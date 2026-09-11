@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>企業資源規劃｜第一部分：概念、歷史、現況與未來</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&amp;family=Noto+Sans+TC:wght@400;500;600;700;800&amp;family=Noto+Serif+TC:wght@700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS：管理筆記本
+       =========================================== */
+    :root {
+      --stage-bg:#242b26;
+      --slide-bg:#f6f0df;
+      --paper:#f6f0df;
+      --paper-deep:#ece3cf;
+      --ink:#183a2d;
+      --ink-2:#315546;
+      --muted:#6a746d;
+      --rule:rgba(24,58,45,.14);
+      --red:#e54b32;
+      --yellow:#dfff53;
+      --blue:#aebdeb;
+      --mint:#9fd1b5;
+      --amber:#ffd16b;
+      --rose:#ef9e91;
+      --white:#fffdf7;
+      --shadow:rgba(24,35,29,.26);
+      --font-display:"Noto Serif TC",serif;
+      --font-body:"Noto Sans TC",sans-serif;
+      --font-label:"DM Sans",sans-serif;
+      --ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --duration-normal:.55s;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+        .deck-controls {
+            display: none !important;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET AND STAGE FALLBACK
+       =========================================== */
+    * { box-sizing:border-box; }
+    body { font-family:var(--font-body); color:var(--ink); }
+    button, a { font:inherit; }
+    .deck-stage {
+      left:50%; top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+    }
+    .slide { background:#242b26; transition:opacity .25s ease; }
+    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:5; }
+    .slide:target .reveal,
+    .slide:target .reveal-left,
+    .slide:target .reveal-scale { opacity:1; transform:none; }
+
+    /* ===========================================
+       NOTEBOOK PAPER SURFACE
+       =========================================== */
+    .paper {
+      position:absolute;
+      left:70px; right:82px; top:46px; bottom:46px;
+      overflow:hidden;
+      color:#183a2d;
+      background-color:#f6f0df;
+      background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 66px,rgba(24,58,45,.12) 67px,transparent 68px);
+      border-radius:9px;
+      box-shadow:0 20px 70px rgba(24,35,29,.28);
+    }
+    .paper::before {
+      content:"";
+      position:absolute; left:154px; top:0; bottom:0; width:2px;
+      background:rgba(229,75,50,.42);
+    }
+    .holes {
+      position:absolute; left:36px; top:104px; bottom:104px;
+      display:flex; flex-direction:column; justify-content:space-between; z-index:4;
+    }
+    .holes i {
+      width:28px; height:28px; border-radius:50%;
+      background:#242b26; box-shadow:inset 0 3px 5px rgba(0,0,0,.8);
+    }
+    .section-tabs {
+      position:absolute; right:0; top:130px; display:grid; gap:18px; z-index:5;
+    }
+    .section-tabs span {
+      width:142px; height:70px; display:grid; place-items:center;
+      border-radius:18px 0 0 18px; color:#183a2d;
+      font:800 22px/1 var(--font-body); letter-spacing:.08em;
+      opacity:.5; transform:translateX(26px);
+    }
+    .section-tabs span:nth-child(1){background:#9fd1b5}
+    .section-tabs span:nth-child(2){background:#aebdeb}
+    .section-tabs span:nth-child(3){background:#ffd16b}
+    .section-tabs span:nth-child(4){background:#ef9e91}
+    .tab-definition .section-tabs span:nth-child(1),
+    .tab-history .section-tabs span:nth-child(2),
+    .tab-now .section-tabs span:nth-child(3),
+    .tab-future .section-tabs span:nth-child(4),
+    .tab-summary .section-tabs span { opacity:1; transform:translateX(0); }
+    .content {
+      position:absolute; left:214px; right:190px; top:98px; bottom:92px; z-index:3;
+    }
+    .topline {
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:55px; padding-bottom:18px; border-bottom:3px solid #183a2d;
+    }
+    .topline h2 {
+      margin:0; max-width:1320px;
+      font:900 58px/1.14 var(--font-display); letter-spacing:-.025em;
+    }
+    .label {
+      flex:0 0 auto; margin-left:30px; padding:10px 16px;
+      color:#183a2d; background:#dfff53;
+      font:700 20px/1 var(--font-label); letter-spacing:.09em;
+      transform:rotate(-1deg);
+    }
+    .page-no {
+      position:absolute; right:178px; bottom:61px; z-index:7;
+      font:700 19px/1 var(--font-label); letter-spacing:.08em; color:#315546;
+    }
+    .source {
+      position:absolute; left:214px; bottom:59px; z-index:7;
+      max-width:1320px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+      font:600 17px/1.3 var(--font-label); color:#6a746d;
+    }
+
+    /* ===========================================
+       TYPOGRAPHY AND REVEALS
+       =========================================== */
+    h1,h2,h3,p { overflow-wrap:break-word; }
+    .reveal,.reveal-left,.reveal-scale {
+      opacity:0;
+      transition:opacity var(--duration-normal) var(--ease-out-expo),
+                 transform var(--duration-normal) var(--ease-out-expo);
+    }
+    .reveal { transform:translateY(28px); }
+    .reveal-left { transform:translateX(-42px); }
+    .reveal-scale { transform:scale(.94); }
+    .slide.visible .reveal,
+    .slide.visible .reveal-left,
+    .slide.visible .reveal-scale { opacity:1; transform:none; }
+    .delay-1 { transition-delay:.10s; }
+    .delay-2 { transition-delay:.20s; }
+    .delay-3 { transition-delay:.30s; }
+    .delay-4 { transition-delay:.40s; }
+    .eyebrow { font:700 22px/1 var(--font-label); letter-spacing:.15em; }
+    .highlight { display:inline; padding:0 .12em; background:linear-gradient(transparent 56%,#dfff53 56%); }
+    .red { color:#e54b32; }
+    .muted { color:#6a746d; }
+
+    /* ===========================================
+       TITLE SLIDE
+       =========================================== */
+    .title-content { position:absolute; left:250px; top:160px; width:1240px; z-index:3; }
+    .title-content .chip {
+      display:inline-block; margin-top:55px; padding:10px 20px;
+      color:#183a2d; background:#dfff53; font-size:24px; font-weight:700;
+      transform:rotate(-2deg);
+    }
+    .title-content h1 {
+      margin:26px 0 24px; font:900 142px/1.06 var(--font-display); letter-spacing:-.045em;
+    }
+    .title-content .lead {
+      max-width:1180px; font-size:40px; line-height:1.5; font-weight:600;
+    }
+    .stamp {
+      position:absolute; right:225px; bottom:105px; z-index:4;
+      width:290px; height:142px; display:grid; place-items:center;
+      border:7px double #e54b32; border-radius:12px;
+      color:#e54b32; background:rgba(246,240,223,.72);
+      font:800 27px/1.3 var(--font-body); text-align:center;
+      transform:rotate(-6deg);
+    }
+    .course-foot {
+      position:absolute; left:250px; bottom:112px; z-index:4;
+      font:700 22px/1 var(--font-label); letter-spacing:.09em;
+    }
+
+    /* ===========================================
+       CONCEPT LAYOUTS
+       =========================================== */
+    .definition-grid {
+      display:grid; grid-template-columns:1.12fr .88fr; gap:48px; margin-top:64px;
+      align-items:stretch;
+    }
+    .big-definition {
+      padding:54px 58px; min-height:610px;
+      background:#183a2d; color:#fffdf7; border-radius:28px 8px 28px 8px;
+      box-shadow:12px 12px 0 #9fd1b5;
+    }
+    .big-definition .term { font:700 24px/1 var(--font-label); letter-spacing:.12em; color:#dfff53; }
+    .big-definition p { margin:34px 0 0; font:700 50px/1.5 var(--font-body); }
+    .module-list { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .module {
+      min-height:134px; padding:26px 24px; border:2px solid #183a2d;
+      background:rgba(255,253,247,.86); border-radius:7px;
+    }
+    .module b { display:block; margin-bottom:10px; font-size:29px; }
+    .module span { font-size:21px; line-height:1.45; color:#315546; }
+    .mis-core {
+      display:grid; grid-template-columns:420px 1fr; gap:58px; margin-top:70px; align-items:center;
+    }
+    .erp-circle {
+      width:390px; height:390px; border-radius:50%; display:grid; place-items:center;
+      background:#e54b32; color:#fffdf7; font:900 92px/1 var(--font-label);
+      box-shadow:0 0 0 25px rgba(229,75,50,.18),0 0 0 50px rgba(229,75,50,.08);
+    }
+    .mis-stack { display:grid; gap:17px; }
+    .mis-row {
+      display:grid; grid-template-columns:190px 1fr; align-items:center;
+      min-height:98px; padding:17px 28px; border-left:10px solid #183a2d;
+      background:rgba(255,253,247,.86);
+    }
+    .mis-row b { font-size:28px; }
+    .mis-row span { font-size:25px; line-height:1.45; color:#315546; }
+
+    /* ===========================================
+       VIDEO INTRO AND PLAYER SLIDES
+       =========================================== */
+    .video-intro {
+      display:grid; grid-template-columns:430px 1fr; gap:48px; margin-top:58px;
+    }
+    .video-meta {
+      min-height:590px; padding:40px 36px; background:#183a2d; color:#fffdf7;
+      border-radius:22px 7px 22px 7px; box-shadow:11px 11px 0 #aebdeb;
+    }
+    .video-meta .video-no { font:700 20px/1 var(--font-label); letter-spacing:.14em; color:#dfff53; }
+    .video-meta .duration { margin:32px 0 20px; font:900 88px/1 var(--font-label); }
+    .video-meta .maker { font-size:27px; line-height:1.5; }
+    .video-meta .status { margin-top:34px; display:grid; gap:12px; }
+    .pill {
+      display:inline-flex; align-items:center; width:max-content; max-width:100%;
+      padding:9px 14px; border:1px solid rgba(255,255,255,.48); border-radius:999px;
+      font-size:19px; line-height:1.3;
+    }
+    .watch-task {
+      min-height:590px; padding:34px 44px;
+      border:3px solid #183a2d; background:rgba(255,253,247,.88);
+    }
+    .watch-task h3 { margin:0 0 22px; font:900 38px/1.2 var(--font-display); }
+    .watch-task ol { margin:0; padding-left:44px; }
+    .watch-task li { margin:0 0 22px; padding-left:12px; font-size:29px; line-height:1.5; }
+    .watch-note {
+      margin-top:24px; padding:18px 22px; background:#ffd16b;
+      font-size:21px; line-height:1.45; font-weight:600;
+    }
+    .video-page .paper { background:#183a2d; color:#fffdf7; background-image:none; }
+    .video-page .paper::before { display:none; }
+    .video-page .section-tabs span { color:#183a2d; }
+    .video-page .page-no,.video-page .source { color:#dfe8e2; }
+    .video-title {
+      position:absolute; top:72px; left:225px; right:215px; z-index:3;
+      display:flex; justify-content:space-between; align-items:baseline; gap:30px;
+    }
+    .video-title h2 { margin:0; color:#fffdf7; font:800 39px/1.25 var(--font-body); }
+    .video-title span { color:#dfff53; font:700 21px/1 var(--font-label); letter-spacing:.1em; }
+    .video-shell {
+      position:absolute; left:338px; top:156px; z-index:3;
+      width:1244px; height:700px; overflow:hidden;
+      background:#0f1914; border:5px solid #fffdf7;
+      box-shadow:16px 16px 0 rgba(174,189,235,.55);
+    }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video {
+      width:100%; height:100%; border:0; color:#fffdf7; background:
+      radial-gradient(circle at 50% 42%,rgba(223,255,83,.16),transparent 35%),
+      linear-gradient(135deg,#12251d,#0b1510);
+      cursor:pointer; display:grid; place-content:center; gap:24px; text-align:center;
+      font-size:28px; font-weight:700;
+    }
+    .play-icon {
+      width:118px; height:118px; margin:auto; display:grid; place-items:center;
+      border-radius:50%; background:#e54b32; color:#fff; font-size:46px;
+      box-shadow:0 0 0 18px rgba(229,75,50,.18);
+    }
+    .video-fallback {
+      position:absolute; left:338px; right:338px; bottom:80px; z-index:4;
+      display:flex; justify-content:space-between; align-items:center; gap:26px;
+      font-size:20px; color:#dfe8e2;
+    }
+    .video-fallback a { color:#dfff53; font-weight:700; }
+
+    /* ===========================================
+       SUMMARY VISUALS
+       =========================================== */
+    .timeline {
+      display:grid; grid-template-columns:repeat(5,1fr); gap:20px; margin-top:92px;
+      position:relative;
+    }
+    .timeline::before {
+      content:""; position:absolute; left:30px; right:30px; top:28px; height:5px; background:#183a2d;
+    }
+    .era { position:relative; padding-top:70px; }
+    .era::before {
+      content:""; position:absolute; left:16px; top:11px; width:34px; height:34px;
+      border-radius:50%; background:#f6f0df; border:8px solid #e54b32; z-index:2;
+    }
+    .era b { display:block; margin-bottom:15px; font:800 26px/1 var(--font-label); }
+    .era h3 { margin:0 0 13px; font:900 34px/1.2 var(--font-display); }
+    .era p { margin:0; font-size:23px; line-height:1.5; color:#315546; }
+    .now-grid,.risk-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:72px;
+    }
+    .now-card,.risk-card {
+      min-height:430px; padding:36px 34px; background:rgba(255,253,247,.88);
+      border:3px solid #183a2d; border-radius:8px;
+    }
+    .now-card:nth-child(2) { box-shadow:11px 11px 0 #ffd16b; }
+    .now-card:nth-child(3) { box-shadow:11px 11px 0 #ef9e91; }
+    .now-card .icon,.risk-card .icon { font:900 54px/1 var(--font-label); color:#e54b32; }
+    .now-card h3,.risk-card h3 { margin:30px 0 16px; font:900 36px/1.2 var(--font-display); }
+    .now-card p,.risk-card p { margin:0; font-size:25px; line-height:1.56; color:#315546; }
+    .future-flow { display:grid; grid-template-columns:1fr 110px 1fr 110px 1fr; align-items:center; margin-top:120px; }
+    .future-node { min-height:310px; padding:42px 36px; border-radius:26px 8px 26px 8px; color:#fffdf7; background:#183a2d; }
+    .future-node:nth-of-type(2){background:#e54b32}.future-node:nth-of-type(3){background:#315546}
+    .future-node b { color:#dfff53; font:700 20px/1 var(--font-label); letter-spacing:.12em; }
+    .future-node h3 { margin:28px 0 16px; font:900 38px/1.25 var(--font-display); }
+    .future-node p { margin:0; font-size:23px; line-height:1.5; }
+    .arrow { text-align:center; font-size:58px; font-weight:900; color:#e54b32; }
+    .formula {
+      margin-top:86px; display:grid; grid-template-columns:1fr 74px 1fr 74px 1fr 74px 1fr;
+      align-items:center;
+    }
+    .formula-card { min-height:280px; padding:36px 25px; display:grid; place-items:center; text-align:center; border:3px solid #183a2d; background:#fffdf7; }
+    .formula-card b { display:block; font:900 35px/1.25 var(--font-display); }
+    .formula-card span { display:block; margin-top:20px; font-size:21px; line-height:1.45; color:#315546; }
+    .plus { text-align:center; font-size:48px; font-weight:900; }
+    .closing-question {
+      position:absolute; left:250px; right:240px; top:205px; z-index:3;
+      font:900 74px/1.42 var(--font-display); letter-spacing:-.025em;
+    }
+    .closing-answer {
+      position:absolute; left:250px; bottom:170px; z-index:3;
+      display:inline-block; padding:17px 24px; background:#dfff53;
+      font-size:31px; line-height:1.4; font-weight:800; transform:rotate(-1deg);
+    }
+
+    /* ===========================================
+       CONTROLS, MENU, AND SCRIPTLESS FALLBACK
+       =========================================== */
+    .fallback-controls {
+      position:absolute; left:50%; bottom:18px; z-index:80;
+      display:flex; align-items:center; gap:14px;
+      transform:translateX(-50%); -ms-transform:translateX(-50%);
+      padding:7px 12px; color:#fff; background:#183a2d;
+      border:1px solid rgba(255,255,255,.55);
+      font:600 17px/1 Arial,sans-serif;
+    }
+    .fallback-controls a {
+      width:40px; height:32px; display:flex; align-items:center; justify-content:center;
+      color:#fff; border:1px solid rgba(255,255,255,.55); text-decoration:none;
+    }
+    .fallback-controls span { min-width:80px; text-align:center; }
+    .deck-controls,.progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .deck-controls {
+      align-items:center; gap:8px; padding:8px;
+      color:#fffdf7; background:#183a2d; border:1px solid rgba(255,255,255,.45);
+      box-shadow:0 8px 25px rgba(0,0,0,.24);
+    }
+    .deck-controls button {
+      width:42px; height:36px; border:1px solid rgba(255,255,255,.36);
+      background:transparent; color:#fffdf7; cursor:pointer;
+    }
+    .deck-controls button:hover { color:#183a2d; background:#dfff53; }
+    .counter { min-width:92px; text-align:center; font:700 16px/1 var(--font-label); }
+    .progress { position:fixed; left:0; top:0; height:5px; z-index:1100; width:5%; background:#dfff53; transition:width .25s ease; }
+    .chapter-menu {
+      position:fixed; inset:0; z-index:1200; visibility:hidden; opacity:0; pointer-events:none;
+      background:rgba(20,29,24,.78); transition:opacity .25s ease;
+    }
+    .chapter-menu.open { visibility:visible; opacity:1; pointer-events:auto; }
+    .menu-panel {
+      position:absolute; right:0; top:0; bottom:0; width:580px; overflow:auto;
+      padding:34px; color:#183a2d; background:#f6f0df; box-shadow:-18px 0 60px rgba(0,0,0,.28);
+    }
+    .menu-head { display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #183a2d; padding-bottom:18px; }
+    .menu-head h2 { margin:0; font:900 35px/1.2 var(--font-display); }
+    .menu-head button { border:0; background:#e54b32; color:#fff; padding:10px 15px; cursor:pointer; }
+    .menu-links { display:grid; gap:7px; padding-top:22px; }
+    .menu-links button { text-align:left; padding:12px 10px; border:0; border-bottom:1px solid rgba(24,58,45,.2); background:transparent; color:#183a2d; cursor:pointer; font-size:18px; }
+    .menu-links button:hover { background:#183a2d; color:#fffdf7; }
+    .legacy-note { position:fixed; right:10px; top:10px; z-index:20000; padding:7px 10px; color:#fff; background:#183a2d; border:1px solid #fff; font:14px/1.4 Arial,sans-serif; }
+
+    /* ===========================================
+       INLINE EDITING
+       =========================================== */
+    .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+    .edit-toggle { position:fixed; top:16px; left:16px; width:46px; height:46px; z-index:10001; border:1px solid rgba(255,255,255,.4); background:#183a2d; color:#fff; opacity:0; pointer-events:none; transition:opacity .3s ease; cursor:pointer; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; top:16px; left:74px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { border:1px solid rgba(255,255,255,.4); background:#183a2d; color:#fff; padding:10px 14px; cursor:pointer; }
+    body.editing [data-editable] { outline:2px dashed #e54b32; outline-offset:5px; cursor:text; }
+
+    /* ===========================================
+       PRINT AND SMALL-VIEWPORT FALLBACKS
+       =========================================== */
+    @media (min-width:1600px) and (min-height:900px) {
+      .deck-stage { transform:translate(-50%,-50%) scale(.85); -ms-transform:translate(-50%,-50%) scale(.85); }
+    }
+    @media (max-width:700px) {
+      .deck-stage { transform:translate(-50%,-50%) scale(.25); -ms-transform:translate(-50%,-50%) scale(.25); }
+    }
+    @media print {
+      .fallback-controls,.progress,.chapter-menu,.edit-toggle,.edit-hotzone,.edit-toolbar { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+
+      <!-- ===========================================
+           01｜封面
+           =========================================== -->
+      <section id="slide-1" class="slide active visible tab-definition" data-title="企業資源規劃">
+        <div class="paper">
+          <div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="title-content">
+            <div class="eyebrow reveal">ENTERPRISE RESOURCE PLANNING</div>
+            <div class="chip reveal delay-1">資訊管理的共同底座</div>
+            <h1 class="reveal delay-2" data-editable>企業資源規劃</h1>
+            <div class="lead reveal delay-3" data-editable>一套系統，如何串起訂單、存貨、財務、製造與人的工作？</div>
+          </div>
+          <div class="stamp reveal-scale delay-3">從 MRP<br>走向 AI</div>
+          <div class="course-foot">115-1　企業資源規劃｜第一部分</div>
+        </div>
+        <div class="page-no">01 / 20</div>
+        <nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">←</a><span>01 / 20</span><a href="#slide-2" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           02｜ERP 是什麼
+           =========================================== -->
+      <section id="slide-2" class="slide tab-definition" data-title="ERP 是什麼">
+        <div class="paper">
+          <div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>ERP 是什麼？</h2><div class="label">CORE DEFINITION</div></header>
+            <div class="definition-grid">
+              <article class="big-definition reveal-left delay-1">
+                <div class="term">ENTERPRISE RESOURCE PLANNING</div>
+                <p data-editable>用一套整合系統，協調企業的<span style="color:#dfff53">流程、資料與資源</span>。</p>
+              </article>
+              <div class="module-list">
+                <article class="module reveal delay-1"><b data-editable>財務會計</b><span data-editable>帳務、成本、預算與結帳</span></article>
+                <article class="module reveal delay-2"><b data-editable>採購供應</b><span data-editable>請購、採購、驗收與付款</span></article>
+                <article class="module reveal delay-2"><b data-editable>銷售服務</b><span data-editable>報價、訂單、出貨與收款</span></article>
+                <article class="module reveal delay-3"><b data-editable>製造庫存</b><span data-editable>物料、排程、領料與存貨</span></article>
+                <article class="module reveal delay-3"><b data-editable>人力資源</b><span data-editable>人事、出勤、薪資與人才</span></article>
+                <article class="module reveal delay-4"><b data-editable>共用資料</b><span data-editable>同一筆交易，跨部門更新</span></article>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="source">概念參考：SAP〈What is ERP?〉、IBM〈Types of ERP Systems〉</div><div class="page-no">02 / 20</div>
+        <nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1">←</a><span>02 / 20</span><a href="#slide-3">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           03｜ERP 在資管領域的意義
+           =========================================== -->
+      <section id="slide-3" class="slide tab-definition" data-title="ERP 在資管領域的意義">
+        <div class="paper">
+          <div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>在資管領域，ERP 的意義是什麼？</h2><div class="label">MIS VIEW</div></header>
+            <div class="mis-core">
+              <div class="erp-circle reveal-scale">ERP</div>
+              <div class="mis-stack">
+                <div class="mis-row reveal delay-1"><b data-editable>人</b><span data-editable>誰輸入、核准、判斷並承擔責任？</span></div>
+                <div class="mis-row reveal delay-2"><b data-editable>流程</b><span data-editable>工作如何跨越部門，從頭到尾完成？</span></div>
+                <div class="mis-row reveal delay-2"><b data-editable>資料</b><span data-editable>名稱、編碼與數字能否一致且可信？</span></div>
+                <div class="mis-row reveal delay-3"><b data-editable>技術</b><span data-editable>系統如何記錄、連結、自動化與分析？</span></div>
+                <div class="mis-row reveal delay-4"><b data-editable>治理</b><span data-editable>權限、控制、資安與例外由誰管理？</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="source">教師統整：ERP 是社會—技術系統，不只是軟體套件</div><div class="page-no">03 / 20</div>
+        <nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-2">←</a><span>03 / 20</span><a href="#slide-4">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           04–05｜影片一：Oracle
+           =========================================== -->
+      <section id="slide-4" class="slide tab-definition" data-title="影片一前導｜Oracle">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>影片一｜用 78 秒抓住 ERP</h2><div class="label">WATCH / 01</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">ORACLE / WHAT IS ERP?</div><div class="duration">1:18</div><div class="maker">Oracle 官方頻道<br>英文短片</div><div class="status"><span class="pill">✓ 免費直接播放</span><span class="pill">✓ 英文自動字幕</span><span class="pill">✓ 可自動翻譯繁中</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請注意</h3><ol><li data-editable>影片用哪些企業活動說明 ERP？</li><li data-editable>為什麼不同規模的組織都可能需要 ERP？</li><li data-editable>ERP 的「規劃」為何不只是做計畫？</li></ol><div class="watch-note">來源為供應商影片，適合建立概念，但不等於中立的產品評測。</div></article>
+            </div>
+          </div>
+        </div><div class="source">https://www.youtube.com/watch?v=c9HfNg4a_Og</div><div class="page-no">04 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-3">←</a><span>04 / 20</span><a href="#slide-5">→</a></nav>
+      </section>
+
+      <section id="slide-5" class="slide video-page tab-definition" data-title="播放｜What is ERP System?">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>What is ERP System?（Enterprise Resource Planning）</h2><span>VIDEO 01 · 1:18</span></div>
+          <div class="video-shell" data-video-id="c9HfNg4a_Og" data-video-title="What is ERP System?"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div>
+          <div class="video-fallback"><span>字幕：設定 → 字幕 → 自動翻譯 → 中文（繁體）</span><a href="https://www.youtube.com/watch?v=c9HfNg4a_Og" target="_blank" rel="noopener">若無法嵌入播放，在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">05 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-4">←</a><span>05 / 20</span><a href="#slide-6">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           06–07｜影片二：IBM
+           =========================================== -->
+      <section id="slide-6" class="slide tab-definition" data-title="影片二前導｜IBM">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>影片二｜ERP 如何把部門連成企業</h2><div class="label">WATCH / 02</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">IBM TECHNOLOGY / OVERVIEW</div><div class="duration">10:23</div><div class="maker">IBM Technology<br>英文解說</div><div class="status"><span class="pill">✓ 免費直接播放</span><span class="pill">✓ 英文字幕</span><span class="pill">✓ 可自動翻譯繁中</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請注意</h3><ol><li data-editable>如果各部門都有自己的系統，問題會出在哪裡？</li><li data-editable>共用資料庫如何改變對帳與決策？</li><li data-editable>整合帶來哪些效益，又會付出什麼代價？</li></ol><div class="watch-note">把焦點放在「跨部門流程」，不要只記住各模組名稱。</div></article>
+            </div>
+          </div>
+        </div><div class="source">https://www.youtube.com/watch?v=Da1hUqzoiAo</div><div class="page-no">06 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-5">←</a><span>06 / 20</span><a href="#slide-7">→</a></nav>
+      </section>
+
+      <section id="slide-7" class="slide video-page tab-definition" data-title="播放｜What is Enterprise Resource Planning Software?">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>What is Enterprise Resource Planning（ERP）Software?</h2><span>VIDEO 02 · 10:23</span></div>
+          <div class="video-shell" data-video-id="Da1hUqzoiAo" data-video-title="What is Enterprise Resource Planning Software?"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div>
+          <div class="video-fallback"><span>自動翻譯是機器字幕，不是人工同步口譯</span><a href="https://www.youtube.com/watch?v=Da1hUqzoiAo" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">07 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-6">←</a><span>07 / 20</span><a href="#slide-8">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           08–09｜影片三：MRP → MRP II → ERP
+           =========================================== -->
+      <section id="slide-8" class="slide tab-history" data-title="影片三前導｜MRP 到 ERP">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>影片三｜ERP 從哪裡來？</h2><div class="label">WATCH / 03</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">DR. HAYWOOD / PLANNING SYSTEMS</div><div class="duration">5:29</div><div class="maker">MRP vs MRP II vs ERP<br>英文解說</div><div class="status"><span class="pill">✓ 免費直接播放</span><span class="pill">✓ 英文字幕</span><span class="pill">✓ 可自動翻譯繁中</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請注意</h3><ol><li data-editable>MRP 最早想解決哪一種問題？</li><li data-editable>MRP II 為何要把設備、人力與產能納入？</li><li data-editable>ERP 又跨出了製造部門的哪一道邊界？</li></ol><div class="watch-note">三個名詞不是互相取代的口號，而是管理範圍逐步擴大的結果。</div></article>
+            </div>
+          </div>
+        </div><div class="source">https://www.youtube.com/watch?v=ttRqLwvN2Pw</div><div class="page-no">08 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-7">←</a><span>08 / 20</span><a href="#slide-9">→</a></nav>
+      </section>
+
+      <section id="slide-9" class="slide video-page tab-history" data-title="播放｜MRP vs MRP II vs ERP">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>MRP vs MRP II vs ERP — A Comparison of Planning Systems</h2><span>VIDEO 03 · 5:29</span></div>
+          <div class="video-shell" data-video-id="ttRqLwvN2Pw" data-video-title="MRP vs MRP II vs ERP"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div>
+          <div class="video-fallback"><span>關鍵詞：物料需求 → 製造資源 → 企業資源</span><a href="https://www.youtube.com/watch?v=ttRqLwvN2Pw" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">09 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-8">←</a><span>09 / 20</span><a href="#slide-10">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           10–11｜影片四：Mars Wrigley
+           =========================================== -->
+      <section id="slide-10" class="slide tab-now" data-title="影片四前導｜Mars Wrigley">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>影片四｜雲端 ERP 與企業轉型</h2><div class="label">WATCH / 04</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">SAP SAPPHIRE / MARS WRIGLEY</div><div class="duration">7:44</div><div class="maker">企業案例訪談<br>英文影片</div><div class="status"><span class="pill">✓ 免費直接播放</span><span class="pill">✓ 英文字幕</span><span class="pill">✓ 可自動翻譯繁中</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請注意</h3><ol><li data-editable>企業為何把 ERP 現代化視為轉型，而不只是換系統？</li><li data-editable>雲端、資料與 AI 在案例中如何連在一起？</li><li data-editable>技術更新之外，組織還必須改變什麼？</li></ol><div class="watch-note">這是 SAP 活動中的客戶案例；可理解實務脈絡，但仍帶有供應商選材觀點。</div></article>
+            </div>
+          </div>
+        </div><div class="source">https://www.youtube.com/watch?v=Xx-74MAdqV8</div><div class="page-no">10 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-9">←</a><span>10 / 20</span><a href="#slide-11">→</a></nav>
+      </section>
+
+      <section id="slide-11" class="slide video-page tab-now" data-title="播放｜Candy + Cloud ERP">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>Candy + Cloud ERP：Mars Wrigley 如何為未來做好準備</h2><span>VIDEO 04 · 7:44</span></div>
+          <div class="video-shell" data-video-id="Xx-74MAdqV8" data-video-title="Candy plus Cloud ERP"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div>
+          <div class="video-fallback"><span>觀察：ERP 專案同時改變流程、資料與組織能力</span><a href="https://www.youtube.com/watch?v=Xx-74MAdqV8" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">11 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-10">←</a><span>11 / 20</span><a href="#slide-12">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           12–13｜影片五：智慧型 ERP
+           =========================================== -->
+      <section id="slide-12" class="slide tab-future" data-title="影片五前導｜智慧型 ERP">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>影片五｜AI 進入 ERP 之後</h2><div class="label">WATCH / 05</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">SAP / JOULE AI COPILOT</div><div class="duration">5:55</div><div class="maker">智慧型 ERP 示範<br>英文影片</div><div class="status"><span class="pill">✓ 免費直接播放</span><span class="pill">✓ 英文字幕</span><span class="pill">✓ 可自動翻譯繁中</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請注意</h3><ol><li data-editable>使用者如何用自然語言與 ERP 互動？</li><li data-editable>AI 是提供摘要、建議，還是直接執行？</li><li data-editable>當系統能預警與建議，人的責任如何改變？</li></ol><div class="watch-note">產品示範呈現的是可能方向；是否適用，仍取決於資料品質、權限與治理。</div></article>
+            </div>
+          </div>
+        </div><div class="source">https://www.youtube.com/watch?v=XxjCdEfFZ4I</div><div class="page-no">12 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-11">←</a><span>12 / 20</span><a href="#slide-13">→</a></nav>
+      </section>
+
+      <section id="slide-13" class="slide video-page tab-future" data-title="播放｜Intelligent ERP & Joule">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>Intelligent ERP &amp; The AI Copilot Joule</h2><span>VIDEO 05 · 5:55</span></div>
+          <div class="video-shell" data-video-id="XxjCdEfFZ4I" data-video-title="Intelligent ERP and the AI Copilot Joule"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div>
+          <div class="video-fallback"><span>觀察：摘要、情境處理、機器學習與工作流程</span><a href="https://www.youtube.com/watch?v=XxjCdEfFZ4I" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">13 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-12">←</a><span>13 / 20</span><a href="#slide-14">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           14–15｜清大開放式課程
+           =========================================== -->
+      <section id="slide-14" class="slide tab-history" data-title="清大課程前導｜製造資源規劃">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>完整理解 ERP 的由來</h2><div class="label">NTHU OCW</div></header>
+            <div class="video-intro">
+              <aside class="video-meta reveal-left"><div class="video-no">清大開放式課程 / 第 8B 講</div><div class="duration">40:04</div><div class="maker">林則孟教授<br>製造資源規劃</div><div class="status"><span class="pill">✓ 中文講授</span><span class="pill">✓ 免費直接播放</span><span class="pill">— 沒有字幕</span></div></aside>
+              <article class="watch-task reveal delay-1"><h3>觀看時，請建立三條線</h3><ol><li data-editable>物料：需要什麼、需要多少、何時需要？</li><li data-editable>資源：產能、人力與設備是否足以支應？</li><li data-editable>整合：計畫如何連到採購、生產與財務？</li></ol><div class="watch-note">這一段完整播放，目的在理解 ERP 不是突然出現，而是長期管理需求累積的結果。</div></article>
+            </div>
+          </div>
+        </div><div class="source">清大開放式課程：https://ocw.nthu.edu.tw/courses/136</div><div class="page-no">14 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-13">←</a><span>14 / 20</span><a href="#slide-15">→</a></nav>
+      </section>
+
+      <section id="slide-15" class="slide video-page tab-history" data-title="播放｜清大第 8B 講製造資源規劃">
+        <div class="paper"><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="video-title"><h2 data-editable>清大開放式課程｜第 8B 講：製造資源規劃</h2><span>NTHU · 40:04</span></div>
+          <div class="video-shell" data-video-id="COVynYsu4PM" data-video-title="清大開放式課程第8B講製造資源規劃"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放完整課程</span></button></div>
+          <div class="video-fallback"><span>中文講授；影片沒有字幕</span><a href="https://www.youtube.com/watch?v=COVynYsu4PM" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="page-no">15 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-14">←</a><span>15 / 20</span><a href="#slide-16">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           16｜歷史總結
+           =========================================== -->
+      <section id="slide-16" class="slide tab-summary" data-title="ERP 的演進主線">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>ERP 的演進：管理範圍不斷擴大</h2><div class="label">SYNTHESIS / 01</div></header>
+            <div class="timeline">
+              <article class="era reveal delay-1"><b>1960s–70s</b><h3 data-editable>MRP</h3><p data-editable>從產品結構、庫存與需求，計算物料何時需要。</p></article>
+              <article class="era reveal delay-2"><b>1980s</b><h3 data-editable>MRP II</h3><p data-editable>把產能、人力、設備與財務回饋納入製造計畫。</p></article>
+              <article class="era reveal delay-2"><b>1990s</b><h3 data-editable>ERP</h3><p data-editable>跨出工廠，整合財務、採購、銷售、人資等企業功能。</p></article>
+              <article class="era reveal delay-3"><b>2000s–</b><h3 data-editable>雲端 ERP</h3><p data-editable>透過網路服務部署，持續更新並連接更多企業系統。</p></article>
+              <article class="era reveal delay-4"><b>現在／未來</b><h3 data-editable>智慧型 ERP</h3><p data-editable>把預測、生成式 AI 與代理型功能放入工作流程。</p></article>
+            </div>
+          </div>
+        </div><div class="source">年代為教學用概括；不同企業與產品的採用時間並不一致</div><div class="page-no">16 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-15">←</a><span>16 / 20</span><a href="#slide-17">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           17｜ERP 現況
+           =========================================== -->
+      <section id="slide-17" class="slide tab-now" data-title="ERP 的現況">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>ERP 的現況：從單一套裝走向連結平台</h2><div class="label">SYNTHESIS / 02</div></header>
+            <div class="now-grid">
+              <article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>部署方式並存</h3><p data-editable>地端、雲端與混合式架構並存；企業依規模、法規、既有系統與風險選擇。</p></article>
+              <article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>模組走向互連</h3><p data-editable>ERP 透過介面連接顧客關係、供應鏈、電子商務與資料分析平台。</p></article>
+              <article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>資料更加即時</h3><p data-editable>管理者期待更接近即時的營運視圖、例外提醒與跨流程追蹤。</p></article>
+            </div>
+          </div>
+        </div><div class="source">參考：IBM ERP types；SAP Cloud ERP overview</div><div class="page-no">17 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-16">←</a><span>17 / 20</span><a href="#slide-18">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           18｜ERP 未來
+           =========================================== -->
+      <section id="slide-18" class="slide tab-future" data-title="ERP 的未來">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>ERP 的未來：從記錄，走向理解與行動</h2><div class="label">SYNTHESIS / 03</div></header>
+            <div class="future-flow">
+              <article class="future-node reveal delay-1"><b>SENSE</b><h3 data-editable>感知異常</h3><p data-editable>從交易與流程資料，找出缺料、延遲、風險與例外。</p></article>
+              <div class="arrow reveal delay-1">→</div>
+              <article class="future-node reveal delay-2"><b>RECOMMEND</b><h3 data-editable>提出建議</h3><p data-editable>整合情境、規則與預測，提供下一步行動選項。</p></article>
+              <div class="arrow reveal delay-2">→</div>
+              <article class="future-node reveal delay-3"><b>ACT + GOVERN</b><h3 data-editable>受控執行</h3><p data-editable>在權限與政策範圍內執行；重要例外仍由人核准與負責。</p></article>
+            </div>
+          </div>
+        </div><div class="source">未來趨勢參考：SAP 2026〈From automation to intelligence〉；屬方向判讀，並非所有產品均已成熟</div><div class="page-no">18 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-17">←</a><span>18 / 20</span><a href="#slide-19">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           19｜價值與代價
+           =========================================== -->
+      <section id="slide-19" class="slide tab-summary" data-title="ERP 的價值與代價">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>ERP 的價值，總是伴隨管理代價</h2><div class="label">SYNTHESIS / 04</div></header>
+            <div class="risk-grid">
+              <article class="risk-card reveal delay-1"><div class="icon">＋</div><h3 data-editable>整合與透明</h3><p data-editable>減少重複輸入與資訊孤島，讓跨部門流程與營運狀況更容易追蹤。</p></article>
+              <article class="risk-card reveal delay-2"><div class="icon">±</div><h3 data-editable>標準與彈性</h3><p data-editable>標準流程提高一致性，卻也可能壓縮部門差異與現場彈性。</p></article>
+              <article class="risk-card reveal delay-3"><div class="icon">!</div><h3 data-editable>集中與風險</h3><p data-editable>資料品質、權限、導入失敗與資安事件，影響範圍也會隨整合而擴大。</p></article>
+            </div>
+          </div>
+        </div><div class="source">教師統整：評估 ERP 不能只看功能清單，也要看組織與治理能力</div><div class="page-no">19 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-18">←</a><span>19 / 20</span><a href="#slide-20">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           20｜最後總結
+           =========================================== -->
+      <section id="slide-20" class="slide tab-summary" data-title="本單元總結">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>定義</span><span>歷史</span><span>現況</span><span>未來</span></div>
+          <div class="content">
+            <header class="topline reveal"><h2 data-editable>最後，請記住這個式子</h2><div class="label">TAKEAWAY</div></header>
+            <div class="formula">
+              <article class="formula-card reveal delay-1"><div><b data-editable>共用資料</b><span data-editable>一致、可追溯、可信</span></div></article><div class="plus">＋</div>
+              <article class="formula-card reveal delay-2"><div><b data-editable>整合流程</b><span data-editable>跨越部門完成工作</span></div></article><div class="plus">＋</div>
+              <article class="formula-card reveal delay-3"><div><b data-editable>組織改變</b><span data-editable>權責、習慣與能力調整</span></div></article><div class="plus">＋</div>
+              <article class="formula-card reveal delay-4"><div><b data-editable>持續治理</b><span data-editable>權限、資安、例外與改善</span></div></article>
+            </div>
+          </div>
+          <div class="closing-answer reveal delay-4" data-editable>ERP ≠ 只是一套軟體；ERP 是企業共同運作的方法。</div>
+        </div><div class="source">課後問題：如果資料定義本身錯了，AI 會讓企業更聰明，還是更快做錯？</div><div class="page-no">20 / 20</div>
+        <nav class="fallback-controls"><a href="#slide-19">←</a><span>20 / 20</span><a href="#slide-20">→</a></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       INTERACTIVE PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button>
+    <button id="menuBtn" type="button" aria-label="開啟章節選單">☰</button>
+    <span class="counter" id="counter">01 / 20</span>
+    <button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress"></div>
+
+  <aside class="chapter-menu" id="chapterMenu" aria-label="章節與影片選單">
+    <div class="menu-panel">
+      <div class="menu-head"><h2>章節與影片</h2><button id="closeMenu" type="button">關閉</button></div>
+      <div class="menu-links" id="menuLinks"></div>
+    </div>
+  </aside>
+
+  <!-- ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <div class="edit-toolbar" id="editToolbar">
+    <button id="saveFile" type="button">下載目前版本</button>
+    <button id="resetEdits" type="button">清除本機修改</button>
+  </div>
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的左右箭頭翻頁；影片請點選 YouTube 文字連結。</div></noscript>
+
+  <script>
+  /* ===========================================
+     SLIDE CONTROLLER, VIDEO LOADER, AND EDITOR
+     =========================================== */
+  (function () {
+    "use strict";
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el,name) { return new RegExp("(^|\\s)" + name + "(\\s|$)").test(el.className); }
+    function addClass(el,name) { if (!hasClass(el,name)) el.className += " " + name; }
+    function removeClass(el,name) { el.className=el.className.replace(new RegExp("(^|\\s)" + name + "(?=\\s|$)","g")," ").replace(/^\\s+|\\s+$/g,""); }
+    function closestClass(el,name) { while (el && el !== document) { if (hasClass(el,name)) return el; el=el.parentNode; } return null; }
+    function closestAttr(el,attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr)!==null) return el; el=el.parentNode; } return null; }
+    function pad2(n) { return n < 10 ? "0" + n : String(n); }
+
+    var stage=byId("deckStage");
+    var slides=stage.getElementsByTagName("section");
+    var current=0;
+    var wheelLocked=false;
+    var touchStart=null;
+    var storageKey="erp-first-unit-v1";
+
+    function storageGet(){try{return window.localStorage.getItem(storageKey);}catch(ignore){return null;}}
+    function storageSet(value){try{window.localStorage.setItem(storageKey,value);return true;}catch(ignore){return false;}}
+    function storageRemove(){try{window.localStorage.removeItem(storageKey);return true;}catch(ignore){return false;}}
+    var saved=storageGet();
+    if(saved && saved.indexOf("fallback-controls")!==-1){stage.innerHTML=saved;slides=stage.getElementsByTagName("section");}
+
+    function scaleStage(){
+      var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+      var value="translate(-50%,-50%) scale(" + factor + ")";
+      stage.style.transform=value; stage.style.msTransform=value; stage.style.webkitTransform=value;
+    }
+    function resetVideo(slide){
+      var shells=slide.getElementsByClassName("video-shell");
+      if(!shells.length || !shells[0].getElementsByTagName("iframe").length)return;
+      shells[0].innerHTML="<button class=\"load-video\" type=\"button\"><span class=\"play-icon\">&#9654;</span><span>點一下以載入並播放影片</span></button>";
+    }
+    function show(index,updateHash){
+      if(index<0)index=0;if(index>=slides.length)index=slides.length-1;current=index;
+      for(var i=0;i<slides.length;i+=1){
+        if(i===current){addClass(slides[i],"active");addClass(slides[i],"visible");}
+        else{removeClass(slides[i],"active");removeClass(slides[i],"visible");resetVideo(slides[i]);}
+      }
+      byId("counter").innerHTML=pad2(current+1)+" / "+slides.length;
+      byId("progress").style.width=((current+1)/slides.length*100)+"%";
+      if(updateHash!==false){try{window.history.replaceState(null,"","#slide-"+(current+1));}catch(ignore){window.location.hash="slide-"+(current+1);}}
+    }
+    function indexFromHash(){
+      var match=window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0;
+    }
+    function loadVideo(shell){
+      var id=shell.getAttribute("data-video-id");
+      var title=shell.getAttribute("data-video-title")||"課程影片";
+      shell.innerHTML="<iframe src=\"https://www.youtube-nocookie.com/embed/"+id+"?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1\" title=\""+title.replace(/\"/g,"&quot;")+"\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+    }
+    function requestFullscreen(){
+      var root=document.documentElement;
+      var exit=document.exitFullscreen||document.msExitFullscreen||document.webkitExitFullscreen;
+      if(document.fullscreenElement||document.msFullscreenElement||document.webkitFullscreenElement){if(exit)exit.call(document);return;}
+      var enter=root.requestFullscreen||root.msRequestFullscreen||root.webkitRequestFullscreen;if(enter)enter.call(root);
+    }
+    function toggleMenu(force){
+      var menu=byId("chapterMenu");
+      var open=typeof force==="boolean"?force:!hasClass(menu,"open");
+      if(open)addClass(menu,"open");else removeClass(menu,"open");
+    }
+    function buildMenu(){
+      var holder=byId("menuLinks");holder.innerHTML="";
+      for(var i=0;i<slides.length;i+=1){
+        var button=document.createElement("button");button.type="button";button.setAttribute("data-jump",i);
+        button.appendChild(document.createTextNode(pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片")));
+        holder.appendChild(button);
+      }
+    }
+
+    byId("prevBtn").onclick=function(){show(current-1);};
+    byId("nextBtn").onclick=function(){show(current+1);};
+    byId("menuBtn").onclick=function(){toggleMenu(true);};
+    byId("closeMenu").onclick=function(){toggleMenu(false);};
+    byId("fullBtn").onclick=requestFullscreen;
+    byId("chapterMenu").onclick=function(event){event=event||window.event;if((event.target||event.srcElement).id==="chapterMenu")toggleMenu(false);};
+    document.onclick=function(event){
+      event=event||window.event;var target=event.target||event.srcElement;
+      var load=closestClass(target,"load-video");if(load)loadVideo(closestClass(load,"video-shell"));
+      var jump=closestAttr(target,"data-jump");if(jump){show(parseInt(jump.getAttribute("data-jump"),10));toggleMenu(false);}
+    };
+    document.onkeydown=function(event){
+      event=event||window.event;var target=event.target||event.srcElement;
+      if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA)$/i.test(target.tagName)))return;
+      var key=event.key||event.keyCode;
+      if(key==="ArrowRight"||key==="ArrowDown"||key==="PageDown"||key===39||key===40||key===34||key===32){if(event.preventDefault)event.preventDefault();show(current+1);}
+      else if(key==="ArrowLeft"||key==="ArrowUp"||key==="PageUp"||key===37||key===38||key===33){if(event.preventDefault)event.preventDefault();show(current-1);}
+      else if(key==="Home"||key===36)show(0);
+      else if(key==="End"||key===35)show(slides.length-1);
+      else if(key==="m"||key==="M"||key===77)toggleMenu();
+      else if(key==="Escape"||key===27)toggleMenu(false);
+      else if(key==="e"||key==="E"||key===69)toggleEditing();
+    };
+    window.onresize=scaleStage;
+    window.onhashchange=function(){show(indexFromHash(),false);};
+    if(window.addEventListener){
+      window.addEventListener("wheel",function(event){if(wheelLocked||Math.abs(event.deltaY)<18)return;wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false;},550);},false);
+      window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX;},false);
+      window.addEventListener("touchend",function(event){if(touchStart===null)return;var d=event.changedTouches[0].clientX-touchStart;if(Math.abs(d)>50)show(current+(d<0?1:-1));touchStart=null;},false);
+    }
+
+    /* Inline editor: E key, hotzone, local storage, and HTML download. */
+    var editing=false;var editTimer=null;var hideTimer=null;
+    var hotzone=document.getElementsByClassName("edit-hotzone")[0];var editToggle=byId("editToggle");
+    function toggleEditing(){
+      editing=!editing;var editable=document.querySelectorAll("[data-editable]");
+      for(var i=0;i<editable.length;i+=1)editable[i].contentEditable=editing?"true":"false";
+      if(editing){addClass(document.body,"editing");addClass(editToggle,"active");addClass(byId("editToolbar"),"show");}
+      else{removeClass(document.body,"editing");removeClass(editToggle,"active");removeClass(byId("editToolbar"),"show");}
+    }
+    editToggle.onclick=toggleEditing;
+    hotzone.onclick=toggleEditing;
+    hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);addClass(editToggle,"show");};
+    hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(editToggle,"show");},400);};
+    editToggle.onmouseenter=function(){window.clearTimeout(hideTimer);};
+    editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(editToggle,"show");},400);};
+    stage.oninput=function(){window.clearTimeout(editTimer);editTimer=window.setTimeout(function(){storageSet(stage.innerHTML);},350);};
+    byId("resetEdits").onclick=function(){if(window.confirm("要清除目前瀏覽器中儲存的文字修改嗎？")){storageRemove();window.location.reload();}};
+    byId("saveFile").onclick=function(){
+      storageSet(stage.innerHTML);
+      var html="<!doctype html>\n"+document.documentElement.outerHTML;
+      var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+      if(window.navigator.msSaveOrOpenBlob)window.navigator.msSaveOrOpenBlob(blob,"企業資源規劃_第一部分_ERP概念歷史現況未來_V1_編輯版.html");
+      else{var urlApi=window.URL||window.webkitURL;var anchor=document.createElement("a");anchor.href=urlApi.createObjectURL(blob);anchor.download="企業資源規劃_第一部分_ERP概念歷史現況未來_V1_編輯版.html";document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href);},1200);}
+    };
+
+    buildMenu();scaleStage();show(indexFromHash(),false);addClass(document.body,"js-ready");
+  }());
+  </script>
+</body>
+</html>
