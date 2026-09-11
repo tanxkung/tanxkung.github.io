@@ -134,11 +134,40 @@
     }
 
     .hero-note {
-      margin: 0;
+      margin: 22px 0 0;
       padding: 24px 0 6px 26px;
       border-left: 3px solid var(--gold);
       color: rgba(255,255,255,.82);
       font-size: 1.05rem;
+    }
+
+    .hero-aside { min-width: 0; }
+
+    .hero-portrait {
+      margin: 0;
+      overflow: hidden;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 22px;
+      box-shadow: 0 24px 54px rgba(0,0,0,.24);
+    }
+
+    .hero-portrait img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+    }
+
+    .hero-portrait figcaption {
+      padding: 9px 14px 11px;
+      color: rgba(255,255,255,.68);
+      font-size: .76rem;
+    }
+
+    .hero-portrait a {
+      color: inherit;
+      text-underline-offset: 3px;
     }
 
     main {
@@ -301,6 +330,7 @@
         gap: 40px;
         padding: 58px 0 68px;
       }
+      .hero-aside { max-width: 560px; }
       .hero-note { max-width: 34rem; }
       main { padding: 54px 0 68px; }
       .section-head { display: block; }
@@ -333,7 +363,13 @@
         <h1 id="page-title">龔鴻裕</h1>
         <p class="role">中國科技大學資訊管理系　助理教授</p>
       </div>
-      <p class="hero-note">從管理問題出發，理解資訊科技如何成為組織運作、決策與創新的能力。</p>
+      <div class="hero-aside">
+        <figure class="hero-portrait">
+          <img src="gong-hong-yu.jpg" alt="龔鴻裕助理教授抱著貓的照片" width="976" height="653" loading="eager" decoding="async">
+          <figcaption>照片來源：<a href="https://mis.cute.edu.tw/en/faculty.html" target="_blank" rel="noopener noreferrer">中國科技大學資訊管理系官方網站</a></figcaption>
+        </figure>
+        <p class="hero-note">從管理問題出發，理解資訊科技如何成為組織運作、決策與創新的能力。</p>
+      </div>
     </div>
   </section>
 
