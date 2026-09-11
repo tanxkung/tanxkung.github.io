@@ -1,588 +1,406 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant-TW">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="管理資訊系統背景教材：電腦、網路與資訊系統的演進">
-  <title>管理資訊系統｜背景演進教材 V3</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+TC:wght@400;600;800;900&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <meta name="description" content="龔鴻裕助理教授的課程教材入口，提供管理資訊系統及本學期課程教材。">
+  <title>龔鴻裕｜教學與教材</title>
   <style>
-    /* ===========================================
-       THEME TOKENS
-       Main slides use cobalt-on-paper; chapter beats use the dark signal system.
-       =========================================== */
     :root {
-      --paper:#f0ebde;
-      --paper-2:#e6e0ce;
-      --ink:#1f2be0;
-      --ink-soft:#5560e5;
-      --grid:rgba(31,43,224,.10);
-      --ink-faint:rgba(31,43,224,.18);
-      --dark:#08111f;
-      --dark-grid:rgba(111,151,181,.13);
-      --light:#f4f0e8;
-      --cyan:#35d9cf;
-      --amber:#ffb547;
-      --stage-bg:#080d17;
-      --slide-bg:var(--paper);
-      --font-display:'Newsreader','Noto Serif TC',serif;
-      --font-cjk-display:'Noto Serif TC','Newsreader',serif;
-      --font-body:'Hanken Grotesk','Noto Sans TC',sans-serif;
-      --font-mono:'DM Mono',monospace;
-      --ease:cubic-bezier(.16,1,.3,1);
+      --navy: #102b46;
+      --navy-2: #173d60;
+      --gold: #f0b429;
+      --paper: #f5f7f8;
+      --white: #ffffff;
+      --ink: #17212b;
+      --muted: #5b6875;
+      --line: #dce3e8;
+      --radius: 22px;
+      --shadow: 0 22px 60px rgba(16, 43, 70, .12);
     }
 
-    /* ===========================================
-       FIXED 16:9 STAGE: MANDATORY BASE STYLES
-       Include this ENTIRE file in every presentation.
-       Slides are authored at 1920×1080 and scaled as a whole.
-       =========================================== */
+    * { box-sizing: border-box; }
 
-    /* 1. Lock the browser viewport */
-    html,
+    html { scroll-behavior: smooth; }
+
     body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-        background: var(--stage-bg, #000);
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.7;
     }
 
-    /* 2. Full-window deck viewport */
-    .deck-viewport {
-        position: fixed;
-        inset: 0;
-        overflow: hidden;
-        background: var(--stage-bg, #000);
+    a { color: inherit; }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 12px;
+      z-index: 20;
+      padding: 10px 14px;
+      background: var(--white);
+      color: var(--navy);
+      border-radius: 8px;
     }
 
-    /* 3. Fixed 16:9 design canvas.
-       JavaScript sets transform: translate(...) scale(...). */
-    .deck-stage {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        transform-origin: 0 0;
-        background: var(--slide-bg, #fff);
+    .skip-link:focus { left: 12px; }
+
+    .site-header {
+      color: var(--white);
+      background: var(--navy);
     }
 
-    /* 4. Slides stack inside the fixed stage.
-       Content must be laid out at 1920×1080, not reflowed per device. */
-    .slide {
-        position: absolute;
-        inset: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        display: block;
-        visibility: hidden;
-        opacity: 0;
-        pointer-events: none;
-        background: var(--slide-bg, #fff);
+    .nav {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
     }
 
-    .slide.active,
-    .slide.visible {
-        visibility: visible;
-        opacity: 1;
-        pointer-events: auto;
-        z-index: 1;
+    .brand {
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-decoration: none;
     }
 
-    /* 5. Keep media inside authored slide canvas */
-    img,
-    video,
-    canvas,
-    svg {
-        max-width: 100%;
-        max-height: 100%;
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: .95rem;
     }
 
-    /* 6. Controls remain outside the scaled stage */
-    .deck-controls {
-        position: fixed;
-        left: 50%;
-        bottom: 18px;
-        transform: translateX(-50%);
-        z-index: 1000;
+    .nav-links a {
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
     }
 
-    /* 7. Print each authored slide as one page */
-    @media print {
-        html,
-        body { width: 1920px; height: auto; overflow: visible; background: #fff; }
-        .deck-viewport { position: static; overflow: visible; background: #fff; }
-        .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
-        .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
-        .slide:last-child { break-after: auto; page-break-after: auto; }
-        .deck-controls,
-        .chapter-menu,
-        .edit-hotzone,
-        .edit-toggle,
-        .edit-toolbar { display: none !important; }
+    .nav-links a:hover,
+    .nav-links a:focus { color: var(--white); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
     }
 
-    /* 8. Reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            transition-duration: 0.2s !important;
-        }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -110px;
+      bottom: -180px;
+      width: 440px;
+      height: 440px;
+      border: 72px solid rgba(240, 180, 41, .13);
+      border-radius: 50%;
     }
 
-    /* ===========================================
-       RESET AND TYPOGRAPHY
-       =========================================== */
-    * { box-sizing:border-box; }
-    button,a { font:inherit; }
-    a { color:inherit; }
-    .slide { transition:opacity .28s ease; }
-    .slide.light { color:var(--ink); background:var(--paper); }
-    .slide.light::before {
-      content:""; position:absolute; inset:0; pointer-events:none;
-      background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-      background-size:40px 40px;
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 76px 0 96px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 70px;
+      align-items: end;
     }
-    .slide.dark { color:var(--light); background:var(--dark); }
-    .slide.dark::before {
-      content:""; position:absolute; inset:0; pointer-events:none;
-      background-image:linear-gradient(var(--dark-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dark-grid) 1px,transparent 1px);
-      background-size:64px 64px;
-      mask-image:linear-gradient(90deg,#000,rgba(0,0,0,.4) 72%,transparent);
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--gold);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
     }
-    .hairlines::before,.hairlines::after { content:""; position:absolute; left:54px; right:54px; height:2px; background:currentColor; opacity:.95; z-index:3; }
-    .hairlines::before { top:30px; }.hairlines::after { bottom:24px; }
-    .frame { position:absolute; inset:92px 86px 118px; z-index:2; }
-    .page-num,.nav-hint { position:absolute; bottom:52px; z-index:4; font:500 18px/1 var(--font-mono); letter-spacing:.08em; }
-    .page-num { right:86px; }.nav-hint { left:86px; opacity:.52; }
-    .topbar { min-height:112px; border-bottom:2px solid currentColor; display:flex; justify-content:space-between; align-items:flex-start; gap:36px; padding-bottom:22px; }
-    .topbar h2 { max-width:1300px; margin:0; font:400 70px/1.04 var(--font-cjk-display); letter-spacing:-.035em; }
-    .lab { padding-top:14px; font:500 18px/1.2 var(--font-mono); letter-spacing:.08em; text-align:right; white-space:nowrap; }
-    .body { font:400 30px/1.65 var(--font-body); }
-    .micro { font:600 18px/1.2 var(--font-body); letter-spacing:.12em; }
-    .source-tag { position:absolute; right:0; bottom:-32px; max-width:900px; text-align:right; font:400 17px/1.3 var(--font-mono); opacity:.72; }
-    .reveal { opacity:0; transform:translateY(28px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
-    .visible .reveal { opacity:1; transform:none; }
-    .visible .reveal:nth-child(2){transition-delay:.08s}.visible .reveal:nth-child(3){transition-delay:.16s}.visible .reveal:nth-child(4){transition-delay:.24s}
 
-    /* ===========================================
-       LIGHT CONTENT LAYOUTS
-       =========================================== */
-    .content-grid { height:620px; padding-top:38px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
-    .concept-card { border-top:8px solid currentColor; border-bottom:1px solid var(--ink-faint); padding:28px 18px 22px 0; }
-    .concept-card .no { font:500 20px/1 var(--font-mono); margin-bottom:48px; }
-    .concept-card h3 { margin:0 0 22px; font:400 45px/1.15 var(--font-cjk-display); letter-spacing:-.02em; }
-    .concept-card p { margin:0; font:400 27px/1.65 var(--font-body); }
-    .two-col { height:630px; padding-top:42px; display:grid; grid-template-columns:1fr 1fr; gap:54px; }
-    .panel { border-top:8px solid currentColor; padding:30px 12px 0 0; }
-    .panel h3 { margin:0 0 28px; font:400 50px/1.12 var(--font-cjk-display); }
-    .panel ul { margin:0; padding-left:32px; font:400 28px/1.75 var(--font-body); }
-    .panel li { margin-bottom:16px; }
-    .statement { height:640px; display:flex; flex-direction:column; justify-content:center; max-width:1420px; }
-    .statement .quote { margin:0; font:400 92px/1.24 var(--font-cjk-display); letter-spacing:-.035em; }
-    .statement .explain { margin:48px 0 0; padding-top:24px; border-top:2px solid currentColor; font:400 29px/1.65 var(--font-body); max-width:1250px; }
-    .timeline { position:relative; height:610px; padding-top:120px; display:grid; grid-template-columns:repeat(var(--steps,4),1fr); gap:22px; }
-    .timeline::before { content:""; position:absolute; left:16px; right:16px; top:170px; height:3px; background:currentColor; }
-    .milestone { position:relative; padding:95px 18px 0 0; }
-    .milestone::before { content:""; position:absolute; left:0; top:33px; width:25px; height:55px; background:currentColor; }
-    .milestone b { display:block; margin-bottom:18px; font:500 20px/1 var(--font-mono); letter-spacing:.04em; }
-    .milestone h3 { margin:0 0 18px; font:400 38px/1.2 var(--font-cjk-display); }
-    .milestone p { margin:0; font:400 24px/1.55 var(--font-body); }
-    .flow { height:620px; padding-top:70px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-    .flow-node { width:290px; min-height:330px; border:3px solid currentColor; padding:28px 24px; display:flex; flex-direction:column; justify-content:space-between; }
-    .flow-node b { font:500 22px/1 var(--font-mono); }.flow-node h3 { margin:0; font:400 44px/1.12 var(--font-cjk-display); }.flow-node p { margin:0; font:400 23px/1.5 var(--font-body); }
-    .arrow { font:400 54px/1 var(--font-mono); }
-    .pyramid-wrap { height:650px; padding-top:36px; display:grid; grid-template-columns:1.18fr .82fr; gap:60px; }
-    .pyramid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
-    .pyr { height:105px; border:3px solid currentColor; display:flex; align-items:center; justify-content:center; gap:18px; font:400 31px/1 var(--font-cjk-display); background:rgba(240,235,222,.82); }
-    .pyr b { font:500 22px/1 var(--font-mono); }.pyr:nth-child(1){width:38%}.pyr:nth-child(2){width:57%}.pyr:nth-child(3){width:76%}.pyr:nth-child(4){width:96%}
-    .pyramid-notes { display:flex; flex-direction:column; justify-content:center; gap:32px; font:400 27px/1.6 var(--font-body); }
-    .pyramid-notes div { border-top:2px solid currentColor; padding-top:18px; }
-
-    /* ===========================================
-       VIDEO INTRODUCTION AND PLAYER
-       =========================================== */
-    .video-intro { height:635px; padding-top:44px; display:grid; grid-template-columns:.72fr 1.28fr; gap:70px; }
-    .video-meta { border-top:8px solid currentColor; padding-top:28px; }
-    .video-meta .duration { font:400 120px/.95 var(--font-display); letter-spacing:-.04em; }
-    .video-meta .maker { margin-top:30px; font:500 22px/1.5 var(--font-mono); }
-    .watch-task { border-top:2px solid currentColor; padding-top:28px; }
-    .watch-task h3 { margin:0 0 28px; font:400 50px/1.1 var(--font-cjk-display); }
-    .watch-task ol { margin:0; padding-left:44px; font:400 31px/1.65 var(--font-body); }
-    .watch-task li { margin-bottom:18px; }
-    .video-shell { position:absolute; left:86px; right:86px; top:150px; bottom:126px; border:3px solid currentColor; background:#060a12; display:grid; place-items:center; overflow:hidden; }
-    .video-shell iframe { width:100%; height:100%; border:0; }
-    .load-video { display:flex; flex-direction:column; align-items:center; gap:22px; color:var(--paper); background:transparent; border:0; cursor:pointer; }
-    .play-icon { width:132px; height:94px; border:3px solid currentColor; display:grid; place-items:center; font:500 55px/1 var(--font-mono); transition:transform .22s ease,background .22s ease,color .22s ease; }
-    .load-video:hover .play-icon { transform:translateY(-5px); background:var(--paper); color:var(--ink); }
-    .load-video span:last-child { font:500 23px/1.4 var(--font-body); }
-    .video-caption { position:absolute; left:86px; right:86px; bottom:82px; display:flex; justify-content:space-between; align-items:center; gap:30px; z-index:6; color:currentColor; font:500 18px/1.3 var(--font-mono); }
-    .video-caption a { text-underline-offset:5px; }
-
-    /* ===========================================
-       DARK COVER AND CHAPTER SYSTEM
-       =========================================== */
-    .dark .hairlines { color:rgba(244,240,232,.82); }
-    .cover-kicker,.chapter-kicker { position:absolute; left:100px; top:82px; color:var(--cyan); font:600 21px/1 var(--font-mono); letter-spacing:.14em; }
-    .cover-serial,.chapter-serial { position:absolute; right:96px; top:80px; color:#91a4b3; font:500 20px/1 var(--font-mono); }
-    .cover h1 { position:absolute; left:94px; top:194px; width:1000px; margin:0; font:900 128px/1.14 'Noto Sans TC',sans-serif; letter-spacing:-.055em; }
-    .cover-sub { position:absolute; left:103px; top:650px; color:#aebcc5; font:400 35px/1.5 var(--font-body); }.cover-sub strong{color:var(--amber)}
-    .cover-timeline { position:absolute; left:104px; bottom:110px; width:1010px; display:flex; gap:0; border-top:2px solid var(--cyan); }
-    .cover-timeline div { width:33.333%; padding-top:22px; font:600 23px/1 var(--font-body); }
-    .signal { position:absolute; right:100px; top:172px; width:620px; height:620px; border:2px solid rgba(53,217,207,.32); }
-    .signal::before,.signal::after { content:""; position:absolute; border:1px solid rgba(255,181,71,.38); }.signal::before{inset:70px}.signal::after{inset:160px;border-color:rgba(53,217,207,.45)}
-    .signal-core { position:absolute; right:282px; top:354px; width:255px; height:255px; background:var(--cyan); color:var(--dark); display:grid; place-items:center; font:800 54px/1 var(--font-body); }
-    .chapter .frame { inset:126px 100px 128px; display:grid; grid-template-columns:1.15fr .85fr; gap:70px; align-items:center; }
-    .chapter h2 { margin:0; font:900 112px/1.18 'Noto Sans TC',sans-serif; letter-spacing:-.05em; }
-    .chapter .chapter-sub { margin-top:32px; max-width:950px; color:#bdc9cf; font:400 35px/1.6 var(--font-body); }
-    .chapter .chapter-no { font:500 170px/.9 var(--font-mono); color:var(--amber); text-align:right; }
-    .chapter .chapter-data { margin-top:54px; border-top:2px solid var(--cyan); padding-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:28px; font:500 21px/1.5 var(--font-mono); }
-    .chapter .chapter-question { margin-top:40px; color:var(--light); font:600 29px/1.55 var(--font-body); }
-
-    /* ===========================================
-       COURSE MAP AND SUMMARY
-       =========================================== */
-    .map-grid { height:640px; padding-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
-    .map-item { border:3px solid currentColor; padding:34px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; }
-    .map-item .map-no { font:500 22px/1 var(--font-mono); }.map-item h3{margin:0;font:400 54px/1.12 var(--font-cjk-display)}.map-item p{margin:0;font:400 27px/1.6 var(--font-body)}
-    .map-item:hover { background:var(--ink); color:var(--paper); }
-    .protocol { height:640px; padding-top:46px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
-    .protocol-step { border-top:8px solid currentColor; padding:28px 18px 0 0; }
-    .protocol-step b{font:500 24px/1 var(--font-mono)}.protocol-step h3{margin:48px 0 24px;font:400 50px/1.12 var(--font-cjk-display)}.protocol-step p{margin:0;font:400 28px/1.65 var(--font-body)}
-    .final-grid { height:620px; padding-top:54px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
-    .final-item { border-top:10px solid currentColor; padding:28px 16px 0 0; }
-    .final-item .big { font:400 70px/1 var(--font-cjk-display); }.final-item p{font:400 28px/1.65 var(--font-body)}
-    .closing .frame { display:flex; flex-direction:column; justify-content:center; }
-    .closing h2 { max-width:1580px; margin:0; font:900 80px/1.3 'Noto Sans TC',sans-serif; letter-spacing:-.04em; }
-    .closing .questions { margin-top:60px; border-top:2px solid var(--cyan); padding-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; color:#c4d0d6; font:500 25px/1.55 var(--font-body); }
-
-    /* ===========================================
-       OUTSIDE-STAGE NAVIGATION AND MENU
-       =========================================== */
-    .deck-controls { display:flex; align-items:center; gap:8px; padding:7px; background:rgba(7,12,22,.88); border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(12px); opacity:.24; transition:opacity .2s ease; }
-    .deck-controls:hover,.deck-controls:focus-within { opacity:1; }
-    .deck-controls button { width:42px; height:34px; color:#fff; background:transparent; border:1px solid rgba(255,255,255,.25); cursor:pointer; }
-    .deck-controls button:hover { background:#fff; color:#07101b; }
-    .counter { min-width:92px; text-align:center; color:#fff; font:500 13px/1 var(--font-mono); }
-    .progress { position:fixed; left:0; bottom:0; height:4px; width:0; background:var(--cyan); z-index:1200; transition:width .28s ease; }
-    .chapter-menu { position:fixed; inset:0; z-index:9000; display:grid; place-items:center; background:rgba(4,8,15,.86); backdrop-filter:blur(16px); opacity:0; visibility:hidden; pointer-events:none; transition:.22s ease; }
-    .chapter-menu.open { opacity:1; visibility:visible; pointer-events:auto; }
-    .menu-panel { width:min(980px,88vw); max-height:82vh; overflow:auto; background:var(--paper); color:var(--ink); border:3px solid var(--ink); padding:38px; }
-    .menu-head { display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid var(--ink); padding-bottom:20px; }
-    .menu-head h2 { margin:0; font:400 42px/1 var(--font-cjk-display); }.menu-head button{border:2px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
-    .menu-links { display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; padding-top:24px; }
-    .menu-links button { text-align:left; color:var(--ink); background:transparent; border:0; border-bottom:1px solid var(--ink-faint); padding:14px 8px; cursor:pointer; font:500 21px/1.35 var(--font-body); }
-    .menu-links button:hover { background:var(--ink); color:var(--paper); }
-
-    /* ===========================================
-       INLINE EDITING CONTROLS
-       =========================================== */
-    .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
-    .edit-toggle { position:fixed; top:16px; left:16px; width:46px; height:46px; z-index:10001; border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; opacity:0; pointer-events:none; transition:opacity .3s ease; cursor:pointer; }
-    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
-    .edit-toolbar { position:fixed; top:16px; left:74px; z-index:10001; display:none; gap:8px; }
-    .edit-toolbar.show { display:flex; }
-    .edit-toolbar button { border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; padding:10px 14px; cursor:pointer; font:500 13px/1 var(--font-body); }
-    body.editing [data-editable] { outline:2px dashed rgba(255,181,71,.8); outline-offset:5px; cursor:text; }
-
-    /* V3 compatibility layer: content is visible even when local JavaScript is blocked. */
-    .deck-viewport { top:0; right:0; bottom:0; left:0; }
-    .deck-stage {
-      left:50%; top:50%;
-      transform-origin:50% 50%;
-      -ms-transform-origin:50% 50%;
-      transform:translate(-50%,-50%) scale(.5);
-      -ms-transform:translate(-50%,-50%) scale(.5);
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 6.4rem);
+      line-height: .98;
+      letter-spacing: -.05em;
     }
-    .slide { top:0; right:0; bottom:0; left:0; }
-    .frame { top:92px; right:86px; bottom:118px; left:86px; }
-    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:5; }
-    .slide:target .reveal { opacity:1; transform:none; }
-    .fallback-controls {
-      position:absolute; left:50%; bottom:34px; z-index:80;
-      display:flex; align-items:center; gap:14px;
-      transform:translateX(-50%); -ms-transform:translateX(-50%);
-      padding:8px 12px; color:#fff; background:#08111f;
-      border:1px solid rgba(255,255,255,.45);
-      font:500 18px/1 Arial,sans-serif;
+
+    .role {
+      margin: 24px 0 0;
+      color: rgba(255,255,255,.86);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
     }
-    .fallback-controls a {
-      width:42px; height:34px; display:flex; align-items:center; justify-content:center;
-      color:#fff; border:1px solid rgba(255,255,255,.5); text-decoration:none;
+
+    .hero-note {
+      margin: 0;
+      padding: 24px 0 6px 26px;
+      border-left: 3px solid var(--gold);
+      color: rgba(255,255,255,.82);
+      font-size: 1.05rem;
     }
-    .fallback-controls span { min-width:82px; text-align:center; }
-    .deck-controls, .progress { display:none; }
-    body.js-ready .deck-controls { display:flex; }
-    body.js-ready .progress { display:block; }
-    body.js-ready .fallback-controls { display:none; }
-    .legacy-note {
-      position:fixed; right:10px; top:10px; z-index:20000;
-      padding:7px 10px; color:#fff; background:#08111f;
-      border:1px solid #fff; font:14px/1.4 Arial,sans-serif;
+
+    main {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 72px 0 88px;
     }
-    @media (min-width:1600px) and (min-height:900px) {
-      .deck-stage {
-        transform:translate(-50%,-50%) scale(.85);
-        -ms-transform:translate(-50%,-50%) scale(.85);
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      line-height: 1.2;
+      letter-spacing: -.03em;
+    }
+
+    .section-head p {
+      max-width: 540px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .material-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 34px;
+      align-items: center;
+      padding: 38px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .material-card h3 {
+      margin: 6px 0 12px;
+      font-size: clamp(1.55rem, 4vw, 2.3rem);
+      line-height: 1.25;
+    }
+
+    .material-card p {
+      margin: 0;
+      color: rgba(255,255,255,.76);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .meta span {
+      padding: 5px 10px;
+      color: var(--gold);
+      border: 1px solid rgba(240,180,41,.45);
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .primary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 154px;
+      min-height: 52px;
+      padding: 12px 20px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 14px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .primary-link:hover,
+    .primary-link:focus { background: #ffd166; }
+
+    .profile-section { margin-top: 74px; }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .info-card {
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .info-card h3 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .info-card p,
+    .info-card ul { margin: 0; }
+
+    .info-card ul {
+      padding-left: 1.25em;
+    }
+
+    .course-section { margin-top: 64px; }
+
+    .course-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .course-list li {
+      padding: 16px 18px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-weight: 650;
+    }
+
+    .source-link {
+      display: inline-block;
+      margin-top: 24px;
+      color: var(--navy-2);
+      font-weight: 700;
+      text-underline-offset: 4px;
+    }
+
+    footer {
+      padding: 28px 20px;
+      color: rgba(255,255,255,.72);
+      background: var(--navy);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 760px) {
+      .nav { min-height: 66px; }
+      .nav-links { display: none; }
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 58px 0 68px;
       }
+      .hero-note { max-width: 34rem; }
+      main { padding: 54px 0 68px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 12px; }
+      .material-card { grid-template-columns: 1fr; padding: 28px; }
+      .primary-link { width: 100%; }
+      .profile-grid,
+      .course-list { grid-template-columns: 1fr; }
     }
-    @media (max-width:700px) {
-      .deck-stage {
-        transform:translate(-50%,-50%) scale(.25);
-        -ms-transform:translate(-50%,-50%) scale(.25);
-      }
-    }
-    /* Concrete color fallbacks for browsers without CSS custom properties. */
-    html, body, .deck-viewport { background:#080d17; }
-    .slide.light { color:#1f2be0; background:#f0ebde; }
-    .slide.dark { color:#f4f0e8; background:#08111f; }
-
   </style>
 </head>
 <body>
-  <div class="deck-viewport">
-    <main class="deck-stage" id="deckStage" aria-live="polite">
-<section id="slide-1" class="slide active visible dark cover" data-title="封面"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">01 / 55</div><div class="cover-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="cover-serial">BACKGROUND EVOLUTION / V3</div><h1 class="reveal" data-editable>管理資訊<br>系統</h1><div class="cover-sub reveal" data-editable>從<strong>運算</strong>、連結到組織能力的形成</div><div class="cover-timeline reveal"><div>電腦的演進</div><div>網路的演進</div><div>資訊系統的演進</div></div><div class="signal"></div><div class="signal-core">IS</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">&#8592;</a><span>01 / 55</span><a href="#slide-2" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-2" class="slide light" data-title="今天要建立的三條線"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">02 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>今天要建立的三條線</h2><div class="lab">COURSE MAP</div></header><div class="map-grid"><article class="map-item reveal" data-jump="3"><div class="map-no">01 / COMPUTE</div><h3 data-editable>電腦</h3><p data-editable>把規則轉成可以反覆執行的運算</p></article><article class="map-item reveal" data-jump="17"><div class="map-no">02 / CONNECT</div><h3 data-editable>網路</h3><p data-editable>讓分散的裝置與資訊彼此連結</p></article><article class="map-item reveal" data-jump="31"><div class="map-no">03 / ORGANIZE</div><h3 data-editable>資訊系統</h3><p data-editable>把技術轉化為組織營運與決策能力</p></article></div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">&#8592;</a><span>02 / 55</span><a href="#slide-3" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-3" class="slide light" data-title="影片不是休息時間"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">03 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>影片不是休息時間</h2><div class="lab">HOW TO WATCH</div></header><div class="protocol"><article class="protocol-step reveal"><b>BEFORE</b><h3 data-editable>先問問題</h3><p data-editable>這個時代遇到了什麼限制？人們真正想解決的是什麼？</p></article><article class="protocol-step reveal"><b>DURING</b><h3 data-editable>抓住轉折</h3><p data-editable>哪一項技術、標準或商業選擇，讓下一階段成為可能？</p></article><article class="protocol-step reveal"><b>AFTER</b><h3 data-editable>連回管理</h3><p data-editable>技術改變之後，誰可以使用資訊？工作與決策如何改變？</p></article></div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-2" aria-label="上一張">&#8592;</a><span>03 / 55</span><a href="#slide-4" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-4" class="slide dark chapter" data-title="電腦的演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">04 / 55</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 01</div><div class="frame"><div class="reveal"><h2 data-editable>電腦的演進</h2><div class="chapter-sub" data-editable>從專門計算的巨大機器，<br>走向每個人都能使用的工作工具</div><div class="chapter-data"><span>2 部影片 · 33:38</span><span>核心詞：運算、程式、個人化</span></div><div class="chapter-question" data-editable>本章核心問題：誰能使用電腦？</div></div><div class="chapter-no reveal">01</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-3" aria-label="上一張">&#8592;</a><span>04 / 55</span><a href="#slide-5" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-5" class="slide light" data-title="The History of Computing"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">05 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>The History of Computing</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">技術主線</div><div class="duration">13:42</div><div class="maker">Singularity Prosperity<br><a href="https://www.youtube.com/watch?v=-M6lANfzFsM" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>電腦為何不是某一個人的單一發明？</li><li data-editable>「可程式化」和單純計算有何不同？</li><li data-editable>真空管、電晶體與積體電路各解決了什麼限制？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=-M6lANfzFsM</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-4" aria-label="上一張">&#8592;</a><span>05 / 55</span><a href="#slide-6" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-6" class="slide dark video-page" data-title="播放｜The History of Computing"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">06 / 55</div><div class="cover-kicker">VIDEO / 06</div><div class="cover-serial">13:42 · ENGLISH CAPTIONS</div><div class="video-shell" data-video-id="-M6lANfzFsM" data-video-title="The History of Computing"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>The History of Computing</span><a href="https://www.youtube.com/watch?v=-M6lANfzFsM" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-5" aria-label="上一張">&#8592;</a><span>06 / 55</span><a href="#slide-7" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-7" class="slide light" data-title="電腦史不是一項發明"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">07 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>電腦史不是一項發明</h2><div class="lab">VIDEO 01 / KEY POINTS</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>計算工具</h3><p data-editable>算盤與機械計算器把人的算術動作外化，先解決「算得更快、更一致」。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>控制與輸入</h3><p data-editable>提花織機與打孔卡示範：機器可以依照預先編碼的指令改變動作。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>長期累積</h3><p data-editable>現代電腦是數學、邏輯、機械、電子與程式概念跨越數百年的組合。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-6" aria-label="上一張">&#8592;</a><span>07 / 55</span><a href="#slide-8" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-8" class="slide light" data-title="從計算走向可程式化"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">08 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>從計算走向可程式化</h2><div class="lab">VIDEO 01 / IDEAS</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1830s</b><h3 data-editable>Babbage</h3><p data-editable>分析機構想包含記憶、控制、條件與打孔卡指令。</p></article><article class="milestone reveal"><b>1840s</b><h3 data-editable>Ada Lovelace</h3><p data-editable>看見機器可以依演算法處理符號，不只處理數字。</p></article><article class="milestone reveal"><b>1890</b><h3 data-editable>Hollerith</h3><p data-editable>用打孔卡處理人口普查，資訊處理開始進入大型組織。</p></article><article class="milestone reveal"><b>1945</b><h3 data-editable>von Neumann</h3><p data-editable>把程式與資料一同存入記憶體，形成現代電腦基本架構。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-7" aria-label="上一張">&#8592;</a><span>08 / 55</span><a href="#slide-9" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-9" class="slide light" data-title="三次電子躍升"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">09 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>三次電子躍升</h2><div class="lab">VIDEO 01 / HARDWARE</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>真空管</h3><p data-editable>速度比機電繼電器快，但體積、耗電、發熱與故障率都很高。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>電晶體</h3><p data-editable>以更小、更省電、更可靠的元件取代真空管，降低運算成本。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>積體電路</h3><p data-editable>把大量電晶體整合在晶片上，推動小型化、量產與效能成長。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-8" aria-label="上一張">&#8592;</a><span>09 / 55</span><a href="#slide-10" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-10" class="slide light" data-title="第一部影片的核心"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">10 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>第一部影片的核心</h2><div class="lab">VIDEO 01 / TAKEAWAY</div></header><div class="statement"><p class="quote reveal" data-editable>縮小、變快、變便宜，改變了電腦可以出現在哪裡</p><p class="explain reveal" data-editable>摩爾定律不只描述效能成長；它也預告運算將從機房擴散到家庭、汽車與隨身裝置。</p></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-9" aria-label="上一張">&#8592;</a><span>10 / 55</span><a href="#slide-11" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-11" class="slide light" data-title="Apple I 到台灣電腦王國，電腦如何從實驗室走進你家的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">11 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Apple I 到台灣電腦王國，電腦如何從實驗室走進你家的？</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">個人電腦與產業主線</div><div class="duration">19:56</div><div class="maker">VisCircuit 電路筆記<br><a href="https://www.youtube.com/watch?v=Aq1IANgRV0k" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>個人電腦為何在 1970 年代才真正出現？</li><li data-editable>哪些「殺手級應用」讓電腦從玩家玩具變成商業工具？</li><li data-editable>IBM 的開放式架構如何改變台灣電腦產業？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=Aq1IANgRV0k</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-10" aria-label="上一張">&#8592;</a><span>11 / 55</span><a href="#slide-12" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-12" class="slide dark video-page" data-title="播放｜Apple I 到台灣電腦王國，電腦如何從實驗室走進你家的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">12 / 55</div><div class="cover-kicker">VIDEO / 12</div><div class="cover-serial">19:56 · 繁體中文字幕</div><div class="video-shell" data-video-id="Aq1IANgRV0k" data-video-title="Apple I 到台灣電腦王國，電腦如何從實驗室走進你家的？"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Apple I 到台灣電腦王國，電腦如何從實驗室走進你家的？</span><a href="https://www.youtube.com/watch?v=Aq1IANgRV0k" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-11" aria-label="上一張">&#8592;</a><span>12 / 55</span><a href="#slide-13" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-13" class="slide light" data-title="個人電腦革命之前"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">13 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>個人電腦革命之前</h2><div class="lab">VIDEO 02 / CONTEXT</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>大型主機</h3><ul><li data-editable>昂貴、集中在政府、大企業與研究機構</li><li data-editable>使用者必須排程或透過專業人員取得運算資源</li><li data-editable>電腦的控制權集中在組織中心</li></ul></article><article class="panel reveal"><h3 data-editable>微處理器帶來的機會</h3><ul><li data-editable>CPU 被縮小到單一晶片，成本與體積快速下降</li><li data-editable>電子玩家可以自己組裝與程式設計</li><li data-editable>運算能力開始脫離機房</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-12" aria-label="上一張">&#8592;</a><span>13 / 55</span><a href="#slide-14" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-14" class="slide light" data-title="從玩家工具進入辦公室"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">14 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>從玩家工具進入辦公室</h2><div class="lab">VIDEO 02 / PERSONAL COMPUTER</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1975</b><h3 data-editable>Altair 8800</h3><p data-editable>微型電腦成為玩家社群可取得的產品。</p></article><article class="milestone reveal"><b>1976–77</b><h3 data-editable>Apple I／II</h3><p data-editable>鍵盤、螢幕與完整產品設計降低使用門檻。</p></article><article class="milestone reveal"><b>1979</b><h3 data-editable>VisiCalc</h3><p data-editable>電子試算表讓管理者看見個人電腦的商業價值。</p></article><article class="milestone reveal"><b>1981</b><h3 data-editable>IBM PC</h3><p data-editable>企業品牌、標準化與軟體生態加速市場擴張。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-13" aria-label="上一張">&#8592;</a><span>14 / 55</span><a href="#slide-15" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-15" class="slide light" data-title="IBM PC 的開放式架構"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">15 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>IBM PC 的開放式架構</h2><div class="lab">VIDEO 02 / ECOSYSTEM</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>採用現成元件</h3><p data-editable>Intel 處理器與 Microsoft 作業系統讓產品快速上市。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>公布多數規格</h3><p data-editable>周邊與軟體廠商可以開發相容產品，市場形成共同平台。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>相容機競爭</h3><p data-editable>Compaq、Dell、Acer 等廠商進入，價值由單一產品轉向生態系。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-14" aria-label="上一張">&#8592;</a><span>15 / 55</span><a href="#slide-16" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-16" class="slide light" data-title="台灣如何進入電腦產業"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">16 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>台灣如何進入電腦產業</h2><div class="lab">VIDEO 02 / TAIWAN</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>周邊與零組件</h3><p data-editable>顯示器、電源、鍵盤、網路卡等相容零組件創造切入點。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>相容電腦</h3><p data-editable>開放規格讓本土企業從仿製、相容設計逐步累積技術能力。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>代工與筆電</h3><p data-editable>國際品牌尋求成本與量產能力，台灣建立 OEM／ODM 與供應鏈優勢。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-15" aria-label="上一張">&#8592;</a><span>16 / 55</span><a href="#slide-17" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-17" class="slide light" data-title="第一部分小結"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">17 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>第一部分小結</h2><div class="lab">SECTION 01 / SYNTHESIS</div></header><div class="statement"><p class="quote reveal" data-editable>運算能力被個人化，才有後來的數位工作</p><p class="explain reveal" data-editable>電腦的演進不只是一條效能曲線；它也把資訊處理權從少數專業機構，逐步交到一般工作者手上。</p></div><div class="source-tag">影片重點＋教師統整</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-16" aria-label="上一張">&#8592;</a><span>17 / 55</span><a href="#slide-18" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-18" class="slide dark chapter" data-title="網路的演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">18 / 55</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 02</div><div class="frame"><div class="reveal"><h2 data-editable>網路的演進</h2><div class="chapter-sub" data-editable>先讓同一個地方的電腦相連，<br>再把家庭與企業接上廣域網路</div><div class="chapter-data"><span>2 部影片 · 41:18</span><span>核心詞：LAN、WAN、標準</span></div><div class="chapter-question" data-editable>本章核心問題：資訊如何跨越距離？</div></div><div class="chapter-no reveal">02</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-17" aria-label="上一張">&#8592;</a><span>18 / 55</span><a href="#slide-19" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-19" class="slide light" data-title="Ethernet 網路線是怎麼發明的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">19 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Ethernet 網路線是怎麼發明的？</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">區域網路主線</div><div class="duration">16:06</div><div class="maker">VisCircuit 電路筆記<br><a href="https://www.youtube.com/watch?v=JIROljkaNOE" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>Xerox PARC 為什麼需要一套新的連線方法？</li><li data-editable>多台電腦共用同一條線時，如何避免彼此干擾？</li><li data-editable>Ethernet 為何能從一項公司技術變成全球標準？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=JIROljkaNOE</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-18" aria-label="上一張">&#8592;</a><span>19 / 55</span><a href="#slide-20" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-20" class="slide dark video-page" data-title="播放｜Ethernet 網路線是怎麼發明的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">20 / 55</div><div class="cover-kicker">VIDEO / 20</div><div class="cover-serial">16:06 · 中文（台灣）字幕</div><div class="video-shell" data-video-id="JIROljkaNOE" data-video-title="Ethernet 網路線是怎麼發明的？"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Ethernet 網路線是怎麼發明的？</span><a href="https://www.youtube.com/watch?v=JIROljkaNOE" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-19" aria-label="上一張">&#8592;</a><span>20 / 55</span><a href="#slide-21" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-21" class="slide light" data-title="Ethernet 起源於一個具體問題"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">21 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Ethernet 起源於一個具體問題</h2><div class="lab">VIDEO 03 / XEROX PARC</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>裝置彼此孤立</h3><p data-editable>1970 年代的電腦與印表機無法直接交換資料。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>共享昂貴設備</h3><p data-editable>Xerox PARC 希望多台電腦共用雷射印表機，省去磁帶搬運。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>Bob Metcalfe</h3><p data-editable>1973 年設計以同軸電纜連接多台裝置的區域網路。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-20" aria-label="上一張">&#8592;</a><span>21 / 55</span><a href="#slide-22" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-22" class="slide light" data-title="共享媒介如何維持秩序"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">22 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>共享媒介如何維持秩序</h2><div class="lab">VIDEO 03 / CSMA-CD</div></header><div class="flow"><article class="flow-node reveal"><b>LISTEN</b><h3 data-editable>先聽</h3><p data-editable>傳送前先確認線路是否正在使用。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>SEND</b><h3 data-editable>再送</h3><p data-editable>線路空閒時才開始送出資料框。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>DETECT</b><h3 data-editable>偵測</h3><p data-editable>若發生碰撞，停止並等待隨機時間後重送。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-21" aria-label="上一張">&#8592;</a><span>22 / 55</span><a href="#slide-23" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-23" class="slide light" data-title="Ethernet 不斷改變外形"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">23 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Ethernet 不斷改變外形</h2><div class="lab">VIDEO 03 / EVOLUTION</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1970s</b><h3 data-editable>同軸電纜</h3><p data-editable>多台裝置共享一條總線，碰撞是主要限制。</p></article><article class="milestone reveal"><b>1980s</b><h3 data-editable>IEEE 802.3</h3><p data-editable>標準化讓不同廠商的設備可以互通。</p></article><article class="milestone reveal"><b>1990s</b><h3 data-editable>雙絞線＋星狀</h3><p data-editable>集線器與交換器讓布線及故障管理更容易。</p></article><article class="milestone reveal"><b>TODAY</b><h3 data-editable>交換式高速網路</h3><p data-editable>每條連線可獨立全雙工，速度持續提升。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-22" aria-label="上一張">&#8592;</a><span>23 / 55</span><a href="#slide-24" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-24" class="slide light" data-title="第三部影片的核心"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">24 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>第三部影片的核心</h2><div class="lab">VIDEO 03 / TAKEAWAY</div></header><div class="statement"><p class="quote reveal" data-editable>Ethernet 的成功不只因為一條網路線，而是因為共同標準</p><p class="explain reveal" data-editable>區域網路要擴張，關鍵不是每家公司各自發明最快技術，而是設備能否遵循同一套規則彼此溝通。</p></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-23" aria-label="上一張">&#8592;</a><span>24 / 55</span><a href="#slide-25" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-25" class="slide light" data-title="撥接、Cable、ADSL、光纖上網是怎麼發明的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">25 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>撥接、Cable、ADSL、光纖上網是怎麼發明的？</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">Internet 接取主線</div><div class="duration">25:12</div><div class="maker">VisCircuit 電路筆記<br><a href="https://www.youtube.com/watch?v=736_bfSVRwo" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>LAN 與電信公司的 WAN 分別解決什麼距離問題？</li><li data-editable>既有電話線與有線電視線如何被重新利用來傳送資料？</li><li data-editable>光纖為什麼成為高速寬頻的主要方向？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=736_bfSVRwo</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-24" aria-label="上一張">&#8592;</a><span>25 / 55</span><a href="#slide-26" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-26" class="slide dark video-page" data-title="播放｜撥接、Cable、ADSL、光纖上網是怎麼發明的？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">26 / 55</div><div class="cover-kicker">VIDEO / 26</div><div class="cover-serial">25:12 · 中文（台灣）字幕</div><div class="video-shell" data-video-id="736_bfSVRwo" data-video-title="撥接、Cable、ADSL、光纖上網是怎麼發明的？"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>撥接、Cable、ADSL、光纖上網是怎麼發明的？</span><a href="https://www.youtube.com/watch?v=736_bfSVRwo" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-25" aria-label="上一張">&#8592;</a><span>26 / 55</span><a href="#slide-27" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-27" class="slide light" data-title="LAN 與 WAN 的任務不同"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">27 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>LAN 與 WAN 的任務不同</h2><div class="lab">VIDEO 04 / DISTANCE</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>LAN｜區域網路</h3><ul><li data-editable>通常處理同一家庭、辦公室或校園內的短距離通訊</li><li data-editable>Ethernet 與 Wi-Fi 是常見技術</li><li data-editable>重點是裝置共享與區域管理</li></ul></article><article class="panel reveal"><h3 data-editable>WAN｜廣域網路</h3><ul><li data-editable>跨越數公里甚至全球，連接電信機房與不同地點</li><li data-editable>訊號衰減、基礎設施與成本成為關鍵</li><li data-editable>寬頻接取把使用者帶進 Internet</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-26" aria-label="上一張">&#8592;</a><span>27 / 55</span><a href="#slide-28" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-28" class="slide light" data-title="撥接：先借用電話網路"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">28 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>撥接：先借用電話網路</h2><div class="lab">VIDEO 04 / DIAL-UP</div></header><div class="timeline" style="--steps:3"><article class="milestone reveal"><b>MODEM</b><h3 data-editable>數據機</h3><p data-editable>把電腦的數位資料轉成電話線可傳送的類比聲音。</p></article><article class="milestone reveal"><b>CALL</b><h3 data-editable>撥號</h3><p data-editable>每次上網都像打一通電話，建立端對端連線。</p></article><article class="milestone reveal"><b>LIMIT</b><h3 data-editable>限制</h3><p data-editable>占用電話線、速度慢，且連線品質受雜訊影響。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-27" aria-label="上一張">&#8592;</a><span>28 / 55</span><a href="#slide-29" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-29" class="slide light" data-title="Cable 與 ADSL：活用既有線路"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">29 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Cable 與 ADSL：活用既有線路</h2><div class="lab">VIDEO 04 / BROADBAND</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>Cable｜有線電視同軸線</h3><ul><li data-editable>利用原本傳送電視頻道的寬頻同軸電纜</li><li data-editable>社區用戶常共享一段頻寬</li><li data-editable>高峰時段可能互相影響</li></ul></article><article class="panel reveal"><h3 data-editable>ADSL｜電話銅線</h3><ul><li data-editable>把語音未使用的較高頻段拿來傳送資料</li><li data-editable>下載與上傳採非對稱設計</li><li data-editable>距離機房越遠，品質通常越受限制</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-28" aria-label="上一張">&#8592;</a><span>29 / 55</span><a href="#slide-30" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-30" class="slide light" data-title="光纖：用光傳送資料"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">30 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>光纖：用光傳送資料</h2><div class="lab">VIDEO 04 / FIBER</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>低損耗、高頻寬</h3><p data-editable>光訊號適合長距離高速傳輸，不易受電磁干擾。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>PON 架構</h3><p data-editable>電信商可透過被動分光器，把一條光纖分享給多個用戶。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>最後一哩</h3><p data-editable>真正的演進不只在骨幹，而是高速連線逐步抵達家庭與企業。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-29" aria-label="上一張">&#8592;</a><span>30 / 55</span><a href="#slide-31" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-31" class="slide light" data-title="第二部分小結"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">31 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>第二部分小結</h2><div class="lab">SECTION 02 / SYNTHESIS</div></header><div class="flow"><article class="flow-node reveal"><b>LOCAL</b><h3 data-editable>區域連結</h3><p data-editable>Ethernet／Wi-Fi 連接身邊的裝置。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>ACCESS</b><h3 data-editable>寬頻接取</h3><p data-editable>撥接、Cable、ADSL、光纖連到服務提供者。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>INTERNET</b><h3 data-editable>網際網路</h3><p data-editable>眾多不同網路依共同協定互相連結。</p></article></div><div class="source-tag">影片重點＋教師統整</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-30" aria-label="上一張">&#8592;</a><span>31 / 55</span><a href="#slide-32" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-32" class="slide dark chapter" data-title="資訊系統的演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">32 / 55</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 03</div><div class="frame"><div class="reveal"><h2 data-editable>資訊系統的演進</h2><div class="chapter-sub" data-editable>運算與連線只是條件；<br>資訊系統真正關心的是組織如何使用資訊</div><div class="chapter-data"><span>4 部影片 · 112:25</span><span>核心詞：資料、決策、整合</span></div><div class="chapter-question" data-editable>本章核心問題：技術如何成為組織能力？</div></div><div class="chapter-no reveal">03</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-31" aria-label="上一張">&#8592;</a><span>32 / 55</span><a href="#slide-33" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-33" class="slide light" data-title="Introduction to Information Systems"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">33 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Introduction to Information Systems</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">資訊系統概念主線</div><div class="duration">39:22</div><div class="maker">Vladyslav Krotov · Murray State University<br><a href="https://www.youtube.com/watch?v=30-nGJ0uCAs" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>資料、資訊與知識的差異是什麼？</li><li data-editable>為什麼資訊系統不能只看硬體與軟體？</li><li data-editable>資訊科技（IT）與資訊系統（IS）如何區分？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=30-nGJ0uCAs</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-32" aria-label="上一張">&#8592;</a><span>33 / 55</span><a href="#slide-34" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-34" class="slide dark video-page" data-title="播放｜Introduction to Information Systems"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">34 / 55</div><div class="cover-kicker">VIDEO / 34</div><div class="cover-serial">39:22 · ENGLISH AUTO CAPTIONS</div><div class="video-shell" data-video-id="30-nGJ0uCAs" data-video-title="Introduction to Information Systems"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Introduction to Information Systems</span><a href="https://www.youtube.com/watch?v=30-nGJ0uCAs" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-33" aria-label="上一張">&#8592;</a><span>34 / 55</span><a href="#slide-35" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-35" class="slide light" data-title="ICT 改變的不只是效率"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">35 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>ICT 改變的不只是效率</h2><div class="lab">VIDEO 05 / IMPACT</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>時間與距離</h3><p data-editable>資訊可以快速複製、搜尋與傳遞，組織協作不再受同一地點限制。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>產業與工作</h3><p data-editable>交易成本下降，新服務與商業模式出現，既有職務也被重新設計。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>社會與個人</h3><p data-editable>便利伴隨隱私、安全、數位落差與資訊品質等新問題。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-34" aria-label="上一張">&#8592;</a><span>35 / 55</span><a href="#slide-36" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-36" class="slide light" data-title="資料、資訊與知識"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">36 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>資料、資訊與知識</h2><div class="lab">VIDEO 05 / DIKW</div></header><div class="flow"><article class="flow-node reveal"><b>DATA</b><h3 data-editable>資料</h3><p data-editable>尚未解釋的符號、數字、文字或事件紀錄。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>INFORMATION</b><h3 data-editable>資訊</h3><p data-editable>資料經整理並放入情境，回答「發生了什麼」。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>KNOWLEDGE</b><h3 data-editable>知識</h3><p data-editable>結合經驗與理解，用來判斷「接下來怎麼做」。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-35" aria-label="上一張">&#8592;</a><span>36 / 55</span><a href="#slide-37" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-37" class="slide light" data-title="用系統思考看組織"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">37 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>用系統思考看組織</h2><div class="lab">VIDEO 05 / SYSTEM THINKING</div></header><div class="flow"><article class="flow-node reveal"><b>INPUT</b><h3 data-editable>輸入</h3><p data-editable>人員、資料、資源與外部要求進入系統。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>PROCESS</b><h3 data-editable>處理</h3><p data-editable>依規則與流程轉換、分析或協調。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>OUTPUT</b><h3 data-editable>輸出</h3><p data-editable>產生產品、服務、報表、決策或行動。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>FEEDBACK</b><h3 data-editable>回饋</h3><p data-editable>比較結果與目標，修正下一輪運作。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-36" aria-label="上一張">&#8592;</a><span>37 / 55</span><a href="#slide-38" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-38" class="slide light" data-title="資訊系統不等於資訊科技"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">38 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>資訊系統不等於資訊科技</h2><div class="lab">VIDEO 05 / SOCIO-TECHNICAL</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>資訊科技 IT</h3><ul><li data-editable>硬體、軟體、資料庫與網路等技術資源</li><li data-editable>回答「我們有哪些工具」</li><li data-editable>是資訊系統的重要組成，但不是全部</li></ul></article><article class="panel reveal"><h3 data-editable>資訊系統 IS</h3><ul><li data-editable>人員、流程、資料與技術共同運作</li><li data-editable>回答「組織如何用資訊完成任務」</li><li data-editable>成效取決於社會與技術能否配合</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-37" aria-label="上一張">&#8592;</a><span>38 / 55</span><a href="#slide-39" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-39" class="slide light" data-title="Types of Information Systems (TPS, MIS, and DSS)"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">39 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Types of Information Systems (TPS, MIS, and DSS)</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">組織層級主線</div><div class="duration">9:30</div><div class="maker">Our Kaleidoscope Journey<br><a href="https://www.youtube.com/watch?v=nQ4Q3iN7TMM" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>基層、中階與高階管理者分別需要什麼資訊？</li><li data-editable>TPS 產生的交易資料如何支持 MIS 與 DSS？</li><li data-editable>批次處理與即時處理各適合什麼情境？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=nQ4Q3iN7TMM</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-38" aria-label="上一張">&#8592;</a><span>39 / 55</span><a href="#slide-40" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-40" class="slide dark video-page" data-title="播放｜Types of Information Systems (TPS, MIS, and DSS)"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">40 / 55</div><div class="cover-kicker">VIDEO / 40</div><div class="cover-serial">9:30 · ENGLISH AUTO CAPTIONS</div><div class="video-shell" data-video-id="nQ4Q3iN7TMM" data-video-title="Types of Information Systems (TPS, MIS, and DSS)"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Types of Information Systems (TPS, MIS, and DSS)</span><a href="https://www.youtube.com/watch?v=nQ4Q3iN7TMM" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-39" aria-label="上一張">&#8592;</a><span>40 / 55</span><a href="#slide-41" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-41" class="slide light" data-title="不同管理層級，需要不同資訊"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">41 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>不同管理層級，需要不同資訊</h2><div class="lab">VIDEO 06 / SYSTEM PYRAMID</div></header><div class="pyramid-wrap"><div class="pyramid reveal"><div class="pyr"><b>ESS</b>高階主管支援</div><div class="pyr"><b>DSS</b>決策支援</div><div class="pyr"><b>MIS</b>管理報表</div><div class="pyr"><b>TPS</b>交易處理</div></div><div class="pyramid-notes reveal"><div data-editable>愈往下：資料量大、頻率高、流程較固定。</div><div data-editable>愈往上：資訊較摘要、問題較不結構化、面向未來。</div><div data-editable>這些系統不是孤立金字塔，而是相互供應資料。</div></div></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-40" aria-label="上一張">&#8592;</a><span>41 / 55</span><a href="#slide-42" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-42" class="slide light" data-title="同一筆交易，如何變成決策"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">42 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>同一筆交易，如何變成決策</h2><div class="lab">VIDEO 06 / DATA FLOW</div></header><div class="flow"><article class="flow-node reveal"><b>TPS</b><h3 data-editable>記錄</h3><p data-editable>每筆銷售、付款、出勤或庫存異動。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>MIS</b><h3 data-editable>彙總</h3><p data-editable>定期報表呈現業績、例外與管理控制資訊。</p></article><div class="arrow reveal">→</div><article class="flow-node reveal"><b>DSS／ESS</b><h3 data-editable>判斷</h3><p data-editable>結合模型與內外部資料，支援非例行與策略決策。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-41" aria-label="上一張">&#8592;</a><span>42 / 55</span><a href="#slide-43" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-43" class="slide light" data-title="Enterprise Wide Systems – CRM, ERP and SCM"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">43 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Enterprise Wide Systems – CRM, ERP and SCM</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">企業整合主線</div><div class="duration">13:33</div><div class="maker">Our Kaleidoscope Journey<br><a href="https://www.youtube.com/watch?v=FZbG0EF0rW8" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>部門各自建立系統，為什麼最後會形成資訊孤島？</li><li data-editable>ERP、CRM、SCM 分別跨越哪些組織邊界？</li><li data-editable>整合帶來效率時，也會增加哪些風險？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=FZbG0EF0rW8</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-42" aria-label="上一張">&#8592;</a><span>43 / 55</span><a href="#slide-44" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-44" class="slide dark video-page" data-title="播放｜Enterprise Wide Systems – CRM, ERP and SCM"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">44 / 55</div><div class="cover-kicker">VIDEO / 44</div><div class="cover-serial">13:33 · ENGLISH AUTO CAPTIONS</div><div class="video-shell" data-video-id="FZbG0EF0rW8" data-video-title="Enterprise Wide Systems – CRM, ERP and SCM"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Enterprise Wide Systems – CRM, ERP and SCM</span><a href="https://www.youtube.com/watch?v=FZbG0EF0rW8" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-43" aria-label="上一張">&#8592;</a><span>44 / 55</span><a href="#slide-45" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-45" class="slide light" data-title="從資訊孤島走向企業整合"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">45 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>從資訊孤島走向企業整合</h2><div class="lab">VIDEO 07 / INTEGRATION</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>獨立的舊系統</h3><ul><li data-editable>各部門依自身需求建置資料與流程</li><li data-editable>相同資料重複輸入，定義可能不一致</li><li data-editable>跨部門流程依賴人工傳遞與對帳</li></ul></article><article class="panel reveal"><h3 data-editable>企業級系統</h3><ul><li data-editable>共用流程、資料標準與整合平台</li><li data-editable>交易發生後可同步影響多個部門</li><li data-editable>管理者看見較一致、即時的全貌</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-44" aria-label="上一張">&#8592;</a><span>45 / 55</span><a href="#slide-46" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-46" class="slide light" data-title="三種企業級系統"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">46 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>三種企業級系統</h2><div class="lab">VIDEO 07 / ENTERPRISE SYSTEMS</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01</div><h3 data-editable>ERP｜企業內部</h3><p data-editable>整合財務、採購、生產、人資與庫存等核心流程。</p></article><article class="concept-card reveal"><div class="no">02</div><h3 data-editable>CRM｜顧客關係</h3><p data-editable>整合行銷、銷售與服務接觸，形成一致的顧客視圖。</p></article><article class="concept-card reveal"><div class="no">03</div><h3 data-editable>SCM｜供應鏈</h3><p data-editable>連接供應商、製造、物流與通路，協調跨企業的物料及資訊流。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-45" aria-label="上一張">&#8592;</a><span>46 / 55</span><a href="#slide-47" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-47" class="slide light" data-title="整合不是只有好處"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">47 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>整合不是只有好處</h2><div class="lab">VIDEO 07 / TRADE-OFFS</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>可能帶來的價值</h3><ul><li data-editable>減少重複輸入與資訊不一致</li><li data-editable>提高流程透明度及跨部門協調</li><li data-editable>提供較即時的營運與管理資訊</li></ul></article><article class="panel reveal"><h3 data-editable>必須承擔的代價</h3><ul><li data-editable>導入成本高，流程與權責需要重新設計</li><li data-editable>標準化可能壓縮部門彈性</li><li data-editable>系統失誤或資安事件的影響範圍更大</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-46" aria-label="上一張">&#8592;</a><span>47 / 55</span><a href="#slide-48" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-48" class="slide light" data-title="Brief History of Information Systems 1940–Present"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">48 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Brief History of Information Systems 1940–Present</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">歷史補充／延伸觀看</div><div class="duration">50:00</div><div class="maker">John Drake, PhD<br><a href="https://www.youtube.com/watch?v=GeQaaehmPFE" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>企業資料處理需求如何推動早期電腦商業化？</li><li data-editable>主機與個人電腦分別代表什麼控制方式？</li><li data-editable>Internet 與 ERP 為什麼都可視為「整合」的轉折？</li></ol></div></div><div class="source-tag">影片來源：https://www.youtube.com/watch?v=GeQaaehmPFE</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-47" aria-label="上一張">&#8592;</a><span>48 / 55</span><a href="#slide-49" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-49" class="slide dark video-page" data-title="播放｜Brief History of Information Systems 1940–Present"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">49 / 55</div><div class="cover-kicker">VIDEO / 49</div><div class="cover-serial">50:00 · ENGLISH AUTO CAPTIONS</div><div class="video-shell" data-video-id="GeQaaehmPFE" data-video-title="Brief History of Information Systems 1940–Present"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Brief History of Information Systems 1940–Present</span><a href="https://www.youtube.com/watch?v=GeQaaehmPFE" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-48" aria-label="上一張">&#8592;</a><span>49 / 55</span><a href="#slide-50" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-50" class="slide light" data-title="早期企業需要的是資料處理能力"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">50 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>早期企業需要的是資料處理能力</h2><div class="lab">VIDEO 08 / MAINFRAME ERA</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1900s</b><h3 data-editable>大量文書人力</h3><p data-editable>大型企業依靠書記、會計與打卡設備處理龐大紀錄。</p></article><article class="milestone reveal"><b>1940s–50s</b><h3 data-editable>電子電腦</h3><p data-editable>戰爭、科學與政府需求加速高速電子運算。</p></article><article class="milestone reveal"><b>1950s–60s</b><h3 data-editable>商用主機</h3><p data-editable>企業把薪資、帳務與大量批次作業搬進中央機房。</p></article><article class="milestone reveal"><b>1960s</b><h3 data-editable>共享資源</h3><p data-editable>終端機與分時概念讓更多使用者接近集中式運算。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-49" aria-label="上一張">&#8592;</a><span>50 / 55</span><a href="#slide-51" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-51" class="slide light" data-title="主機與個人電腦代表兩種邏輯"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">51 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>主機與個人電腦代表兩種邏輯</h2><div class="lab">VIDEO 08 / CENTRALIZE ↔ DISTRIBUTE</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>集中式主機</h3><ul><li data-editable>昂貴資源集中管理，可靠但存取受排程與專業部門控制</li><li data-editable>適合大量、標準化與重複性高的交易</li><li data-editable>資訊處理權靠近組織中心</li></ul></article><article class="panel reveal"><h3 data-editable>個人／部門電腦</h3><ul><li data-editable>使用者直接操作試算表、文字處理與部門應用</li><li data-editable>反應快、有彈性，但容易各自為政</li><li data-editable>資訊處理權向工作現場分散</li></ul></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-50" aria-label="上一張">&#8592;</a><span>51 / 55</span><a href="#slide-52" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-52" class="slide light" data-title="分散之後，再度追求整合"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">52 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>分散之後，再度追求整合</h2><div class="lab">VIDEO 08 / NETWORK + ERP</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1969</b><h3 data-editable>ARPANET</h3><p data-editable>遠端電腦開始依封包交換概念共享網路資源。</p></article><article class="milestone reveal"><b>1980s</b><h3 data-editable>辦公室網路</h3><p data-editable>個人電腦、伺服器與部門應用開始互連。</p></article><article class="milestone reveal"><b>1991</b><h3 data-editable>World Wide Web</h3><p data-editable>圖形化介面降低使用 Internet 資訊的門檻。</p></article><article class="milestone reveal"><b>1990s</b><h3 data-editable>ERP</h3><p data-editable>以共用資料庫及流程重新整合企業內部功能。</p></article></div><div class="source-tag">影片重點</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-51" aria-label="上一張">&#8592;</a><span>52 / 55</span><a href="#slide-53" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-53" class="slide light" data-title="資訊系統角色的長期演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">53 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>資訊系統角色的長期演進</h2><div class="lab">TEACHER SUPPLEMENT</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1950s–60s</b><h3 data-editable>處理交易</h3><p data-editable>TPS 把大量、重複的資料處理自動化。</p></article><article class="milestone reveal"><b>1960s–70s</b><h3 data-editable>支援管理</h3><p data-editable>MIS 產生定期、摘要與例外報表。</p></article><article class="milestone reveal"><b>1970s–90s</b><h3 data-editable>支援決策</h3><p data-editable>DSS、ESS 與策略系統擴大分析及競爭用途。</p></article><article class="milestone reveal"><b>1990s–NOW</b><h3 data-editable>連結與智慧</h3><p data-editable>ERP、電子商務、雲端平台、數位生態系與 AI。</p></article></div><div class="source-tag">教師補充：整合 OpenStax 與管理資訊系統常見年代架構；非單一影片逐字內容</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-52" aria-label="上一張">&#8592;</a><span>53 / 55</span><a href="#slide-54" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-54" class="slide light" data-title="三條演進線，最後匯合"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">54 / 55</div><div class="frame"><header class="topbar reveal"><h2 data-editable>三條演進線，最後匯合</h2><div class="lab">FINAL SYNTHESIS</div></header><div class="final-grid"><article class="final-item reveal"><div class="big" data-editable>運算</div><p data-editable>電腦讓規則可以被高速、反覆而一致地執行。</p></article><article class="final-item reveal"><div class="big" data-editable>連結</div><p data-editable>網路讓資料、裝置與人可以跨越距離共同工作。</p></article><article class="final-item reveal"><div class="big" data-editable>組織</div><p data-editable>資訊系統把人、流程、資料與技術組合成營運及決策能力。</p></article></div><div class="source-tag">教師統整</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-53" aria-label="上一張">&#8592;</a><span>54 / 55</span><a href="#slide-55" aria-label="下一張">&#8594;</a></nav></section>
-<section id="slide-55" class="slide dark closing" data-title="課程收束"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">55 / 55</div><div class="chapter-kicker">ONE MORE QUESTION</div><div class="chapter-serial">END / BEGIN</div><div class="frame"><h2 class="reveal" data-editable>當 AI 進入資訊系統，<br>改變的會只是工具，還是整個組織？</h2><div class="questions reveal"><div data-editable>哪些工作將被重新設計？</div><div data-editable>誰負責判斷資料與模型是否可信？</div><div data-editable>企業如何在效率、控制與人的自主性之間取捨？</div></div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-54" aria-label="上一張">&#8592;</a><span>55 / 55</span><a href="#slide-55" aria-label="下一張">&#8594;</a></nav></section>
-    </main>
-  </div>
+  <a class="skip-link" href="#materials">跳至教材</a>
 
-  <nav class="deck-controls" aria-label="投影片控制">
-    <button id="prevBtn" type="button" aria-label="上一張">←</button>
-    <button id="menuBtn" type="button" aria-label="開啟章節選單">☰</button>
-    <span class="counter" id="counter">01 / 55</span>
-    <button id="nextBtn" type="button" aria-label="下一張">→</button>
-    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
-  </nav>
-  <div class="progress" id="progress"></div>
+  <header class="site-header">
+    <nav class="nav" aria-label="主要導覽">
+      <a class="brand" href="./">龔鴻裕｜教學與教材</a>
+      <div class="nav-links">
+        <a href="#materials">教材</a>
+        <a href="#profile">教師簡介</a>
+        <a href="#courses">本學期課程</a>
+      </div>
+    </nav>
+  </header>
 
-  <aside class="chapter-menu" id="chapterMenu" aria-label="章節選單">
-    <div class="menu-panel">
-      <div class="menu-head"><h2>章節與影片</h2><button id="closeMenu" type="button">關閉</button></div>
-      <div class="menu-links" id="menuLinks"></div>
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">Teaching · Information Management</p>
+        <h1 id="page-title">龔鴻裕</h1>
+        <p class="role">中國科技大學資訊管理系　助理教授</p>
+      </div>
+      <p class="hero-note">從管理問題出發，理解資訊科技如何成為組織運作、決策與創新的能力。</p>
     </div>
-  </aside>
+  </section>
 
-  <div class="edit-hotzone" aria-hidden="true"></div>
-  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
-  <div class="edit-toolbar" id="editToolbar">
-    <button id="saveFile" type="button">下載目前版本</button>
-    <button id="resetEdits" type="button">清除本機修改</button>
-  </div>
+  <main>
+    <section id="materials" aria-labelledby="materials-title">
+      <div class="section-head">
+        <h2 id="materials-title">課程教材</h2>
+        <p>教材以瀏覽器直接開啟，建議使用最新版 Edge、Chrome 或 Safari。上課前仍請確認網路與影片連線狀態。</p>
+      </div>
 
-  <noscript><div class="legacy-note">相容模式：請使用投影片內的左右箭頭翻頁</div></noscript>
+      <article class="material-card">
+        <div>
+          <div class="meta" aria-label="教材資訊">
+            <span>管理資訊系統</span>
+            <span>55 張</span>
+            <span>V3</span>
+          </div>
+          <h3>背景演進：從運算、連結到組織能力的形成</h3>
+          <p>依序掌握電腦、網路與資訊系統的演進脈絡。</p>
+        </div>
+        <a class="primary-link" href="mis-background-evolution-v3.html">開啟教材　→</a>
+      </article>
+    </section>
 
+    <section class="profile-section" id="profile" aria-labelledby="profile-title">
+      <div class="section-head">
+        <h2 id="profile-title">教師簡介</h2>
+        <p>以下資訊參考中國科技大學資訊管理系教師介紹頁。</p>
+      </div>
 
-  <script>
-  (function () {
-    'use strict';
-    function byId(id) { return document.getElementById(id); }
-    function hasClass(el, name) { return new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className); }
-    function addClass(el, name) { if (!hasClass(el, name)) el.className += ' ' + name; }
-    function removeClass(el, name) { el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(?=\\s|$)', 'g'), ' ').replace(/^\\s+|\\s+$/g, ''); }
-    function closestWithClass(el, name) { while (el && el !== document) { if (hasClass(el, name)) return el; el = el.parentNode; } return null; }
-    function closestWithAttr(el, attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr) !== null) return el; el = el.parentNode; } return null; }
-    function pad2(n) { return n < 10 ? '0' + n : String(n); }
+      <div class="profile-grid">
+        <article class="info-card">
+          <h3>最高學歷</h3>
+          <p>國立中央大學管理學院資訊管理學系博士</p>
+        </article>
+        <article class="info-card">
+          <h3>實務專長</h3>
+          <ul>
+            <li>企業資源規劃</li>
+            <li>專案管理</li>
+            <li>企業管理</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h3>專業證照領域</h3>
+          <ul>
+            <li>電子商務</li>
+            <li>網路行銷</li>
+            <li>中小企業管理</li>
+          </ul>
+        </article>
+      </div>
 
-    var stage = byId('deckStage');
-    var storageKey = 'mis-background-evolution-v3';
-    function storageGet() { try { return window.localStorage.getItem(storageKey); } catch (ignore) { return null; } }
-    function storageSet(value) { try { window.localStorage.setItem(storageKey, value); return true; } catch (ignore) { return false; } }
-    function storageRemove() { try { window.localStorage.removeItem(storageKey); return true; } catch (ignore) { return false; } }
-    var saved = storageGet();
-    if (saved && saved.indexOf('fallback-controls') !== -1) stage.innerHTML = saved;
-    var slides = stage.getElementsByTagName('section');
-    var current = 0;
-    var locked = false;
-    var touchStart = null;
+      <a class="source-link" href="https://sites.google.com/view/cutedmis/%E5%B8%AB%E8%B3%87%E4%BB%8B%E7%B4%B9/%E6%95%99%E5%B8%AB%E9%BE%94%E9%B4%BB%E8%A3%95" target="_blank" rel="noopener noreferrer">查看中國科技大學資訊管理系教師介紹 ↗</a>
+    </section>
 
-    function scaleStage() {
-      var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-      var value = 'translate(-50%,-50%) scale(' + factor + ')';
-      stage.style.transform = value;
-      stage.style.msTransform = value;
-      stage.style.webkitTransform = value;
-    }
-    function resetVideo(slide) {
-      var shells = slide.getElementsByClassName('video-shell');
-      if (!shells.length || !shells[0].getElementsByTagName('iframe').length) return;
-      shells[0].innerHTML = '<button class="load-video" type="button"><span class="play-icon">&#9654;</span><span>點一下載入並播放影片</span></button>';
-    }
-    function show(index, updateHash) {
-      if (index < 0) index = 0;
-      if (index >= slides.length) index = slides.length - 1;
-      current = index;
-      for (var i = 0; i < slides.length; i += 1) {
-        if (i === current) { addClass(slides[i], 'active'); addClass(slides[i], 'visible'); }
-        else { removeClass(slides[i], 'active'); removeClass(slides[i], 'visible'); resetVideo(slides[i]); }
-      }
-      byId('counter').innerHTML = pad2(current + 1) + ' / ' + slides.length;
-      byId('progress').style.width = ((current + 1) / slides.length * 100) + '%';
-      if (updateHash !== false) {
-        try { window.history.replaceState(null, '', '#slide-' + (current + 1)); }
-        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
-      }
-    }
-    function indexFromHash() {
-      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
-      return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, slides.length - 1)) : 0;
-    }
-    function toggleMenu(force) {
-      var menu = byId('chapterMenu');
-      var open = typeof force === 'boolean' ? force : !hasClass(menu, 'open');
-      if (open) addClass(menu, 'open'); else removeClass(menu, 'open');
-    }
-    function buildMenu() {
-      var holder = byId('menuLinks');
-      holder.innerHTML = '';
-      for (var i = 0; i < slides.length; i += 1) {
-        var button = document.createElement('button');
-        button.type = 'button';
-        button.setAttribute('data-jump', i);
-        button.appendChild(document.createTextNode(pad2(i + 1) + '　' + (slides[i].getAttribute('data-title') || '投影片')));
-        holder.appendChild(button);
-      }
-    }
-    function loadVideo(shell) {
-      var id = shell.getAttribute('data-video-id');
-      var title = shell.getAttribute('data-video-title') || '課程影片';
-      shell.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="' + title.replace(/"/g, '&quot;') + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-    }
-    function requestFullscreen() {
-      var root = document.documentElement;
-      var exit = document.exitFullscreen || document.msExitFullscreen || document.webkitExitFullscreen;
-      if (document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement) { if (exit) exit.call(document); return; }
-      var enter = root.requestFullscreen || root.msRequestFullscreen || root.webkitRequestFullscreen;
-      if (enter) enter.call(root);
-    }
+    <section class="course-section" id="courses" aria-labelledby="courses-title">
+      <div class="section-head">
+        <h2 id="courses-title">115-1 本學期課程</h2>
+        <p>教材將依課程進度陸續整理與發布。</p>
+      </div>
+      <ul class="course-list">
+        <li>職涯探索與專業倫理</li>
+        <li>行銷企劃</li>
+        <li>管理資訊系統</li>
+        <li>企業資源規劃</li>
+        <li>專題研究（一）</li>
+        <li>專題研究（二）</li>
+      </ul>
+    </section>
+  </main>
 
-    byId('prevBtn').onclick = function () { show(current - 1); };
-    byId('nextBtn').onclick = function () { show(current + 1); };
-    byId('menuBtn').onclick = function () { toggleMenu(true); };
-    byId('closeMenu').onclick = function () { toggleMenu(false); };
-    byId('fullBtn').onclick = requestFullscreen;
-    byId('chapterMenu').onclick = function (event) { event = event || window.event; if ((event.target || event.srcElement).id === 'chapterMenu') toggleMenu(false); };
-    document.onclick = function (event) {
-      event = event || window.event;
-      var target = event.target || event.srcElement;
-      var load = closestWithClass(target, 'load-video');
-      if (load) loadVideo(closestWithClass(load, 'video-shell'));
-      var jump = closestWithAttr(target, 'data-jump');
-      if (jump) { show(parseInt(jump.getAttribute('data-jump'), 10)); toggleMenu(false); }
-    };
-    document.onkeydown = function (event) {
-      event = event || window.event;
-      var eventTarget = event.target || event.srcElement;
-      if (eventTarget && (eventTarget.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(eventTarget.tagName))) return;
-      var key = event.key || event.keyCode;
-      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) { if (event.preventDefault) event.preventDefault(); show(current + 1); }
-      else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) { if (event.preventDefault) event.preventDefault(); show(current - 1); }
-      else if (key === 'Home' || key === 36) show(0);
-      else if (key === 'End' || key === 35) show(slides.length - 1);
-      else if (key === 'm' || key === 'M' || key === 77) toggleMenu();
-      else if (key === 'Escape' || key === 27) toggleMenu(false);
-      else if (key === 'e' || key === 'E' || key === 69) toggleEditing();
-    };
-    window.onresize = scaleStage;
-    window.onhashchange = function () { show(indexFromHash(), false); };
-    if (window.addEventListener) {
-      window.addEventListener('wheel', function (event) { if (locked || Math.abs(event.deltaY) < 18) return; locked = true; show(current + (event.deltaY > 0 ? 1 : -1)); window.setTimeout(function () { locked = false; }, 550); }, false);
-      window.addEventListener('touchstart', function (event) { touchStart = event.changedTouches[0].clientX; }, false);
-      window.addEventListener('touchend', function (event) { if (touchStart === null) return; var d = event.changedTouches[0].clientX - touchStart; if (Math.abs(d) > 50) show(current + (d < 0 ? 1 : -1)); touchStart = null; }, false);
-    }
-    var editing = false;
-    var editTimer = null;
-    function toggleEditing() {
-      editing = !editing;
-      var editable = document.querySelectorAll('[data-editable]');
-      for (var i = 0; i < editable.length; i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
-      if (editing) { addClass(document.body, 'editing'); addClass(byId('editToggle'), 'active'); addClass(byId('editToolbar'), 'show'); }
-      else { removeClass(document.body, 'editing'); removeClass(byId('editToggle'), 'active'); removeClass(byId('editToolbar'), 'show'); }
-    }
-    byId('editToggle').onclick = toggleEditing;
-    byId('editToggle').style.opacity = '1';
-    byId('editToggle').style.pointerEvents = 'auto';
-    stage.oninput = function () { window.clearTimeout(editTimer); editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); }, 350); };
-    byId('resetEdits').onclick = function () { if (window.confirm('清除這個瀏覽器儲存的文字修改？')) { storageRemove(); window.location.reload(); } };
-    byId('saveFile').onclick = function () {
-      storageSet(stage.innerHTML);
-      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
-      var blob = new Blob([html], { type:'text/html;charset=utf-8' });
-      if (window.navigator.msSaveOrOpenBlob) window.navigator.msSaveOrOpenBlob(blob, '管理資訊系統_背景演進教材_V3_編輯版.html');
-      else {
-        var urlApi = window.URL || window.webkitURL;
-        var anchor = document.createElement('a');
-        anchor.href = urlApi.createObjectURL(blob);
-        anchor.download = '管理資訊系統_背景演進教材_V3_編輯版.html';
-        document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor);
-        window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); }, 1200);
-      }
-    };
-    buildMenu();
-    scaleStage();
-    show(indexFromHash(), false);
-    addClass(document.body, 'js-ready');
-  }());
-  </script>
+  <footer>龔鴻裕｜教學與教材 · 最後更新 2026-09-11</footer>
 </body>
 </html>
