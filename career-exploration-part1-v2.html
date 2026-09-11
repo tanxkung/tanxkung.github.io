@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="職涯探索與專業倫理第一部分：什麼是職涯，以及如何透過假設、經驗與修正做選擇。">
+  <title>職涯探索與專業倫理｜第一部分：什麼是職涯與如何選擇</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&amp;family=Noto+Sans+TC:wght@400;500;600;700;800;900&amp;family=Noto+Serif+TC:wght@600;700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS｜溫暖編輯風
+       =========================================== */
+    :root {
+      --stage-bg:#272b27;
+      --slide-bg:#f2eadc;
+      --paper:#f2eadc;
+      --paper-deep:#e7dcc9;
+      --ink:#162d24;
+      --ink-2:#315246;
+      --muted:#667069;
+      --coral:#e65e43;
+      --sage:#7a9a7d;
+      --sage-light:#c9d7c9;
+      --sun:#f2c94c;
+      --blue:#8eb1bf;
+      --cream:#fffaf0;
+      --rule:rgba(22,45,36,.24);
+      --ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --font-display:"Fraunces","Noto Serif TC",serif;
+      --font-body:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET AND NO-JAVASCRIPT FALLBACK
+       =========================================== */
+    * { box-sizing:border-box; }
+    body { color:var(--ink); font-family:var(--font-body); }
+    button,
+    a { color:inherit; font:inherit; }
+    button { cursor:pointer; }
+    body:not(.js-ready) .slide:first-child,
+    body:not(.js-ready) .slide:target { visibility:visible; opacity:1; pointer-events:auto; }
+    body:not(.js-ready) .slide:target { z-index:5; }
+    /* Pure-CSS scale ladder keeps the full 16:9 canvas visible when scripts are blocked. */
+    body:not(.js-ready) .deck-stage { transform:scale(.25); }
+    @media (min-width:800px) and (min-height:450px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.4); }
+    }
+    @media (min-width:960px) and (min-height:540px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.5); }
+    }
+    @media (min-width:1024px) and (min-height:576px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.533333); }
+    }
+    @media (min-width:1280px) and (min-height:720px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.666667); }
+    }
+    @media (min-width:1366px) and (min-height:768px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.71); }
+    }
+    @media (min-width:1600px) and (min-height:900px) {
+      body:not(.js-ready) .deck-stage { transform:scale(.833333); }
+    }
+    @media (min-width:1920px) and (min-height:1080px) {
+      body:not(.js-ready) .deck-stage { transform:scale(1); }
+    }
+    body.js-ready .fallback-controls { display:none; }
+    body.js-ready .deck-controls,
+    body.js-ready .progress { display:flex; }
+
+    /* ===========================================
+       SLIDE SURFACE AND SHARED CHROME
+       =========================================== */
+    .slide {
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 84% 12%,rgba(242,201,76,.16),transparent 20%),
+        radial-gradient(circle at 94% 88%,rgba(122,154,125,.14),transparent 24%),
+        var(--paper);
+      transition:opacity .28s ease;
+    }
+    .slide::before {
+      content:"";
+      position:absolute;
+      inset:42px;
+      border:1px solid var(--rule);
+      pointer-events:none;
+    }
+    .slide.dark {
+      color:var(--cream);
+      background:
+        radial-gradient(circle at 84% 22%,rgba(230,94,67,.22),transparent 24%),
+        radial-gradient(circle at 16% 86%,rgba(122,154,125,.18),transparent 22%),
+        var(--ink);
+    }
+    .slide.dark::before { border-color:rgba(255,250,240,.24); }
+    .masthead {
+      position:absolute;
+      left:92px;
+      right:92px;
+      top:68px;
+      z-index:4;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:40px;
+      padding-bottom:18px;
+      border-bottom:2px solid currentColor;
+      font:800 20px/1 var(--font-body);
+      letter-spacing:.11em;
+    }
+    .masthead .chapter { color:var(--coral); }
+    .dark .masthead .chapter { color:var(--sun); }
+    .frame {
+      position:absolute;
+      left:112px;
+      right:112px;
+      top:158px;
+      bottom:100px;
+      z-index:3;
+    }
+    .page-no {
+      position:absolute;
+      right:78px;
+      bottom:62px;
+      z-index:6;
+      font:900 18px/1 var(--font-body);
+      letter-spacing:.12em;
+    }
+    .source {
+      position:absolute;
+      left:112px;
+      bottom:61px;
+      max-width:1450px;
+      color:var(--muted);
+      font:500 17px/1.25 var(--font-body);
+    }
+    .dark .source { color:rgba(255,250,240,.62); }
+    .eyebrow {
+      margin:0 0 18px;
+      color:var(--coral);
+      font:900 22px/1.2 var(--font-body);
+      letter-spacing:.13em;
+    }
+    .dark .eyebrow { color:var(--sun); }
+    h1,
+    h2,
+    h3,
+    p { margin-top:0; }
+    .title {
+      max-width:1540px;
+      margin:0;
+      font:900 76px/1.12 var(--font-display);
+      letter-spacing:-.035em;
+    }
+    .lead {
+      max-width:1260px;
+      margin:26px 0 0;
+      color:var(--ink-2);
+      font:600 31px/1.55 var(--font-body);
+    }
+    .dark .lead { color:rgba(255,250,240,.76); }
+    .big-statement {
+      margin:0;
+      font:900 96px/1.16 var(--font-display);
+      letter-spacing:-.04em;
+    }
+    .accent { color:var(--coral); }
+    .dark .accent { color:var(--sun); }
+
+    /* ===========================================
+       MOTION SYSTEM
+       =========================================== */
+    .reveal {
+      opacity:0;
+      transform:translateY(26px);
+      transition:opacity .62s var(--ease-out-expo),transform .62s var(--ease-out-expo);
+    }
+    .reveal-left {
+      opacity:0;
+      transform:translateX(-44px);
+      transition:opacity .72s var(--ease-out-expo),transform .72s var(--ease-out-expo);
+    }
+    .reveal-scale {
+      opacity:0;
+      transform:scale(.9);
+      transition:opacity .68s var(--ease-out-expo),transform .68s var(--ease-out-expo);
+    }
+    .slide.visible .reveal,
+    .slide.visible .reveal-left,
+    .slide.visible .reveal-scale,
+    .slide:target .reveal,
+    .slide:target .reveal-left,
+    .slide:target .reveal-scale { opacity:1; transform:none; }
+    .delay-1 { transition-delay:.10s; }
+    .delay-2 { transition-delay:.20s; }
+    .delay-3 { transition-delay:.30s; }
+    .delay-4 { transition-delay:.40s; }
+    .delay-5 { transition-delay:.50s; }
+
+    /* ===========================================
+       COVER AND COMPASS
+       =========================================== */
+    .cover .copy { position:absolute; left:118px; top:210px; width:1080px; }
+    .cover .kicker { margin:0 0 28px; color:var(--coral); font:900 24px/1 var(--font-body); letter-spacing:.13em; }
+    .cover h1 { margin:0; font:900 138px/.98 var(--font-display); letter-spacing:-.055em; }
+    .cover h1 em { color:var(--coral); font-style:italic; }
+    .cover .subtitle { width:780px; margin:38px 0 0 8px; font:650 34px/1.55 var(--font-body); }
+    .route-note { position:absolute; left:126px; bottom:104px; display:flex; align-items:center; gap:20px; color:var(--muted); font:650 22px/1 var(--font-body); }
+    .route-note i { width:60px; height:3px; background:var(--coral); }
+    .compass { position:absolute; right:116px; top:214px; width:520px; height:520px; border:2px solid var(--ink); border-radius:50%; }
+    .compass::before,
+    .compass::after { content:""; position:absolute; left:50%; top:50%; background:rgba(22,45,36,.24); transform:translate(-50%,-50%); }
+    .compass::before { width:610px; height:1px; }
+    .compass::after { width:1px; height:610px; }
+    .compass .orbit { position:absolute; inset:82px; border:1px dashed var(--sage); border-radius:50%; }
+    .compass .needle { position:absolute; left:249px; top:72px; width:24px; height:190px; background:var(--coral); clip-path:polygon(50% 0,100% 100%,50% 82%,0 100%); transform-origin:50% 190px; transform:rotate(38deg); }
+    .compass .center-dot { position:absolute; left:244px; top:244px; width:32px; height:32px; border:8px solid var(--paper); border-radius:50%; background:var(--ink); box-shadow:0 0 0 2px var(--ink); }
+    .axis-label { position:absolute; font:900 20px/1 var(--font-body); letter-spacing:.16em; }
+    .north { top:-40px; left:50%; transform:translateX(-50%); }
+    .east { right:-62px; top:50%; transform:translateY(-50%); }
+    .south { bottom:-42px; left:50%; transform:translateX(-50%); }
+    .west { left:-54px; top:50%; transform:translateY(-50%); }
+    .question-chip { position:absolute; right:148px; bottom:118px; width:430px; padding:20px 26px; border:2px solid var(--ink); background:var(--sun); transform:rotate(-2deg); font:850 24px/1.35 var(--font-body); }
+
+    /* ===========================================
+       CARDS, GRIDS, AND CHOICE PANELS
+       =========================================== */
+    .cards { display:grid; gap:28px; margin-top:48px; }
+    .cards.three { grid-template-columns:repeat(3,1fr); }
+    .cards.four { grid-template-columns:repeat(2,1fr); }
+    .cards.five { grid-template-columns:repeat(5,1fr); gap:20px; }
+    .cards.six { grid-template-columns:repeat(3,1fr); gap:22px; }
+    .card {
+      position:relative;
+      min-height:235px;
+      padding:34px 32px 30px;
+      border:2px solid var(--ink);
+      background:rgba(255,250,240,.48);
+    }
+    .card::before { content:""; position:absolute; left:-2px; top:-2px; width:82px; height:10px; background:var(--card-color,var(--coral)); }
+    .card .no { margin-bottom:20px; color:var(--coral); font:900 18px/1 var(--font-body); letter-spacing:.12em; }
+    .card h3 { margin:0 0 15px; font:900 38px/1.2 var(--font-display); }
+    .card p { margin:0; color:var(--ink-2); font:600 25px/1.48 var(--font-body); }
+    .dark .card { border-color:var(--cream); background:rgba(255,250,240,.06); }
+    .dark .card p { color:rgba(255,250,240,.72); }
+    .cards.five .card { min-height:390px; padding:32px 24px; }
+    .cards.five .card h3 { font-size:34px; }
+    .cards.five .card p { font-size:23px; }
+    .cards.six .card { min-height:245px; }
+
+    /* ===========================================
+       POLL, SPLIT, AND DEFINITION LAYOUTS
+       =========================================== */
+    .poll-grid,
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:46px; }
+    .choice {
+      position:relative;
+      min-height:450px;
+      padding:44px;
+      border:3px solid var(--ink);
+      background:var(--cream);
+    }
+    .choice:nth-child(2) { background:var(--sage-light); }
+    .choice .letter { display:grid; place-items:center; width:72px; height:72px; border-radius:50%; color:var(--cream); background:var(--ink); font:900 34px/1 var(--font-body); }
+    .choice h3 { margin:48px 0 18px; font:900 52px/1.18 var(--font-display); }
+    .choice p { max-width:600px; margin:0; color:var(--ink-2); font:600 28px/1.5 var(--font-body); }
+    .choice .vote { position:absolute; right:26px; bottom:24px; padding:12px 18px; border:2px solid var(--ink); background:var(--sun); font:900 20px/1 var(--font-body); transform:rotate(-2deg); }
+    .split-panel { min-height:440px; padding:42px; border-top:9px solid var(--panel-color,var(--coral)); background:rgba(255,250,240,.55); }
+    .split-panel h3 { margin:0 0 24px; font:900 50px/1.15 var(--font-display); }
+    .split-panel p,
+    .split-panel li { color:var(--ink-2); font:600 28px/1.55 var(--font-body); }
+    .split-panel ul { margin:0; padding-left:32px; }
+    .versus { position:absolute; left:50%; top:54%; z-index:6; display:grid; place-items:center; width:92px; height:92px; border:3px solid var(--ink); border-radius:50%; background:var(--sun); font:900 24px/1 var(--font-body); transform:translate(-50%,-50%) rotate(-7deg); }
+
+    /* ===========================================
+       VIDEO SLIDES
+       =========================================== */
+    .video-grid { display:grid; grid-template-columns:1.5fr .74fr; gap:38px; margin-top:32px; }
+    .video-shell { position:relative; height:510px; overflow:hidden; border:3px solid var(--cream); background:#0c1712; box-shadow:14px 14px 0 rgba(242,201,76,.18); }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video { width:100%; height:100%; border:0; color:var(--cream); background:
+      radial-gradient(circle at 50% 50%,rgba(230,94,67,.26),transparent 26%),
+      repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 2px,transparent 2px,transparent 14px),#0c1712; }
+    .play-icon { display:grid; place-items:center; width:116px; height:116px; margin:0 auto 24px; border:3px solid var(--cream); border-radius:50%; color:var(--ink); background:var(--sun); font-size:44px; }
+    .load-video strong { display:block; font:800 28px/1.3 var(--font-body); }
+    .watch-task { padding:30px; border:2px solid var(--cream); background:rgba(255,250,240,.08); }
+    .watch-task h3 { margin:0 0 22px; color:var(--sun); font:900 33px/1.2 var(--font-display); }
+    .watch-task ol { margin:0; padding-left:30px; }
+    .watch-task li { margin:0 0 18px; font:600 24px/1.48 var(--font-body); }
+    .video-link { display:inline-block; margin-top:20px; padding-bottom:5px; border-bottom:2px solid var(--sun); color:var(--sun); text-decoration:none; font:800 20px/1.2 var(--font-body); }
+    .video-meta { display:flex; gap:18px; align-items:center; margin-top:20px; color:rgba(255,250,240,.72); font:600 19px/1 var(--font-body); }
+    .video-meta b { padding:9px 14px; color:var(--ink); background:var(--sun); }
+
+    /* ===========================================
+       TIMELINES, ROUTES, AND LOOPS
+       =========================================== */
+    .timeline { position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:26px; margin-top:116px; }
+    .timeline::before { content:""; position:absolute; left:7%; right:7%; top:38px; height:4px; background:var(--ink); }
+    .milestone { position:relative; padding-top:86px; }
+    .milestone::before { content:""; position:absolute; left:28px; top:17px; width:42px; height:42px; border:9px solid var(--paper); border-radius:50%; background:var(--coral); box-shadow:0 0 0 3px var(--ink); }
+    .milestone b { color:var(--coral); font:900 18px/1 var(--font-body); letter-spacing:.12em; }
+    .milestone h3 { margin:14px 0 12px; font:900 38px/1.2 var(--font-display); }
+    .milestone p { margin:0; color:var(--ink-2); font:600 24px/1.5 var(--font-body); }
+    .route-three { display:grid; grid-template-columns:repeat(3,1fr); gap:34px; margin-top:62px; }
+    .route-card { position:relative; min-height:420px; padding:40px 36px; border:3px solid var(--ink); background:var(--cream); }
+    .route-card:nth-child(2) { background:var(--sage-light); transform:translateY(28px); }
+    .route-card:nth-child(3) { background:#ead0c7; transform:translateY(56px); }
+    .route-card .route-no { display:grid; place-items:center; width:70px; height:70px; border-radius:50%; color:var(--cream); background:var(--ink); font:900 26px/1 var(--font-body); }
+    .route-card h3 { margin:38px 0 18px; font:900 48px/1.15 var(--font-display); }
+    .route-card p { margin:0; color:var(--ink-2); font:600 27px/1.5 var(--font-body); }
+    .loop { display:flex; align-items:center; justify-content:center; gap:20px; margin-top:108px; }
+    .loop-node { display:grid; place-items:center; width:250px; height:250px; padding:24px; border:3px solid var(--ink); border-radius:50%; background:var(--cream); text-align:center; font:900 34px/1.25 var(--font-display); }
+    .loop-node:nth-of-type(2) { background:var(--sage-light); }
+    .loop-node:nth-of-type(3) { background:#ead0c7; }
+    .loop-node:nth-of-type(4) { background:var(--sun); }
+    .loop-arrow { color:var(--coral); font:900 54px/1 var(--font-body); }
+
+    /* ===========================================
+       WHEELS, MATRIX, AND LADDER
+       =========================================== */
+    .force-layout { display:grid; grid-template-columns:1fr 720px; align-items:center; gap:50px; margin-top:24px; }
+    .force-list { display:grid; gap:20px; }
+    .force-item { display:grid; grid-template-columns:72px 1fr; gap:20px; align-items:center; padding:22px 26px; border-bottom:2px solid var(--ink); }
+    .force-item b { display:grid; place-items:center; width:58px; height:58px; border-radius:50%; color:var(--cream); background:var(--item-color,var(--coral)); font:900 22px/1 var(--font-body); }
+    .force-item h3 { margin:0 0 6px; font:900 34px/1.15 var(--font-display); }
+    .force-item p { margin:0; color:var(--ink-2); font:600 22px/1.4 var(--font-body); }
+    .force-wheel { position:relative; width:610px; height:610px; margin:auto; border:3px solid var(--ink); border-radius:50%; }
+    .force-wheel::before,
+    .force-wheel::after { content:""; position:absolute; left:50%; top:50%; background:var(--ink); transform:translate(-50%,-50%); }
+    .force-wheel::before { width:100%; height:2px; }
+    .force-wheel::after { width:2px; height:100%; }
+    .force-wheel .center { position:absolute; left:50%; top:50%; z-index:3; display:grid; place-items:center; width:160px; height:160px; border:3px solid var(--ink); border-radius:50%; color:var(--cream); background:var(--coral); transform:translate(-50%,-50%); font:900 34px/1.1 var(--font-display); text-align:center; }
+    .force-wheel span { position:absolute; width:210px; text-align:center; font:900 30px/1.2 var(--font-display); }
+    .fw-top { top:70px; left:200px; }
+    .fw-right { right:22px; top:280px; }
+    .fw-bottom { bottom:70px; left:200px; }
+    .fw-left { left:20px; top:280px; }
+    .matrix { display:grid; grid-template-columns:120px 1fr; grid-template-rows:1fr 90px; width:1260px; height:610px; margin:26px auto 0; }
+    .matrix-y { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; font:900 24px/1.15 var(--font-body); text-align:center; }
+    .matrix-y span { letter-spacing:.16em; }
+    .matrix-y b { color:var(--coral); font-size:21px; line-height:1.25; }
+    .matrix-x { grid-column:2; display:grid; place-items:center; font:900 24px/1 var(--font-body); }
+    .matrix-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; border-left:3px solid var(--ink); border-bottom:3px solid var(--ink); }
+    .quadrant { padding:30px 34px; border-top:1px solid var(--rule); border-right:1px solid var(--rule); }
+    .quadrant:nth-child(1) { background:#ead0c7; }
+    .quadrant:nth-child(2) { background:var(--sun); }
+    .quadrant:nth-child(3) { background:rgba(142,177,191,.28); }
+    .quadrant:nth-child(4) { background:var(--sage-light); }
+    .quadrant h3 { margin:0 0 12px; font:900 36px/1.2 var(--font-display); }
+    .quadrant p { margin:0; color:var(--ink-2); font:600 23px/1.42 var(--font-body); }
+    .ladder { display:flex; align-items:flex-end; justify-content:center; gap:20px; height:540px; margin-top:24px; }
+    .step { display:flex; align-items:flex-end; width:260px; padding:26px; border:2px solid var(--ink); background:var(--cream); }
+    .step:nth-child(1) { height:180px; }
+    .step:nth-child(2) { height:260px; background:var(--paper-deep); }
+    .step:nth-child(3) { height:340px; background:var(--sage-light); }
+    .step:nth-child(4) { height:420px; background:#ead0c7; }
+    .step:nth-child(5) { height:500px; background:var(--sun); }
+    .step div { width:100%; }
+    .step b { display:block; margin-bottom:12px; color:var(--coral); font:900 18px/1 var(--font-body); letter-spacing:.1em; }
+    .step h3 { margin:0 0 10px; font:900 32px/1.15 var(--font-display); }
+    .step p { margin:0; color:var(--ink-2); font:600 21px/1.4 var(--font-body); }
+
+    /* ===========================================
+       LAYERS, FUNNEL, AND FINAL CYCLE
+       =========================================== */
+    .layers { display:grid; gap:14px; width:1280px; margin:44px auto 0; }
+    .layer { display:grid; grid-template-columns:230px 1fr; align-items:center; min-height:90px; padding:18px 30px; border:2px solid var(--ink); background:var(--cream); }
+    .layer:nth-child(2) { margin-left:70px; background:var(--paper-deep); }
+    .layer:nth-child(3) { margin-left:140px; background:var(--sage-light); }
+    .layer:nth-child(4) { margin-left:210px; background:#ead0c7; }
+    .layer:nth-child(5) { margin-left:280px; background:var(--sun); }
+    .layer b { font:900 31px/1 var(--font-display); }
+    .layer span { font:650 24px/1.4 var(--font-body); }
+    .funnel { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:122px; }
+    .funnel-item { position:relative; display:grid; place-items:center; height:230px; padding:26px; border:3px solid var(--ink); text-align:center; font:900 34px/1.2 var(--font-display); }
+    .funnel-item:nth-child(1) { width:360px; background:#ead0c7; }
+    .funnel-item:nth-child(2) { width:320px; background:var(--paper-deep); }
+    .funnel-item:nth-child(3) { width:280px; background:var(--sage-light); }
+    .funnel-item:nth-child(4) { width:240px; background:var(--blue); }
+    .funnel-item:nth-child(5) { width:200px; background:var(--sun); }
+    .funnel-arrow { color:var(--coral); font:900 46px/1 var(--font-body); }
+    .cycle-final { position:relative; width:760px; height:610px; margin:20px auto 0; border:4px solid var(--ink); border-radius:50%; }
+    .cycle-final::before { content:""; position:absolute; inset:90px; border:2px dashed var(--sage); border-radius:50%; }
+    .cycle-center { position:absolute; left:50%; top:50%; display:grid; place-items:center; width:230px; height:230px; border-radius:50%; color:var(--cream); background:var(--coral); transform:translate(-50%,-50%); text-align:center; font:900 42px/1.18 var(--font-display); }
+    .cycle-node { position:absolute; display:grid; place-items:center; width:180px; height:100px; padding:15px; border:3px solid var(--ink); background:var(--cream); text-align:center; font:900 28px/1.2 var(--font-display); }
+    .cn1 { left:290px; top:-24px; }
+    .cn2 { right:-70px; top:160px; background:var(--sun); }
+    .cn3 { right:4px; bottom:16px; background:var(--sage-light); }
+    .cn4 { left:90px; bottom:-26px; background:#ead0c7; }
+    .cn5 { left:-70px; top:170px; background:var(--paper-deep); }
+
+    /* ===========================================
+       FALLBACK, LIVE CONTROLS, AND OVERLAYS
+       =========================================== */
+    .fallback-controls { position:absolute; left:50%; bottom:22px; z-index:20; display:flex; align-items:center; gap:18px; transform:translateX(-50%); }
+    .fallback-controls a,
+    .fallback-controls span { min-width:74px; padding:10px 14px; border:1px solid currentColor; background:var(--paper); color:var(--ink); text-align:center; text-decoration:none; font:800 16px/1 var(--font-body); }
+    .dark .fallback-controls a,
+    .dark .fallback-controls span { color:var(--cream); background:var(--ink); }
+    .deck-controls { display:none; align-items:center; gap:8px; padding:8px 10px; border:1px solid rgba(255,255,255,.22); border-radius:999px; background:rgba(18,35,29,.92); box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    .deck-controls button { display:grid; place-items:center; width:42px; height:42px; border:0; border-radius:50%; color:var(--cream); background:transparent; }
+    .deck-controls button:hover { color:var(--ink); background:var(--sun); }
+    .deck-controls .counter { min-width:92px; color:var(--cream); text-align:center; font:800 15px/1 var(--font-body); }
+    .progress { position:fixed; left:0; bottom:0; z-index:1100; display:none; width:0; height:4px; background:var(--coral); transition:width .28s ease; }
+    .overlay { position:fixed; inset:0; z-index:5000; display:none; align-items:center; justify-content:center; padding:40px; background:rgba(8,20,15,.86); }
+    .overlay.open { display:flex; }
+    .overlay-panel { position:relative; width:min(1000px,90vw); max-height:84vh; overflow:auto; padding:44px; border:2px solid var(--ink); background:var(--paper); box-shadow:18px 18px 0 rgba(242,201,76,.42); }
+    .overlay-panel h2 { margin:0 0 22px; font:900 44px/1.15 var(--font-display); }
+    .overlay-panel p,
+    .overlay-panel li { font:600 22px/1.55 var(--font-body); }
+    .overlay-close { position:absolute; right:18px; top:18px; width:42px; height:42px; border:2px solid var(--ink); background:var(--sun); font:900 24px/1 var(--font-body); }
+    .menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .menu-grid button { padding:14px 16px; border:1px solid var(--ink); background:transparent; text-align:left; font:700 18px/1.25 var(--font-body); }
+    .menu-grid button:hover { background:var(--sage-light); }
+    .teacher-trigger { position:absolute; right:112px; bottom:58px; z-index:8; display:none; padding:10px 15px; border:2px solid var(--ink); background:var(--sun); font:900 16px/1 var(--font-body); transform:rotate(-1deg); }
+    .slide.has-note .teacher-trigger { display:block; }
+
+    /* ===========================================
+       INLINE EDITING
+       =========================================== */
+    .edit-hotzone { position:fixed; left:0; top:0; z-index:10000; width:80px; height:80px; cursor:pointer; }
+    .edit-toggle { position:fixed; left:16px; top:16px; z-index:10001; width:48px; height:48px; border:1px solid rgba(255,255,255,.38); border-radius:50%; color:var(--cream); background:var(--ink); opacity:0; pointer-events:none; transition:opacity .3s ease; }
+    .edit-toggle.show,
+    .edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; left:76px; top:17px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { padding:12px 16px; border:1px solid rgba(255,255,255,.38); color:var(--cream); background:var(--ink); font:700 14px/1 var(--font-body); }
+    body.editing [data-editable] { outline:2px dashed var(--coral); outline-offset:5px; cursor:text; }
+    .legacy-note { position:fixed; left:12px; right:12px; top:12px; z-index:9000; padding:10px; color:var(--cream); background:var(--ink); text-align:center; font:700 16px/1.4 var(--font-body); }
+    @media print {
+      .progress,
+      .overlay,
+      .edit-hotzone,
+      .edit-toggle,
+      .edit-toolbar,
+      .teacher-trigger,
+      .fallback-controls,
+      .legacy-note { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+
+      <!-- ===========================================
+           01｜封面
+           =========================================== -->
+      <section id="slide-1" class="slide cover active visible" data-title="職涯，不是一次選對">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">第一部分｜CAREER EXPLORATION</span></header>
+        <div class="copy"><p class="kicker reveal" data-editable>你要找的，是工作，還是職涯？</p><h1 class="reveal delay-1" data-editable>職涯，<br>不是一次<em>選對</em></h1><p class="subtitle reveal delay-2" data-editable>什麼是職涯？我們又該如何做出下一個選擇？</p></div>
+        <div class="route-note reveal delay-3"><i></i><span data-editable>形成假設　→　取得經驗　→　逐步修正</span></div>
+        <div class="compass reveal-scale delay-2" aria-hidden="true"><div class="orbit"></div><div class="needle"></div><div class="center-dot"></div><span class="axis-label north">熱愛</span><span class="axis-label east">機會</span><span class="axis-label south">生活</span><span class="axis-label west">能力</span></div>
+        <div class="question-chip reveal delay-4" data-editable>如果沒有唯一正確答案，<br>我們要靠什麼做選擇？</div><div class="page-no">01 / 28</div>
+        <nav class="fallback-controls" aria-label="靜態翻頁"><span aria-disabled="true">←</span><span>01 / 28</span><a href="#slide-2">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           02｜三個核心問題
+           =========================================== -->
+      <section id="slide-2" class="slide has-note" data-title="今天要處理的三個問題">
+        <header class="masthead"><span>今天要處理的三個問題</span><span class="chapter">COURSE MAP</span></header>
+        <div class="frame"><p class="eyebrow reveal" data-editable>先不急著找答案</p><h2 class="title reveal delay-1" data-editable>把「我該做什麼」拆成三個可以討論的問題</h2>
+          <div class="cards three"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">QUESTION 01</div><h3 data-editable>高薪與適合</h3><p data-editable>薪水很高，但每天都很痛苦，要留下嗎？</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">QUESTION 02</div><h3 data-editable>熱愛與職業</h3><p data-editable>喜歡一件事，就一定要把它變成工作嗎？</p></article><article class="card reveal delay-3" style="--card-color:var(--sun)"><div class="no">QUESTION 03</div><h3 data-editable>選擇與證據</h3><p data-editable>還沒做過，怎麼知道自己適不適合？</p></article></div>
+        </div><div class="page-no">02 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>開場方式</h2><p>請學生先快速選一題最有感的問題，不必馬上說明理由。這一頁要讓學生知道：今天不會拿到一份「正確職業清單」，而是要學會怎麼判斷。</p></template>
+        <nav class="fallback-controls"><a href="#slide-1">←</a><span>02 / 28</span><a href="#slide-3">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           03｜高薪與適合的投票
+           =========================================== -->
+      <section id="slide-3" class="slide has-note" data-title="高薪與適合，選哪一個？">
+        <header class="masthead"><span>第一個衝突</span><span class="chapter">QUICK POLL</span></header>
+        <div class="frame"><p class="eyebrow reveal" data-editable>假設你剛畢業，現在有兩份工作可以選</p><h2 class="title reveal delay-1" data-editable>高薪與適合，選哪一個？</h2>
+          <div class="poll-grid"><article class="choice reveal delay-2"><div class="letter">A</div><h3 data-editable>薪水高很多</h3><p data-editable>工作內容沒有興趣，工時也長，但收入和履歷都很好看。</p><div class="vote">站左邊</div></article><article class="choice reveal delay-3"><div class="letter">B</div><h3 data-editable>薪水普通</h3><p data-editable>工作內容比較有興趣，也比較符合你想要的生活方式。</p><div class="vote">站右邊</div></article></div>
+        </div><div class="page-no">03 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>快速站隊</h2><p>請每位學生先選 A 或 B，暫時不接受「看情況」。站隊後各找兩位學生說明理由，再問：如果薪資差距變成兩倍，你會改變選擇嗎？</p></template>
+        <nav class="fallback-controls"><a href="#slide-2">←</a><span>03 / 28</span><a href="#slide-4">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           04｜TVBS 轉職案例影片
+           =========================================== -->
+      <section id="slide-4" class="slide dark has-note" data-title="影片｜TVBS 轉職案例">
+        <header class="masthead"><span>高薪與適合</span><span class="chapter">VIDEO 01｜04:50</span></header>
+        <div class="frame"><p class="eyebrow reveal" data-editable>看影片時想一想</p><h2 class="title reveal delay-1" data-editable>他放棄的只是高薪嗎？</h2>
+          <div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="vSYF18fuI88" data-video-title="TVBS 轉職案例"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 TVBS 轉職案例</strong></button></div><div class="video-meta"><b>4:50</b><span data-editable>案例報導｜高薪、壓力與生活選擇</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>請邊看邊想三件事</h3><ol><li data-editable>他原本擁有什麼？</li><li data-editable>他承受了什麼代價？</li><li data-editable>轉職後，他真正換到的是什麼？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=vSYF18fuI88" target="_blank" rel="noopener">如果無法播放，請改到 YouTube 觀看 ↗</a></aside></div>
+        </div><div class="page-no">04 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片一</h2><p>播放時間約 4 分 50 秒。播放前，先請學生看完三個問題；播放後不要急著評論，先請學生用一句話說明「他換到的是什麼」。</p></template>
+        <nav class="fallback-controls"><a href="#slide-3">←</a><span>04 / 28</span><a href="#slide-5">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           05｜影片後討論
+           =========================================== -->
+      <section id="slide-5" class="slide dark has-note" data-title="他真正離開的是什麼？">
+        <header class="masthead"><span>影片後討論</span><span class="chapter">DISCUSSION 01</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只看職稱</p><p class="big-statement reveal delay-1" data-editable>他真正離開的，<br>可能不是一份工作，<br>而是一種<span class="accent">不能長久的生活</span>。</p><p class="lead reveal delay-2" data-editable>判斷一份工作適不適合自己，除了收入與工作內容，也要一起看身心狀態、人際關係和生活安排。</p></div>
+        <div class="page-no">05 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>追問</h2><p>請學生把答案分成「工作本身」與「這份工作帶來的生活」。如果只換公司、不換工作方式，問題會消失嗎？</p></template>
+        <nav class="fallback-controls"><a href="#slide-4">←</a><span>05 / 28</span><a href="#slide-6">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           06｜工作不等於職涯
+           =========================================== -->
+      <section id="slide-6" class="slide" data-title="工作不等於職涯">
+        <header class="masthead"><span>基本概念</span><span class="chapter">JOB ≠ CAREER</span></header>
+        <div class="frame"><p class="eyebrow reveal">兩個容易混在一起的詞</p><h2 class="title reveal delay-1" data-editable>工作是你現在做的事；職涯是一路走來累積的過程</h2><div class="split"><article class="split-panel reveal delay-2" style="--panel-color:var(--coral)"><h3 data-editable>工作 JOB</h3><ul><li data-editable>目前負責的職務與工作內容</li><li data-editable>用時間與能力換取報酬</li><li data-editable>會隨著公司或人生階段而改變</li></ul></article><article class="split-panel reveal delay-3" style="--panel-color:var(--sage)"><h3 data-editable>職涯 CAREER</h3><ul><li data-editable>能力、經驗與人脈的長期累積</li><li data-editable>也會經歷轉換、停頓與重新開始</li><li data-editable>也包括你想過什麼樣的生活</li></ul></article></div><div class="versus">≠</div></div>
+        <div class="page-no">06 / 28</div><nav class="fallback-controls"><a href="#slide-5">←</a><span>06 / 28</span><a href="#slide-7">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           07｜職涯是一條時間線
+           =========================================== -->
+      <section id="slide-7" class="slide" data-title="職涯是一條會轉彎的時間線">
+        <header class="masthead"><span>職涯的時間尺度</span><span class="chapter">A LIFELONG PATH</span></header>
+        <div class="frame"><p class="eyebrow reveal">一份工作，不是整個人生</p><h2 class="title reveal delay-1" data-editable>職涯是一條會轉彎的時間線</h2><div class="timeline"><article class="milestone reveal delay-1"><b>LEARN</b><h3 data-editable>學習</h3><p data-editable>建立能力，也開始認識自己。</p></article><article class="milestone reveal delay-2"><b>TRY</b><h3 data-editable>嘗試</h3><p data-editable>實習、打工、專題與第一份工作。</p></article><article class="milestone reveal delay-3"><b>SHIFT</b><h3 data-editable>轉換</h3><p data-editable>角色、產業與生活階段發生改變。</p></article><article class="milestone reveal delay-4"><b>REBUILD</b><h3 data-editable>重新規劃</h3><p data-editable>帶著原有經驗，重新規劃下一段路。</p></article></div></div>
+        <div class="page-no">07 / 28</div><nav class="fallback-controls"><a href="#slide-6">←</a><span>07 / 28</span><a href="#slide-8">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           08｜職涯的四股力量
+           =========================================== -->
+      <section id="slide-8" class="slide" data-title="職涯由四股力量共同形成">
+        <header class="masthead"><span>影響職涯的力量</span><span class="chapter">FOUR FORCES</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是只看興趣</p><h2 class="title reveal delay-1" data-editable>職涯由四股力量共同形成</h2><div class="force-layout"><div class="force-list"><article class="force-item reveal delay-1"><b style="--item-color:var(--coral)">01</b><div><h3 data-editable>自己</h3><p data-editable>能力、興趣、價值觀與做事方式。</p></div></article><article class="force-item reveal delay-2"><b style="--item-color:var(--sage)">02</b><div><h3 data-editable>工作</h3><p data-editable>任務、環境、報酬與成長路徑。</p></div></article><article class="force-item reveal delay-3"><b style="--item-color:var(--blue)">03</b><div><h3 data-editable>人生階段</h3><p data-editable>健康、家庭、責任與生活期待。</p></div></article><article class="force-item reveal delay-4"><b style="--item-color:#b88d61">04</b><div><h3 data-editable>外部環境</h3><p data-editable>產業變化、科技、景氣與機會。</p></div></article></div><div class="force-wheel reveal-scale delay-2"><div class="center">我的<br>職涯</div><span class="fw-top">自己</span><span class="fw-right">工作</span><span class="fw-bottom">人生階段</span><span class="fw-left">外部環境</span></div></div></div>
+        <div class="page-no">08 / 28</div><nav class="fallback-controls"><a href="#slide-7">←</a><span>08 / 28</span><a href="#slide-9">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           09｜沒有唯一正解
+           =========================================== -->
+      <section id="slide-9" class="slide dark" data-title="職涯選擇不是考試">
+        <header class="masthead"><span>先拆掉一個迷思</span><span class="chapter">NO SINGLE RIGHT ANSWER</span></header>
+        <div class="frame"><p class="eyebrow reveal">職涯選擇不是考試</p><p class="big-statement reveal delay-1" data-editable>你不是在答案卷上，<br>找出唯一正確的<span class="accent">職業名稱</span>。</p><p class="lead reveal delay-2" data-editable>你是在資訊不完整的情況下，做出一個目前合理、未來可以修正的決定。</p></div>
+        <div class="page-no">09 / 28</div><nav class="fallback-controls"><a href="#slide-8">←</a><span>09 / 28</span><a href="#slide-10">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           10｜三條選擇路徑
+           =========================================== -->
+      <section id="slide-10" class="slide" data-title="我們常走的三條路">
+        <header class="masthead"><span>職涯選擇的三條路</span><span class="chapter">THREE ROUTES</span></header>
+        <div class="frame"><p class="eyebrow reveal">哪一條比較像你？</p><h2 class="title reveal delay-1" data-editable>我們通常從三個方向思考未來</h2><div class="route-three"><article class="route-card reveal delay-1"><div class="route-no">01</div><h3 data-editable>找到熱愛</h3><p data-editable>從「我想做什麼」出發，把興趣變成方向。</p></article><article class="route-card reveal delay-2"><div class="route-no">02</div><h3 data-editable>找到適合</h3><p data-editable>從能力、價值與環境的配合程度出發。</p></article><article class="route-card reveal delay-3"><div class="route-no">03</div><h3 data-editable>在做中調整</h3><p data-editable>先投入、練習，再邊做邊調整，慢慢培養能力與認同感。</p></article></div></div>
+        <div class="page-no">10 / 28</div><nav class="fallback-controls"><a href="#slide-9">←</a><span>10 / 28</span><a href="#slide-11">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           11｜什麼是熱愛
+           =========================================== -->
+      <section id="slide-11" class="slide" data-title="熱愛，不只是覺得有趣">
+        <header class="masthead"><span>路徑一｜找到熱愛</span><span class="chapter">LOVE</span></header>
+        <div class="frame"><p class="eyebrow reveal">興趣只是第一層</p><h2 class="title reveal delay-1" data-editable>熱愛，不只是「我覺得很有趣」</h2><div class="cards three"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">ENERGY</div><h3 data-editable>會主動了解</h3><p data-editable>你會主動關注、找資料、請教別人，也願意多做一點。</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">EFFORT</div><h3 data-editable>願意投入</h3><p data-editable>遇到不熟、無聊或挫折時，仍願意繼續練習。</p></article><article class="card reveal delay-3" style="--card-color:var(--sun)"><div class="no">MEANING</div><h3 data-editable>覺得值得</h3><p data-editable>你知道這件事為什麼重要，也願意承擔它的代價。</p></article></div></div>
+        <div class="page-no">11 / 28</div><nav class="fallback-controls"><a href="#slide-10">←</a><span>11 / 28</span><a href="#slide-12">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           12｜什麼是適合
+           =========================================== -->
+      <section id="slide-12" class="slide" data-title="適合，是多個條件的交集">
+        <header class="masthead"><span>路徑二｜找到適合</span><span class="chapter">FIT</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是一種感覺</p><h2 class="title reveal delay-1" data-editable>所謂適合，就是你和工作能不能彼此配合</h2><div class="cards four"><article class="card reveal delay-1" style="--card-color:var(--coral)"><h3 data-editable>做得來</h3><p data-editable>目前的能力大致符合工作要求，也願意繼續學習。</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><h3 data-editable>待得住</h3><p data-editable>工作環境、步調與人際關係，不會讓你長期身心俱疲。</p></article><article class="card reveal delay-3" style="--card-color:var(--blue)"><h3 data-editable>認同這份工作</h3><p data-editable>工作的做法與結果，不會一直違背你的價值觀。</p></article><article class="card reveal delay-4" style="--card-color:var(--sun)"><h3 data-editable>顧得到生活</h3><p data-editable>薪資、工時和地點，能配合目前的生活與家庭責任。</p></article></div></div>
+        <div class="page-no">12 / 28</div><nav class="fallback-controls"><a href="#slide-11">←</a><span>12 / 28</span><a href="#slide-13">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           13｜在做中調整
+           =========================================== -->
+      <section id="slide-13" class="slide" data-title="適合，也可能是慢慢做出來的">
+        <header class="masthead"><span>路徑三｜在做中調整</span><span class="chapter">BECOMING</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要把現在當成終點</p><h2 class="title reveal delay-1" data-editable>適合，也可能是慢慢做出來的</h2><div class="loop"><div class="loop-node reveal delay-1" data-editable>先做一點</div><span class="loop-arrow reveal delay-1">→</span><div class="loop-node reveal delay-2" data-editable>變得熟練</div><span class="loop-arrow reveal delay-2">→</span><div class="loop-node reveal delay-3" data-editable>得到回饋</div><span class="loop-arrow reveal delay-3">→</span><div class="loop-node reveal delay-4" data-editable>形成認同</div></div><p class="lead reveal delay-5" style="margin:55px auto 0;text-align:center" data-editable>有些能力與興趣，是實際投入之後才慢慢培養出來的。</p></div>
+        <div class="page-no">13 / 28</div><nav class="fallback-controls"><a href="#slide-12">←</a><span>13 / 28</span><a href="#slide-14">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           14｜啾啾鞋影片
+           =========================================== -->
+      <section id="slide-14" class="slide dark has-note" data-title="影片｜熱愛是否應該成為職業">
+        <header class="masthead"><span>熱愛與職業</span><span class="chapter">VIDEO 02｜14:26</span></header>
+        <div class="frame"><p class="eyebrow reveal">看影片時想一想</p><h2 class="title reveal delay-1" data-editable>喜歡一件事，就該把它變成職業嗎？</h2><div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="iCMzIAafDWw" data-video-title="啾啾鞋｜熱愛是否應該成為職業"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放啾啾鞋影片</strong></button></div><div class="video-meta"><b>14:26</b><span data-editable>興趣、工作與現實條件</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>邊看邊判斷</h3><ol><li data-editable>影片中的「熱愛」指的是什麼？</li><li data-editable>把興趣變成工作後，多了哪些現實條件？</li><li data-editable>你同意他的結論嗎？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=iCMzIAafDWw" target="_blank" rel="noopener">如果無法播放，請改到 YouTube 觀看 ↗</a></aside></div></div>
+        <div class="page-no">14 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片二</h2><p>播放時間約 14 分 26 秒。可在影片結束後先安靜一分鐘，請學生寫下「我最同意／最不同意的一句話」，再進入四角辯論。</p></template>
+        <nav class="fallback-controls"><a href="#slide-13">←</a><span>14 / 28</span><a href="#slide-15">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           15｜四角辯論
+           =========================================== -->
+      <section id="slide-15" class="slide has-note" data-title="熱愛應該成為職業嗎？">
+        <header class="masthead"><span>四角辯論</span><span class="chapter">DISCUSSION 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">請選一個最接近自己想法的立場</p><h2 class="title reveal delay-1" data-editable>「熱愛」應該成為職業嗎？</h2><div class="cards four"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">A｜贊成</div><h3 data-editable>喜歡才做得久</h3><p data-editable>工作占了人生很多時間，應該追求真正想做的事。</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">B｜有條件贊成</div><h3 data-editable>還要看現實條件</h3><p data-editable>除了喜歡，也要有市場需求、收入能支持生活，還要能承受工作的壓力。</p></article><article class="card reveal delay-3" style="--card-color:var(--blue)"><div class="no">C｜不贊成</div><h3 data-editable>工作與興趣可分開</h3><p data-editable>工作提供收入，興趣保留自由，未必比較差。</p></article><article class="card reveal delay-4" style="--card-color:var(--sun)"><div class="no">D｜還不知道</div><h3 data-editable>我需要先試做</h3><p data-editable>沒有真實經驗，現在的答案可能只是想像。</p></article></div></div>
+        <div class="page-no">15 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>四角辯論</h2><p>四個角落各推派一位代表。每組先說自己的理由，再替相反立場找一個最合理的理由。最後讓學生自由換位置，並說明是什麼資訊讓他改變想法。</p></template>
+        <nav class="fallback-controls"><a href="#slide-14">←</a><span>15 / 28</span><a href="#slide-16">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           16｜熱愛可能是結果
+           =========================================== -->
+      <section id="slide-16" class="slide dark" data-title="熱愛有時不是起點">
+        <header class="masthead"><span>影片後統整</span><span class="chapter">PASSION CAN GROW</span></header>
+        <div class="frame"><p class="eyebrow reveal">另一種可能</p><p class="big-statement reveal delay-1" data-editable>熱愛有時不是起點，<br>而是投入之後，<br>逐漸形成的<span class="accent">結果</span>。</p><p class="lead reveal delay-2" data-editable>當你越做越熟、能自己作主，也看見這份工作帶來的影響，感受就可能跟著改變。</p></div>
+        <div class="page-no">16 / 28</div><nav class="fallback-controls"><a href="#slide-15">←</a><span>16 / 28</span><a href="#slide-17">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           17｜適合需要證據
+           =========================================== -->
+      <section id="slide-17" class="slide" data-title="適不適合不能只憑感覺">
+        <header class="masthead"><span>從感覺走向判斷</span><span class="chapter">FIT NEEDS EVIDENCE</span></header>
+        <div class="frame"><p class="eyebrow reveal">先把「好像適合」說清楚</p><h2 class="title reveal delay-1" data-editable>適不適合不能只憑感覺，而要用經驗來驗證</h2><div class="cards four"><article class="card reveal delay-1" style="--card-color:var(--coral)"><h3 data-editable>做得來？</h3><p data-editable>能不能完成主要工作，也願不願意把不足的能力補起來？</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><h3 data-editable>做得久？</h3><p data-editable>這樣的工作節奏和環境，你能不能長期適應？</p></article><article class="card reveal delay-3" style="--card-color:var(--blue)"><h3 data-editable>生活能兼顧？</h3><p data-editable>薪資、時間、地點和生活責任能不能兼顧？</p></article><article class="card reveal delay-4" style="--card-color:var(--sun)"><h3 data-editable>能成長？</h3><p data-editable>繼續做下去，能不能累積能力，也增加下一步的選擇？</p></article></div></div>
+        <div class="page-no">17 / 28</div><nav class="fallback-controls"><a href="#slide-16">←</a><span>17 / 28</span><a href="#slide-18">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           18｜認識自己五個面向
+           =========================================== -->
+      <section id="slide-18" class="slide" data-title="認識自己，要看五個面向">
+        <header class="masthead"><span>認識自己</span><span class="chapter">KNOW YOURSELF</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只問「我喜歡什麼」</p><h2 class="title reveal delay-1" data-editable>認識自己，要看五個面向</h2><div class="cards five"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">01</div><h3 data-editable>能力</h3><p data-editable>目前會什麼？哪些能力學得快？</p></article><article class="card reveal delay-2" style="--card-color:var(--sun)"><div class="no">02</div><h3 data-editable>興趣</h3><p data-editable>哪些事情會讓你想繼續了解、繼續做？</p></article><article class="card reveal delay-3" style="--card-color:var(--sage)"><div class="no">03</div><h3 data-editable>價值觀</h3><p data-editable>你希望工作帶來什麼、不能犧牲什麼？</p></article><article class="card reveal delay-4" style="--card-color:var(--blue)"><div class="no">04</div><h3 data-editable>工作方式</h3><p data-editable>獨立或合作？穩定或變動？</p></article><article class="card reveal delay-5" style="--card-color:#b88d61"><div class="no">05</div><h3 data-editable>生活條件</h3><p data-editable>收入、地點、健康與家庭責任。</p></article></div></div>
+        <div class="page-no">18 / 28</div><nav class="fallback-controls"><a href="#slide-17">←</a><span>18 / 28</span><a href="#slide-19">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           19｜認識工作六個面向
+           =========================================== -->
+      <section id="slide-19" class="slide" data-title="認識工作，要拆開六個面向">
+        <header class="masthead"><span>認識工作</span><span class="chapter">KNOW THE WORK</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只看職稱</p><h2 class="title reveal delay-1" data-editable>認識工作，要拆開六個面向</h2><div class="cards six"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">01｜TASK</div><h3 data-editable>日常任務</h3><p data-editable>一天大多在做什麼？</p></article><article class="card reveal delay-1" style="--card-color:var(--sage)"><div class="no">02｜SKILL</div><h3 data-editable>所需能力</h3><p data-editable>進入門檻與學習曲線。</p></article><article class="card reveal delay-2" style="--card-color:var(--blue)"><div class="no">03｜CONTEXT</div><h3 data-editable>工作環境</h3><p data-editable>地點、工時、團隊與壓力。</p></article><article class="card reveal delay-2" style="--card-color:var(--sun)"><div class="no">04｜REWARD</div><h3 data-editable>考核與報酬</h3><p data-editable>怎麼考核？薪資與升遷怎麼決定？</p></article><article class="card reveal delay-3" style="--card-color:#b88d61"><div class="no">05｜GROWTH</div><h3 data-editable>成長路徑</h3><p data-editable>做了三年，能累積哪些能力與經驗？</p></article><article class="card reveal delay-3" style="--card-color:#c98aa1"><div class="no">06｜TRADE-OFF</div><h3 data-editable>生活代價</h3><p data-editable>這份工作會怎麼影響時間、健康與人際關係？</p></article></div></div>
+        <div class="page-no">19 / 28</div><nav class="fallback-controls"><a href="#slide-18">←</a><span>19 / 28</span><a href="#slide-20">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           20｜適合矩陣
+           =========================================== -->
+      <section id="slide-20" class="slide has-note" data-title="喜歡與勝任是兩條不同的軸">
+        <header class="masthead"><span>適合矩陣</span><span class="chapter">DESIRE × FIT</span></header>
+        <div class="frame"><p class="eyebrow reveal">把模糊的感覺整理清楚</p><h2 class="title reveal delay-1" data-editable>喜歡與勝任，是兩條不同的軸</h2><div class="matrix reveal-scale delay-2"><div class="matrix-y"><span>喜歡<br>程度</span><b>高<br>↑<br>低</b></div><div class="matrix-grid"><article class="quadrant"><h3 data-editable>想做，但還不會</h3><p data-editable>先學習、實際做做看，再觀察能力能不能提升。</p></article><article class="quadrant"><h3 data-editable>想做，也做得來</h3><p data-editable>多累積一些實際經驗，看看自己能不能做得長久。</p></article><article class="quadrant"><h3 data-editable>不想做，也不擅長</h3><p data-editable>除非有必要理由，不必把它當主要方向。</p></article><article class="quadrant"><h3 data-editable>做得來，但不想做</h3><p data-editable>先釐清：是不喜歡工作環境、價值觀不合，還是只是暫時太累。</p></article></div><div></div><div class="matrix-x">勝任程度　低 → 高</div></div></div>
+        <div class="page-no">20 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>矩陣練習</h2><p>請學生選一個曾經做過的任務，而不是抽象職業，把它放進矩陣。接著問：你把它放在這一格的根據是什麼？如果只是想像，請在旁邊加上問號。</p></template>
+        <nav class="fallback-controls"><a href="#slide-19">←</a><span>20 / 28</span><a href="#slide-21">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           21｜測驗是鏡子
+           =========================================== -->
+      <section id="slide-21" class="slide dark" data-title="測驗是鏡子，不是判決書">
+        <header class="masthead"><span>銜接下一部分</span><span class="chapter">TESTS AS MIRRORS</span></header>
+        <div class="frame"><p class="eyebrow reveal">性向測驗能做什麼？</p><p class="big-statement reveal delay-1" data-editable>測驗是幫你提問的<span class="accent">鏡子</span>，<br>不是替你決定職業的判決書。</p><p class="lead reveal delay-2" data-editable>它可以幫你描述自己的傾向、提出可能的方向；最後還是要靠實際經驗來判斷。</p></div>
+        <div class="page-no">21 / 28</div><nav class="fallback-controls"><a href="#slide-20">←</a><span>21 / 28</span><a href="#slide-22">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           22｜證據階梯
+           =========================================== -->
+      <section id="slide-22" class="slide" data-title="越接近真實工作，證據越有用">
+        <header class="masthead"><span>如何知道適不適合</span><span class="chapter">EVIDENCE LADDER</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只靠想像</p><h2 class="title reveal delay-1" data-editable>越接近真實工作，證據越有用</h2><div class="ladder"><article class="step reveal delay-1"><div><b>01</b><h3 data-editable>想像</h3><p data-editable>「我覺得應該……」</p></div></article><article class="step reveal delay-2"><div><b>02</b><h3 data-editable>聽說</h3><p data-editable>親友的說法或網路上的介紹。</p></div></article><article class="step reveal delay-3"><div><b>03</b><h3 data-editable>觀察</h3><p data-editable>職涯訪談、職場觀察與企業參訪。</p></div></article><article class="step reveal delay-4"><div><b>04</b><h3 data-editable>模擬</h3><p data-editable>課程練習、模擬作業或情境任務。</p></div></article><article class="step reveal delay-5"><div><b>05</b><h3 data-editable>實作</h3><p data-editable>實習、專題、接案或實際服務。</p></div></article></div></div>
+        <div class="page-no">22 / 28</div><nav class="fallback-controls"><a href="#slide-21">←</a><span>22 / 28</span><a href="#slide-23">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           23｜HelloJuJu 影片
+           =========================================== -->
+      <section id="slide-23" class="slide dark has-note" data-title="影片｜把選擇變成可以操作的方法">
+        <header class="masthead"><span>選擇的方法</span><span class="chapter">VIDEO 03｜11:13</span></header>
+        <div class="frame"><p class="eyebrow reveal">看影片時想一想</p><h2 class="title reveal delay-1" data-editable>怎麼把「不知道」變成下一個行動？</h2><div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="Ka6VKEUj8-o" data-video-title="HelloJuJu｜職涯選擇方法"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 HelloJuJu 影片</strong></button></div><div class="video-meta"><b>11:13</b><span data-editable>把想法變成真的可以去做的步驟</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>請找出可以採取的行動</h3><ol><li data-editable>影片提出哪些選擇步驟？</li><li data-editable>哪一步最能讓你得到第一手經驗？</li><li data-editable>如果今天就開始，你會先做哪一步？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=Ka6VKEUj8-o" target="_blank" rel="noopener">如果無法播放，請改到 YouTube 觀看 ↗</a></aside></div></div>
+        <div class="page-no">23 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片三</h2><p>播放時間約 11 分 13 秒。請學生不要只抄結論，而是整理出「實際可以做的行動」。播放後，再把大家的答案一起整理成一套步驟。</p></template>
+        <nav class="fallback-controls"><a href="#slide-22">←</a><span>23 / 28</span><a href="#slide-24">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           24｜不滿意的五個層次
+           =========================================== -->
+      <section id="slide-24" class="slide" data-title="先釐清：你真正不滿意的是哪一層？">
+        <header class="masthead"><span>不要太快說「我不適合」</span><span class="chapter">DIAGNOSE FIRST</span></header>
+        <div class="frame"><p class="eyebrow reveal">不滿意的原因，可能出在不同層面</p><h2 class="title reveal delay-1" data-editable>先釐清：你真正不滿意的是哪一層？</h2><div class="layers"><div class="layer reveal delay-1"><b data-editable>產業</b><span data-editable>你不認同這個產業，還是不喜歡眼前的公司？</span></div><div class="layer reveal delay-2"><b data-editable>職務</b><span data-editable>你不喜歡核心任務，還是只是某些附帶工作？</span></div><div class="layer reveal delay-3"><b data-editable>公司</b><span data-editable>問題是不是出在公司的制度、文化或資源？</span></div><div class="layer reveal delay-4"><b data-editable>主管／團隊</b><span data-editable>溝通、信任或合作方式，是不是讓你很難工作下去？</span></div><div class="layer reveal delay-5"><b data-editable>人生階段</b><span data-editable>目前的健康、家庭和責任，是不是讓你更在意不同的條件？</span></div></div></div>
+        <div class="page-no">24 / 28</div><nav class="fallback-controls"><a href="#slide-23">←</a><span>24 / 28</span><a href="#slide-25">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           25｜由大到小拆解選擇
+           =========================================== -->
+      <section id="slide-25" class="slide" data-title="把職涯方向由大到小拆開">
+        <header class="masthead"><span>職涯選擇不是只選職稱</span><span class="chapter">FROM FIELD TO LIFE</span></header>
+        <div class="frame"><p class="eyebrow reveal">由大到小，一層一層看清楚</p><h2 class="title reveal delay-1" data-editable>把職涯方向拆成五個可以調整的選擇</h2><div class="funnel"><div class="funnel-item reveal delay-1" data-editable>產業</div><span class="funnel-arrow">→</span><div class="funnel-item reveal delay-2" data-editable>角色</div><span class="funnel-arrow">→</span><div class="funnel-item reveal delay-3" data-editable>能力</div><span class="funnel-arrow">→</span><div class="funnel-item reveal delay-4" data-editable>公司</div><span class="funnel-arrow">→</span><div class="funnel-item reveal delay-5" data-editable>生活</div></div><p class="lead reveal delay-5" style="margin:70px auto 0;text-align:center" data-editable>不要因為一家公司不適合，就否定整個產業；也不要因為喜歡某個產業，就忽略自己每天實際要做的工作。</p></div>
+        <div class="page-no">25 / 28</div><nav class="fallback-controls"><a href="#slide-24">←</a><span>25 / 28</span><a href="#slide-26">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           26｜三個候選方向
+           =========================================== -->
+      <section id="slide-26" class="slide has-note" data-title="不要急著定案，先列出三個可能的方向">
+        <header class="masthead"><span>建立職涯假設</span><span class="chapter">THREE CANDIDATES</span></header>
+        <div class="frame"><p class="eyebrow reveal">先不要只留一個答案</p><h2 class="title reveal delay-1" data-editable>不要急著定案，先列出三個可能的方向</h2><div class="route-three"><article class="route-card reveal delay-1"><div class="route-no">A</div><h3 data-editable>穩健方向</h3><p data-editable>先用自己目前最有把握的能力，選擇方向比較明確的工作。</p></article><article class="route-card reveal delay-2"><div class="route-no">B</div><h3 data-editable>延伸方向</h3><p data-editable>保留原有優勢，再增加一種新角色或一項新能力。</p></article><article class="route-card reveal delay-3"><div class="route-no">C</div><h3 data-editable>探索方向</h3><p data-editable>對很想嘗試、但還不夠了解的方向，先做一次小規模嘗試。</p></article></div></div>
+        <div class="page-no">26 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>三個候選方向</h2><p>提醒學生：三個方向不能只是三個職稱；每個方向至少要寫出「服務誰、做什麼任務、需要什麼能力、可能犧牲什麼」。</p></template>
+        <nav class="fallback-controls"><a href="#slide-25">←</a><span>26 / 28</span><a href="#slide-27">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           27｜小規模職涯實驗
+           =========================================== -->
+      <section id="slide-27" class="slide has-note" data-title="先做一次小規模嘗試，不必立刻辭職">
+        <header class="masthead"><span>取得真實證據</span><span class="chapter">MICRO EXPERIMENTS</span></header>
+        <div class="frame"><p class="eyebrow reveal">先用簡單、成本不高的方法試試看</p><h2 class="title reveal delay-1" data-editable>先做一次小規模嘗試，不必立刻辭職</h2><div class="cards five"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">01</div><h3 data-editable>職涯訪談</h3><p data-editable>找一位正在做這份工作的人，問問他平常一天怎麼過。</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">02</div><h3 data-editable>職場觀察</h3><p data-editable>實際跟著看半天或一天，了解工作流程。</p></article><article class="card reveal delay-3" style="--card-color:var(--blue)"><div class="no">03</div><h3 data-editable>短期任務</h3><p data-editable>修一門課，或完成一次接近真實工作的作業。</p></article><article class="card reveal delay-4" style="--card-color:var(--sun)"><div class="no">04</div><h3 data-editable>專案／服務</h3><p data-editable>社團、志工、競賽或小型接案。</p></article><article class="card reveal delay-5" style="--card-color:#b88d61"><div class="no">05</div><h3 data-editable>做出作品</h3><p data-editable>做出一件能讓別人看見、提供意見的成果。</p></article></div></div>
+        <div class="page-no">27 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>課堂小作業</h2><p>請每位學生選一個候選方向，設計一次兩週內可以完成、不會花太多時間或金錢，也能得到回饋的小規模嘗試。要寫清楚想驗證什麼，以及不管結果如何，都能得到哪些資訊。</p></template>
+        <nav class="fallback-controls"><a href="#slide-26">←</a><span>27 / 28</span><a href="#slide-28">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           28｜職涯探索循環
+           =========================================== -->
+      <section id="slide-28" class="slide has-note" data-title="職涯探索是一個循環">
+        <header class="masthead"><span>第一部分總結</span><span class="chapter">CAREER EXPLORATION CYCLE</span></header>
+        <div class="frame"><p class="eyebrow reveal">最後，記住這個循環就好</p><h2 class="title reveal delay-1" data-editable>職涯探索不是一次決定，而是一個循環</h2><div class="cycle-final reveal-scale delay-2"><div class="cycle-center" data-editable>下一個<br>更好的選擇</div><div class="cycle-node cn1" data-editable>形成假設</div><div class="cycle-node cn2" data-editable>蒐集資訊</div><div class="cycle-node cn3" data-editable>小規模嘗試</div><div class="cycle-node cn4" data-editable>取得證據</div><div class="cycle-node cn5" data-editable>修正方向</div></div><p class="lead reveal delay-4" style="position:absolute;right:0;bottom:25px;width:420px;text-align:right" data-editable>今天不必決定一輩子；<br>先選一個值得試試看的方向就好。</p></div>
+        <div class="page-no">28 / 28</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>收尾</h2><p>請學生用一句話完成：「我現在的一個職涯假設是＿＿；我準備用＿＿取得證據。」下一部分會用 PDP 與 MBTI，提供更多認識自己的角度，但不會替學生做最後決定。</p></template>
+        <nav class="fallback-controls"><a href="#slide-27">←</a><span>28 / 28</span><span aria-disabled="true">→</span></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       LIVE PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="簡報控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button>
+    <button id="menuBtn" type="button" aria-label="章節選單">☰</button>
+    <span class="counter" id="counter">01 / 28</span>
+    <button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="noteBtn" type="button" aria-label="教師提示">T</button>
+    <button id="helpBtn" type="button" aria-label="操作說明">?</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===========================================
+       MENU, NOTES, AND HELP OVERLAYS
+       =========================================== -->
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="章節選單"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>前往投影片</h2><div class="menu-grid" id="menuGrid"></div></div></div>
+  <div class="overlay" id="noteOverlay" role="dialog" aria-modal="true" aria-label="教師提示"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><div id="noteContent"></div></div></div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>操作說明</h2><ul><li>←、→、Space、Page Up／Down：翻頁</li><li>Home／End：第一張／最後一張</li><li>M：章節選單　T：教師提示　E：文字編輯</li><li>F：全螢幕　Esc：關閉視窗　手機／平板可左右滑動</li><li>影片需連線；若嵌入失敗，使用頁面上的 YouTube 備援連結。</li></ul></div></div>
+
+  <!-- ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）" aria-label="切換編輯模式">✎</button>
+  <div class="edit-toolbar" id="editToolbar"><button id="saveFile" type="button">下載修訂版 HTML</button><button id="resetEdits" type="button">清除本機修改</button></div>
+  <noscript><div class="legacy-note">相容模式：請使用每張投影片下方的左右箭頭翻頁；影片請使用 YouTube 文字連結。</div></noscript>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    (function(){
+      "use strict";
+      function byId(id){ return document.getElementById(id); }
+      function pad2(number){ return number<10?"0"+number:String(number); }
+      function closeOverlays(){ var open=document.querySelectorAll(".overlay.open"); for(var i=0;i<open.length;i+=1){ open[i].classList.remove("open"); } }
+      var stage=byId("deckStage");
+      var storageKey="career-exploration-part1-v1";
+      try { var saved=window.localStorage.getItem(storageKey); if(saved&&saved.indexOf("slide-28")!==-1){ stage.innerHTML=saved; } } catch(ignore){}
+      var slides=stage.querySelectorAll(".slide");
+      var current=0;
+      var wheelLocked=false;
+      var touchStart=null;
+
+      function scaleStage(){
+        var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+        var x=(window.innerWidth-1920*factor)/2;
+        var y=(window.innerHeight-1080*factor)/2;
+        stage.style.transform="translate("+x+"px,"+y+"px) scale("+factor+")";
+      }
+      function resetVideo(slide){
+        var shell=slide.querySelector(".video-shell");
+        if(shell&&shell.querySelector("iframe")){
+          var label=shell.getAttribute("data-video-title")||"課程影片";
+          shell.innerHTML='<button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下重新載入 '+label+'</strong></button>';
+        }
+      }
+      function show(index,updateHash){
+        if(index<0){index=0;} if(index>=slides.length){index=slides.length-1;}
+        for(var i=0;i<slides.length;i+=1){
+          if(i===index){ slides[i].classList.add("active"); slides[i].classList.add("visible"); }
+          else { slides[i].classList.remove("active"); slides[i].classList.remove("visible"); resetVideo(slides[i]); }
+        }
+        current=index;
+        byId("counter").textContent=pad2(current+1)+" / "+slides.length;
+        byId("progress").style.width=((current+1)/slides.length*100)+"%";
+        byId("noteBtn").style.opacity=slides[current].querySelector(".teacher-note")?"1":".35";
+        if(updateHash!==false){ try{ window.history.replaceState(null,"","#slide-"+(current+1)); }catch(ignore){ window.location.hash="slide-"+(current+1); } }
+      }
+      function indexFromHash(){ var match=window.location.hash.match(/^#slide-(\d+)$/); return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0; }
+      function openOverlay(id){ closeOverlays(); byId(id).classList.add("open"); }
+      function showNote(){
+        var template=slides[current].querySelector(".teacher-note");
+        if(!template){return;}
+        byId("noteContent").innerHTML="";
+        byId("noteContent").appendChild(template.content.cloneNode(true));
+        openOverlay("noteOverlay");
+      }
+      function requestFullscreen(){
+        var root=document.documentElement;
+        var exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+        if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement){ if(exit){exit.call(document);} return; }
+        var enter=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen; if(enter){enter.call(root);}
+      }
+      function buildMenu(){
+        var grid=byId("menuGrid"); grid.innerHTML="";
+        for(var i=0;i<slides.length;i+=1){
+          var button=document.createElement("button");
+          button.type="button"; button.setAttribute("data-jump",i);
+          button.textContent=pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片");
+          grid.appendChild(button);
+        }
+      }
+
+      /* ===========================================
+         VIDEO LAZY LOADING
+         =========================================== */
+      function loadVideo(shell){
+        var id=shell.getAttribute("data-video-id");
+        var title=shell.getAttribute("data-video-title")||"課程影片";
+        shell.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="'+title.replace(/"/g,"&quot;")+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      }
+
+      /* ===========================================
+         INPUT AND NAVIGATION EVENTS
+         =========================================== */
+      byId("prevBtn").onclick=function(){show(current-1);};
+      byId("nextBtn").onclick=function(){show(current+1);};
+      byId("menuBtn").onclick=function(){openOverlay("menuOverlay");};
+      byId("noteBtn").onclick=showNote;
+      byId("helpBtn").onclick=function(){openOverlay("helpOverlay");};
+      byId("fullBtn").onclick=requestFullscreen;
+      document.addEventListener("click",function(event){
+        var close=event.target.closest("[data-close]"); if(close){closeOverlays();return;}
+        if(event.target.classList.contains("overlay")){closeOverlays();return;}
+        var jump=event.target.closest("[data-jump]"); if(jump){show(parseInt(jump.getAttribute("data-jump"),10));closeOverlays();return;}
+        var load=event.target.closest(".load-video"); if(load){loadVideo(load.closest(".video-shell"));return;}
+        var teacher=event.target.closest(".teacher-trigger"); if(teacher){showNote();}
+      });
+      document.addEventListener("keydown",function(event){
+        var target=event.target;
+        if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA)$/i.test(target.tagName))){return;}
+        if(event.key==="ArrowRight"||event.key==="ArrowDown"||event.key==="PageDown"||event.key===" "){event.preventDefault();show(current+1);}
+        else if(event.key==="ArrowLeft"||event.key==="ArrowUp"||event.key==="PageUp"){event.preventDefault();show(current-1);}
+        else if(event.key==="Home"){show(0);}
+        else if(event.key==="End"){show(slides.length-1);}
+        else if(event.key==="m"||event.key==="M"){openOverlay("menuOverlay");}
+        else if(event.key==="t"||event.key==="T"){showNote();}
+        else if(event.key==="f"||event.key==="F"){requestFullscreen();}
+        else if(event.key==="Escape"){closeOverlays();}
+        else if(event.key==="e"||event.key==="E"){toggleEditing();}
+      });
+      window.addEventListener("resize",scaleStage);
+      window.addEventListener("hashchange",function(){show(indexFromHash(),false);});
+      window.addEventListener("wheel",function(event){ if(wheelLocked||Math.abs(event.deltaY)<18){return;} wheelLocked=true; show(current+(event.deltaY>0?1:-1)); window.setTimeout(function(){wheelLocked=false;},520); },{passive:true});
+      window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX;},{passive:true});
+      window.addEventListener("touchend",function(event){ if(touchStart===null){return;} var delta=event.changedTouches[0].clientX-touchStart; if(Math.abs(delta)>50){show(current+(delta<0?1:-1));} touchStart=null; },{passive:true});
+
+      /* ===========================================
+         INLINE EDITOR AND FILE EXPORT
+         =========================================== */
+      var editing=false;
+      var hideTimer=null;
+      var saveTimer=null;
+      var hotzone=document.querySelector(".edit-hotzone");
+      var editToggle=byId("editToggle");
+      function setStored(value){try{window.localStorage.setItem(storageKey,value);return true;}catch(ignore){return false;}}
+      function toggleEditing(){
+        editing=!editing;
+        var editable=stage.querySelectorAll("[data-editable]");
+        for(var i=0;i<editable.length;i+=1){editable[i].contentEditable=editing?"true":"false";}
+        document.body.classList.toggle("editing",editing);
+        editToggle.classList.toggle("active",editing);
+        byId("editToolbar").classList.toggle("show",editing);
+      }
+      editToggle.onclick=toggleEditing;
+      hotzone.onclick=toggleEditing;
+      hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);editToggle.classList.add("show");};
+      hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show");}},400);};
+      editToggle.onmouseenter=function(){window.clearTimeout(hideTimer);};
+      editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show");}},400);};
+      stage.addEventListener("input",function(){window.clearTimeout(saveTimer);saveTimer=window.setTimeout(function(){setStored(stage.innerHTML);},350);});
+      byId("resetEdits").onclick=function(){if(window.confirm("要清除這台瀏覽器儲存的文字修改嗎？")){try{window.localStorage.removeItem(storageKey);}catch(ignore){} window.location.reload();}};
+      byId("saveFile").onclick=function(){
+        if(editing){toggleEditing();}
+        setStored(stage.innerHTML);
+        var html="<!doctype html>\n"+document.documentElement.outerHTML;
+        var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+        var urlApi=window.URL||window.webkitURL;
+        var anchor=document.createElement("a");
+        anchor.href=urlApi.createObjectURL(blob);
+        anchor.download="職涯探索與專業倫理_第一部分_什麼是職涯與如何選擇_V1_編輯版.html";
+        document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);
+        window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href);},1200);
+      };
+
+      buildMenu();scaleStage();show(indexFromHash(),false);document.body.classList.add("js-ready");
+    }());
+  </script>
+</body>
+</html>
