@@ -345,8 +345,55 @@
     .slide.dark { color:#f4f0e8; background:#08111f; }
 
   </style>
+  <style>
+    .site-home-link {
+      position: fixed;
+      top: 16px;
+      left: 92px;
+      z-index: 9900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 9px 14px;
+      color: #fff;
+      background: rgba(9, 24, 38, .84);
+      border: 1px solid rgba(255, 255, 255, .38);
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font: 700 14px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      text-decoration: none;
+      opacity: .78;
+      transition: opacity .2s ease, background .2s ease;
+    }
+
+    .site-home-link:hover,
+    .site-home-link:focus-visible {
+      opacity: 1;
+      background: rgba(9, 24, 38, .96);
+      outline: 3px solid rgba(255, 255, 255, .7);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 520px) {
+      .site-home-link {
+        top: 10px;
+        left: 88px;
+        min-height: 40px;
+        padding: 8px 11px;
+        font-size: 13px;
+      }
+    }
+
+    @media print {
+      .site-home-link { display: none !important; }
+    }
+  </style>
 </head>
 <body>
+  <a class="site-home-link" href="./" aria-label="返回龔鴻裕教學與教材首頁">← 教材首頁</a>
   <div class="deck-viewport">
     <main class="deck-stage" id="deckStage" aria-live="polite">
 <section id="slide-1" class="slide active visible dark cover" data-title="封面"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">01 / 55</div><div class="cover-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="cover-serial">BACKGROUND EVOLUTION / V4</div><h1 class="reveal" data-editable>管理資訊<br>系統</h1><div class="cover-sub reveal" data-editable>從<strong>運算</strong>、連結到組織能力的形成</div><div class="cover-timeline reveal"><div>電腦的演進</div><div>網路的演進</div><div>資訊系統的演進</div></div><div class="signal"></div><div class="signal-core">IS</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">&#8592;</a><span>01 / 55</span><a href="#slide-2" aria-label="下一張">&#8594;</a></nav></section>
