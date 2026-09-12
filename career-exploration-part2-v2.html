@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="職涯探索與專業倫理第二部分：以 PDP 與 MBTI 認識自己的工作方式，並將測驗結果轉換成可以驗證的工作條件。">
+  <title>職涯探索與專業倫理｜第二部分：認識自己與工作適配</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&amp;family=Noto+Sans+TC:wght@400;500;600;700;800;900&amp;family=Noto+Serif+TC:wght@600;700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS｜延續第一部分的溫暖編輯風
+       =========================================== */
+    :root {
+      --stage-bg:#272b27; --slide-bg:#f2eadc; --paper:#f2eadc; --paper-deep:#e7dcc9;
+      --ink:#162d24; --ink-2:#315246; --muted:#667069; --coral:#e65e43;
+      --sage:#7a9a7d; --sage-light:#c9d7c9; --sun:#f2c94c; --blue:#8eb1bf;
+      --cream:#fffaf0; --rule:rgba(22,45,36,.24); --ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --font-display:"Fraunces","Noto Serif TC",serif;
+      --font-body:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET, NO-JS FALLBACK, AND SLIDE CHROME
+       =========================================== */
+    * { box-sizing:border-box; }
+    body { color:var(--ink); font-family:var(--font-body); }
+    button { font:inherit; cursor:pointer; }
+    .slide::after { content:""; position:absolute; inset:26px; border:1px solid rgba(22,45,36,.17); pointer-events:none; }
+    .slide.dark { color:var(--cream); background:
+      radial-gradient(circle at 88% 18%,rgba(242,201,76,.12),transparent 24%),
+      linear-gradient(135deg,#10261e,#19372c 62%,#10261e); }
+    .slide.dark::after { border-color:rgba(255,250,240,.2); }
+    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:3; }
+    .js-ready .fallback-controls { display:none; }
+    .js-ready .deck-controls { display:flex; }
+    .js-ready .progress { display:block; }
+    .masthead { position:absolute; left:96px; right:96px; top:62px; z-index:5; display:flex; justify-content:space-between; padding-bottom:24px; border-bottom:2px solid currentColor; font:800 20px/1 var(--font-body); letter-spacing:.12em; }
+    .masthead .chapter { color:var(--coral); }
+    .dark .masthead .chapter { color:var(--sun); }
+    .frame { position:absolute; left:118px; right:118px; top:152px; bottom:104px; }
+    .eyebrow { margin:0 0 20px; color:var(--coral); font:900 22px/1 var(--font-body); letter-spacing:.14em; }
+    .dark .eyebrow { color:var(--sun); }
+    .title { max-width:1540px; margin:0; font:900 68px/1.13 var(--font-display); letter-spacing:-.035em; }
+    .lead { max-width:1180px; color:var(--ink-2); font:650 29px/1.55 var(--font-body); }
+    .dark .lead { color:rgba(255,250,240,.76); }
+    .page-no { position:absolute; right:80px; bottom:50px; z-index:7; font:900 17px/1 var(--font-body); letter-spacing:.16em; }
+    .source-note { position:absolute; left:0; bottom:4px; max-width:1360px; color:var(--muted); font:600 15px/1.35 var(--font-body); }
+    .dark .source-note { color:rgba(255,250,240,.54); }
+
+    /* ===========================================
+       ENTRANCE MOTION
+       =========================================== */
+    .reveal,.reveal-left,.reveal-scale { opacity:0; transition:opacity .7s var(--ease-out-expo),transform .7s var(--ease-out-expo); }
+    .reveal { transform:translateY(28px); }
+    .reveal-left { transform:translateX(-48px); }
+    .reveal-scale { transform:scale(.91); }
+    .slide.visible .reveal,.slide.visible .reveal-left,.slide.visible .reveal-scale { opacity:1; transform:none; }
+    .delay-1 { transition-delay:.10s; } .delay-2 { transition-delay:.20s; } .delay-3 { transition-delay:.30s; }
+    .delay-4 { transition-delay:.40s; } .delay-5 { transition-delay:.50s; }
+
+    /* ===========================================
+       COVER AND SECTION DIVIDERS
+       =========================================== */
+    .cover .copy { position:absolute; left:118px; top:218px; width:1070px; }
+    .cover .kicker { margin:0 0 28px; color:var(--coral); font:900 24px/1 var(--font-body); letter-spacing:.13em; }
+    .cover h1 { margin:0; font:900 126px/.98 var(--font-display); letter-spacing:-.055em; }
+    .cover h1 em { color:var(--coral); font-style:italic; }
+    .cover .subtitle { width:860px; margin:38px 0 0 8px; font:650 32px/1.55 var(--font-body); }
+    .route-note { position:absolute; left:126px; bottom:104px; display:flex; align-items:center; gap:20px; color:var(--muted); font:650 22px/1 var(--font-body); }
+    .route-note i { width:60px; height:3px; background:var(--coral); }
+    .mirror-visual { position:absolute; right:118px; top:190px; width:560px; height:650px; border:3px solid var(--ink); border-radius:50% 50% 46% 46%; background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(142,177,191,.32)); box-shadow:28px 30px 0 var(--sun); }
+    .mirror-visual::before { content:"你"; position:absolute; inset:86px; display:grid; place-items:center; border:2px dashed var(--ink); border-radius:50%; color:var(--coral); font:900 170px/1 var(--font-display); }
+    .mirror-visual::after { content:"不是答案，是線索"; position:absolute; left:74px; right:74px; bottom:62px; padding:18px; color:var(--cream); background:var(--ink); text-align:center; font:800 23px/1 var(--font-body); transform:rotate(-2deg); }
+    .section-mark { position:absolute; left:120px; top:200px; color:var(--sun); font:900 24px/1 var(--font-body); letter-spacing:.2em; }
+    .section-title { position:absolute; left:116px; top:292px; width:1250px; margin:0; font:900 116px/.98 var(--font-display); letter-spacing:-.05em; }
+    .section-title em { color:var(--coral); font-style:italic; }
+    .section-side { position:absolute; right:118px; bottom:132px; width:480px; padding:28px; border:2px solid var(--cream); color:var(--cream); font:650 25px/1.55 var(--font-body); }
+
+    /* ===========================================
+       CARDS, GRIDS, AND COMPARISONS
+       =========================================== */
+    .cards { display:grid; gap:26px; margin-top:44px; }
+    .cards.two { grid-template-columns:repeat(2,1fr); }
+    .cards.three { grid-template-columns:repeat(3,1fr); }
+    .cards.four { grid-template-columns:repeat(2,1fr); }
+    .cards.five { grid-template-columns:repeat(5,1fr); gap:18px; }
+    .card { position:relative; min-height:235px; padding:32px 30px 28px; border:2px solid var(--ink); background:rgba(255,250,240,.55); }
+    .card::before { content:""; position:absolute; left:-2px; top:-2px; width:82px; height:10px; background:var(--card-color,var(--coral)); }
+    .card .no { margin-bottom:18px; color:var(--coral); font:900 17px/1 var(--font-body); letter-spacing:.12em; }
+    .card h3 { margin:0 0 14px; font:900 38px/1.18 var(--font-display); }
+    .card p { margin:0; color:var(--ink-2); font:600 24px/1.48 var(--font-body); }
+    .dark .card { border-color:var(--cream); background:rgba(255,250,240,.07); }
+    .dark .card p { color:rgba(255,250,240,.74); }
+    .cards.five .card { min-height:410px; padding:28px 22px; }
+    .cards.five .card h3 { font-size:32px; }
+    .cards.five .card p { font-size:21px; }
+    .big-statement { max-width:1510px; margin:88px 0 0; font:900 78px/1.24 var(--font-display); letter-spacing:-.035em; }
+    .big-statement .accent { color:var(--coral); }
+    .dark .big-statement .accent { color:var(--sun); }
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:44px; }
+    .split-panel { min-height:430px; padding:40px; border-top:9px solid var(--panel-color,var(--coral)); background:rgba(255,250,240,.58); }
+    .split-panel h3 { margin:0 0 22px; font:900 50px/1.15 var(--font-display); }
+    .split-panel p,.split-panel li { color:var(--ink-2); font:600 27px/1.5 var(--font-body); }
+    .split-panel ul { margin:0; padding-left:30px; }
+    .versus { position:absolute; left:50%; top:55%; z-index:6; display:grid; place-items:center; width:92px; height:92px; border:3px solid var(--ink); border-radius:50%; background:var(--sun); font:900 22px/1 var(--font-body); transform:translate(-50%,-50%) rotate(-7deg); }
+
+    /* ===========================================
+       PDP ANIMAL PROFILES
+       =========================================== */
+    .animal-wheel { position:relative; width:680px; height:680px; margin:10px auto 0; border:3px solid var(--ink); border-radius:50%; }
+    .animal-wheel::before { content:""; position:absolute; inset:120px; border:2px dashed var(--sage); border-radius:50%; }
+    .animal-center { position:absolute; left:50%; top:50%; display:grid; place-items:center; width:210px; height:210px; border-radius:50%; color:var(--cream); background:var(--ink); transform:translate(-50%,-50%); text-align:center; font:900 34px/1.15 var(--font-display); }
+    .animal-node { position:absolute; display:grid; place-items:center; width:170px; height:126px; border:3px solid var(--ink); background:var(--cream); text-align:center; font:900 25px/1.2 var(--font-display); }
+    .animal-node b { display:block; font-size:46px; }
+    .an1 { left:255px; top:-28px; background:#ead0c7; } .an2 { right:-58px; top:190px; background:var(--sun); }
+    .an3 { right:50px; bottom:8px; background:var(--sage-light); } .an4 { left:50px; bottom:8px; background:var(--blue); }
+    .an5 { left:-58px; top:190px; background:var(--paper-deep); }
+    .profile-layout { display:grid; grid-template-columns:500px 1fr; gap:64px; align-items:center; margin-top:38px; }
+    .animal-poster { position:relative; display:grid; place-items:center; height:520px; border:3px solid var(--ink); background:var(--animal-bg,var(--sun)); }
+    .animal-poster .emoji { font-size:220px; filter:drop-shadow(14px 16px 0 rgba(22,45,36,.16)); }
+    .animal-poster b { position:absolute; left:26px; top:24px; font:900 20px/1 var(--font-body); letter-spacing:.18em; }
+    .profile-copy h3 { margin:0 0 20px; font:900 70px/1 var(--font-display); }
+    .profile-copy .tagline { margin:0 0 30px; color:var(--coral); font:800 29px/1.4 var(--font-body); }
+    .profile-copy dl { display:grid; grid-template-columns:140px 1fr; gap:16px 24px; margin:0; }
+    .profile-copy dt { font:900 22px/1.5 var(--font-body); }
+    .profile-copy dd { margin:0; color:var(--ink-2); font:600 25px/1.5 var(--font-body); }
+
+    /* ===========================================
+       MBTI PAIRS AND TYPE CODE
+       =========================================== */
+    .pair-map { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:56px; }
+    .pair-card { position:relative; min-height:430px; padding:34px 28px; border:3px solid var(--ink); background:var(--cream); }
+    .pair-card:nth-child(2) { background:var(--paper-deep); } .pair-card:nth-child(3) { background:var(--sage-light); } .pair-card:nth-child(4) { background:#ead0c7; }
+    .pair-letters { display:flex; justify-content:space-between; align-items:center; margin-bottom:38px; }
+    .pair-letters b { display:grid; place-items:center; width:86px; height:86px; border-radius:50%; color:var(--cream); background:var(--ink); font:900 42px/1 var(--font-display); }
+    .pair-letters span { color:var(--coral); font:900 34px/1 var(--font-body); }
+    .pair-card h3 { margin:0 0 16px; font:900 32px/1.2 var(--font-display); }
+    .pair-card p { margin:0; color:var(--ink-2); font:600 22px/1.5 var(--font-body); }
+    .spectrum { position:relative; height:190px; margin-top:68px; }
+    .spectrum-line { position:absolute; left:100px; right:100px; top:82px; height:6px; background:var(--ink); }
+    .spectrum-line::before { content:""; position:absolute; left:50%; top:-17px; width:3px; height:40px; background:var(--coral); }
+    .spectrum-end { position:absolute; top:0; width:270px; text-align:center; }
+    .spectrum-end.left { left:0; } .spectrum-end.right { right:0; }
+    .spectrum-end b { display:grid; place-items:center; width:110px; height:110px; margin:0 auto 15px; border:3px solid var(--ink); border-radius:50%; color:var(--cream); background:var(--ink); font:900 54px/1 var(--font-display); }
+    .spectrum-end span { font:850 25px/1.2 var(--font-body); }
+    .type-code { display:flex; justify-content:center; gap:34px; margin-top:92px; }
+    .type-code b { display:grid; place-items:center; width:210px; height:230px; border:3px solid var(--ink); color:var(--cream); background:var(--ink); font:900 92px/1 var(--font-display); box-shadow:14px 14px 0 var(--sun); }
+    .type-code b:nth-child(2) { background:var(--coral); } .type-code b:nth-child(3) { background:var(--sage); } .type-code b:nth-child(4) { background:#537b8d; }
+
+    /* ===========================================
+       QUIZ AND RESULT DISPLAYS
+       =========================================== */
+    .quiz-launch { display:grid; grid-template-columns:1fr 520px; gap:70px; align-items:center; margin-top:68px; }
+    .quiz-steps { display:grid; gap:18px; }
+    .quiz-step { display:grid; grid-template-columns:70px 1fr; gap:22px; align-items:center; padding:20px 24px; border-bottom:2px solid var(--ink); }
+    .quiz-step b { display:grid; place-items:center; width:58px; height:58px; border-radius:50%; color:var(--cream); background:var(--coral); font:900 20px/1 var(--font-body); }
+    .quiz-step span { font:700 27px/1.4 var(--font-body); }
+    .quiz-button { display:grid; place-items:center; height:280px; border:3px solid var(--ink); color:var(--ink); background:var(--sun); box-shadow:18px 18px 0 var(--ink); font:900 44px/1.25 var(--font-display); text-align:center; }
+    .quiz-button small { display:block; margin-top:16px; font:700 19px/1.4 var(--font-body); }
+    .result-board { display:grid; grid-template-columns:1fr 1fr; gap:42px; margin-top:48px; }
+    .result-main { min-height:430px; padding:42px; border:3px solid var(--ink); background:var(--sun); }
+    .result-main .result-icon { font-size:118px; }
+    .result-main h3 { margin:12px 0 16px; font:900 54px/1.1 var(--font-display); }
+    .result-main p { margin:0; font:650 25px/1.5 var(--font-body); }
+    .result-bars { display:grid; gap:18px; padding:30px 0; }
+    .bar-row { display:grid; grid-template-columns:100px 1fr 54px; gap:16px; align-items:center; font:800 20px/1 var(--font-body); }
+    .bar-track { height:22px; border:2px solid var(--ink); background:var(--cream); }
+    .bar-fill { width:0; height:100%; background:var(--coral); transition:width .6s var(--ease-out-expo); }
+    .mbti-code-result { display:flex; justify-content:center; gap:14px; margin:28px 0; }
+    .mbti-code-result b { display:grid; place-items:center; width:100px; height:120px; border:3px solid var(--ink); color:var(--cream); background:var(--ink); font:900 54px/1 var(--font-display); }
+
+    /* ===========================================
+       EXTENDED ASSESSMENT RESOURCE PAGES
+       =========================================== */
+    .resource-layout { display:grid; grid-template-columns:1.12fr .88fr; gap:38px; margin-top:34px; }
+    .resource-card { min-height:470px; padding:34px 36px; border:3px solid var(--ink); background:rgba(255,250,240,.62); }
+    .resource-card h3 { margin:0 0 20px; font:900 40px/1.15 var(--font-display); }
+    .resource-card p,.resource-card li { color:var(--ink-2); font:600 23px/1.48 var(--font-body); }
+    .resource-card ul { margin:0; padding-left:28px; }
+    .resource-card li { margin-bottom:12px; }
+    .resource-badge { display:inline-block; margin-bottom:18px; padding:9px 14px; color:var(--cream); background:var(--ink); font:900 16px/1 var(--font-body); letter-spacing:.1em; }
+    .resource-qr { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:var(--sun); }
+    .resource-qr img { width:260px; height:260px; padding:10px; border:3px solid var(--ink); background:#fff; image-rendering:crisp-edges; }
+    .resource-qr h3 { margin:20px 0 8px; font-size:31px; }
+    .resource-qr p { margin:0 0 12px; font-size:19px; }
+    .resource-link { display:inline-block; padding-bottom:4px; border-bottom:2px solid var(--ink); color:var(--ink); text-decoration:none; font:900 17px/1.25 var(--font-body); overflow-wrap:anywhere; }
+    .resource-grid { display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:32px; }
+    .resource-option { display:grid; grid-template-columns:220px 1fr; gap:28px; align-items:center; min-height:450px; padding:30px; border:3px solid var(--ink); background:var(--cream); }
+    .resource-option.alt { background:var(--sage-light); }
+    .resource-option img { width:220px; height:220px; padding:9px; border:3px solid var(--ink); background:#fff; image-rendering:crisp-edges; }
+    .resource-option h3 { margin:0 0 14px; font:900 34px/1.16 var(--font-display); }
+    .resource-option p { margin:0 0 12px; color:var(--ink-2); font:600 20px/1.45 var(--font-body); }
+    .resource-caution { margin:24px 0 0; padding:17px 22px; border-left:8px solid var(--coral); background:rgba(255,250,240,.72); font:750 21px/1.45 var(--font-body); }
+
+    /* ===========================================
+       VIDEO SLIDES
+       =========================================== */
+    .video-grid { display:grid; grid-template-columns:1.5fr .74fr; gap:38px; margin-top:30px; }
+    .video-shell { position:relative; height:505px; overflow:hidden; border:3px solid var(--cream); background:#0c1712; box-shadow:14px 14px 0 rgba(242,201,76,.18); }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video { width:100%; height:100%; border:0; color:var(--cream); background:radial-gradient(circle at 50% 50%,rgba(230,94,67,.26),transparent 26%),repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 2px,transparent 2px,transparent 14px),#0c1712; }
+    .play-icon { display:grid; place-items:center; width:116px; height:116px; margin:0 auto 24px; border:3px solid var(--cream); border-radius:50%; color:var(--ink); background:var(--sun); font-size:44px; }
+    .load-video strong { display:block; font:800 27px/1.3 var(--font-body); }
+    .watch-task { padding:28px; border:2px solid var(--cream); background:rgba(255,250,240,.08); }
+    .watch-task h3 { margin:0 0 20px; color:var(--sun); font:900 31px/1.2 var(--font-display); }
+    .watch-task ol { margin:0; padding-left:28px; }
+    .watch-task li { margin:0 0 16px; font:600 22px/1.48 var(--font-body); }
+    .video-link { display:inline-block; margin-top:18px; padding-bottom:5px; border-bottom:2px solid var(--sun); color:var(--sun); text-decoration:none; font:800 18px/1.2 var(--font-body); }
+    .video-meta { display:flex; gap:18px; align-items:center; margin-top:18px; color:rgba(255,250,240,.72); font:600 18px/1 var(--font-body); }
+    .video-meta b { padding:8px 13px; color:var(--ink); background:var(--sun); }
+
+    /* ===========================================
+       WORK-FIT MATRIX AND FINAL PATH
+       =========================================== */
+    .fit-row { display:grid; grid-template-columns:260px 1fr 1fr; gap:18px; align-items:center; min-height:98px; padding:14px 22px; border-bottom:2px solid var(--ink); }
+    .fit-row:first-child { border-top:2px solid var(--ink); }
+    .fit-row b { font:900 28px/1.2 var(--font-display); }
+    .fit-row span { padding:16px; background:rgba(255,250,240,.6); font:650 22px/1.35 var(--font-body); }
+    .fit-row span:last-child { background:var(--sage-light); }
+    .action-path { display:flex; align-items:center; justify-content:center; gap:18px; margin-top:108px; }
+    .action-node { display:grid; place-items:center; width:285px; height:250px; padding:26px; border:3px solid var(--ink); background:var(--cream); text-align:center; font:900 32px/1.25 var(--font-display); }
+    .action-node:nth-of-type(2) { background:var(--paper-deep); } .action-node:nth-of-type(3) { background:var(--sage-light); } .action-node:nth-of-type(4) { background:var(--sun); }
+    .action-arrow { color:var(--coral); font:900 50px/1 var(--font-body); }
+
+    /* ===========================================
+       LIVE CONTROLS, OVERLAYS, AND EDITING
+       =========================================== */
+    .fallback-controls { position:absolute; left:50%; bottom:22px; z-index:20; display:flex; align-items:center; gap:18px; transform:translateX(-50%); }
+    .fallback-controls a,.fallback-controls span { min-width:74px; padding:10px 14px; border:1px solid currentColor; background:var(--paper); color:var(--ink); text-align:center; text-decoration:none; font:800 16px/1 var(--font-body); }
+    .dark .fallback-controls a,.dark .fallback-controls span { color:var(--cream); background:var(--ink); }
+    .deck-controls { display:none; align-items:center; gap:8px; padding:8px 10px; border:1px solid rgba(255,255,255,.22); border-radius:999px; background:rgba(18,35,29,.92); box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    .deck-controls button { display:grid; place-items:center; width:42px; height:42px; border:0; border-radius:50%; color:var(--cream); background:transparent; }
+    .deck-controls button:hover { color:var(--ink); background:var(--sun); }
+    .deck-controls .counter { min-width:92px; color:var(--cream); text-align:center; font:800 15px/1 var(--font-body); }
+    .progress { position:fixed; left:0; bottom:0; z-index:1100; display:none; width:0; height:4px; background:var(--coral); transition:width .28s ease; }
+    .overlay { position:fixed; inset:0; z-index:5000; display:none; align-items:center; justify-content:center; padding:40px; background:rgba(8,20,15,.88); }
+    .overlay.open { display:flex; }
+    .overlay-panel { position:relative; width:min(1040px,92vw); max-height:88vh; overflow:auto; padding:42px; border:2px solid var(--ink); background:var(--paper); box-shadow:18px 18px 0 rgba(242,201,76,.42); }
+    .overlay-panel.wide { width:min(1320px,94vw); }
+    .overlay-panel h2 { margin:0 0 20px; font:900 42px/1.15 var(--font-display); }
+    .overlay-panel p,.overlay-panel li { font:600 21px/1.5 var(--font-body); }
+    .overlay-close { position:absolute; right:18px; top:18px; width:42px; height:42px; border:2px solid var(--ink); background:var(--sun); font:900 24px/1 var(--font-body); }
+    .menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .menu-grid button { padding:13px 16px; border:1px solid var(--ink); background:transparent; text-align:left; font:700 17px/1.25 var(--font-body); }
+    .menu-grid button:hover { background:var(--sage-light); }
+    .teacher-trigger { position:absolute; right:112px; bottom:58px; z-index:8; display:none; padding:10px 15px; border:2px solid var(--ink); background:var(--sun); font:900 16px/1 var(--font-body); transform:rotate(-1deg); }
+    .slide.has-note .teacher-trigger { display:block; }
+    .quiz-form { display:grid; gap:18px; }
+    .quiz-question { padding:20px 22px; border:1px solid var(--rule); background:var(--cream); }
+    .quiz-question legend { margin-bottom:12px; font:800 20px/1.45 var(--font-body); }
+    .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:10px 18px; }
+    .quiz-options label { display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border:1px solid var(--rule); font:600 17px/1.4 var(--font-body); }
+    .quiz-actions { position:sticky; bottom:-42px; display:flex; gap:14px; justify-content:flex-end; padding:20px 0 4px; background:linear-gradient(transparent,var(--paper) 24%); }
+    .quiz-submit { padding:14px 22px; border:2px solid var(--ink); color:var(--cream); background:var(--ink); font:800 18px/1 var(--font-body); }
+    .quiz-reset { padding:14px 22px; border:2px solid var(--ink); background:var(--sun); font:800 18px/1 var(--font-body); }
+    .quiz-message { min-height:28px; color:var(--coral); font:800 17px/1.4 var(--font-body); }
+    .edit-hotzone { position:fixed; left:0; top:0; z-index:10000; width:80px; height:80px; cursor:pointer; }
+    .edit-toggle { position:fixed; left:16px; top:16px; z-index:10001; width:48px; height:48px; border:1px solid rgba(255,255,255,.38); border-radius:50%; color:var(--cream); background:var(--ink); opacity:0; pointer-events:none; transition:opacity .3s ease; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; left:76px; top:17px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { padding:12px 16px; border:1px solid rgba(255,255,255,.38); color:var(--cream); background:var(--ink); font:700 14px/1 var(--font-body); }
+    body.editing [data-editable] { outline:2px dashed var(--coral); outline-offset:5px; cursor:text; }
+    .legacy-note { position:fixed; left:12px; right:12px; top:12px; z-index:9000; padding:10px; color:var(--cream); background:var(--ink); text-align:center; font:700 16px/1.4 var(--font-body); }
+    @media print {
+      .progress,.overlay,.edit-hotzone,.edit-toggle,.edit-toolbar,.teacher-trigger,.fallback-controls,.legacy-note { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+
+      <!-- ===========================================
+           01｜封面
+           =========================================== -->
+      <section id="slide-1" class="slide cover active visible" data-title="認識自己，但不被測驗定義">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">第二部分｜SELF &amp; WORK FIT</span></header>
+        <div class="copy"><p class="kicker reveal" data-editable>測驗可以告訴我們什麼？</p><h1 class="reveal delay-1" data-editable>認識自己，<br>但不被<em>測驗</em>定義</h1><p class="subtitle reveal delay-2" data-editable>PDP、MBTI 與工作適配：把類型變成可以驗證的工作條件。</p></div>
+        <div class="route-note reveal delay-3"><i></i><span data-editable>描述傾向　→　理解差異　→　提出職涯假設</span></div>
+        <div class="mirror-visual reveal-scale delay-2" aria-hidden="true"></div>
+        <nav class="fallback-controls"><span aria-disabled="true">←</span><span>01 / 36</span><a href="#slide-2">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           02｜與第一部分銜接
+           =========================================== -->
+      <section id="slide-2" class="slide dark" data-title="測驗是鏡子，不是判決書">
+        <header class="masthead"><span>從第一部分接續</span><span class="chapter">A MIRROR, NOT A VERDICT</span></header>
+        <div class="frame"><p class="eyebrow reveal">還記得這句話嗎？</p><p class="big-statement reveal delay-1" data-editable>測驗是幫你提問的<span class="accent">鏡子</span>，<br>不是替你決定職業的判決書。</p><p class="lead reveal delay-2" style="margin-top:42px" data-editable>它提供一套描述自己的語言；真正的選擇，仍要回到工作內容、生活條件與實際經驗。</p></div>
+        <div class="page-no">02 / 36</div><nav class="fallback-controls"><a href="#slide-1">←</a><span>02 / 36</span><a href="#slide-3">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           03｜名詞辨識
+           =========================================== -->
+      <section id="slide-3" class="slide" data-title="先分清楚三件事">
+        <header class="masthead"><span>測驗之前先校準</span><span class="chapter">THREE DIFFERENT QUESTIONS</span></header>
+        <div class="frame"><p class="eyebrow reveal">它們都在談「我」，但問題不同</p><h2 class="title reveal delay-1" data-editable>先分清楚：能力性向、行為特質、人格偏好</h2><div class="cards three"><article class="card reveal delay-1" style="--card-color:var(--blue)"><div class="no">APTITUDE</div><h3 data-editable>能力性向</h3><p data-editable>我在哪些能力上學得比較快、表現比較好？</p></article><article class="card reveal delay-2" style="--card-color:var(--coral)"><div class="no">BEHAVIOR</div><h3 data-editable>行為特質</h3><p data-editable>我面對任務、他人與壓力時，通常怎麼行動？</p></article><article class="card reveal delay-3" style="--card-color:var(--sage)"><div class="no">PREFERENCE</div><h3 data-editable>人格偏好</h3><p data-editable>我比較自然、比較不費力的注意與決策方式是什麼？</p></article></div></div>
+        <div class="page-no">03 / 36</div><nav class="fallback-controls"><a href="#slide-2">←</a><span>03 / 36</span><a href="#slide-4">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           04｜三項使用原則
+           =========================================== -->
+      <section id="slide-4" class="slide has-note" data-title="測驗結果的三項使用原則">
+        <header class="masthead"><span>今天的共同約定</span><span class="chapter">THREE RULES</span></header>
+        <div class="frame"><p class="eyebrow reveal">先約定，再開始</p><h2 class="title reveal delay-1" data-editable>測驗結果要這樣用，才不會把人貼死</h2><div class="cards three"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">01</div><h3 data-editable>沒有高低好壞</h3><p data-editable>每一種傾向都有優勢，也有可能用過頭的地方。</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">02</div><h3 data-editable>偏好不等於能力</h3><p data-editable>不偏好一件事，不代表做不到；只是可能比較耗力。</p></article><article class="card reveal delay-3" style="--card-color:var(--sun)"><div class="no">03</div><h3 data-editable>結果需要驗證</h3><p data-editable>用經驗、他人回饋與作品，檢查測驗是否真的像你。</p></article></div></div>
+        <div class="page-no">04 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>建立安全感</h2><p>請學生不要公開比較「哪一型最好」，也不要用類型替同學下結論。今天所有結果都由本人決定是否分享；討論時改用「我觀察到……」而不是「你就是……」。</p></template><nav class="fallback-controls"><a href="#slide-3">←</a><span>04 / 36</span><a href="#slide-5">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           05｜PDP 章節
+           =========================================== -->
+      <section id="slide-5" class="slide dark" data-title="PDP：看見做事風格">
+        <div class="section-mark reveal">CHAPTER 01｜PDP</div><h2 class="section-title reveal delay-1" data-editable>先從簡單的開始：<br>看見你的<em>做事風格</em></h2><div class="section-side reveal delay-2" data-editable>PDP 的動物圖像很好記，但圖像只是入口。真正要觀察的是：你怎麼推動事情、影響他人、維持步調與遵循規則。</div>
+        <div class="page-no">05 / 36</div><nav class="fallback-controls"><a href="#slide-4">←</a><span>05 / 36</span><a href="#slide-6">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           06｜PDP 測量焦點
+           =========================================== -->
+      <section id="slide-6" class="slide" data-title="PDP 關注可觀察的行為">
+        <header class="masthead"><span>PDP 是什麼</span><span class="chapter">BEHAVIORAL TENDENCIES</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要急著問「我是什麼動物」</p><h2 class="title reveal delay-1" data-editable>PDP 關注的是：你在工作情境中，傾向怎麼行動</h2><div class="cards four"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">DOMINANCE</div><h3 data-editable>推動</h3><p data-editable>遇到目標與挑戰時，會不會直接採取行動？</p></article><article class="card reveal delay-2" style="--card-color:var(--sun)"><div class="no">EXTROVERSION</div><h3 data-editable>影響</h3><p data-editable>是否習慣透過互動、表達與說服帶動他人？</p></article><article class="card reveal delay-3" style="--card-color:var(--sage)"><div class="no">PACE</div><h3 data-editable>步調</h3><p data-editable>偏好穩定持續，還是快速變動與多工？</p></article><article class="card reveal delay-4" style="--card-color:var(--blue)"><div class="no">CONFORMITY</div><h3 data-editable>規範</h3><p data-editable>對制度、細節與正確性的需求有多高？</p></article></div><p class="source-note">參考：PDP Global FAQ；台灣常見動物類型為方便理解的圖像化說法，正式 ProScan 並不只是一個動物標籤。</p></div>
+        <div class="page-no">06 / 36</div><nav class="fallback-controls"><a href="#slide-5">←</a><span>06 / 36</span><a href="#slide-7">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           07｜五種動物總覽
+           =========================================== -->
+      <section id="slide-7" class="slide has-note" data-title="五種動物是五種工作語言">
+        <header class="masthead"><span>PDP 動物圖像</span><span class="chapter">FIVE WORKING LANGUAGES</span></header>
+        <div class="frame"><p class="eyebrow reveal">先看差異，不急著選答案</p><h2 class="title reveal delay-1" data-editable>五種動物，是五種容易記住的工作語言</h2><div class="animal-wheel reveal-scale delay-2"><div class="animal-center">我的<br>做事方式</div><div class="animal-node an1"><b>🐯</b>老虎｜推動</div><div class="animal-node an2"><b>🦚</b>孔雀｜影響</div><div class="animal-node an3"><b>🐨</b>無尾熊｜穩定</div><div class="animal-node an4"><b>🦉</b>貓頭鷹｜精準</div><div class="animal-node an5"><b>🦎</b>變色龍｜整合</div></div></div>
+        <div class="page-no">07 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>先不要公布類型答案</h2><p>請學生先觀察：在「時間很趕」「任務不清楚」「團隊意見不同」三種情境下，自己最常出現哪一種反應。動物只是方便記憶，重點是反應與情境。</p></template><nav class="fallback-controls"><a href="#slide-6">←</a><span>07 / 36</span><a href="#slide-8">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           08｜老虎型
+           =========================================== -->
+      <section id="slide-8" class="slide" data-title="老虎：先推動，再調整">
+        <header class="masthead"><span>PDP｜老虎型</span><span class="chapter">TAKE CHARGE</span></header>
+        <div class="frame"><p class="eyebrow reveal">「先往前走，再看怎麼調整」</p><div class="profile-layout"><div class="animal-poster reveal-scale" style="--animal-bg:#ead0c7"><b>TIGER</b><span class="emoji">🐯</span></div><div class="profile-copy"><h3 class="reveal delay-1" data-editable>老虎｜推動</h3><p class="tagline reveal delay-2" data-editable>直接、果斷、喜歡挑戰與結果</p><dl class="reveal delay-3"><dt>可能優勢</dt><dd data-editable>敢決定、能承擔、遇到阻力仍推進。</dd><dt>用過頭時</dt><dd data-editable>太快下結論、忽略感受、缺少耐心。</dd><dt>工作線索</dt><dd data-editable>目標清楚、能自己作主、成果看得見。</dd></dl></div></div></div>
+        <div class="page-no">08 / 36</div><nav class="fallback-controls"><a href="#slide-7">←</a><span>08 / 36</span><a href="#slide-9">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           09｜孔雀型
+           =========================================== -->
+      <section id="slide-9" class="slide" data-title="孔雀：先連結，再帶動">
+        <header class="masthead"><span>PDP｜孔雀型</span><span class="chapter">CONNECT &amp; INFLUENCE</span></header>
+        <div class="frame"><p class="eyebrow reveal">「先讓大家願意一起做」</p><div class="profile-layout"><div class="animal-poster reveal-scale" style="--animal-bg:var(--sun)"><b>PEACOCK</b><span class="emoji">🦚</span></div><div class="profile-copy"><h3 class="reveal delay-1" data-editable>孔雀｜影響</h3><p class="tagline reveal delay-2" data-editable>熱情、會表達、善於建立氣氛</p><dl class="reveal delay-3"><dt>可能優勢</dt><dd data-editable>有感染力、能說服、容易看見人的可能。</dd><dt>用過頭時</dt><dd data-editable>承諾太多、忽略細節、被新鮮感帶走。</dd><dt>工作線索</dt><dd data-editable>需要互動、表達、創意與即時回饋。</dd></dl></div></div></div>
+        <div class="page-no">09 / 36</div><nav class="fallback-controls"><a href="#slide-8">←</a><span>09 / 36</span><a href="#slide-10">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           10｜無尾熊型
+           =========================================== -->
+      <section id="slide-10" class="slide" data-title="無尾熊：先穩定，再累積">
+        <header class="masthead"><span>PDP｜無尾熊型</span><span class="chapter">STEADY &amp; SUPPORTIVE</span></header>
+        <div class="frame"><p class="eyebrow reveal">「把事情穩穩做好，讓大家放心」</p><div class="profile-layout"><div class="animal-poster reveal-scale" style="--animal-bg:var(--sage-light)"><b>KOALA</b><span class="emoji">🐨</span></div><div class="profile-copy"><h3 class="reveal delay-1" data-editable>無尾熊｜穩定</h3><p class="tagline reveal delay-2" data-editable>有耐心、可靠、重視合作與持續</p><dl class="reveal delay-3"><dt>可能優勢</dt><dd data-editable>能傾聽、願意支持、長期維持品質。</dd><dt>用過頭時</dt><dd data-editable>不敢拒絕、抗拒變動、把衝突悶住。</dd><dt>工作線索</dt><dd data-editable>步調可預期、關係穩定、能長期累積。</dd></dl></div></div></div>
+        <div class="page-no">10 / 36</div><nav class="fallback-controls"><a href="#slide-9">←</a><span>10 / 36</span><a href="#slide-11">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           11｜貓頭鷹型
+           =========================================== -->
+      <section id="slide-11" class="slide" data-title="貓頭鷹：先確認，再完成">
+        <header class="masthead"><span>PDP｜貓頭鷹型</span><span class="chapter">ACCURATE &amp; SYSTEMATIC</span></header>
+        <div class="frame"><p class="eyebrow reveal">「先把問題看清楚，再做對」</p><div class="profile-layout"><div class="animal-poster reveal-scale" style="--animal-bg:var(--blue)"><b>OWL</b><span class="emoji">🦉</span></div><div class="profile-copy"><h3 class="reveal delay-1" data-editable>貓頭鷹｜精準</h3><p class="tagline reveal delay-2" data-editable>分析、謹慎、重視標準與正確性</p><dl class="reveal delay-3"><dt>可能優勢</dt><dd data-editable>能找問題、顧品質、把複雜事情系統化。</dd><dt>用過頭時</dt><dd data-editable>想太久、要求過高、對模糊情況不放心。</dd><dt>工作線索</dt><dd data-editable>標準明確、可深入分析、品質受到重視。</dd></dl></div></div></div>
+        <div class="page-no">11 / 36</div><nav class="fallback-controls"><a href="#slide-10">←</a><span>11 / 36</span><a href="#slide-12">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           12｜變色龍型
+           =========================================== -->
+      <section id="slide-12" class="slide" data-title="變色龍：先判斷，再切換">
+        <header class="masthead"><span>PDP｜變色龍型</span><span class="chapter">ADAPT &amp; INTEGRATE</span></header>
+        <div class="frame"><p class="eyebrow reveal">「看情況，選擇現在最需要的方式」</p><div class="profile-layout"><div class="animal-poster reveal-scale" style="--animal-bg:var(--paper-deep)"><b>CHAMELEON</b><span class="emoji">🦎</span></div><div class="profile-copy"><h3 class="reveal delay-1" data-editable>變色龍｜整合</h3><p class="tagline reveal delay-2" data-editable>彈性、協調、能在不同風格間切換</p><dl class="reveal delay-3"><dt>可能優勢</dt><dd data-editable>看懂情境、連結不同的人、補團隊缺口。</dd><dt>用過頭時</dt><dd data-editable>立場不清、太配合別人、忽略自己的需要。</dd><dt>工作線索</dt><dd data-editable>角色多元、需要協調、能彈性調整作法。</dd></dl></div></div></div>
+        <div class="page-no">12 / 36</div><nav class="fallback-controls"><a href="#slide-11">←</a><span>12 / 36</span><a href="#slide-13">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           13｜沒有最好類型
+           =========================================== -->
+      <section id="slide-13" class="slide dark" data-title="沒有最好的動物，只有不同的任務">
+        <header class="masthead"><span>PDP 使用界線</span><span class="chapter">NO BEST TYPE</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要把差異變成排名</p><p class="big-statement reveal delay-1" data-editable>沒有最好的動物，<br>只有不同任務需要的<span class="accent">行為組合</span>。</p><p class="lead reveal delay-2" style="margin-top:40px" data-editable>同一份工作也不只需要一種風格：專案要有人推動、有人溝通、有人維持、也有人把關。</p></div>
+        <div class="page-no">13 / 36</div><nav class="fallback-controls"><a href="#slide-12">←</a><span>13 / 36</span><a href="#slide-14">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           14｜PDP 課堂自我檢核
+           =========================================== -->
+      <section id="slide-14" class="slide has-note" data-title="PDP 課堂版快問快答">
+        <header class="masthead"><span>PDP｜課堂活動</span><span class="chapter">QUICK SELF-CHECK</span></header>
+        <div class="frame"><p class="eyebrow reveal">8 個工作情境，約 5 分鐘</p><h2 class="title reveal delay-1" data-editable>先憑第一反應，觀察你常用的做事方式</h2><div class="quiz-launch"><div class="quiz-steps"><div class="quiz-step reveal delay-1"><b>1</b><span data-editable>每題選一個最像平常自己的反應。</span></div><div class="quiz-step reveal delay-2"><b>2</b><span data-editable>不要選「理想中的我」，也不要猜哪個比較好。</span></div><div class="quiz-step reveal delay-3"><b>3</b><span data-editable>結果只是課堂自我觀察，不是正式 PDP® ProScan。</span></div></div><button class="quiz-button reveal-scale delay-2" type="button" data-open-quiz="pdpQuizOverlay">開始快問快答<small>作答不會上傳，也不會離開這份簡報</small></button></div></div>
+        <div class="page-no">14 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>活動定位</h2><p>這 8 題是依課堂情境自行設計的暖身活動，只用來引導觀察，不是 PDP 官方題目，也不能當成正式測評結果。請學生把結果當作「待驗證的假設」。</p></template><nav class="fallback-controls"><a href="#slide-13">←</a><span>14 / 36</span><a href="#slide-15">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           15｜PDP 結果解讀
+           =========================================== -->
+      <section id="slide-15" class="slide has-note" data-title="PDP 結果要看分布">
+        <header class="masthead"><span>PDP｜結果解讀</span><span class="chapter">READ THE PATTERN</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是只看第一名</p><h2 class="title reveal delay-1" data-editable>請看你的分布，再找生活中的證據</h2><div class="result-board"><div class="result-main reveal delay-2"><div class="result-icon" id="pdpResultIcon">?</div><h3 id="pdpResultText" data-editable>尚未完成快問快答</h3><p id="pdpResultHint" data-editable>作答後，請寫下一個「這很像我」與一個「這不太像我」的地方。</p></div><div class="result-bars reveal delay-3" id="pdpBars"><div class="bar-row"><span>老虎</span><div class="bar-track"><div class="bar-fill" data-pdp-bar="D"></div></div><b data-pdp-score="D">0</b></div><div class="bar-row"><span>孔雀</span><div class="bar-track"><div class="bar-fill" data-pdp-bar="E"></div></div><b data-pdp-score="E">0</b></div><div class="bar-row"><span>無尾熊</span><div class="bar-track"><div class="bar-fill" data-pdp-bar="P"></div></div><b data-pdp-score="P">0</b></div><div class="bar-row"><span>貓頭鷹</span><div class="bar-track"><div class="bar-fill" data-pdp-bar="C"></div></div><b data-pdp-score="C">0</b></div><p class="lead" style="font-size:22px;margin:14px 0 0" data-editable>最高分只是目前最常使用的方式；兩項接近，代表你可能會依情境切換。</p></div></div></div>
+        <div class="page-no">15 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>追問證據</h2><p>請學生各找一個真實事件：何時這個風格幫了他？何時又造成困擾？如果學生說「不像」，不要說他測錯；請問「哪一題可能受當時角色或情境影響？」</p></template><nav class="fallback-controls"><a href="#slide-14">←</a><span>15 / 36</span><a href="#slide-16">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           16｜PDP 完整測評資源
+           =========================================== -->
+      <section id="slide-16" class="slide has-note" data-title="想做更完整的 PDP 測評">
+        <header class="masthead"><span>PDP｜延伸資源</span><span class="chapter">FULL ASSESSMENT</span></header>
+        <div class="frame"><p class="eyebrow reveal">課堂短版之後，還想再深入</p><h2 class="title reveal delay-1" data-editable>想深入了解，可以參考正式 PDP ProScan®</h2><div class="resource-layout"><article class="resource-card reveal delay-2"><span class="resource-badge">正式 PDP 工具</span><h3 data-editable>ProScan® 不只是選一種動物</h3><ul><li data-editable>以 60 個行為形容詞進行評量。</li><li data-editable>可進一步理解自然本我、目前角色與壓力調適狀態。</li><li data-editable>通常透過授權顧問或服務單位施測，可能需要付費。</li><li data-editable>正式報告仍要搭配經驗與情境解讀，不能直接決定職業。</li></ul></article><aside class="resource-card resource-qr reveal-scale delay-3"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFAAQMAAAD3XjfpAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABYElEQVRoge2aO47DMAxE6WrLHElX95FSujIjfiUhWeymo42ZRmD0Uo0oUoSJIAj6Ug8O7RKd1A7i58b7T248AdYGT7NStzQSQhc3GWB9sImfm3rdJV6L8/K3vh4ALwSayT0SAuAVQc9MydMN4D1BlR2Kzqv+usMBVgI55NX1H50UwFLgIuWJplr7iwAWAt1rz9NYaLIcYHXwjKXxSFdzPkoowJuANk5YnqR+UrLkAiwN9kD6WD6XiKeEBlgdpMldb271araoMQMsDtqNOz8xh+UfqivAkqD6acMCy1pP11g+TRUAXhOkqaz6EcmRYBwYgKXBNk1u03m/qHvH6wJYFZyUV7PmKY3+F2BpcJnt5Vx2W5wHWBscE3Zb+MjoMb9WAN4BVOOXYxB6v8MBlgfHKH68U9+aYYCFQVE2t/kyBVgd9N+8ukqC+icFzPm5AcDCIId264xGgsYGwJuAEAR9oRd0oU5n5X1wtQAAAABJRU5ErkJggg==" alt="PDP 台灣中文官方網站服務項目 QR Code"><h3 data-editable>台灣 PDP 中文官方網站</h3><p data-editable>掃描 QR Code 查看 ProScan® 服務項目</p><a class="resource-link" href="https://pdp.com.tw/services" target="_blank" rel="noopener">pdp.com.tw/services ↗</a></aside></div><p class="source-note">參考：PDP® 台灣中文官方網站、PDP Global FAQ。施測費用、服務方式與可取得報告依提供單位為準。</p></div>
+        <div class="page-no">16 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>延伸資源的定位</h2><p>這一頁不是要求全班購買測評，而是讓有興趣的學生知道正式工具從哪裡取得。若課程未安排正式施測，請把 QR Code 定位成課後參考資訊；也提醒學生先了解費用、個資用途與報告解讀方式。</p></template><nav class="fallback-controls"><a href="#slide-15">←</a><span>16 / 36</span><a href="#slide-17">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           17｜PDP 影片
+           =========================================== -->
+      <section id="slide-17" class="slide dark has-note" data-title="影片：PDP 如何看工作適配">
+        <header class="masthead"><span>PDP 與工作</span><span class="chapter">VIDEO 01｜7:04</span></header>
+        <div class="frame"><p class="eyebrow reveal">看影片時，不要只記動物名稱</p><h2 class="title reveal delay-1" data-editable>「把對的人放到對的位置」是什麼意思？</h2><div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="UU8YSPCQ4ag" data-video-title="張曼琳｜PDP 如何把對的人放到對的位置"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 PDP 影片</strong></button></div><div class="video-meta"><b>7:04</b><span data-editable>張曼琳｜做事風格與工作位置</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>邊看邊找三個線索</h3><ol><li data-editable>影片怎麼說明「對的位置」？</li><li data-editable>它談的是職稱，還是工作要求？</li><li data-editable>哪一句需要保留或進一步驗證？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=UU8YSPCQ4ag" target="_blank" rel="noopener">無法播放時，改到 YouTube 觀看 ↗</a></aside></div></div>
+        <div class="page-no">17 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片一</h2><p>影片約 7 分 04 秒，沒有可切換字幕。播放前先提醒學生：影片中的說法是理解 PDP 應用的一個觀點，不是職業配對的唯一標準。播放後請學生把「位置」改寫成具體工作條件。</p></template><nav class="fallback-controls"><a href="#slide-16">←</a><span>17 / 36</span><a href="#slide-18">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           18｜團隊任務討論
+           =========================================== -->
+      <section id="slide-18" class="slide has-note" data-title="同一個任務需要不同風格">
+        <header class="masthead"><span>PDP｜團隊練習</span><span class="chapter">ONE TASK, MANY STYLES</span></header>
+        <div class="frame"><p class="eyebrow reveal">情境：一個月後要辦系上成果展</p><h2 class="title reveal delay-1" data-editable>同一個任務，五種風格各能貢獻什麼？</h2><div class="cards five"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">🐯</div><h3 data-editable>定目標</h3><p data-editable>拍板方向、排除障礙、確保如期完成。</p></article><article class="card reveal delay-2" style="--card-color:var(--sun)"><div class="no">🦚</div><h3 data-editable>號召人</h3><p data-editable>宣傳、主持、拉資源、維持熱度。</p></article><article class="card reveal delay-3" style="--card-color:var(--sage)"><div class="no">🐨</div><h3 data-editable>顧合作</h3><p data-editable>協調分工、支持成員、穩定執行。</p></article><article class="card reveal delay-4" style="--card-color:var(--blue)"><div class="no">🦉</div><h3 data-editable>守品質</h3><p data-editable>預算、流程、風險與細節檢查。</p></article><article class="card reveal delay-5" style="--card-color:#b88d61"><div class="no">🦎</div><h3 data-editable>補缺口</h3><p data-editable>看情況調整，連接不同工作小組。</p></article></div></div>
+        <div class="page-no">18 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>分組方式</h2><p>先讓同類型學生聚在一起，寫出自己能貢獻什麼；再重新混合成五種風格小組，討論「如果少了一種風格，成果展最可能在哪裡出問題？」</p></template><nav class="fallback-controls"><a href="#slide-17">←</a><span>18 / 36</span><a href="#slide-19">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           19｜PDP 轉成工作條件
+           =========================================== -->
+      <section id="slide-19" class="slide" data-title="把動物名稱翻譯成工作條件">
+        <header class="masthead"><span>PDP｜走向職涯</span><span class="chapter">FROM LABEL TO CONDITIONS</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要停在「我是老虎」</p><h2 class="title reveal delay-1" data-editable>把動物名稱，翻譯成可以比較的工作條件</h2><div class="cards four"><article class="card reveal delay-1" style="--card-color:var(--coral)"><div class="no">TASK</div><h3 data-editable>任務</h3><p data-editable>開創、溝通、維持、分析，哪一類任務讓我更有精神？</p></article><article class="card reveal delay-2" style="--card-color:var(--sage)"><div class="no">PACE</div><h3 data-editable>步調</h3><p data-editable>我偏好快速變化，還是穩定深入？</p></article><article class="card reveal delay-3" style="--card-color:var(--blue)"><div class="no">AUTONOMY</div><h3 data-editable>自主</h3><p data-editable>我需要多大的決定空間與明確規範？</p></article><article class="card reveal delay-4" style="--card-color:var(--sun)"><div class="no">PEOPLE</div><h3 data-editable>互動</h3><p data-editable>我希望一天有多少時間與人協作、說明或服務？</p></article></div></div>
+        <div class="page-no">19 / 36</div><nav class="fallback-controls"><a href="#slide-18">←</a><span>19 / 36</span><a href="#slide-20">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           20｜MBTI 章節
+           =========================================== -->
+      <section id="slide-20" class="slide dark" data-title="MBTI：看見偏好">
+        <div class="section-mark reveal">CHAPTER 02｜MBTI</div><h2 class="section-title reveal delay-1" data-editable>再深入一點：<br>看見你的<em>心理偏好</em></h2><div class="section-side reveal delay-2" data-editable>MBTI 不只是四個字母。它提供四組偏好，幫助我們觀察：精力、資訊、決策與生活安排。</div>
+        <div class="page-no">20 / 36</div><nav class="fallback-controls"><a href="#slide-19">←</a><span>20 / 36</span><a href="#slide-21">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           21｜四組偏好總覽
+           =========================================== -->
+      <section id="slide-21" class="slide" data-title="MBTI 的四組偏好">
+        <header class="masthead"><span>MBTI 基本架構</span><span class="chapter">FOUR PREFERENCE PAIRS</span></header>
+        <div class="frame"><p class="eyebrow reveal">四組問題，不是四場比賽</p><h2 class="title reveal delay-1" data-editable>MBTI 用四組偏好，描述我們比較自然的方式</h2><div class="pair-map"><article class="pair-card reveal delay-1"><div class="pair-letters"><b>E</b><span>↔</span><b>I</b></div><h3 data-editable>精力來源</h3><p data-editable>從外在互動，還是內在整理恢復精神？</p></article><article class="pair-card reveal delay-2"><div class="pair-letters"><b>S</b><span>↔</span><b>N</b></div><h3 data-editable>資訊焦點</h3><p data-editable>先注意具體事實，還是整體可能性？</p></article><article class="pair-card reveal delay-3"><div class="pair-letters"><b>T</b><span>↔</span><b>F</b></div><h3 data-editable>決策依據</h3><p data-editable>先看邏輯原則，還是人的影響與價值？</p></article><article class="pair-card reveal delay-4"><div class="pair-letters"><b>J</b><span>↔</span><b>P</b></div><h3 data-editable>生活安排</h3><p data-editable>偏好先確定計畫，還是保留彈性？</p></article></div><p class="source-note">參考：The Myers-Briggs Company, MBTI® Facts。偏好不表示能力高低，也不代表只能使用其中一端。</p></div>
+        <div class="page-no">21 / 36</div><nav class="fallback-controls"><a href="#slide-20">←</a><span>21 / 36</span><a href="#slide-22">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           22｜E 與 I
+           =========================================== -->
+      <section id="slide-22" class="slide" data-title="E 與 I：你怎麼恢復精神">
+        <header class="masthead"><span>MBTI｜E ↔ I</span><span class="chapter">ENERGY</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是外向等於會說話</p><h2 class="title reveal delay-1" data-editable>忙完一天後，你怎麼恢復精神？</h2><div class="spectrum reveal-scale delay-2"><div class="spectrum-line"></div><div class="spectrum-end left"><b>E</b><span data-editable>透過互動、行動與外在刺激整理想法</span></div><div class="spectrum-end right"><b>I</b><span data-editable>透過獨處、沉澱與內在思考恢復能量</span></div></div><p class="lead reveal delay-3" style="margin:66px auto 0;text-align:center" data-editable>內向的人也可以很會簡報；外向的人也需要獨處。差別常在於「哪一種方式比較充電」。</p></div>
+        <div class="page-no">22 / 36</div><nav class="fallback-controls"><a href="#slide-21">←</a><span>22 / 36</span><a href="#slide-23">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           23｜S 與 N
+           =========================================== -->
+      <section id="slide-23" class="slide" data-title="S 與 N：你先注意什麼">
+        <header class="masthead"><span>MBTI｜S ↔ N</span><span class="chapter">INFORMATION</span></header>
+        <div class="frame"><p class="eyebrow reveal">同一張圖，先看到的可能不同</p><h2 class="title reveal delay-1" data-editable>接到新任務時，你先注意什麼？</h2><div class="spectrum reveal-scale delay-2"><div class="spectrum-line"></div><div class="spectrum-end left"><b>S</b><span data-editable>事實、步驟、現在可用的經驗與資料</span></div><div class="spectrum-end right"><b>N</b><span data-editable>關聯、意義、未來可能與新的做法</span></div></div><p class="lead reveal delay-3" style="margin:66px auto 0;text-align:center" data-editable>S 不是沒創意，N 也不是不切實際；只是起手式不同。</p></div>
+        <div class="page-no">23 / 36</div><nav class="fallback-controls"><a href="#slide-22">←</a><span>23 / 36</span><a href="#slide-24">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           24｜T 與 F
+           =========================================== -->
+      <section id="slide-24" class="slide" data-title="T 與 F：你先衡量什麼">
+        <header class="masthead"><span>MBTI｜T ↔ F</span><span class="chapter">DECISION</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是理性對感性</p><h2 class="title reveal delay-1" data-editable>做困難決定時，你先衡量什麼？</h2><div class="spectrum reveal-scale delay-2"><div class="spectrum-line"></div><div class="spectrum-end left"><b>T</b><span data-editable>原則是否一致、理由是否站得住腳</span></div><div class="spectrum-end right"><b>F</b><span data-editable>決定會如何影響人、是否符合重視的價值</span></div></div><p class="lead reveal delay-3" style="margin:66px auto 0;text-align:center" data-editable>T 也有感受，F 也會分析；差別常在於「哪一類條件先進入判斷」。</p></div>
+        <div class="page-no">24 / 36</div><nav class="fallback-controls"><a href="#slide-23">←</a><span>24 / 36</span><a href="#slide-25">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           25｜J 與 P
+           =========================================== -->
+      <section id="slide-25" class="slide" data-title="J 與 P：你怎麼安排事情">
+        <header class="masthead"><span>MBTI｜J ↔ P</span><span class="chapter">LIFESTYLE</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是守規矩對拖延</p><h2 class="title reveal delay-1" data-editable>面對期限，你喜歡怎麼推進？</h2><div class="spectrum reveal-scale delay-2"><div class="spectrum-line"></div><div class="spectrum-end left"><b>J</b><span data-editable>先決定、先安排，完成後比較安心</span></div><div class="spectrum-end right"><b>P</b><span data-editable>保留選項，接近期限仍願意調整</span></div></div><p class="lead reveal delay-3" style="margin:66px auto 0;text-align:center" data-editable>J 也會改變，P 也能準時；差別在於「確定」與「彈性」哪一個比較舒服。</p></div>
+        <div class="page-no">25 / 36</div><nav class="fallback-controls"><a href="#slide-24">←</a><span>25 / 36</span><a href="#slide-26">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           26｜四個字母
+           =========================================== -->
+      <section id="slide-26" class="slide dark" data-title="四個字母是一組偏好組合">
+        <header class="masthead"><span>MBTI｜16 種組合</span><span class="chapter">A FOUR-LETTER PATTERN</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是四張獨立標籤</p><h2 class="title reveal delay-1" data-editable>四個字母合在一起，才形成一組偏好組合</h2><div class="type-code reveal-scale delay-2"><b>E</b><b>N</b><b>F</b><b>P</b></div><p class="lead reveal delay-3" style="margin:76px auto 0;text-align:center" data-editable>相同四個字母的人，仍可能因能力、價值觀、家庭、文化與經驗而非常不同。</p></div>
+        <div class="page-no">26 / 36</div><nav class="fallback-controls"><a href="#slide-25">←</a><span>26 / 36</span><a href="#slide-27">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           27｜MBTI 課堂自我檢核
+           =========================================== -->
+      <section id="slide-27" class="slide has-note" data-title="MBTI 四組偏好自我檢核">
+        <header class="masthead"><span>MBTI｜課堂活動</span><span class="chapter">PREFERENCE SELF-CHECK</span></header>
+        <div class="frame"><p class="eyebrow reveal">16 個情境，約 8 分鐘</p><h2 class="title reveal delay-1" data-editable>先選比較自然的方式，再回頭檢查是否符合自己</h2><div class="quiz-launch"><div class="quiz-steps"><div class="quiz-step reveal delay-1"><b>1</b><span data-editable>每題兩個選項都能做到，請選比較不費力的一個。</span></div><div class="quiz-step reveal delay-2"><b>2</b><span data-editable>如果很難選，想像沒有考試、主管或家人期待時的自己。</span></div><div class="quiz-step reveal delay-3"><b>3</b><span data-editable>這是課堂自我檢核，不是正式 MBTI® 評量。</span></div></div><button class="quiz-button reveal-scale delay-2" type="button" data-open-quiz="mbtiQuizOverlay">開始偏好檢核<small>作答只在目前頁面計算，不會上傳</small></button></div></div>
+        <div class="page-no">27 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>避免把情境當人格</h2><p>學生可能因科系訓練、打工要求或家庭期待而選擇「應該做的」。請提醒他區分：我做得到、我經常被要求、以及我比較自然的方式。</p></template><nav class="fallback-controls"><a href="#slide-26">←</a><span>27 / 36</span><a href="#slide-28">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           28｜MBTI 結果解讀
+           =========================================== -->
+      <section id="slide-28" class="slide has-note" data-title="四個字母是起點">
+        <header class="masthead"><span>MBTI｜結果解讀</span><span class="chapter">A STARTING POINT</span></header>
+        <div class="frame"><p class="eyebrow reveal">結果出來後，先問「像不像」</p><h2 class="title reveal delay-1" data-editable>四個字母是起點，不是你的完整說明書</h2><div class="result-board"><div class="result-main reveal delay-2" style="background:var(--sage-light)"><p style="font-weight:900;letter-spacing:.12em">目前偏好組合</p><div class="mbti-code-result" id="mbtiCodeResult"><b>?</b><b>?</b><b>?</b><b>?</b></div><p id="mbtiResultHint" data-editable>完成檢核後，請圈出最確定與最不確定的一組偏好。</p></div><div class="cards two reveal delay-3" style="margin-top:0"><article class="card" style="--card-color:var(--coral)"><div class="no">BEST FIT</div><h3 data-editable>哪裡最像？</h3><p data-editable>找一件真實經驗，說明這個偏好如何出現。</p></article><article class="card" style="--card-color:var(--blue)"><div class="no">DOUBT</div><h3 data-editable>哪裡不像？</h3><p data-editable>是題目理解不同，還是你會依情境切換？</p></article><article class="card" style="--card-color:var(--sage)"><div class="no">ENERGY</div><h3 data-editable>哪個較耗力？</h3><p data-editable>做得到，不代表長時間做仍然舒服。</p></article><article class="card" style="--card-color:var(--sun)"><div class="no">FEEDBACK</div><h3 data-editable>別人怎麼看？</h3><p data-editable>找兩位熟悉你的人，請他們提供行為證據。</p></article></div></div></div>
+        <div class="page-no">28 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>看接近程度</h2><p>如果某一組剛好 2 比 2，不要硬選。這通常代表偏好不明顯、題目不足，或學生能依情境切換。可以先保留 X，例如 INXP，再透過生活經驗驗證。</p></template><nav class="fallback-controls"><a href="#slide-27">←</a><span>28 / 36</span><a href="#slide-29">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           29｜MBTI 完整測評資源
+           =========================================== -->
+      <section id="slide-29" class="slide has-note" data-title="想做更完整的人格偏好測評">
+        <header class="masthead"><span>MBTI｜延伸資源</span><span class="chapter">CHOOSE THE RIGHT TOOL</span></header>
+        <div class="frame"><p class="eyebrow reveal">同樣使用四個字母，不一定是同一套工具</p><h2 class="title reveal delay-1" data-editable>完整測驗之前，先確認使用的是哪一套工具</h2><div class="resource-grid"><article class="resource-option reveal delay-2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFAAQMAAAD3XjfpAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB80lEQVRoge2aMY6EMAxFjSgoOUKOwtHgaByFI1BSILy2Y0LQzhajYZMp/i8gSh7Vlx3HgQiCoDfVc9RBNKw6EdaW5ck7+QqvAJ8EN3t1B40sCPPSK7LIHM+2NACsBDbqUqcWmpFqqny0KRhkCeB/ge6MaSIC+DWgjPeGp+D4DrA2aC+1cJY8pjuMBtfS7X+nPYCfgB4lEXRnHHQBrALe1B5acukobL9XARYFo4VrxzdN1GkeWyTmPMQAPgQSNZw2EatxSWPG8Nn8GVaANUBFtAwW2/xcqFv6pCOZyyIHYGHQosjqALEt7TOSzVq1kLPgAvgkyNfpQ/zRbLanRYB1QGriopZcdmL3bLafMZOlPYAFwZjNvJdiwWWZzSy0JHcaCPApMHvGc+E9WlJtBrAsaONYDNvM6Nks6pbNABYFzbyBvRiW3caKYeuoaDZr7s0rgM+AqXnVsGuxg+JiRxMCWAeMLskOM+jaZBs7xWfY8rQHsDBo48zClVJD0WMO4IPgpZHtGjA4eHbbAVYCsw57tjiF67LJBbA0mPaZ7NP00a3LBfAZMN2Iz/0ZIrHDzjGbzQC/ALRs1vpfJHr38fKnBoDFQQmocTnz26lXFgL8ALSXgX7vajWuN68OAlgLdKOufwtJs1ncYcLWvKwAABYAIQh6Qz9VGnah3Cap1AAAAABJRU5ErkJggg==" alt="The Myers-Briggs Company 正式 MBTI 工具 QR Code"><div><span class="resource-badge">正式 MBTI®</span><h3 data-editable>官方評量工具</h3><p data-editable>93 題，約 20 分鐘；有繁體中文版，通常需付費並搭配正式報告或解讀。</p><a class="resource-link" href="https://asia.themyersbriggs.com/instruments/mbti/" target="_blank" rel="noopener">官方工具說明 ↗</a></div></article><article class="resource-option alt reveal delay-3"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFAAQMAAAD3XjfpAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACXElEQVRoge2aS5KDMAxElWLB0kfgKByNHI2jcASWLCg0Vsvmkw9DKs6utcgM9mMjudptGREGg/FhBEUsImqPbfx/rHWWm6r4lI4EL4D4Uy020cXRoRnDVM9VfFP0bnMNwUtgTDnGI3WXdohDU8w4En7v8CbBH4CoDCohUmuuDMFPQR/vpYl5n6SabwvBH4H2a5UxBWl7U5B68gq90R6Cr8C0xQHs+naV5tubvZDgd+AhIqiDmKaYyTgJgo9zSPhcIbOuFAetbvtmIFgStDpMUGL1p8akWcSlGe54JHgFDDnh0QzHhA9RrN0MPyacYAkwWOKrWZIZ9hU+VZpdXTsIwQug2AqXgxnGFocKoAQEy4JhTJIC77suaNMYmLgmSwrBUzAd2izh3sXBkodZS9IhBAuCYfRuA0wbJnCK09zv2bSH4BmIFS4VdMHM8AC3ZlJtJqPbVYZgGXALPyULPIVLipqneD7FEXwGbdjkwRuQvXUbgi3xdIrbeTOCZUA10k8f5tlMmetk4nIHmOD/oAlDHPeE3wVtslpXb7aXFIIlwLDvS3ZxdsACz28eJYXgCWieQnPDF1dsUA6scNWdpBAsA8INuxf2Q1s2Feo3FULwEhiyUqwN32TWPOH7u2GC34M5fIWL4PSRlryVar1iI3gK7m58ctMmt3GO/QiChcB0pynuKeIKz/b4sTIEz8H1gmfrk8VTnOQtTkQI/gYU//4p3RXp9j0UwU9Ae7Idzi8vodVmhp8TTvA70H7XyuCwYYqyvHJ7BN+DLghQivRxCI51/jneoY1DsATIYDA+iD9fIhD91pS82QAAAABJRU5ErkJggg==" alt="16Personalities 繁體中文免費測驗 QR Code"><div><span class="resource-badge">免費延伸</span><h3 data-editable>16Personalities</h3><p data-editable>60 題，約 10 分鐘，有繁體中文介面；採 NERIS 架構，不是正式 MBTI。</p><a class="resource-link" href="https://www.16personalities.com/tw/%E6%80%A7%E6%A0%BC%E6%B8%AC%E8%A9%A6" target="_blank" rel="noopener">免費測驗頁面 ↗</a></div></article></div><p class="resource-caution reveal delay-4" data-editable>兩份結果不一致，不代表誰測錯；請先看測量架構、題目情境與偏好強度，再回到自己的真實經驗。</p><p class="source-note">參考：The Myers-Briggs Company；16Personalities 官方框架說明。兩套工具雖使用相似字母，但理論與計分方式不同。</p></div>
+        <div class="page-no">29 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>不要把 16Personalities 說成 MBTI</h2><p>學生最常接觸的是 16Personalities。它適合做免費延伸活動，但採用 NERIS 特質架構，和正式 MBTI 並不是同一套工具。可請學生記下「使用哪個網站、何時完成、各向度百分比」，不要只留下四個字母。</p></template><nav class="fallback-controls"><a href="#slide-28">←</a><span>29 / 36</span><a href="#slide-30">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           30｜MBTI 入門影片
+           =========================================== -->
+      <section id="slide-30" class="slide dark has-note" data-title="影片：MBTI 四組偏好">
+        <header class="masthead"><span>MBTI 入門</span><span class="chapter">VIDEO 02｜10:14</span></header>
+        <div class="frame"><p class="eyebrow reveal">用動畫整理四組偏好</p><h2 class="title reveal delay-1" data-editable>影片中的描述，哪些幫你更理解自己？</h2><div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="qQ50VVZV9IY" data-video-title="Sprouts 中文｜16 種 MBTI 人格類型解析"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 Sprouts 中文影片</strong></button></div><div class="video-meta"><b>10:14</b><span data-editable>手繪動畫｜四組偏好與 16 種組合</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>請做兩種記號</h3><ol><li data-editable>「像」：符合自己經驗的描述。</li><li data-editable>「疑」：聽起來太簡化或沒有證據。</li><li data-editable>影片是否把偏好說成固定能力？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=qQ50VVZV9IY" target="_blank" rel="noopener">無法播放時，改到 YouTube 觀看 ↗</a></aside></div></div>
+        <div class="page-no">30 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片二</h2><p>影片約 10 分 14 秒，為中文旁白、手繪動畫，畫面本身有中英文字。請學生不要逐句照抄，把注意力放在「哪些描述有經驗支持」。</p></template><nav class="fallback-controls"><a href="#slide-29">←</a><span>30 / 36</span><a href="#slide-31">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           31｜影片後辨識
+           =========================================== -->
+      <section id="slide-31" class="slide has-note" data-title="把人格形容詞改寫成行為">
+        <header class="masthead"><span>MBTI｜影片後討論</span><span class="chapter">FROM ADJECTIVES TO EVIDENCE</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要說「我就是很內向」</p><h2 class="title reveal delay-1" data-editable>把抽象的人格形容詞，改寫成可以觀察的行為</h2><div class="split"><article class="split-panel reveal delay-2" style="--panel-color:var(--coral)"><h3 data-editable>抽象標籤</h3><ul><li data-editable>我很內向</li><li data-editable>我是感覺型的人</li><li data-editable>我是 P，所以很會拖延</li></ul></article><article class="split-panel reveal delay-3" style="--panel-color:var(--sage)"><h3 data-editable>行為證據</h3><ul><li data-editable>開會前先寫下想法，我比較能發言</li><li data-editable>做決定時，我會先問受到影響的人</li><li data-editable>我偏好保留選項，但仍會設定最後期限</li></ul></article></div><div class="versus">改寫</div></div>
+        <div class="page-no">31 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>兩人互訪</h2><p>兩人一組，各挑一個自己常說的人格標籤。伙伴只能追問：「你上一次出現這種行為是什麼時候？」最後把標籤改寫成看得見的行為。</p></template><nav class="fallback-controls"><a href="#slide-30">←</a><span>31 / 36</span><a href="#slide-32">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           32｜維思維影片
+           =========================================== -->
+      <section id="slide-32" class="slide dark has-note" data-title="影片：真正的 MBTI">
+        <header class="masthead"><span>MBTI 深入理解</span><span class="chapter">VIDEO 03｜22:50</span></header>
+        <div class="frame"><p class="eyebrow reveal">動畫圖解｜從四個字母回到原始觀點</p><h2 class="title reveal delay-1" data-editable>人真的可以被固定分成 16 種嗎？</h2><div class="video-grid"><div><div class="video-shell reveal delay-2" data-video-id="qVb9Fik9d14" data-video-title="維思維｜20 分鐘告訴你真正的 MBTI"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放維思維影片</strong></button></div><div class="video-meta"><b>22:50</b><span data-editable>動畫解讀｜原創者觀點、偏好與常見誤解</span></div></div><aside class="watch-task reveal delay-3"><h3 data-editable>看完請回答</h3><ol><li data-editable>網路常見說法，和原始觀點差在哪裡？</li><li data-editable>哪一種解讀最容易把人貼死？</li><li data-editable>保留 MBTI 的什麼用途，才有幫助？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=qVb9Fik9d14" target="_blank" rel="noopener">無法播放時，改到 YouTube 觀看 ↗</a></aside></div></div>
+        <div class="page-no">32 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>影片三</h2><p>影片約 22 分 50 秒，動畫與圖解很多，影片本身有中文字。播放前先告訴學生：這支不是要推翻 MBTI，而是把焦點從「你是哪一型」拉回「怎麼理解偏好」。</p></template><nav class="fallback-controls"><a href="#slide-31">←</a><span>32 / 36</span><a href="#slide-33">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           33｜MBTI 使用界線
+           =========================================== -->
+      <section id="slide-33" class="slide has-note" data-title="MBTI 可以做什麼，不能做什麼">
+        <header class="masthead"><span>MBTI｜使用界線</span><span class="chapter">USE, DON'T ABUSE</span></header>
+        <div class="frame"><p class="eyebrow reveal">工具的價值，取決於怎麼用</p><h2 class="title reveal delay-1" data-editable>MBTI 可以幫助探索，但不能代替選擇</h2><div class="split"><article class="split-panel reveal delay-2" style="--panel-color:var(--sage)"><h3 data-editable>可以用來</h3><ul><li data-editable>描述自己比較自然的偏好</li><li data-editable>理解溝通與決策差異</li><li data-editable>提出值得驗證的工作條件</li></ul></article><article class="split-panel reveal delay-3" style="--panel-color:var(--coral)"><h3 data-editable>不應用來</h3><ul><li data-editable>預測一個人的工作績效</li><li data-editable>篩選、淘汰或限制求職者</li><li data-editable>斷言某一型只能做某些職業</li></ul></article></div><div class="versus">界線</div><p class="source-note">The Myers-Briggs Company 明確說明：MBTI 用於發展與自我理解，不應用於人才甄選，也不是預測工作表現的工具。</p></div>
+        <div class="page-no">33 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>倫理連結</h2><p>這一頁可以連到課程的「專業倫理」：如果主管用人格類型決定錄取、升遷或分工，可能造成什麼偏見？要求學生同時思考效率、尊重與程序公平。</p></template><nav class="fallback-controls"><a href="#slide-32">←</a><span>33 / 36</span><a href="#slide-34">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           34｜PDP 與 MBTI 比較
+           =========================================== -->
+      <section id="slide-34" class="slide" data-title="PDP 與 MBTI 提供不同鏡頭">
+        <header class="masthead"><span>兩種工具一起看</span><span class="chapter">TWO LENSES</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要問誰比較準，先問各自回答什麼</p><h2 class="title reveal delay-1" data-editable>PDP 與 MBTI，提供的是兩種不同鏡頭</h2><div class="split"><article class="split-panel reveal delay-2" style="--panel-color:var(--coral)"><h3 data-editable>PDP｜行為風格</h3><p data-editable>幫助觀察自己在工作情境中，通常怎麼推進、溝通、維持與把關。</p><p data-editable><strong>較適合問：</strong>我怎麼做事？別人通常怎麼感受到我？</p></article><article class="split-panel reveal delay-3" style="--panel-color:var(--blue)"><h3 data-editable>MBTI｜心理偏好</h3><p data-editable>幫助描述精力、資訊、決策與安排上的自然偏好。</p><p data-editable><strong>較適合問：</strong>什麼方式比較不費力？我如何理解差異？</p></article></div><div class="versus">＋</div></div>
+        <div class="page-no">34 / 36</div><nav class="fallback-controls"><a href="#slide-33">←</a><span>34 / 36</span><a href="#slide-35">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           35｜工作適配矩陣
+           =========================================== -->
+      <section id="slide-35" class="slide has-note" data-title="不要配對職稱，要比較工作條件">
+        <header class="masthead"><span>從測驗走向工作適配</span><span class="chapter">JOB-FIT MATRIX</span></header>
+        <div class="frame"><p class="eyebrow reveal">同一個職稱，在不同公司可能完全不同</p><h2 class="title reveal delay-1" data-editable>不要配對職稱；請比較每天真正面對的工作條件</h2><div style="margin-top:38px"><div class="fit-row reveal delay-1"><b data-editable>任務內容</b><span data-editable>我喜歡解決哪一類問題？</span><span data-editable>這份工作一天實際做哪些事？</span></div><div class="fit-row reveal delay-2"><b data-editable>人際互動</b><span data-editable>我需要多少合作、服務與說服？</span><span data-editable>互動對象、頻率與情緒負荷如何？</span></div><div class="fit-row reveal delay-3"><b data-editable>工作步調</b><span data-editable>穩定深入，還是快速變動？</span><span data-editable>期限、多工與臨時狀況有多少？</span></div><div class="fit-row reveal delay-4"><b data-editable>規則與自主</b><span data-editable>我需要明確標準，還是決定空間？</span><span data-editable>流程、權限與容錯範圍有多大？</span></div><div class="fit-row reveal delay-5"><b data-editable>生活條件</b><span data-editable>我目前能承擔什麼代價？</span><span data-editable>工時、地點、收入與成長是否可接受？</span></div></div></div>
+        <div class="page-no">35 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>最後練習</h2><p>請學生拿兩個正在考慮的職業，各用右欄寫出可查證的工作條件。不能只寫「適合 I 人」「適合老虎」，必須找到職缺、從業者訪談或實際任務作為證據。</p></template><nav class="fallback-controls"><a href="#slide-34">←</a><span>35 / 36</span><a href="#slide-36">→</a></nav>
+      </section>
+
+      <!-- ===========================================
+           36｜收束與行動
+           =========================================== -->
+      <section id="slide-36" class="slide dark has-note" data-title="從類型走向一次真實嘗試">
+        <header class="masthead"><span>第二部分總結</span><span class="chapter">FROM TYPE TO ACTION</span></header>
+        <div class="frame"><p class="eyebrow reveal">最後，不必替自己下定論</p><h2 class="title reveal delay-1" data-editable>把測驗結果，變成下一次可以驗證的行動</h2><div class="action-path"><div class="action-node reveal delay-1" data-editable>描述<br>我的傾向</div><span class="action-arrow">→</span><div class="action-node reveal delay-2" data-editable>翻譯成<br>工作條件</div><span class="action-arrow">→</span><div class="action-node reveal delay-3" data-editable>提出兩個<br>職涯假設</div><span class="action-arrow">→</span><div class="action-node reveal delay-4" data-editable>七天內<br>做一次嘗試</div></div><p class="lead reveal delay-5" style="margin:70px auto 0;text-align:center" data-editable>你不是某一型的囚犯；你是在累積證據，讓下一個選擇更接近自己。</p></div>
+        <div class="page-no">36 / 36</div><button class="teacher-trigger" type="button">教師提示 T</button><template class="teacher-note"><h2>收尾作業</h2><p>請學生完成一句話：「測驗讓我注意到＿＿；我想找一個＿＿的工作條件；這週我會用＿＿來驗證。」下一堂可從學生的行動紀錄開始，而不是再問一次人格類型。</p></template><nav class="fallback-controls"><a href="#slide-35">←</a><span>36 / 36</span><span aria-disabled="true">→</span></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       LIVE PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="簡報控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button><button id="menuBtn" type="button" aria-label="章節選單">☰</button>
+    <span class="counter" id="counter">01 / 36</span><button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="noteBtn" type="button" aria-label="教師提示">T</button><button id="helpBtn" type="button" aria-label="操作說明">?</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===========================================
+       MENU, NOTES, HELP, AND QUIZ OVERLAYS
+       =========================================== -->
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="章節選單"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>前往投影片</h2><div class="menu-grid" id="menuGrid"></div></div></div>
+  <div class="overlay" id="noteOverlay" role="dialog" aria-modal="true" aria-label="教師提示"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><div id="noteContent"></div></div></div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>操作說明</h2><ul><li>←、→、Space、Page Up／Down：翻頁</li><li>Home／End：第一張／最後一張</li><li>M：章節選單　T：教師提示　E：文字編輯</li><li>F：全螢幕　Esc：關閉視窗　手機／平板可左右滑動</li><li>影片需連線；若嵌入失敗，使用頁面上的 YouTube 備援連結。</li><li>兩個自我檢核只在目前頁面計算，不會上傳資料。</li></ul></div></div>
+
+  <div class="overlay" id="pdpQuizOverlay" role="dialog" aria-modal="true" aria-label="PDP 課堂版快問快答"><div class="overlay-panel wide"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>PDP 課堂版快問快答</h2><p>請選最像平常自己的反應。本活動不是正式 PDP® ProScan，也不會儲存或上傳答案。</p>
+    <form class="quiz-form" id="pdpQuiz">
+      <fieldset class="quiz-question"><legend>1. 小組接到一個時間很趕的新任務，你第一個反應通常是：</legend><div class="quiz-options"><label><input type="radio" name="pdp1" value="D"> 先決定方向，馬上分工</label><label><input type="radio" name="pdp1" value="E"> 先讓大家有共識與動力</label><label><input type="radio" name="pdp1" value="P"> 先確認每個人的狀況與負荷</label><label><input type="radio" name="pdp1" value="C"> 先釐清要求、標準與風險</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>2. 會議意見一直沒有結論時，你比較可能：</legend><div class="quiz-options"><label><input type="radio" name="pdp2" value="D"> 提出決定，推動下一步</label><label><input type="radio" name="pdp2" value="E"> 用說法或故事拉近共識</label><label><input type="radio" name="pdp2" value="P"> 先聽完不同人的顧慮</label><label><input type="radio" name="pdp2" value="C"> 整理資料與判準再比較</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>3. 面對陌生任務，你最希望先得到：</legend><div class="quiz-options"><label><input type="radio" name="pdp3" value="D"> 可決定的空間與目標</label><label><input type="radio" name="pdp3" value="E"> 可以一起討論的伙伴</label><label><input type="radio" name="pdp3" value="P"> 穩定支援與足夠時間</label><label><input type="radio" name="pdp3" value="C"> 完整資訊與清楚規格</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>4. 團隊臨時出錯，你通常先做什麼？</legend><div class="quiz-options"><label><input type="radio" name="pdp4" value="D"> 立刻處理，先止住損失</label><label><input type="radio" name="pdp4" value="E"> 對外說明並安定氣氛</label><label><input type="radio" name="pdp4" value="P"> 協助成員恢復工作步調</label><label><input type="radio" name="pdp4" value="C"> 找出原因並防止再發生</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>5. 你最容易因為什麼獲得成就感？</legend><div class="quiz-options"><label><input type="radio" name="pdp5" value="D"> 達成困難目標</label><label><input type="radio" name="pdp5" value="E"> 影響別人、得到回應</label><label><input type="radio" name="pdp5" value="P"> 讓事情穩定持續</label><label><input type="radio" name="pdp5" value="C"> 把品質做到可靠精準</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>6. 工作突然改變方向時，你比較可能：</legend><div class="quiz-options"><label><input type="radio" name="pdp6" value="D"> 很快接受，直接換做法</label><label><input type="radio" name="pdp6" value="E"> 找人討論，重新凝聚熱度</label><label><input type="radio" name="pdp6" value="P"> 需要時間適應並確認影響</label><label><input type="radio" name="pdp6" value="C"> 先確認改變的理由與細節</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>7. 別人最常請你幫忙的是：</legend><div class="quiz-options"><label><input type="radio" name="pdp7" value="D"> 做決定、解決卡關</label><label><input type="radio" name="pdp7" value="E"> 溝通、簡報、帶氣氛</label><label><input type="radio" name="pdp7" value="P"> 陪伴、協調、持續執行</label><label><input type="radio" name="pdp7" value="C"> 檢查、分析、整理流程</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>8. 你最不喜歡哪一種工作狀況？</legend><div class="quiz-options"><label><input type="radio" name="pdp8" value="D"> 無法決定、進度停滯</label><label><input type="radio" name="pdp8" value="E"> 沒有互動、沒有回應</label><label><input type="radio" name="pdp8" value="P"> 一直變動、關係緊張</label><label><input type="radio" name="pdp8" value="C"> 標準模糊、品質失控</label></div></fieldset>
+      <div class="quiz-message" id="pdpMessage" aria-live="polite"></div><div class="quiz-actions"><button class="quiz-reset" type="reset">重新作答</button><button class="quiz-submit" type="submit">查看課堂結果</button></div>
+    </form>
+  </div></div>
+
+  <div class="overlay" id="mbtiQuizOverlay" role="dialog" aria-modal="true" aria-label="MBTI 四組偏好自我檢核"><div class="overlay-panel wide"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>MBTI 四組偏好自我檢核</h2><p>請選比較自然、比較不費力的一個。本活動不是正式 MBTI® 評量，也不會儲存或上傳答案。</p>
+    <form class="quiz-form" id="mbtiQuiz">
+      <fieldset class="quiz-question"><legend>1. 忙碌一週後，我比較想：</legend><div class="quiz-options"><label><input type="radio" name="mbti1" value="E"> 找人聊天或一起活動</label><label><input type="radio" name="mbti1" value="I"> 留一段時間自己整理</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>2. 討論新點子時，我比較容易：</legend><div class="quiz-options"><label><input type="radio" name="mbti2" value="E"> 邊說邊形成想法</label><label><input type="radio" name="mbti2" value="I"> 想清楚後再發言</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>3. 到陌生場合時，我通常：</legend><div class="quiz-options"><label><input type="radio" name="mbti3" value="E"> 主動接觸環境與人</label><label><input type="radio" name="mbti3" value="I"> 先觀察，再選擇互動</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>4. 長時間合作後，哪一種情況比較耗力？</legend><div class="quiz-options"><label><input type="radio" name="mbti4" value="E"> 一直沒有交流，只能自己做</label><label><input type="radio" name="mbti4" value="I"> 一直需要回應很多人</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>5. 學習新工具時，我偏好：</legend><div class="quiz-options"><label><input type="radio" name="mbti5" value="S"> 看示範，照步驟操作</label><label><input type="radio" name="mbti5" value="N"> 先理解概念與可能用途</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>6. 聽一段說明時，我先注意：</legend><div class="quiz-options"><label><input type="radio" name="mbti6" value="S"> 具體事實與實例</label><label><input type="radio" name="mbti6" value="N"> 整體意義與關聯</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>7. 面對成熟做法時，我比較傾向：</legend><div class="quiz-options"><label><input type="radio" name="mbti7" value="S"> 先把有效方法做好</label><label><input type="radio" name="mbti7" value="N"> 想想是否有新做法</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>8. 回想一次經驗時，我更常記得：</legend><div class="quiz-options"><label><input type="radio" name="mbti8" value="S"> 發生的細節與順序</label><label><input type="radio" name="mbti8" value="N"> 當時得到的意義與啟發</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>9. 團隊要做決定時，我先問：</legend><div class="quiz-options"><label><input type="radio" name="mbti9" value="T"> 判準是否一致、合理</label><label><input type="radio" name="mbti9" value="F"> 對每個人會有什麼影響</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>10. 給別人回饋時，我較自然的是：</legend><div class="quiz-options"><label><input type="radio" name="mbti10" value="T"> 直接指出問題與改善方法</label><label><input type="radio" name="mbti10" value="F"> 先理解對方感受再提出建議</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>11. 面對爭議時，我比較在意：</legend><div class="quiz-options"><label><input type="radio" name="mbti11" value="T"> 原則能不能一致適用</label><label><input type="radio" name="mbti11" value="F"> 關係與價值是否受到傷害</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>12. 別人向我訴苦時，我第一個反應較像：</legend><div class="quiz-options"><label><input type="radio" name="mbti12" value="T"> 幫忙分析怎麼處理</label><label><input type="radio" name="mbti12" value="F"> 先讓他感覺被理解</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>13. 出遊之前，我比較喜歡：</legend><div class="quiz-options"><label><input type="radio" name="mbti13" value="J"> 先把行程與住宿確認好</label><label><input type="radio" name="mbti13" value="P"> 保留空間，看情況調整</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>14. 有期限的任務，我較自然的是：</legend><div class="quiz-options"><label><input type="radio" name="mbti14" value="J"> 先拆步驟，逐項完成</label><label><input type="radio" name="mbti14" value="P"> 先探索，接近期限再收斂</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>15. 面對多個選項，我比較舒服的是：</legend><div class="quiz-options"><label><input type="radio" name="mbti15" value="J"> 選定後往下走</label><label><input type="radio" name="mbti15" value="P"> 先保留，不急著關閉可能</label></div></fieldset>
+      <fieldset class="quiz-question"><legend>16. 計畫臨時改變時，我通常：</legend><div class="quiz-options"><label><input type="radio" name="mbti16" value="J"> 需要重新排好才安心</label><label><input type="radio" name="mbti16" value="P"> 很快跟著情況調整</label></div></fieldset>
+      <div class="quiz-message" id="mbtiMessage" aria-live="polite"></div><div class="quiz-actions"><button class="quiz-reset" type="reset">重新作答</button><button class="quiz-submit" type="submit">查看偏好組合</button></div>
+    </form>
+  </div></div>
+
+  <!-- ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div><button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）" aria-label="切換編輯模式">✎</button>
+  <div class="edit-toolbar" id="editToolbar"><button id="saveFile" type="button">下載修訂版 HTML</button><button id="resetEdits" type="button">清除本機修改</button></div>
+  <noscript><div class="legacy-note">相容模式：請使用每張投影片下方的左右箭頭翻頁；互動檢核需啟用 JavaScript，影片可使用 YouTube 文字連結。</div></noscript>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    (function(){
+      "use strict";
+      function byId(id){ return document.getElementById(id); }
+      function pad2(number){ return number<10?"0"+number:String(number); }
+      function closeOverlays(){ var open=document.querySelectorAll(".overlay.open"); for(var i=0;i<open.length;i+=1){open[i].classList.remove("open");} }
+      var stage=byId("deckStage");
+      var storageKey="career-exploration-part2-v2";
+      try { var saved=window.localStorage.getItem(storageKey); if(saved&&saved.indexOf("slide-36")!==-1){stage.innerHTML=saved;} } catch(ignore){}
+      var slides=stage.querySelectorAll(".slide");
+      var current=0, wheelLocked=false, touchStart=null;
+
+      function scaleStage(){
+        var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+        var x=(window.innerWidth-1920*factor)/2, y=(window.innerHeight-1080*factor)/2;
+        stage.style.transform="translate("+x+"px,"+y+"px) scale("+factor+")";
+      }
+      function resetVideo(slide){
+        var shell=slide.querySelector(".video-shell");
+        if(shell&&shell.querySelector("iframe")){
+          var label=shell.getAttribute("data-video-title")||"課程影片";
+          shell.innerHTML='<button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下重新載入 '+label+'</strong></button>';
+        }
+      }
+      function show(index,updateHash){
+        if(index<0){index=0;} if(index>=slides.length){index=slides.length-1;}
+        for(var i=0;i<slides.length;i+=1){
+          if(i===index){slides[i].classList.add("active");slides[i].classList.add("visible");}
+          else {slides[i].classList.remove("active");slides[i].classList.remove("visible");resetVideo(slides[i]);}
+        }
+        current=index;
+        byId("counter").textContent=pad2(current+1)+" / "+slides.length;
+        byId("progress").style.width=((current+1)/slides.length*100)+"%";
+        byId("noteBtn").style.opacity=slides[current].querySelector(".teacher-note")?"1":".35";
+        if(updateHash!==false){try{window.history.replaceState(null,"","#slide-"+(current+1));}catch(ignore){window.location.hash="slide-"+(current+1);}}
+      }
+      function indexFromHash(){var match=window.location.hash.match(/^#slide-(\d+)$/);return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0;}
+      function openOverlay(id){closeOverlays();byId(id).classList.add("open");}
+      function showNote(){var template=slides[current].querySelector(".teacher-note");if(!template){return;}byId("noteContent").innerHTML="";byId("noteContent").appendChild(template.content.cloneNode(true));openOverlay("noteOverlay");}
+      function requestFullscreen(){var root=document.documentElement;var exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement){if(exit){exit.call(document);}return;}var enter=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(enter){enter.call(root);}}
+      function buildMenu(){var grid=byId("menuGrid");grid.innerHTML="";for(var i=0;i<slides.length;i+=1){var button=document.createElement("button");button.type="button";button.setAttribute("data-jump",i);button.textContent=pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片");grid.appendChild(button);}}
+
+      /* ===========================================
+         VIDEO LAZY LOADING
+         =========================================== */
+      function loadVideo(shell){
+        var id=shell.getAttribute("data-video-id"), title=shell.getAttribute("data-video-title")||"課程影片";
+        shell.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="'+title.replace(/"/g,"&quot;")+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      }
+
+      /* ===========================================
+         CLASSROOM SELF-CHECKS
+         These original activities are not official PDP or MBTI instruments.
+         =========================================== */
+      function selectedValues(form){var checked=form.querySelectorAll('input[type="radio"]:checked'), values=[];for(var i=0;i<checked.length;i+=1){values.push(checked[i].value);}return values;}
+      byId("pdpQuiz").onsubmit=function(event){
+        event.preventDefault();var values=selectedValues(this);
+        if(values.length!==8){byId("pdpMessage").textContent="還有題目尚未作答，請完成 8 題。";return;}
+        var scores={D:0,E:0,P:0,C:0}, names={D:"老虎型傾向",E:"孔雀型傾向",P:"無尾熊型傾向",C:"貓頭鷹型傾向"}, icons={D:"🐯",E:"🦚",P:"🐨",C:"🦉"};
+        for(var i=0;i<values.length;i+=1){scores[values[i]]+=1;}
+        var keys=["D","E","P","C"];keys.sort(function(a,b){return scores[b]-scores[a];});
+        var balanced=(scores[keys[0]]-scores[keys[1]])<=1;
+        byId("pdpResultIcon").textContent=balanced?"🦎":icons[keys[0]];
+        byId("pdpResultText").textContent=balanced?"多元／情境切換傾向":names[keys[0]];
+        byId("pdpResultHint").textContent=balanced?"你的前兩項分數接近，可能會依角色與情境切換做法。請用真實經驗確認。":"這是你目前較常選擇的反應，不是固定人格。請用真實事件確認是否符合。";
+        for(var k=0;k<keys.length;k+=1){var key=keys[k], scoreNode=document.querySelector('[data-pdp-score="'+key+'"]'), bar=document.querySelector('[data-pdp-bar="'+key+'"]');scoreNode.textContent=scores[key];bar.style.width=(scores[key]/8*100)+"%";}
+        byId("pdpMessage").textContent="完成。結果已顯示在第 15 張。";closeOverlays();show(14);
+      };
+      byId("pdpQuiz").onreset=function(){byId("pdpMessage").textContent="";};
+      byId("mbtiQuiz").onsubmit=function(event){
+        event.preventDefault();var values=selectedValues(this);
+        if(values.length!==16){byId("mbtiMessage").textContent="還有題目尚未作答，請完成 16 題。";return;}
+        var scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+        for(var i=0;i<values.length;i+=1){scores[values[i]]+=1;}
+        var pairs=[["E","I"],["S","N"],["T","F"],["J","P"]], code=[], uncertain=[];
+        for(var p=0;p<pairs.length;p+=1){var a=pairs[p][0],b=pairs[p][1];if(scores[a]===scores[b]){code.push("X");uncertain.push(a+"/"+b);}else{code.push(scores[a]>scores[b]?a:b);}}
+        var boxes=byId("mbtiCodeResult").querySelectorAll("b");for(var n=0;n<boxes.length;n+=1){boxes[n].textContent=code[n];}
+        byId("mbtiResultHint").textContent=uncertain.length?"目前組合為 "+code.join("")+"；"+uncertain.join("、")+" 分數相同，先保留 X，再用經驗驗證。":"目前組合為 "+code.join("")+"。請圈出最確定與最不確定的一組偏好。";
+        byId("mbtiMessage").textContent="完成。結果已顯示在第 28 張。";closeOverlays();show(27);
+      };
+      byId("mbtiQuiz").onreset=function(){byId("mbtiMessage").textContent="";};
+
+      /* ===========================================
+         INPUT AND NAVIGATION EVENTS
+         =========================================== */
+      byId("prevBtn").onclick=function(){show(current-1);};byId("nextBtn").onclick=function(){show(current+1);};
+      byId("menuBtn").onclick=function(){openOverlay("menuOverlay");};byId("noteBtn").onclick=showNote;
+      byId("helpBtn").onclick=function(){openOverlay("helpOverlay");};byId("fullBtn").onclick=requestFullscreen;
+      document.addEventListener("click",function(event){
+        var close=event.target.closest("[data-close]");if(close){closeOverlays();return;}
+        if(event.target.classList.contains("overlay")){closeOverlays();return;}
+        var jump=event.target.closest("[data-jump]");if(jump){show(parseInt(jump.getAttribute("data-jump"),10));closeOverlays();return;}
+        var load=event.target.closest(".load-video");if(load){loadVideo(load.closest(".video-shell"));return;}
+        var teacher=event.target.closest(".teacher-trigger");if(teacher){showNote();return;}
+        var quiz=event.target.closest("[data-open-quiz]");if(quiz){openOverlay(quiz.getAttribute("data-open-quiz"));}
+      });
+      document.addEventListener("keydown",function(event){
+        var target=event.target;if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName))){return;}
+        if(event.key==="ArrowRight"||event.key==="ArrowDown"||event.key==="PageDown"||event.key===" "){event.preventDefault();show(current+1);}
+        else if(event.key==="ArrowLeft"||event.key==="ArrowUp"||event.key==="PageUp"){event.preventDefault();show(current-1);}
+        else if(event.key==="Home"){show(0);}else if(event.key==="End"){show(slides.length-1);}
+        else if(event.key==="m"||event.key==="M"){openOverlay("menuOverlay");}else if(event.key==="t"||event.key==="T"){showNote();}
+        else if(event.key==="f"||event.key==="F"){requestFullscreen();}else if(event.key==="Escape"){closeOverlays();}
+        else if(event.key==="e"||event.key==="E"){toggleEditing();}
+      });
+      window.addEventListener("resize",scaleStage);
+      window.addEventListener("hashchange",function(){show(indexFromHash(),false);});
+      window.addEventListener("wheel",function(event){if(document.querySelector(".overlay.open")||wheelLocked||Math.abs(event.deltaY)<18){return;}wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false;},520);},{passive:true});
+      window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX;},{passive:true});
+      window.addEventListener("touchend",function(event){if(touchStart===null||document.querySelector(".overlay.open")){return;}var delta=event.changedTouches[0].clientX-touchStart;if(Math.abs(delta)>50){show(current+(delta<0?1:-1));}touchStart=null;},{passive:true});
+
+      /* ===========================================
+         INLINE EDITOR AND FILE EXPORT
+         =========================================== */
+      var editing=false, hideTimer=null, saveTimer=null, hotzone=document.querySelector(".edit-hotzone"), editToggle=byId("editToggle");
+      function setStored(value){try{window.localStorage.setItem(storageKey,value);return true;}catch(ignore){return false;}}
+      function toggleEditing(){editing=!editing;var editable=stage.querySelectorAll("[data-editable]");for(var i=0;i<editable.length;i+=1){editable[i].contentEditable=editing?"true":"false";}document.body.classList.toggle("editing",editing);editToggle.classList.toggle("active",editing);byId("editToolbar").classList.toggle("show",editing);}
+      editToggle.onclick=toggleEditing;hotzone.onclick=toggleEditing;
+      hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);editToggle.classList.add("show");};
+      hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show");}},400);};
+      editToggle.onmouseenter=function(){window.clearTimeout(hideTimer);};
+      editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show");}},400);};
+      stage.addEventListener("input",function(){window.clearTimeout(saveTimer);saveTimer=window.setTimeout(function(){setStored(stage.innerHTML);},350);});
+      byId("resetEdits").onclick=function(){if(window.confirm("要清除這台瀏覽器儲存的文字修改嗎？")){try{window.localStorage.removeItem(storageKey);}catch(ignore){}window.location.reload();}};
+      byId("saveFile").onclick=function(){if(editing){toggleEditing();}setStored(stage.innerHTML);var html="<!doctype html>\n"+document.documentElement.outerHTML;var blob=new Blob([html],{type:"text/html;charset=utf-8"});var urlApi=window.URL||window.webkitURL;var anchor=document.createElement("a");anchor.href=urlApi.createObjectURL(blob);anchor.download="職涯探索與專業倫理_第二部分_認識自己與工作適配_V2_編輯版.html";document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href);},1200);};
+
+      buildMenu();scaleStage();show(indexFromHash(),false);document.body.classList.add("js-ready");
+    }());
+  </script>
+</body>
+</html>
