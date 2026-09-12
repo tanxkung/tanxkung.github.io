@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="職涯探索與專業倫理第三部分：收入、生產力、職涯價值與成長循環。">
+  <title>職涯探索與專業倫理｜第三部分：收入、生產力與成長循環｜V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&amp;family=Noto+Sans+TC:wght@400;500;600;700;800;900&amp;family=Noto+Serif+TC:wght@600;700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS｜延續 A 版溫暖編輯風
+       =========================================== */
+    :root{
+      --stage-bg:#272b27;--slide-bg:#f2eadc;--paper:#f2eadc;--paper-deep:#e7dcc9;
+      --ink:#162d24;--ink-2:#315246;--muted:#667069;--coral:#e65e43;
+      --sage:#7a9a7d;--sage-light:#c9d7c9;--sun:#f2c94c;--blue:#8eb1bf;
+      --cream:#fffaf0;--rule:rgba(22,45,36,.24);--ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --font-display:"Fraunces","Noto Serif TC",serif;
+      --font-body:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff)}
+    .slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff)}
+    .slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+    img,video,canvas,svg{max-width:100%;max-height:100%}
+    .deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+    @media print{
+      html,body{width:1920px;height:auto;overflow:visible;background:#fff}
+      .deck-viewport{position:static;overflow:visible;background:#fff}
+      .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
+      .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
+      .slide:last-child{break-after:auto;page-break-after:auto}.deck-controls{display:none!important}
+    }
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+    /* ===========================================
+       RESET AND NO-JAVASCRIPT FALLBACK
+       =========================================== */
+    *{box-sizing:border-box}body{color:var(--ink);font-family:var(--font-body)}button,a{color:inherit;font:inherit}button{cursor:pointer}
+    body:not(.js-ready) .slide:first-child,body:not(.js-ready) .slide:target{visibility:visible;opacity:1;pointer-events:auto}
+    body:not(.js-ready) .slide:target{z-index:5}body:not(.js-ready) .deck-stage{transform:scale(.25)}
+    @media (min-width:800px) and (min-height:450px){body:not(.js-ready) .deck-stage{transform:scale(.4)}}
+    @media (min-width:960px) and (min-height:540px){body:not(.js-ready) .deck-stage{transform:scale(.5)}}
+    @media (min-width:1024px) and (min-height:576px){body:not(.js-ready) .deck-stage{transform:scale(.533333)}}
+    @media (min-width:1280px) and (min-height:720px){body:not(.js-ready) .deck-stage{transform:scale(.666667)}}
+    @media (min-width:1366px) and (min-height:768px){body:not(.js-ready) .deck-stage{transform:scale(.71)}}
+    @media (min-width:1600px) and (min-height:900px){body:not(.js-ready) .deck-stage{transform:scale(.833333)}}
+    @media (min-width:1920px) and (min-height:1080px){body:not(.js-ready) .deck-stage{transform:scale(1)}}
+    body.js-ready .fallback-controls{display:none}body.js-ready .deck-controls,body.js-ready .progress{display:flex}
+
+    /* ===========================================
+       SLIDE SURFACE AND SHARED CHROME
+       =========================================== */
+    .slide{color:var(--ink);background:radial-gradient(circle at 84% 12%,rgba(242,201,76,.16),transparent 20%),radial-gradient(circle at 94% 88%,rgba(122,154,125,.14),transparent 24%),var(--paper);transition:opacity .28s ease}
+    .slide::before{content:"";position:absolute;inset:42px;border:1px solid var(--rule);pointer-events:none}
+    .slide.dark{color:var(--cream);background:radial-gradient(circle at 84% 22%,rgba(230,94,67,.22),transparent 24%),radial-gradient(circle at 16% 86%,rgba(122,154,125,.18),transparent 22%),var(--ink)}
+    .slide.dark::before{border-color:rgba(255,250,240,.24)}
+    .masthead{position:absolute;left:92px;right:92px;top:68px;z-index:4;display:flex;align-items:center;justify-content:space-between;min-height:40px;padding-bottom:18px;border-bottom:2px solid currentColor;font:800 20px/1 var(--font-body);letter-spacing:.11em}
+    .masthead .chapter{color:var(--coral)}.dark .masthead .chapter{color:var(--sun)}
+    .frame{position:absolute;left:112px;right:112px;top:158px;bottom:100px;z-index:3}
+    .page-no{position:absolute;right:78px;bottom:62px;z-index:6;font:900 18px/1 var(--font-body);letter-spacing:.12em}
+    .source{position:absolute;left:112px;bottom:61px;max-width:1450px;color:var(--muted);font:500 17px/1.25 var(--font-body)}.dark .source{color:rgba(255,250,240,.62)}
+    .eyebrow{margin:0 0 18px;color:var(--coral);font:900 22px/1.2 var(--font-body);letter-spacing:.13em}.dark .eyebrow{color:var(--sun)}
+    h1,h2,h3,p{margin-top:0}.title{max-width:1540px;margin:0;font:900 76px/1.12 var(--font-display);letter-spacing:-.035em}
+    .lead{max-width:1320px;margin:26px 0 0;color:var(--ink-2);font:600 31px/1.55 var(--font-body)}.dark .lead{color:rgba(255,250,240,.76)}
+    .accent{color:var(--coral)}.dark .accent{color:var(--sun)}
+
+    /* ===========================================
+       MOTION SYSTEM
+       =========================================== */
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .62s var(--ease-out-expo),transform .62s var(--ease-out-expo)}
+    .reveal-left{opacity:0;transform:translateX(-44px);transition:opacity .72s var(--ease-out-expo),transform .72s var(--ease-out-expo)}
+    .reveal-scale{opacity:0;transform:scale(.9);transition:opacity .68s var(--ease-out-expo),transform .68s var(--ease-out-expo)}
+    .slide.visible .reveal,.slide.visible .reveal-left,.slide.visible .reveal-scale,.slide:target .reveal,.slide:target .reveal-left,.slide:target .reveal-scale{opacity:1;transform:none}
+    .delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}.delay-5{transition-delay:.5s}
+
+    /* ===========================================
+       COVER AND OPENING QUESTION
+       =========================================== */
+    .cover .copy{position:absolute;left:118px;top:205px;width:1110px}.cover .kicker{margin:0 0 28px;color:var(--coral);font:900 24px/1 var(--font-body);letter-spacing:.13em}
+    .cover h1{margin:0;font:900 132px/.98 var(--font-display);letter-spacing:-.055em}.cover h1 em{color:var(--coral);font-style:italic}
+    .cover .subtitle{width:900px;margin:38px 0 0 8px;font:650 34px/1.55 var(--font-body)}
+    .route-note{position:absolute;left:126px;bottom:104px;display:flex;align-items:center;gap:20px;color:var(--muted);font:650 22px/1 var(--font-body)}.route-note i{width:60px;height:3px;background:var(--coral)}
+    .value-meter{position:absolute;right:132px;top:208px;width:500px;height:610px;border:3px solid var(--ink);background:rgba(255,250,240,.45);transform:rotate(1deg)}
+    .value-meter::before{content:"";position:absolute;left:76px;right:76px;bottom:86px;height:360px;background:linear-gradient(to top,var(--coral) 0 28%,var(--sun) 28% 54%,var(--sage) 54% 78%,var(--ink) 78% 100%);clip-path:polygon(0 100%,0 88%,28% 88%,28% 66%,55% 66%,55% 42%,78% 42%,78% 12%,100% 12%,100% 100%)}
+    .value-meter b{position:absolute;left:0;right:0;top:42px;text-align:center;font:900 31px/1.2 var(--font-display)}
+    .value-meter span{position:absolute;left:0;right:0;bottom:28px;text-align:center;font:800 19px/1 var(--font-body);letter-spacing:.12em}
+    .question-stage{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:52px}.person-card{position:relative;min-height:470px;padding:44px;border:3px solid currentColor;background:rgba(255,250,240,.08)}
+    .person-card.light{background:var(--cream);color:var(--ink)}.person-card .salary{font:900 94px/1 var(--font-display);letter-spacing:-.04em}.person-card h3{margin:34px 0 14px;font:900 40px/1.15 var(--font-display)}.person-card p{color:inherit;opacity:.78;font:600 25px/1.5 var(--font-body)}
+    .question-mark{position:absolute;left:50%;top:57%;z-index:5;display:grid;place-items:center;width:100px;height:100px;border:3px solid var(--ink);border-radius:50%;background:var(--sun);color:var(--ink);font:900 56px/1 var(--font-display);transform:translate(-50%,-50%) rotate(-6deg)}
+
+    /* ===========================================
+       CARDS, SPLITS, AND MARKET FACTORS
+       =========================================== */
+    .cards{display:grid;gap:28px;margin-top:46px}.cards.two{grid-template-columns:repeat(2,1fr)}.cards.three{grid-template-columns:repeat(3,1fr)}
+    .card{position:relative;min-height:250px;padding:34px 32px 28px;border:2px solid var(--ink);background:rgba(255,250,240,.6)}.card::before{content:"";position:absolute;left:-2px;top:-2px;width:84px;height:10px;background:var(--card-color,var(--coral))}
+    .card .no{margin-bottom:20px;color:var(--coral);font:900 17px/1 var(--font-body);letter-spacing:.12em}.card h3{margin:0 0 14px;font:900 38px/1.18 var(--font-display)}.card p,.card li{margin:0;color:var(--ink-2);font:600 24px/1.48 var(--font-body)}
+    .dark .card{border-color:var(--cream);background:rgba(255,250,240,.07)}.dark .card p,.dark .card li{color:rgba(255,250,240,.76)}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}.split-panel{min-height:430px;padding:40px;border-top:9px solid var(--panel-color,var(--coral));background:rgba(255,250,240,.62)}
+    .split-panel h3{margin:0 0 22px;font:900 50px/1.15 var(--font-display)}.split-panel p,.split-panel li{color:var(--ink-2);font:600 27px/1.5 var(--font-body)}.split-panel ul{margin:0;padding-left:30px}.split-panel li{margin-bottom:14px}
+    .market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:42px}.market-card{min-height:220px;padding:28px;border:2px solid var(--ink);background:var(--cream)}
+    .market-card:nth-child(2),.market-card:nth-child(5){background:var(--paper-deep)}.market-card:nth-child(3),.market-card:nth-child(6){background:var(--sage-light)}
+    .market-card b{display:block;margin-bottom:14px;color:var(--coral);font:900 22px/1 var(--font-body)}.market-card h3{margin:0 0 10px;font:900 32px/1.16 var(--font-display)}.market-card p{margin:0;color:var(--ink-2);font:600 21px/1.45 var(--font-body)}
+
+    /* ===========================================
+       PRODUCTIVITY FORMULAS AND CHAINS
+       =========================================== */
+    .formula{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:86px}.formula-node{display:grid;place-items:center;width:300px;height:250px;padding:26px;border:3px solid var(--ink);background:var(--cream);text-align:center;font:900 35px/1.25 var(--font-display)}
+    .formula-node:nth-of-type(2){background:var(--paper-deep)}.formula-node:nth-of-type(3){background:var(--sage-light)}.formula-node.result{color:var(--cream);background:var(--ink)}.formula-op{color:var(--coral);font:900 54px/1 var(--font-body)}
+    .capital-map{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:72px}.capital-node{position:relative;min-height:350px;padding:34px 28px;border:3px solid var(--ink);background:var(--cream)}
+    .capital-node .icon{font-size:78px}.capital-node h3{margin:20px 0 14px;font:900 37px/1.15 var(--font-display)}.capital-node p{margin:0;color:var(--ink-2);font:600 23px/1.48 var(--font-body)}
+    .value-chain{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:105px}.chain-node{display:grid;place-items:center;width:330px;height:250px;padding:24px;border:3px solid var(--ink);background:var(--cream);text-align:center}.chain-node:nth-of-type(2){background:var(--paper-deep)}.chain-node:nth-of-type(3){background:var(--sage-light)}.chain-node:nth-of-type(4){background:var(--sun)}
+    .chain-node b{display:block;margin-bottom:12px;font:900 44px/1 var(--font-display)}.chain-node span{font:650 23px/1.4 var(--font-body)}.chain-arrow{color:var(--coral);font:900 48px/1 var(--font-body)}
+    .equation{margin:78px auto 0;max-width:1510px;padding:54px;border-top:4px solid var(--cream);border-bottom:4px solid var(--cream);text-align:center;font:900 62px/1.35 var(--font-display)}
+    .equation small{display:block;margin-top:30px;color:rgba(255,250,240,.72);font:650 25px/1.5 var(--font-body)}
+
+    /* ===========================================
+       ACTIVITIES AND EVIDENCE
+       =========================================== */
+    .scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:48px}.scenario{min-height:400px;padding:34px;border:3px solid var(--ink);background:var(--cream)}
+    .scenario:nth-child(2){background:var(--paper-deep)}.scenario:nth-child(3){background:var(--sage-light)}.scenario b{display:block;margin-bottom:18px;color:var(--coral);font:900 18px/1 var(--font-body);letter-spacing:.1em}.scenario h3{margin:0 0 18px;font:900 37px/1.18 var(--font-display)}.scenario p{margin:0;color:var(--ink-2);font:600 23px/1.5 var(--font-body)}
+    .lever-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:58px}.lever{min-height:350px;padding:34px 28px;border:3px solid var(--ink);background:var(--cream)}
+    .lever:nth-child(2){background:var(--paper-deep)}.lever:nth-child(3){background:var(--sage-light)}.lever:nth-child(4){background:var(--sun)}.lever .num{font:900 58px/1 var(--font-display)}.lever h3{margin:34px 0 14px;font:900 36px/1.1 var(--font-display)}.lever p{margin:0;color:var(--ink-2);font:600 22px/1.45 var(--font-body)}
+    .evidence-board{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;margin-top:48px}.evidence-stack{display:grid;gap:20px}.evidence-item{display:grid;grid-template-columns:84px 1fr;gap:22px;align-items:center;padding:20px 24px;border:2px solid var(--ink);background:var(--cream)}
+    .evidence-item b{display:grid;place-items:center;width:66px;height:66px;border-radius:50%;color:var(--cream);background:var(--coral);font:900 24px/1 var(--font-body)}.evidence-item span{font:700 25px/1.38 var(--font-body)}
+    .proof-card{display:flex;flex-direction:column;justify-content:center;min-height:480px;padding:48px;border:3px solid var(--ink);background:var(--sun);box-shadow:18px 18px 0 var(--ink)}.proof-card h3{margin:0 0 24px;font:900 54px/1.15 var(--font-display)}.proof-card p{margin:0;font:650 28px/1.55 var(--font-body)}
+
+    /* ===========================================
+       VIDEO SLIDES
+       =========================================== */
+    .video-grid{display:grid;grid-template-columns:1.5fr .74fr;gap:38px;margin-top:30px}.video-shell{position:relative;height:505px;overflow:hidden;border:3px solid var(--cream);background:#0c1712;box-shadow:14px 14px 0 rgba(242,201,76,.18)}.video-shell iframe{width:100%;height:100%;border:0}
+    .load-video{width:100%;height:100%;border:0;color:var(--cream);background:radial-gradient(circle at 50% 50%,rgba(230,94,67,.26),transparent 26%),repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 2px,transparent 2px,transparent 14px),#0c1712}.play-icon{display:grid;place-items:center;width:116px;height:116px;margin:0 auto 24px;border:3px solid var(--cream);border-radius:50%;color:var(--ink);background:var(--sun);font-size:44px}.load-video strong{display:block;padding:0 60px;font:800 27px/1.3 var(--font-body)}
+    .watch-task{padding:28px;border:2px solid var(--cream);background:rgba(255,250,240,.08)}.watch-task h3{margin:0 0 20px;color:var(--sun);font:900 31px/1.2 var(--font-display)}.watch-task ol{margin:0;padding-left:28px}.watch-task li{margin:0 0 16px;font:600 22px/1.48 var(--font-body)}
+    .video-link{display:inline-block;margin-top:18px;padding-bottom:5px;border-bottom:2px solid var(--sun);color:var(--sun);text-decoration:none;font:800 18px/1.2 var(--font-body)}.video-meta{display:flex;gap:18px;align-items:center;margin-top:18px;color:rgba(255,250,240,.72);font:600 18px/1 var(--font-body)}.video-meta b{padding:8px 13px;color:var(--ink);background:var(--sun)}
+    .discussion-prompt{margin:82px auto 0;max-width:1510px;font:900 72px/1.25 var(--font-display);letter-spacing:-.035em;text-align:center}.discussion-prompt::before{content:"討論";display:block;width:max-content;margin:0 auto 34px;padding:12px 22px;color:var(--ink);background:var(--sun);font:900 19px/1 var(--font-body);letter-spacing:.16em;transform:rotate(-2deg)}
+    .discussion-hint{margin:38px auto 0;max-width:1200px;color:rgba(255,250,240,.7);font:600 25px/1.5 var(--font-body);text-align:center}
+
+    /* ===========================================
+       GROWTH LOOPS AND ACTION PLAN
+       =========================================== */
+    .loop-wrap{position:relative;width:1260px;height:560px;margin:34px auto 0}.loop-node{position:absolute;display:grid;place-items:center;width:260px;height:140px;padding:18px;border:3px solid var(--ink);background:var(--cream);text-align:center;font:900 30px/1.2 var(--font-display)}
+    .loop-node.n1{left:500px;top:0;background:var(--sun)}.loop-node.n2{right:90px;top:180px;background:var(--sage-light)}.loop-node.n3{right:290px;bottom:0;background:var(--cream)}.loop-node.n4{left:290px;bottom:0;background:var(--paper-deep)}.loop-node.n5{left:90px;top:180px;background:#ead0c7}
+    .loop-center{position:absolute;left:50%;top:51%;display:grid;place-items:center;width:250px;height:250px;border-radius:50%;color:var(--cream);background:var(--ink);text-align:center;font:900 34px/1.2 var(--font-display);transform:translate(-50%,-50%)}
+    .loop-arrow{position:absolute;color:var(--coral);font:900 55px/1 var(--font-body)}.a1{right:300px;top:90px;transform:rotate(40deg)}.a2{right:130px;bottom:135px;transform:rotate(98deg)}.a3{left:475px;bottom:0;transform:rotate(180deg)}.a4{left:150px;bottom:135px;transform:rotate(245deg)}.a5{left:340px;top:90px;transform:rotate(315deg)}
+    .negative .loop-node{background:rgba(255,250,240,.08);border-color:var(--cream)}.negative .loop-node.n1{background:var(--coral)}.negative .loop-center{color:var(--ink);background:var(--sun)}.negative .loop-arrow{color:var(--sun)}
+    .break-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:60px}.break-card{min-height:390px;padding:38px;border:3px solid var(--ink);background:var(--cream)}.break-card:nth-child(2){background:var(--sage-light)}.break-card:nth-child(3){background:var(--sun)}.break-card b{display:block;margin-bottom:28px;color:var(--coral);font:900 20px/1 var(--font-body)}.break-card h3{margin:0 0 18px;font:900 42px/1.12 var(--font-display)}.break-card p{margin:0;color:var(--ink-2);font:600 24px/1.5 var(--font-body)}
+    .action-sheet{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px}.action-box{min-height:220px;padding:30px 34px;border:3px solid var(--ink);background:var(--cream)}.action-box:nth-child(2){background:var(--paper-deep)}.action-box:nth-child(3){background:var(--sage-light)}.action-box:nth-child(4){background:var(--sun)}.action-box b{display:block;margin-bottom:16px;color:var(--coral);font:900 17px/1 var(--font-body);letter-spacing:.12em}.action-box h3{margin:0 0 10px;font:900 35px/1.15 var(--font-display)}.action-box p{margin:0;color:var(--ink-2);font:600 22px/1.45 var(--font-body)}
+    .final-path{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:105px}.final-node{display:grid;place-items:center;width:275px;height:235px;padding:24px;border:3px solid var(--cream);background:rgba(255,250,240,.06);text-align:center;font:900 30px/1.25 var(--font-display)}.final-node:nth-of-type(2){background:rgba(142,177,191,.2)}.final-node:nth-of-type(3){background:rgba(122,154,125,.24)}.final-node:nth-of-type(4){color:var(--ink);background:var(--sun)}.final-arrow{color:var(--coral);font:900 46px/1 var(--font-body)}
+
+    /* ===========================================
+       LIVE CONTROLS, OVERLAYS, AND EDITING
+       =========================================== */
+    .fallback-controls{position:absolute;left:50%;bottom:22px;z-index:20;display:flex;align-items:center;gap:18px;transform:translateX(-50%)}.fallback-controls a,.fallback-controls span{min-width:74px;padding:10px 14px;border:1px solid currentColor;background:var(--paper);color:var(--ink);text-align:center;text-decoration:none;font:800 16px/1 var(--font-body)}.dark .fallback-controls a,.dark .fallback-controls span{color:var(--cream);background:var(--ink)}
+    .deck-controls{display:none;align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(18,35,29,.92);box-shadow:0 10px 30px rgba(0,0,0,.25)}.deck-controls button{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;color:var(--cream);background:transparent}.deck-controls button:hover{color:var(--ink);background:var(--sun)}.deck-controls .counter{min-width:92px;color:var(--cream);text-align:center;font:800 15px/1 var(--font-body)}
+    .progress{position:fixed;left:0;bottom:0;z-index:1100;display:none;width:0;height:4px;background:var(--coral);transition:width .28s ease}.overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:40px;background:rgba(8,20,15,.88)}.overlay.open{display:flex}.overlay-panel{position:relative;width:min(1040px,92vw);max-height:88vh;overflow:auto;padding:42px;border:2px solid var(--ink);background:var(--paper);box-shadow:18px 18px 0 rgba(242,201,76,.42)}.overlay-panel h2{margin:0 0 20px;font:900 42px/1.15 var(--font-display)}.overlay-panel p,.overlay-panel li{font:600 21px/1.5 var(--font-body)}.overlay-close{position:absolute;right:18px;top:18px;width:42px;height:42px;border:2px solid var(--ink);background:var(--sun);font:900 24px/1 var(--font-body)}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.menu-grid button{padding:13px 16px;border:1px solid var(--ink);background:transparent;text-align:left;font:700 17px/1.25 var(--font-body)}.menu-grid button:hover{background:var(--sage-light)}.teacher-trigger{position:absolute;right:112px;bottom:58px;z-index:8;display:none;padding:10px 15px;border:2px solid var(--ink);background:var(--sun);font:900 16px/1 var(--font-body);transform:rotate(-1deg)}.slide.has-note .teacher-trigger{display:block}
+    .edit-hotzone{position:fixed;left:0;top:0;z-index:10000;width:80px;height:80px;cursor:pointer}.edit-toggle{position:fixed;left:16px;top:16px;z-index:10001;width:48px;height:48px;border:1px solid rgba(255,255,255,.38);border-radius:50%;color:var(--cream);background:var(--ink);opacity:0;pointer-events:none;transition:opacity .3s ease}.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}.edit-toolbar{position:fixed;left:76px;top:17px;z-index:10001;display:none;gap:8px}.edit-toolbar.show{display:flex}.edit-toolbar button{padding:12px 16px;border:1px solid rgba(255,255,255,.38);color:var(--cream);background:var(--ink);font:700 14px/1 var(--font-body)}body.editing [data-editable]{outline:2px dashed var(--coral);outline-offset:5px;cursor:text}.legacy-note{position:fixed;left:12px;right:12px;top:12px;z-index:9000;padding:10px;color:var(--cream);background:var(--ink);text-align:center;font:700 16px/1.4 var(--font-body)}
+    @media print{.progress,.overlay,.edit-hotzone,.edit-toggle,.edit-toolbar,.teacher-trigger,.fallback-controls,.legacy-note{display:none!important}}
+  </style>
+  <style>
+    /* ===========================================
+       PUBLIC SITE HOME LINK
+       =========================================== */
+    .site-home-link {
+      position: fixed;
+      top: 16px;
+      left: 92px;
+      z-index: 9900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 999px;
+      color: #fffaf0;
+      background: rgba(18,35,29,.9);
+      box-shadow: 0 8px 24px rgba(0,0,0,.24);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font: 700 14px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      text-decoration: none;
+      opacity: .78;
+      transition: opacity .2s ease, background .2s ease;
+    }
+    .site-home-link:hover,
+    .site-home-link:focus-visible {
+      opacity: 1;
+      background: rgba(9,24,38,.96);
+      outline: 3px solid rgba(255,255,255,.7);
+      outline-offset: 2px;
+    }
+    @media (max-width: 520px) {
+      .site-home-link {
+        top: 10px;
+        left: 88px;
+        min-height: 40px;
+        padding: 8px 11px;
+        font-size: 13px;
+      }
+    }
+    @media print {
+      .site-home-link { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="site-home-link" href="./" aria-label="返回龔鴻裕教學與教材首頁">← 教材首頁</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+
+      <!-- 01｜收入從哪裡來？ -->
+      <section id="slide-1" class="slide cover active visible" data-title="收入從哪裡來？">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">第三部分｜PRODUCTIVITY &amp; VALUE</span></header>
+        <div class="copy"><p class="kicker reveal" data-editable>為什麼有人賺得多，有人賺得少？</p><h1 class="reveal delay-1" data-editable>收入從哪裡來？<br><em>生產力</em>、價值<br>與成長循環</h1><p class="subtitle reveal delay-2" data-editable>收入不是單靠努力決定；它是能力、市場與制度共同作用的結果。</p></div>
+        <div class="route-note reveal delay-3"><i></i><span data-editable>看懂生產力如何形成　→　如何轉成收入　→　如何透過投資持續累積</span></div>
+        <div class="value-meter reveal-scale delay-2" aria-hidden="true"><b>職涯價值<br>不是一次跳躍</b><span>KNOWLEDGE × SKILL × EXPERIENCE</span></div>
+        <nav class="fallback-controls"><span>←</span><span>01 / 33</span><a href="#slide-2">→</a></nav>
+      </section>
+
+      <!-- 02｜同樣工作八小時，收入為何不同？ -->
+      <section id="slide-2" class="slide dark has-note" data-title="同樣工作八小時，收入為何不同？">
+        <header class="masthead"><span>從一個不舒服的問題開始</span><span class="chapter">OPENING QUESTION</span></header>
+        <div class="frame"><p class="eyebrow reveal">先不要急著回答「誰比較努力」</p><h2 class="title reveal delay-1" data-editable>同樣工作八小時，<br>收入為什麼可能差很多？</h2><div class="question-stage reveal-scale delay-2"><article class="person-card"><div class="salary">32K</div><h3 data-editable>工作忙、責任多</h3><p data-editable>服務許多人，每天幾乎沒有空檔。</p></article><article class="person-card light"><div class="salary">120K</div><h3 data-editable>解決重要而困難的問題</h3><p data-editable>工作時間未必更長，但決策影響更大。</p></article><div class="question-mark">?</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>先蒐集學生直覺</h2><p>把答案寫在黑板上，常見會有：學歷、能力、產業、公司、運氣、人脈、努力、責任。先不判斷對錯，後面逐一分類。</p></template>
+        <span class="page-no">02</span><nav class="fallback-controls"><a href="#slide-1">←</a><span>02 / 33</span><a href="#slide-3">→</a></nav>
+      </section>
+
+      <!-- 03｜薪資不等於人的價值 -->
+      <section id="slide-3" class="slide" data-title="薪資不等於人的價值">
+        <header class="masthead"><span>先畫出倫理界線</span><span class="chapter">WORTH ≠ WAGE</span></header>
+        <div class="frame"><p class="eyebrow reveal">這一部分最重要的前提</p><h2 class="title reveal delay-1" data-editable>薪資反映某個市場願意付出的價格，<br><span class="accent">不等於一個人的價值。</span></h2><div class="split reveal delay-2"><article class="split-panel" style="--panel-color:var(--coral)"><h3 data-editable>市場願意開出的薪資</h3><ul><li data-editable>需求與供給</li><li data-editable>企業的獲利與付薪能力</li><li data-editable>制度、談判與機會</li></ul></article><article class="split-panel" style="--panel-color:var(--sage)"><h3 data-editable>人的價值</h3><ul><li data-editable>尊嚴與基本權利</li><li data-editable>照顧、關係與社會貢獻</li><li data-editable>不能只用薪資排序</li></ul></article></div></div>
+        <span class="page-no">03</span><nav class="fallback-controls"><a href="#slide-2">←</a><span>03 / 33</span><a href="#slide-4">→</a></nav>
+      </section>
+
+      <!-- 04｜收入差距要用兩個鏡頭看 -->
+      <section id="slide-4" class="slide" data-title="收入差距要用兩個鏡頭看">
+        <header class="masthead"><span>收入差距的雙重視角</span><span class="chapter">TWO LENSES</span></header>
+        <div class="frame"><p class="eyebrow reveal">只談其中一邊，都會失真</p><h2 class="title reveal delay-1" data-editable>收入差距，要同時看<span class="accent">個人</span>與<span class="accent">結構</span>。</h2><div class="cards two reveal delay-2"><article class="card" style="--card-color:var(--coral)"><p class="no">LENS 01</p><h3 data-editable>個人可以累積什麼？</h3><p data-editable>知識、技術、經驗、判斷、合作能力，以及可以被看見的成果。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">LENS 02</p><h3 data-editable>人身處什麼環境？</h3><p data-editable>所處產業、企業獲利、勞動制度、家庭資源、景氣、機會與運氣。</p></article></div></div>
+        <span class="page-no">04</span><nav class="fallback-controls"><a href="#slide-3">←</a><span>04 / 33</span><a href="#slide-5">→</a></nav>
+      </section>
+
+      <!-- 05｜影片：產業薪資兩極化怎麼辦？ -->
+      <section id="slide-5" class="slide dark has-note" data-title="影片：產業薪資兩極化怎麼辦？">
+        <header class="masthead"><span>影片一｜市場與產業</span><span class="chapter">5:28</span></header>
+        <div class="frame"><p class="eyebrow reveal">公視 P# 新聞實驗室</p><h2 class="title reveal delay-1" data-editable>近七成勞工領不到平均月薪？<br>產業薪資兩極化怎麼辦？</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="xo_zmG66w_4" data-video-title="公視P#：產業薪資兩極化"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放公視 P# 影片</strong></button></div><aside><div class="watch-task"><h3>觀看時請找三件事</h3><ol><li data-editable>哪幾個產業拉高平均薪資？</li><li data-editable>產業獲利能力如何影響薪資？</li><li data-editable>個人努力能解決哪些問題？不能解決哪些？</li></ol></div><div class="video-meta"><b>繁體中文</b><span>資料圖表＋訪談</span></div><a class="video-link" href="https://www.youtube.com/watch?v=xo_zmG66w_4" target="_blank" rel="noopener">YouTube 無法嵌入時，開啟原始影片</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>影片定位</h2><p>這支不是用來證明任何單一政策立場，而是讓學生看見：整體經濟成長、產業獲利與個人薪資之間並不會自動同步。</p></template>
+        <span class="page-no">05</span><nav class="fallback-controls"><a href="#slide-4">←</a><span>05 / 33</span><a href="#slide-6">→</a></nav>
+      </section>
+
+      <!-- 06｜討論：生產力提高，薪資一定增加嗎？ -->
+      <section id="slide-6" class="slide dark has-note" data-title="討論：生產力提高，薪資一定增加嗎？">
+        <header class="masthead"><span>影片後討論</span><span class="chapter">THINK · PAIR · SHARE</span></header>
+        <div class="frame"><p class="discussion-prompt reveal" data-editable>如果一個人工作效率提高，<br>他的薪資就一定會增加嗎？</p><p class="discussion-hint reveal delay-1" data-editable>請分成「個人能控制」、「組織能決定」、「產業與制度影響」三層來回答。</p></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>建議時間：4–6 分鐘</h2><p>先兩人討論，再邀請三組回答。追問：產出增加後，誰看得見？誰擁有成果？誰有權決定分配？</p></template>
+        <span class="page-no">06</span><nav class="fallback-controls"><a href="#slide-5">←</a><span>06 / 33</span><a href="#slide-7">→</a></nav>
+      </section>
+
+      <!-- 07｜什麼是生產力？ -->
+      <section id="slide-7" class="slide" data-title="什麼是生產力？">
+        <header class="masthead"><span>回到核心概念</span><span class="chapter">PRODUCTIVITY</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是把自己逼得更忙</p><h2 class="title reveal delay-1" data-editable>生產力，是用有限資源，<br>創造更有用的產出與成果。</h2><div class="cards two reveal delay-2"><article class="card"><p class="no">不是</p><h3 data-editable>做更多事情</h3><p data-editable>待辦清單變長、工時增加、訊息回得更快，不一定產生更好的成果。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">而是</p><h3 data-editable>把資源用在刀口上</h3><p data-editable>運用更好的知識、方法與工具，解決真正重要的問題。</p></article></div></div>
+        <span class="page-no">07</span><nav class="fallback-controls"><a href="#slide-6">←</a><span>07 / 33</span><a href="#slide-8">→</a></nav>
+      </section>
+
+      <!-- 08｜生產力的組成公式 -->
+      <section id="slide-8" class="slide has-note" data-title="生產力的組成公式">
+        <header class="masthead"><span>保留原有的生產力架構</span><span class="chapter">CORE MODEL</span></header>
+        <div class="frame"><p class="eyebrow reveal">生產力不是天生固定</p><h2 class="title reveal delay-1" data-editable>哪些東西共同形成一個人的生產力？</h2><div class="formula reveal-scale delay-2"><div class="formula-node" data-editable>勞動力<br><small>時間・體力・投入</small></div><span class="formula-op">＋</span><div class="formula-node" data-editable>知識・技術・經驗</div><span class="formula-op">＋</span><div class="formula-node" data-editable>資本<br><small>工具・資源・組織</small></div><span class="formula-op">＝</span><div class="formula-node result" data-editable>生產力</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>老師原有論述的核心頁</h2><p>這裡先完整保留原架構。補充時強調三項會互相放大：同一個人使用更好的知識與工具，產出可能大幅不同。</p></template>
+        <span class="page-no">08</span><nav class="fallback-controls"><a href="#slide-7">←</a><span>08 / 33</span><a href="#slide-9">→</a></nav>
+      </section>
+
+      <!-- 09｜勞動力不只是工作時間 -->
+      <section id="slide-9" class="slide has-note" data-title="勞動力不只是工作時間">
+        <header class="masthead"><span>生產力要素一｜勞動力</span><span class="chapter">LABOR CAPACITY</span></header>
+        <div class="frame"><p class="eyebrow reveal">人能投入工作的基本條件</p><h2 class="title reveal delay-1" data-editable>勞動力不只是工時，<br>還包括你能否<span class="accent">持續投入</span>。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">時間</p><h3 data-editable>可以投入多少？</h3><p data-editable>可運用的時間、工作節奏，以及能否長期維持。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">身體</p><h3 data-editable>身體承受得了嗎？</h3><p data-editable>健康、體力、反應速度與肢體協調，會影響不同工作的表現。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">心力</p><h3 data-editable>能不能專注？</h3><p data-editable>注意力、情緒調節與恢復能力，也是工作投入的一部分。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>把原來的「青春與身體條件」說得更完整</h2><p>某些工作確實會受年齡、外貌、體能或肢體條件影響；但這是勞動市場的交換條件，不等於人的價值。也可帶學生討論其中的公平與倫理問題。</p></template>
+        <span class="page-no">09</span><nav class="fallback-controls"><a href="#slide-8">←</a><span>09 / 33</span><a href="#slide-10">→</a></nav>
+      </section>
+
+      <!-- 10｜知識、技術與經驗有什麼不同？ -->
+      <section id="slide-10" class="slide has-note" data-title="知識、技術與經驗有什麼不同？">
+        <header class="masthead"><span>生產力要素二｜能力</span><span class="chapter">KNOW · DO · JUDGE</span></header>
+        <div class="frame"><p class="eyebrow reveal">三者都重要，但形成方式不同</p><h2 class="title reveal delay-1" data-editable>知識、技術、經驗，<br>不是同一件事。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">KNOW</p><h3 data-editable>知識來自學習</h3><p data-editable>閱讀、上課與觀察，讓你知道概念、原理與可能的做法。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">DO</p><h3 data-editable>技術來自練習</h3><p data-editable>反覆操作與修正，讓你不只知道，而且真正做得出來。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">JUDGE</p><h3 data-editable>經驗來自實作</h3><p data-editable>遇過真實情境並加以反思，才能在變化中做出判斷。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>可用駕駛或企劃當例子</h2><p>讀完交通規則是知識；能把車開好是技術；遇到天雨、塞車與突發狀況仍能判斷，才逐漸形成經驗。三者不能互相取代。</p></template>
+        <span class="page-no">10</span><nav class="fallback-controls"><a href="#slide-9">←</a><span>10 / 33</span><a href="#slide-11">→</a></nav>
+      </section>
+
+      <!-- 11｜資本不只是錢 -->
+      <section id="slide-11" class="slide" data-title="資本不只是錢">
+        <header class="masthead"><span>生產力要素三｜資本</span><span class="chapter">LEVERAGE</span></header>
+        <div class="frame"><p class="eyebrow reveal">讓相同投入產生不同結果的槓桿</p><h2 class="title reveal delay-1" data-editable>資本不只是錢，也是讓能力發揮的<span class="accent">槓桿</span>。</h2><div class="capital-map reveal delay-2"><article class="capital-node"><div class="icon">🛠</div><h3 data-editable>有形資本</h3><p data-editable>資金、設備、空間與可直接使用的工具。</p></article><article class="capital-node"><div class="icon">💡</div><h3 data-editable>無形資本</h3><p data-editable>專利、著作、方法、資料、品牌與營業祕密。</p></article><article class="capital-node"><div class="icon">🤝</div><h3 data-editable>社會資本</h3><p data-editable>信任、人脈與合作關係，以及取得資訊與資源的管道。</p></article><article class="capital-node"><div class="icon">🏢</div><h3 data-editable>組織與平台</h3><p data-editable>流程、團隊、AI 與發布管道，讓成果能被放大。</p></article></div></div>
+        <span class="page-no">11</span><nav class="fallback-controls"><a href="#slide-10">←</a><span>11 / 33</span><a href="#slide-12">→</a></nav>
+      </section>
+
+      <!-- 12｜生產力要素會彼此放大 -->
+      <section id="slide-12" class="slide dark has-note" data-title="生產力要素會彼此放大">
+        <header class="masthead"><span>從加法走向乘法</span><span class="chapter">MULTIPLIER EFFECT</span></header>
+        <div class="frame"><p class="eyebrow reveal">原來的公式是一張地圖，不是一條固定算式</p><h2 class="title reveal delay-1" data-editable>生產力不只是相加，<br>各項要素還會<span class="accent">彼此放大</span>。</h2><div class="equation reveal delay-2" data-editable>同樣八小時 × 更好的知識與技術 × 合適的工具與合作<br><span class="accent">＝可能產生完全不同的成果</span><small>只有工具、不會使用，效果有限；只有能力、沒有資源，也可能難以發揮。</small></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>保留原模型，再加入一層解釋</h2><p>「勞動力＋知識／技術／經驗＋資本」適合幫學生盤點要素；這一頁再補充，要素之間其實有互補與放大效果。</p></template>
+        <span class="page-no">12</span><nav class="fallback-controls"><a href="#slide-11">←</a><span>12 / 33</span><a href="#slide-13">→</a></nav>
+      </section>
+
+      <!-- 13｜從投入走到價值 -->
+      <section id="slide-13" class="slide" data-title="從投入走到價值">
+        <header class="masthead"><span>生產力的完整路徑</span><span class="chapter">INPUT TO VALUE</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只停在「我很努力」</p><h2 class="title reveal delay-1" data-editable>一份工作要走到最後，<br>才看得見它創造的價值。</h2><div class="value-chain reveal-scale delay-2"><div class="chain-node"><div><b data-editable>投入</b><span data-editable>時間、人力、資源</span></div></div><span class="chain-arrow">→</span><div class="chain-node"><div><b data-editable>產出</b><span data-editable>完成的工作或產品</span></div></div><span class="chain-arrow">→</span><div class="chain-node"><div><b data-editable>成果</b><span data-editable>帶來的改變與改善</span></div></div><span class="chain-arrow">→</span><div class="chain-node"><div><b data-editable>價值</b><span data-editable>對他人有多重要</span></div></div></div></div>
+        <span class="page-no">13</span><nav class="fallback-controls"><a href="#slide-12">←</a><span>13 / 33</span><a href="#slide-14">→</a></nav>
+      </section>
+
+      <!-- 14｜忙碌，還是有生產力？ -->
+      <section id="slide-14" class="slide has-note" data-title="忙碌，還是有生產力？">
+        <header class="masthead"><span>課堂快問快答</span><span class="chapter">BUSY OR PRODUCTIVE?</span></header>
+        <div class="frame"><p class="eyebrow reveal">請判斷問題卡在哪一層</p><h2 class="title reveal delay-1" data-editable>忙碌，還是有生產力？</h2><div class="scenario-grid reveal delay-2"><article class="scenario"><b>情境 A</b><h3 data-editable>報告做了四十頁</h3><p data-editable>但沒有回答老師指定的問題。投入很多，產出很多，成果呢？</p></article><article class="scenario"><b>情境 B</b><h3 data-editable>一小時改善流程</h3><p data-editable>之後每位同事每天都少花二十分鐘。它創造了什麼價值？</p></article><article class="scenario"><b>情境 C</b><h3 data-editable>每天都在回訊息</h3><p data-editable>看起來很忙，但真正重要的工作一直沒有完成。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>三層回答</h2><p>A：產出沒有轉成成果；B：改善一次流程，之後可以持續受益；C：時間都被低價值活動占滿。請學生再補一個自己的例子。</p></template>
+        <span class="page-no">14</span><nav class="fallback-controls"><a href="#slide-13">←</a><span>14 / 33</span><a href="#slide-15">→</a></nav>
+      </section>
+
+      <!-- 15｜影片：提升時間價值 -->
+      <section id="slide-15" class="slide dark has-note" data-title="影片：提升時間價值">
+        <header class="masthead"><span>影片二｜個人生產力</span><span class="chapter">6:02</span></header>
+        <div class="frame"><p class="eyebrow reveal">Spark Liang 自我成長</p><h2 class="title reveal delay-1" data-editable>加薪不成？<br>那就提升時間價值</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="HqZrIHdnByY" data-video-title="Spark Liang：提升時間價值"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 Spark Liang 影片</strong></button></div><aside><div class="watch-task"><h3>觀看時請思考</h3><ol><li data-editable>工作更久，為什麼不一定更有價值？</li><li data-editable>哪些能力會提高單位時間的產出？</li><li data-editable>時間價值只由自己決定嗎？</li></ol></div><div class="video-meta"><b>繁體字幕</b><span>棚內拍攝</span></div><a class="video-link" href="https://www.youtube.com/watch?v=HqZrIHdnByY" target="_blank" rel="noopener">YouTube 無法嵌入時，開啟原始影片</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>避免把責任全放在個人</h2><p>影片之後要補充：提升時間價值是一種可行策略，但薪資仍受產業、組織與談判條件影響。</p></template>
+        <span class="page-no">15</span><nav class="fallback-controls"><a href="#slide-14">←</a><span>15 / 33</span><a href="#slide-16">→</a></nav>
+      </section>
+
+      <!-- 16｜討論：工作越久就越有價值嗎？ -->
+      <section id="slide-16" class="slide dark has-note" data-title="討論：工作越久就越有價值嗎？">
+        <header class="masthead"><span>影片後討論</span><span class="chapter">COMPARE</span></header>
+        <div class="frame"><p class="discussion-prompt reveal" data-editable>一個人每天工作十二小時，<br>就一定比工作八小時的人更有生產力嗎？</p><p class="discussion-hint reveal delay-1" data-editable>請用「投入、產出、成果、價值」四個詞來說明。</p></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>建議時間：3–5 分鐘</h2><p>不要把休息視為懶惰。可以追問：如果長工時造成錯誤、健康損耗與離職，真正的總產出是否反而下降？</p></template>
+        <span class="page-no">16</span><nav class="fallback-controls"><a href="#slide-15">←</a><span>16 / 33</span><a href="#slide-17">→</a></nav>
+      </section>
+
+      <!-- 17｜時間價值來自重要問題 -->
+      <section id="slide-17" class="slide dark" data-title="時間價值來自重要問題">
+        <header class="masthead"><span>影片二收束</span><span class="chapter">VALUE PER HOUR</span></header>
+        <div class="frame"><p class="eyebrow reveal">單位時間價值的三個放大器</p><h2 class="title reveal delay-1" data-editable>時間價值，不只是做得快。</h2><div class="equation reveal delay-2" data-editable><span class="accent">問題的重要性</span> × 解法的品質 × 成果的可重複性<small>真正有價值的工作，常常是選對問題、降低錯誤，或讓成果可以被更多人重複使用。</small></div></div>
+        <span class="page-no">17</span><nav class="fallback-controls"><a href="#slide-16">←</a><span>17 / 33</span><a href="#slide-18">→</a></nav>
+      </section>
+
+      <!-- 18｜提高職涯價值的四個槓桿 -->
+      <section id="slide-18" class="slide" data-title="提高職涯價值的四個槓桿">
+        <header class="masthead"><span>個人可以採取的行動</span><span class="chapter">FOUR LEVERS</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只問「我要更努力嗎？」</p><h2 class="title reveal delay-1" data-editable>提高職涯價值，有四個槓桿。</h2><div class="lever-grid reveal delay-2"><article class="lever"><div class="num">01</div><h3 data-editable>深化能力</h3><p data-editable>把一般知識練成真正用得上的技能。</p></article><article class="lever"><div class="num">02</div><h3 data-editable>組合能力</h3><p data-editable>把兩三項能力組合成少見的優勢。</p></article><article class="lever"><div class="num">03</div><h3 data-editable>善用槓桿</h3><p data-editable>工具、流程、AI、團隊與平台。</p></article><article class="lever"><div class="num">04</div><h3 data-editable>留下證據</h3><p data-editable>讓成果能被理解、驗證與比較。</p></article></div></div>
+        <span class="page-no">18</span><nav class="fallback-controls"><a href="#slide-17">←</a><span>18 / 33</span><a href="#slide-19">→</a></nav>
+      </section>
+
+      <!-- 19｜能力要留下可以驗證的證據 -->
+      <section id="slide-19" class="slide has-note" data-title="能力要留下可以驗證的證據">
+        <header class="masthead"><span>能力不只寫在履歷上</span><span class="chapter">EVIDENCE</span></header>
+        <div class="frame"><p class="eyebrow reveal">「我很會」不是證據</p><h2 class="title reveal delay-1" data-editable>能力要留下可以被驗證的成果。</h2><div class="evidence-board reveal delay-2"><div class="evidence-stack"><div class="evidence-item"><b>01</b><span data-editable>作品與專案成果</span></div><div class="evidence-item"><b>02</b><span data-editable>改善前後的差異與數字</span></div><div class="evidence-item"><b>03</b><span data-editable>他人的回饋與推薦</span></div><div class="evidence-item"><b>04</b><span data-editable>說得清楚的解題過程</span></div></div><article class="proof-card"><h3 data-editable>從「特質」改寫成「證據」</h3><p data-editable>不要只說「我很負責」。改成：「我重新安排交接流程，讓延誤從每月五次降到一次。」</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>與前兩部分連結</h2><p>PDP、MBTI 提供的是假設；作品、實習、專題與工作成果，才是更接近真實工作的證據。</p></template>
+        <span class="page-no">19</span><nav class="fallback-controls"><a href="#slide-18">←</a><span>19 / 33</span><a href="#slide-20">→</a></nav>
+      </section>
+
+      <!-- 20｜能力不是知道，而是做得出來 -->
+      <section id="slide-20" class="slide dark" data-title="能力不是知道，而是做得出來">
+        <header class="masthead"><span>從理解走向累積</span><span class="chapter">PRACTICE</span></header>
+        <div class="frame"><p class="eyebrow reveal">知道，不等於會做</p><h2 class="title reveal delay-1" data-editable>能力不是聽懂一次，<br>而是<span class="accent">反覆練習、接受回饋、再調整</span>。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">練習</p><h3 data-editable>針對弱點</h3><p data-editable>不是一直做自己已經會的部分。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">回饋</p><h3 data-editable>知道差距</h3><p data-editable>讓錯誤有機會被看見與修正。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">紀錄</p><h3 data-editable>看見累積</h3><p data-editable>用作品與紀錄確認自己真的有進步。</p></article></div></div>
+        <span class="page-no">20</span><nav class="fallback-controls"><a href="#slide-19">←</a><span>20 / 33</span><a href="#slide-21">→</a></nav>
+      </section>
+
+      <!-- 21｜影片：刻意練習的三個關鍵 -->
+      <section id="slide-21" class="slide dark has-note" data-title="影片：刻意練習的三個關鍵">
+        <header class="masthead"><span>影片三｜能力累積</span><span class="chapter">10:58</span></header>
+        <div class="frame"><p class="eyebrow reveal">Better Leaf 好葉</p><h2 class="title reveal delay-1" data-editable>如何成為高手：<br>刻意練習的三個關鍵</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="SDFykGWVc9s" data-video-title="Better Leaf 好葉：刻意練習"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下播放 Better Leaf 好葉影片</strong></button></div><aside><div class="watch-task"><h3>觀看時請記錄</h3><ol><li data-editable>有目標的練習是什麼？</li><li data-editable>為什麼要離開舒適圈？</li><li data-editable>回饋如何改變練習效果？</li></ol></div><div class="video-meta"><b>中文動畫</b><span>白板故事</span></div><a class="video-link" href="https://www.youtube.com/watch?v=SDFykGWVc9s" target="_blank" rel="noopener">YouTube 無法嵌入時，開啟原始影片</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>影片定位</h2><p>把「一萬小時」改說成「有方向的有效練習」。時間本身不保證進步，目標、難度與回饋品質更重要。</p></template>
+        <span class="page-no">21</span><nav class="fallback-controls"><a href="#slide-20">←</a><span>21 / 33</span><a href="#slide-22">→</a></nav>
+      </section>
+
+      <!-- 22｜討論：一年後想提高哪一項價值？ -->
+      <section id="slide-22" class="slide dark has-note" data-title="討論：一年後想提高哪一項價值？">
+        <header class="masthead"><span>影片後討論</span><span class="chapter">ONE-YEAR BET</span></header>
+        <div class="frame"><p class="discussion-prompt reveal" data-editable>如果一年後要提高自己的職涯價值，<br>你最值得刻意練習哪一項能力？</p><p class="discussion-hint reveal delay-1" data-editable>再補一句：你要用什麼證據，確認自己真的進步了？</p></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>把抽象願望改成練習設計</h2><p>追問四件事：練什麼、每週幾次、誰給回饋、留下什麼成果。答案若只有「多看書」，就還不夠具體。</p></template>
+        <span class="page-no">22</span><nav class="fallback-controls"><a href="#slide-21">←</a><span>22 / 33</span><a href="#slide-23">→</a></nav>
+      </section>
+
+      <!-- 23｜生產力不會自動變成薪資 -->
+      <section id="slide-23" class="slide" data-title="生產力不會自動變成薪資">
+        <header class="masthead"><span>回到開場問題</span><span class="chapter">CONVERSION</span></header>
+        <div class="frame"><p class="eyebrow reveal">生產力不會自動變成薪資</p><h2 class="title reveal delay-1" data-editable>生產力要經過三道門，<br>才可能轉成收入。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">01</p><h3 data-editable>被需要</h3><p data-editable>你的成果是否解決了市場或組織真正重視的問題？</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">02</p><h3 data-editable>被看見</h3><p data-editable>成果是否有證據，能被主管、客戶或市場理解？</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">03</p><h3 data-editable>換成收入</h3><p data-editable>組織付得起嗎？你有沒有選擇與談判空間？</p></article></div></div>
+        <span class="page-no">23</span><nav class="fallback-controls"><a href="#slide-22">←</a><span>23 / 33</span><a href="#slide-24">→</a></nav>
+      </section>
+
+      <!-- 24｜一份工作為什麼會有不同薪資？ -->
+      <section id="slide-24" class="slide" data-title="一份工作為什麼會有不同薪資？">
+        <header class="masthead"><span>薪資差異不是單一因素</span><span class="chapter">SIX FACTORS</span></header>
+        <div class="frame"><p class="eyebrow reveal">同一項能力，放在不同產業與職位，薪資可能不同</p><h2 class="title reveal delay-1" data-editable>一份工作為什麼會有不同薪資？</h2><div class="market-grid reveal delay-2"><article class="market-card"><b>01</b><h3 data-editable>需求</h3><p data-editable>有多少個人或組織需要這項能力？</p></article><article class="market-card"><b>02</b><h3 data-editable>稀缺性</h3><p data-editable>具備這項能力的人好找嗎？</p></article><article class="market-card"><b>03</b><h3 data-editable>可替代性</h3><p data-editable>容易被流程、機器或其他人取代嗎？</p></article><article class="market-card"><b>04</b><h3 data-editable>規模</h3><p data-editable>同一份成果可以服務多少人？</p></article><article class="market-card"><b>05</b><h3 data-editable>責任與風險</h3><p data-editable>錯誤會造成多大損失？</p></article><article class="market-card"><b>06</b><h3 data-editable>付薪能力</h3><p data-editable>這個產業與企業付得起多少？</p></article></div></div>
+        <span class="page-no">24</span><nav class="fallback-controls"><a href="#slide-23">←</a><span>24 / 33</span><a href="#slide-25">→</a></nav>
+      </section>
+
+      <!-- 25｜努力到薪資之間不是直線 -->
+      <section id="slide-25" class="slide dark" data-title="努力到薪資之間不是直線">
+        <header class="masthead"><span>先修正一條常見的直線</span><span class="chapter">NOT A STRAIGHT LINE</span></header>
+        <div class="frame"><p class="eyebrow reveal">努力很重要，但不是唯一變數</p><h2 class="title reveal delay-1" data-editable>努力　≠　產出　≠　價值　≠　薪資</h2><div class="equation reveal delay-2" data-editable>努力 × 方法 × 工具 × 所處產業與職位 × 分配制度<br><span class="accent">＝最後可能得到的收入</span><small>任何一項明顯不足，整體結果都可能受到限制。</small></div></div>
+        <span class="page-no">25</span><nav class="fallback-controls"><a href="#slide-24">←</a><span>25 / 33</span><a href="#slide-26">→</a></nav>
+      </section>
+
+      <!-- 26｜生產力的正向循環 -->
+      <section id="slide-26" class="slide has-note" data-title="生產力的正向循環">
+        <header class="masthead"><span>老師原有的成長循環</span><span class="chapter">POSITIVE LOOP</span></header>
+        <div class="frame"><p class="eyebrow reveal">每一次累積，都可能成為下一次的起點</p><h2 class="title reveal delay-1" data-editable>生產力的<span class="accent">正向循環</span></h2><div class="loop-wrap reveal-scale delay-2"><div class="loop-node n1" data-editable>生產力提高</div><div class="loop-node n2" data-editable>獲得收入</div><div class="loop-node n3" data-editable>扣除消費</div><div class="loop-node n4" data-editable>形成儲蓄</div><div class="loop-node n5" data-editable>投資提高生產力</div><div class="loop-center" data-editable>把現在的收入<br>變成未來的能力</div><span class="loop-arrow a1">➜</span><span class="loop-arrow a2">➜</span><span class="loop-arrow a3">➜</span><span class="loop-arrow a4">➜</span><span class="loop-arrow a5">➜</span></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>循環不是保證</h2><p>這是一個可能被建立的機制，不是「努力就一定成功」。健康、家庭責任、景氣與制度都可能干擾循環。</p></template>
+        <span class="page-no">26</span><nav class="fallback-controls"><a href="#slide-25">←</a><span>26 / 33</span><a href="#slide-27">→</a></nav>
+      </section>
+
+      <!-- 27｜儲蓄是下一輪生產力的起點 -->
+      <section id="slide-27" class="slide has-note" data-title="儲蓄是下一輪生產力的起點">
+        <header class="masthead"><span>老師原有的循環思考</span><span class="chapter">SAVE TO INVEST</span></header>
+        <div class="frame"><p class="eyebrow reveal">儲蓄＝收入－消費</p><h2 class="title reveal delay-1" data-editable>儲蓄的目的，不只是等待下一次消費。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">第一步</p><h3 data-editable>避免過度消費</h3><p data-editable>如果收入全部被當下的消費用掉，就很難留下下一次選擇的空間。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">消極意義</p><h3 data-editable>未雨綢繆</h3><p data-editable>面對失業、疾病與突發支出時，保有基本的安全與緩衝。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">積極意義</p><h3 data-editable>再投資自己</h3><p data-editable>把資源投入學習、工具、健康與經驗，形成下一輪生產力。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>這一頁是第三部分與財商的橋</h2><p>重點不是要求每個人用相同比例儲蓄，而是讓學生理解：消費、儲蓄與投資會改變未來的選擇空間。</p></template>
+        <span class="page-no">27</span><nav class="fallback-controls"><a href="#slide-26">←</a><span>27 / 33</span><a href="#slide-28">→</a></nav>
+      </section>
+
+      <!-- 28｜不同生命階段，投資重點不同 -->
+      <section id="slide-28" class="slide has-note" data-title="不同生命階段，投資重點不同">
+        <header class="masthead"><span>把資源放在最需要的地方</span><span class="chapter">LIFE-STAGE INVESTMENT</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是硬性年齡表，而是思考資源配置</p><h2 class="title reveal delay-1" data-editable>不同生命階段，<br>投資自己的重點會改變。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">職涯初期</p><h3 data-editable>先累積能力與經驗</h3><p data-editable>把時間放在學習、練習、實作與探索，建立可以帶著走的本事。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">職涯中期</p><h3 data-editable>能力與資本並進</h3><p data-editable>除了深化專業，也開始累積工具、團隊、品牌、關係與財務資源。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">職涯後期</p><h3 data-editable>健康與槓桿更重要</h3><p data-editable>照顧體力與健康，並善用經驗、資本與合作，減少只靠工時換取成果。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>保留原論述，取消僵硬分界</h2><p>原簡報用三十歲與五十歲作為參考界線。新版改用職涯階段，避免學生把年齡當成硬性規則；但仍保留「資源有限，投資要有重點」的核心。</p></template>
+        <span class="page-no">28</span><nav class="fallback-controls"><a href="#slide-27">←</a><span>28 / 33</span><a href="#slide-29">→</a></nav>
+      </section>
+
+      <!-- 29｜生產力的負向循環 -->
+      <section id="slide-29" class="slide dark has-note" data-title="生產力的負向循環">
+        <header class="masthead"><span>同一套機制也可能往下走</span><span class="chapter">NEGATIVE LOOP</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是責怪，而是看見卡點</p><h2 class="title reveal delay-1" data-editable>生產力的<span class="accent">負向循環</span></h2><div class="loop-wrap negative reveal-scale delay-2"><div class="loop-node n1" data-editable>低薪或收入不穩</div><div class="loop-node n2" data-editable>消費與生活壓力</div><div class="loop-node n3" data-editable>難以形成儲蓄</div><div class="loop-node n4" data-editable>無法投資自己</div><div class="loop-node n5" data-editable>生產力與機會停滯</div><div class="loop-center" data-editable>困境也會消耗<br>重新累積的條件</div><span class="loop-arrow a1">➜</span><span class="loop-arrow a2">➜</span><span class="loop-arrow a3">➜</span><span class="loop-arrow a4">➜</span><span class="loop-arrow a5">➜</span></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>倫理上的重要補充</h2><p>不要把負向循環解釋成「不夠努力」。有些人首先需要的是安全、支持、時間與制度資源，才有條件投資自己。</p></template>
+        <span class="page-no">29</span><nav class="fallback-controls"><a href="#slide-28">←</a><span>29 / 33</span><a href="#slide-30">→</a></nav>
+      </section>
+
+      <!-- 30｜從一個做得到的小改變開始 -->
+      <section id="slide-30" class="slide" data-title="從一個做得到的小改變開始">
+        <header class="masthead"><span>打破負向循環</span><span class="chapter">SMALLEST STEP</span></header>
+        <div class="frame"><p class="eyebrow reveal">不必等到條件都準備好才開始</p><h2 class="title reveal delay-1" data-editable>從一個<span class="accent">做得到的小改變</span>開始。</h2><div class="break-grid reveal delay-2"><article class="break-card"><b>善用資源</b><h3 data-editable>先用身邊現成的資源</h3><p data-editable>免費課程、圖書館、校內資源、同儕與導師。</p></article><article class="break-card"><b>從小處開始</b><h3 data-editable>每次只練一點</h3><p data-editable>把「學會一項能力」拆成每週做得到的小任務。</p></article><article class="break-card"><b>留下成果</b><h3 data-editable>讓進步可以累積</h3><p data-editable>每次練習都留下作品、紀錄或回饋。</p></article></div></div>
+        <span class="page-no">30</span><nav class="fallback-controls"><a href="#slide-29">←</a><span>30 / 33</span><a href="#slide-31">→</a></nav>
+      </section>
+
+      <!-- 31｜我的職涯價值實驗 -->
+      <section id="slide-31" class="slide has-note" data-title="我的職涯價值實驗">
+        <header class="masthead"><span>個人行動練習</span><span class="chapter">30-DAY EXPERIMENT</span></header>
+        <div class="frame"><p class="eyebrow reveal">先做三十天，不必一次決定一生</p><h2 class="title reveal delay-1" data-editable>設計一個「我的職涯價值實驗」。</h2><div class="action-sheet reveal delay-2"><article class="action-box"><b>01｜問題</b><h3 data-editable>我要解決什麼問題？</h3><p data-editable>對誰有用？為什麼重要？</p></article><article class="action-box"><b>02｜能力</b><h3 data-editable>我要練哪一項能力？</h3><p data-editable>把範圍縮小到三十天內做得到的程度。</p></article><article class="action-box"><b>03｜回饋</b><h3 data-editable>誰能告訴我差距？</h3><p data-editable>老師、同學、使用者或實際成果。</p></article><article class="action-box"><b>04｜證據</b><h3 data-editable>最後留下什麼？</h3><p data-editable>作品、紀錄、改善前後的差異或他人推薦。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>可作為課後作業</h2><p>學生不一定要選「最熱門」能力；重點是能完成一次真實嘗試，並留下下一次修正所需要的證據。</p></template>
+        <span class="page-no">31</span><nav class="fallback-controls"><a href="#slide-30">←</a><span>31 / 33</span><a href="#slide-32">→</a></nav>
+      </section>
+
+      <!-- 32｜第三部分的五個結論 -->
+      <section id="slide-32" class="slide dark" data-title="第三部分的五個結論">
+        <header class="masthead"><span>第三部分總結</span><span class="chapter">FIVE TAKEAWAYS</span></header>
+        <div class="frame"><p class="eyebrow reveal">帶走五句話</p><h2 class="title reveal delay-1" data-editable>收入、生產力與職涯價值</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">01</p><h3 data-editable>薪資不是人的價值</h3><p data-editable>它是特定市場中的交換結果。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">02</p><h3 data-editable>生產力可以持續累積</h3><p data-editable>勞動力、能力與資本會彼此放大。</p></article><article class="card" style="--card-color:var(--sage)"><p class="no">03</p><h3 data-editable>忙碌不等於生產力</h3><p data-editable>要追問成果與價值。</p></article><article class="card" style="--card-color:var(--blue)"><p class="no">04</p><h3 data-editable>生產力還要通過市場與制度</h3><p data-editable>能創造成果，不代表會自動增加薪資。</p></article><article class="card" style="--card-color:var(--coral)"><p class="no">05</p><h3 data-editable>儲蓄與投資會形成循環</h3><p data-editable>把今天的收入，轉成明天的能力與選擇。</p></article><article class="card" style="--card-color:var(--sun)"><p class="no">下一步</p><h3 data-editable>收入增加以後，該怎麼用？</h3><p data-editable>這將進入下一部分：財商。</p></article></div></div>
+        <span class="page-no">32</span><nav class="fallback-controls"><a href="#slide-31">←</a><span>32 / 33</span><a href="#slide-33">→</a></nav>
+      </section>
+
+      <!-- 33｜下一步：從賺錢走向用錢 -->
+      <section id="slide-33" class="slide dark has-note" data-title="下一步：從賺錢走向用錢">
+        <header class="masthead"><span>第三部分結束</span><span class="chapter">NEXT｜FINANCIAL LITERACY</span></header>
+        <div class="frame"><p class="eyebrow reveal">收入增加，不代表人生就會更穩定</p><h2 class="title reveal delay-1" data-editable>下一個問題：<br>我們該怎麼<span class="accent">花、怎麼存、怎麼安排</span>收入？</h2><div class="final-path reveal-scale delay-2"><div class="final-node" data-editable>創造價值</div><span class="final-arrow">→</span><div class="final-node" data-editable>獲得收入</div><span class="final-arrow">→</span><div class="final-node" data-editable>做出金錢選擇</div><span class="final-arrow">→</span><div class="final-node" data-editable>建立生活的安全與自由</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>銜接第四部分</h2><p>第三部分回答「收入與職涯價值從哪裡來」；第四部分再回答「得到收入之後，如何形成安全、選擇與長期自由」。</p></template>
+        <span class="page-no">33</span><nav class="fallback-controls"><a href="#slide-32">←</a><span>33 / 33</span><span>→</span></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- LIVE PRESENTATION CONTROLS -->
+  <div class="deck-controls" aria-label="簡報控制列"><button id="prevBtn" type="button" title="上一張">←</button><button id="menuBtn" type="button" title="目錄（M）">☰</button><span class="counter" id="counter">01 / 33</span><button id="noteBtn" type="button" title="講師提示（T）">T</button><button id="helpBtn" type="button" title="操作說明">?</button><button id="fullBtn" type="button" title="全螢幕（F）">⛶</button><button id="nextBtn" type="button" title="下一張">→</button></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- OVERLAYS -->
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="投影片目錄"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>投影片目錄</h2><div class="menu-grid" id="menuGrid"></div></div></div>
+  <div class="overlay" id="noteOverlay" role="dialog" aria-modal="true" aria-label="講師提示"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><div id="noteContent"></div></div></div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>操作方式</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：翻頁</li><li>滑鼠滾輪或手機左右滑動：翻頁</li><li>M：目錄；T：講師提示；F：全螢幕；E：文字編輯</li><li>影片採點擊後載入；離開影片頁時會停止播放。</li><li>若 JavaScript 被封鎖，仍可使用每張下方的左右箭頭翻頁。</li></ul></div></div>
+
+  <!-- INLINE EDITING CONTROLS -->
+  <div class="edit-hotzone" aria-hidden="true"></div><button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）" aria-label="切換編輯模式">✎</button>
+  <div class="edit-toolbar" id="editToolbar"><button id="saveFile" type="button">下載修訂版 HTML</button><button id="resetEdits" type="button">清除本機修改</button></div>
+  <noscript><div class="legacy-note">相容模式：請使用每張投影片下方的左右箭頭翻頁；講師提示與內嵌影片需啟用 JavaScript，影片仍可使用 YouTube 文字連結。</div></noscript>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    (function(){
+      "use strict";
+      function byId(id){return document.getElementById(id)}
+      function pad2(number){return number<10?"0"+number:String(number)}
+      function closeOverlays(){var open=document.querySelectorAll(".overlay.open");for(var i=0;i<open.length;i+=1){open[i].classList.remove("open")}}
+      var stage=byId("deckStage"),storageKey="career-exploration-part3-v3";
+      try{var saved=window.localStorage.getItem(storageKey);if(saved&&saved.indexOf("slide-33")!==-1){stage.innerHTML=saved}}catch(ignore){}
+      var slides=stage.querySelectorAll(".slide"),current=0,wheelLocked=false,touchStart=null;
+      function scaleStage(){var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080),x=(window.innerWidth-1920*factor)/2,y=(window.innerHeight-1080*factor)/2;stage.style.transform="translate("+x+"px,"+y+"px) scale("+factor+")"}
+      function resetVideo(slide){var shell=slide.querySelector(".video-shell");if(shell&&shell.querySelector("iframe")){var label=shell.getAttribute("data-video-title")||"課程影片";shell.innerHTML='<button class="load-video" type="button"><span class="play-icon">▶</span><strong>點一下重新載入 '+label+'</strong></button>'}}
+      function show(index,updateHash){if(index<0){index=0}if(index>=slides.length){index=slides.length-1}for(var i=0;i<slides.length;i+=1){if(i===index){slides[i].classList.add("active");slides[i].classList.add("visible")}else{slides[i].classList.remove("active");slides[i].classList.remove("visible");resetVideo(slides[i])}}current=index;byId("counter").textContent=pad2(current+1)+" / "+slides.length;byId("progress").style.width=((current+1)/slides.length*100)+"%";byId("noteBtn").style.opacity=slides[current].querySelector(".teacher-note")?"1":".35";if(updateHash!==false){try{window.history.replaceState(null,"","#slide-"+(current+1))}catch(ignore){window.location.hash="slide-"+(current+1)}}}
+      function indexFromHash(){var match=window.location.hash.match(/^#slide-(\d+)$/);return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0}
+      function openOverlay(id){closeOverlays();byId(id).classList.add("open")}
+      function showNote(){var template=slides[current].querySelector(".teacher-note");if(!template){return}byId("noteContent").innerHTML="";byId("noteContent").appendChild(template.content.cloneNode(true));openOverlay("noteOverlay")}
+      function requestFullscreen(){var root=document.documentElement,exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement){if(exit){exit.call(document)}return}var enter=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(enter){enter.call(root)}}
+      function buildMenu(){var grid=byId("menuGrid");grid.innerHTML="";for(var i=0;i<slides.length;i+=1){var button=document.createElement("button");button.type="button";button.setAttribute("data-jump",i);button.textContent=pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片");grid.appendChild(button)}}
+
+      /* VIDEO LAZY LOADING */
+      function loadVideo(shell){var id=shell.getAttribute("data-video-id"),title=shell.getAttribute("data-video-title")||"課程影片";shell.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="'+title.replace(/"/g,"&quot;")+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
+
+      /* INPUT AND NAVIGATION EVENTS */
+      byId("prevBtn").onclick=function(){show(current-1)};byId("nextBtn").onclick=function(){show(current+1)};byId("menuBtn").onclick=function(){openOverlay("menuOverlay")};byId("noteBtn").onclick=showNote;byId("helpBtn").onclick=function(){openOverlay("helpOverlay")};byId("fullBtn").onclick=requestFullscreen;
+      document.addEventListener("click",function(event){var close=event.target.closest("[data-close]");if(close){closeOverlays();return}if(event.target.classList.contains("overlay")){closeOverlays();return}var jump=event.target.closest("[data-jump]");if(jump){show(parseInt(jump.getAttribute("data-jump"),10));closeOverlays();return}var load=event.target.closest(".load-video");if(load){loadVideo(load.closest(".video-shell"));return}var teacher=event.target.closest(".teacher-trigger");if(teacher){showNote()}});
+      document.addEventListener("keydown",function(event){var target=event.target;if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName))){return}if(event.key==="ArrowRight"||event.key==="ArrowDown"||event.key==="PageDown"||event.key===" "){event.preventDefault();show(current+1)}else if(event.key==="ArrowLeft"||event.key==="ArrowUp"||event.key==="PageUp"){event.preventDefault();show(current-1)}else if(event.key==="Home"){show(0)}else if(event.key==="End"){show(slides.length-1)}else if(event.key==="m"||event.key==="M"){openOverlay("menuOverlay")}else if(event.key==="t"||event.key==="T"){showNote()}else if(event.key==="f"||event.key==="F"){requestFullscreen()}else if(event.key==="Escape"){closeOverlays()}else if(event.key==="e"||event.key==="E"){toggleEditing()}});
+      window.addEventListener("resize",scaleStage);window.addEventListener("hashchange",function(){show(indexFromHash(),false)});window.addEventListener("wheel",function(event){if(document.querySelector(".overlay.open")||wheelLocked||Math.abs(event.deltaY)<18){return}wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false},520)},{passive:true});window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX},{passive:true});window.addEventListener("touchend",function(event){if(touchStart===null||document.querySelector(".overlay.open")){return}var delta=event.changedTouches[0].clientX-touchStart;if(Math.abs(delta)>50){show(current+(delta<0?1:-1))}touchStart=null},{passive:true});
+
+      /* INLINE EDITOR AND FILE EXPORT */
+      var editing=false,hideTimer=null,saveTimer=null,hotzone=document.querySelector(".edit-hotzone"),editToggle=byId("editToggle");
+      function setStored(value){try{window.localStorage.setItem(storageKey,value);return true}catch(ignore){return false}}
+      function toggleEditing(){editing=!editing;var editable=stage.querySelectorAll("[data-editable]");for(var i=0;i<editable.length;i+=1){editable[i].contentEditable=editing?"true":"false"}document.body.classList.toggle("editing",editing);editToggle.classList.toggle("active",editing);byId("editToolbar").classList.toggle("show",editing)}
+      editToggle.onclick=toggleEditing;hotzone.onclick=toggleEditing;hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);editToggle.classList.add("show")};hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show")}},400)};editToggle.onmouseenter=function(){window.clearTimeout(hideTimer)};editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show")}},400)};
+      stage.addEventListener("input",function(){window.clearTimeout(saveTimer);saveTimer=window.setTimeout(function(){setStored(stage.innerHTML)},350)});byId("resetEdits").onclick=function(){if(window.confirm("要清除這台瀏覽器儲存的文字修改嗎？")){try{window.localStorage.removeItem(storageKey)}catch(ignore){}window.location.reload()}};byId("saveFile").onclick=function(){if(editing){toggleEditing()}setStored(stage.innerHTML);var html="<!doctype html>\n"+document.documentElement.outerHTML,blob=new Blob([html],{type:"text/html;charset=utf-8"}),urlApi=window.URL||window.webkitURL,anchor=document.createElement("a");anchor.href=urlApi.createObjectURL(blob);anchor.download="職涯探索與專業倫理_第三部分_收入生產力與成長循環_V3_編輯版.html";document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href)},1200)};
+      buildMenu();scaleStage();show(indexFromHash(),false);document.body.classList.add("js-ready");
+    }());
+  </script>
+</body>
+</html>
