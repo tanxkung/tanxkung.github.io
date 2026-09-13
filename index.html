@@ -105,10 +105,10 @@
       z-index: 1;
       width: min(1120px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 76px 0 96px;
+      padding: 42px 0 50px;
       display: grid;
       grid-template-columns: 1.2fr .8fr;
-      gap: 70px;
+      gap: 50px;
       align-items: center;
     }
 
@@ -135,16 +135,16 @@
     }
 
     .hero-note {
-      margin: 22px 0 0;
-      padding: 24px 0 6px 26px;
+      margin: 14px 0 0;
+      padding: 14px 0 3px 18px;
       border-left: 3px solid var(--gold);
       color: rgba(255,255,255,.82);
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
 
     .hero-aside {
       width: 100%;
-      max-width: 460px;
+      max-width: 380px;
       min-width: 0;
       justify-self: end;
     }
@@ -205,21 +205,56 @@
 
     .course-groups {
       display: grid;
-      gap: 42px;
+      gap: 16px;
     }
 
     .course-group {
       padding-top: 4px;
+      border-radius: 16px;
     }
 
     .course-group-head {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto 32px;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      gap: 14px;
       margin: 0 4px 14px;
-      padding-bottom: 10px;
+      padding: 10px 8px 12px;
       border-bottom: 2px solid var(--line);
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+      list-style: none;
+      transition: background .2s ease;
+    }
+
+    .course-group-head::-webkit-details-marker { display: none; }
+
+    .course-group-head::after {
+      content: "+";
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: 50%;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .course-group[open] > .course-group-head::after { content: "−"; }
+
+    .course-group-head:hover { background: rgba(16, 43, 70, .06); }
+
+    .course-group-head:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .course-group:not([open]) > .course-group-head {
+      margin-bottom: 0;
+      border-radius: 10px;
     }
 
     .course-group-head h3 {
@@ -365,19 +400,19 @@
       .nav-links { display: none; }
       .hero-inner {
         grid-template-columns: 1fr;
-        gap: 40px;
-        padding: 58px 0 68px;
+        gap: 28px;
+        padding: 36px 0 44px;
       }
       .hero-aside {
-        max-width: 560px;
+        max-width: 420px;
         justify-self: start;
       }
       .hero-note { max-width: 34rem; }
       main { padding: 54px 0 68px; }
       .section-head { display: block; }
       .section-head p { margin-top: 12px; }
-      .course-groups { gap: 32px; }
-      .course-group-head { align-items: baseline; }
+      .course-groups { gap: 12px; }
+      .course-group-head { align-items: center; }
       .material-card { grid-template-columns: 1fr; padding: 28px; }
       .primary-link { width: 100%; }
       .profile-grid,
@@ -424,11 +459,11 @@
       </div>
 
       <div class="course-groups">
-        <section class="course-group" aria-labelledby="course-career">
-          <div class="course-group-head">
+        <details class="course-group" aria-labelledby="course-career">
+          <summary class="course-group-head">
             <h3 id="course-career">職涯探索與專業倫理</h3>
             <span class="course-count">3 份教材</span>
-          </div>
+          </summary>
           <div class="materials-grid">
             <article class="material-card">
               <div>
@@ -469,13 +504,13 @@
               <a class="primary-link" href="career-exploration-part3-v3.html">開啟教材　→</a>
             </article>
           </div>
-        </section>
+        </details>
 
-        <section class="course-group" aria-labelledby="course-marketing">
-          <div class="course-group-head">
+        <details class="course-group" aria-labelledby="course-marketing">
+          <summary class="course-group-head">
             <h3 id="course-marketing">行銷企劃</h3>
             <span class="course-count">2 份教材</span>
-          </div>
+          </summary>
           <div class="materials-grid">
             <article class="material-card">
               <div>
@@ -503,13 +538,13 @@
               <a class="primary-link" href="marketing-part2-stp-marketing-mix-v2.html">開啟教材　→</a>
             </article>
           </div>
-        </section>
+        </details>
 
-        <section class="course-group" aria-labelledby="course-mis">
-          <div class="course-group-head">
+        <details class="course-group" aria-labelledby="course-mis">
+          <summary class="course-group-head">
             <h3 id="course-mis">管理資訊系統</h3>
             <span class="course-count">1 份教材</span>
-          </div>
+          </summary>
           <div class="materials-grid">
             <article class="material-card">
               <div>
@@ -524,13 +559,13 @@
               <a class="primary-link" href="mis-background-evolution-v4.html">開啟教材　→</a>
             </article>
           </div>
-        </section>
+        </details>
 
-        <section class="course-group" aria-labelledby="course-erp">
-          <div class="course-group-head">
+        <details class="course-group" aria-labelledby="course-erp">
+          <summary class="course-group-head">
             <h3 id="course-erp">企業資源規劃</h3>
             <span class="course-count">1 份教材</span>
-          </div>
+          </summary>
           <div class="materials-grid">
             <article class="material-card">
               <div>
@@ -545,13 +580,13 @@
               <a class="primary-link" href="erp-concepts-history-present-future-v1.html">開啟教材　→</a>
             </article>
           </div>
-        </section>
+        </details>
 
-        <section class="course-group" aria-labelledby="course-capstone">
-          <div class="course-group-head">
+        <details class="course-group" aria-labelledby="course-capstone">
+          <summary class="course-group-head">
             <h3 id="course-capstone">專題研究（一／二）</h3>
             <span class="course-count">1 份共用教材</span>
-          </div>
+          </summary>
           <div class="materials-grid">
             <article class="material-card">
               <div>
@@ -566,14 +601,13 @@
               <a class="primary-link" href="capstone-project-video-materials-v3.html">開啟教材　→</a>
             </article>
           </div>
-        </section>
+        </details>
       </div>
     </section>
 
     <section class="profile-section" id="profile" aria-labelledby="profile-title">
       <div class="section-head">
         <h2 id="profile-title">教師簡介</h2>
-        <p>以下資訊參考中國科技大學資訊管理系教師介紹頁。</p>
       </div>
 
       <div class="profile-grid">
@@ -584,9 +618,10 @@
         <article class="info-card">
           <h3>實務專長</h3>
           <ul>
-            <li>企業資源規劃</li>
-            <li>專案管理</li>
-            <li>企業管理</li>
+            <li>AI Agent 應用</li>
+            <li>AI 工作流規劃及導入</li>
+            <li>創業與創新</li>
+            <li>職涯探索</li>
           </ul>
         </article>
         <article class="info-card">
@@ -618,6 +653,6 @@
     </section>
   </main>
 
-  <footer>龔鴻裕｜教學與教材 · 最後更新 2026-09-12</footer>
+  <footer>龔鴻裕｜教學與教材 · 最後更新 2026-09-13</footer>
 </body>
 </html>
