@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <script src="access-gate-config.js?v=14b"></script>
+  <script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="管理資訊系統教材：行動通訊、手機與人工智慧的演進">
+  <title>管理資訊系統｜行動通訊、手機與 AI 演進教材 V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+TC:wght@400;600;800;900&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS
+       Main slides use cobalt-on-paper; chapter beats use the dark signal system.
+       =========================================== */
+    :root {
+      --paper:#f0ebde;
+      --paper-2:#e6e0ce;
+      --ink:#1f2be0;
+      --ink-soft:#5560e5;
+      --grid:rgba(31,43,224,.10);
+      --ink-faint:rgba(31,43,224,.18);
+      --dark:#08111f;
+      --dark-grid:rgba(111,151,181,.13);
+      --light:#f4f0e8;
+      --cyan:#35d9cf;
+      --amber:#ffb547;
+      --stage-bg:#080d17;
+      --slide-bg:var(--paper);
+      --font-display:'Newsreader','Noto Serif TC',serif;
+      --font-cjk-display:'Noto Serif TC','Newsreader',serif;
+      --font-body:'Hanken Grotesk','Noto Sans TC',sans-serif;
+      --font-mono:'DM Mono',monospace;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide canvas */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Controls remain outside the scaled stage */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print each authored slide as one page */
+    @media print {
+        html,
+        body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+        .deck-viewport { position: static; overflow: visible; background: #fff; }
+        .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+        .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+        .slide:last-child { break-after: auto; page-break-after: auto; }
+        .deck-controls,
+        .chapter-menu,
+        .edit-hotzone,
+        .edit-toggle,
+        .edit-toolbar { display: none !important; }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET AND TYPOGRAPHY
+       =========================================== */
+    * { box-sizing:border-box; }
+    button,a { font:inherit; }
+    a { color:inherit; }
+    .slide { transition:opacity .28s ease; }
+    .slide.light { color:var(--ink); background:var(--paper); }
+    .slide.light::before {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    .slide.dark { color:var(--light); background:var(--dark); }
+    .slide.dark::before {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:linear-gradient(var(--dark-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dark-grid) 1px,transparent 1px);
+      background-size:64px 64px;
+      mask-image:linear-gradient(90deg,#000,rgba(0,0,0,.4) 72%,transparent);
+    }
+    .hairlines::before,.hairlines::after { content:""; position:absolute; left:54px; right:54px; height:2px; background:currentColor; opacity:.95; z-index:3; }
+    .hairlines::before { top:30px; }.hairlines::after { bottom:24px; }
+    .frame { position:absolute; inset:92px 86px 118px; z-index:2; }
+    .page-num,.nav-hint { position:absolute; bottom:52px; z-index:4; font:500 18px/1 var(--font-mono); letter-spacing:.08em; }
+    .page-num { right:86px; }.nav-hint { left:86px; opacity:.52; }
+    .topbar { min-height:112px; border-bottom:2px solid currentColor; display:flex; justify-content:space-between; align-items:flex-start; gap:36px; padding-bottom:22px; }
+    .topbar h2 { max-width:1300px; margin:0; font:400 70px/1.04 var(--font-cjk-display); letter-spacing:-.035em; }
+    .lab { padding-top:14px; font:500 18px/1.2 var(--font-mono); letter-spacing:.08em; text-align:right; white-space:nowrap; }
+    .body { font:400 30px/1.65 var(--font-body); }
+    .micro { font:600 18px/1.2 var(--font-body); letter-spacing:.12em; }
+    .source-tag { position:absolute; right:0; bottom:-32px; max-width:900px; text-align:right; font:400 17px/1.3 var(--font-mono); opacity:.72; }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
+    .visible .reveal { opacity:1; transform:none; }
+    .visible .reveal:nth-child(2){transition-delay:.08s}.visible .reveal:nth-child(3){transition-delay:.16s}.visible .reveal:nth-child(4){transition-delay:.24s}
+
+    /* ===========================================
+       LIGHT CONTENT LAYOUTS
+       =========================================== */
+    .content-grid { height:620px; padding-top:38px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+    .concept-card { border-top:8px solid currentColor; border-bottom:1px solid var(--ink-faint); padding:28px 18px 22px 0; }
+    .concept-card .no { font:500 20px/1 var(--font-mono); margin-bottom:48px; }
+    .concept-card h3 { margin:0 0 22px; font:400 45px/1.15 var(--font-cjk-display); letter-spacing:-.02em; }
+    .concept-card p { margin:0; font:400 27px/1.65 var(--font-body); }
+    .two-col { height:630px; padding-top:42px; display:grid; grid-template-columns:1fr 1fr; gap:54px; }
+    .panel { border-top:8px solid currentColor; padding:30px 12px 0 0; }
+    .panel h3 { margin:0 0 28px; font:400 50px/1.12 var(--font-cjk-display); }
+    .panel ul { margin:0; padding-left:32px; font:400 28px/1.75 var(--font-body); }
+    .panel li { margin-bottom:16px; }
+    .statement { height:640px; display:flex; flex-direction:column; justify-content:center; max-width:1420px; }
+    .statement .quote { margin:0; font:400 92px/1.24 var(--font-cjk-display); letter-spacing:-.035em; }
+    .statement .explain { margin:48px 0 0; padding-top:24px; border-top:2px solid currentColor; font:400 29px/1.65 var(--font-body); max-width:1250px; }
+    .timeline { position:relative; height:610px; padding-top:120px; display:grid; grid-template-columns:repeat(var(--steps,4),1fr); gap:22px; }
+    .timeline::before { content:""; position:absolute; left:16px; right:16px; top:170px; height:3px; background:currentColor; }
+    .milestone { position:relative; padding:95px 18px 0 0; }
+    .milestone::before { content:""; position:absolute; left:0; top:33px; width:25px; height:55px; background:currentColor; }
+    .milestone b { display:block; margin-bottom:18px; font:500 20px/1 var(--font-mono); letter-spacing:.04em; }
+    .milestone h3 { margin:0 0 18px; font:400 38px/1.2 var(--font-cjk-display); }
+    .milestone p { margin:0; font:400 24px/1.55 var(--font-body); }
+    .flow { height:620px; padding-top:70px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .flow-node { width:290px; min-height:330px; border:3px solid currentColor; padding:28px 24px; display:flex; flex-direction:column; justify-content:space-between; }
+    .flow-node b { font:500 22px/1 var(--font-mono); }.flow-node h3 { margin:0; font:400 44px/1.12 var(--font-cjk-display); }.flow-node p { margin:0; font:400 23px/1.5 var(--font-body); }
+    .arrow { font:400 54px/1 var(--font-mono); }
+    .pyramid-wrap { height:650px; padding-top:36px; display:grid; grid-template-columns:1.18fr .82fr; gap:60px; }
+    .pyramid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+    .pyr { height:105px; border:3px solid currentColor; display:flex; align-items:center; justify-content:center; gap:18px; font:400 31px/1 var(--font-cjk-display); background:rgba(240,235,222,.82); }
+    .pyr b { font:500 22px/1 var(--font-mono); }.pyr:nth-child(1){width:38%}.pyr:nth-child(2){width:57%}.pyr:nth-child(3){width:76%}.pyr:nth-child(4){width:96%}
+    .pyramid-notes { display:flex; flex-direction:column; justify-content:center; gap:32px; font:400 27px/1.6 var(--font-body); }
+    .pyramid-notes div { border-top:2px solid currentColor; padding-top:18px; }
+
+    /* ===========================================
+       VIDEO INTRODUCTION AND PLAYER
+       =========================================== */
+    .video-intro { height:635px; padding-top:44px; display:grid; grid-template-columns:.72fr 1.28fr; gap:70px; }
+    .video-meta { border-top:8px solid currentColor; padding-top:28px; }
+    .video-meta .duration { font:400 120px/.95 var(--font-display); letter-spacing:-.04em; }
+    .video-meta .maker { margin-top:30px; font:500 22px/1.5 var(--font-mono); }
+    .watch-task { border-top:2px solid currentColor; padding-top:28px; }
+    .watch-task h3 { margin:0 0 28px; font:400 50px/1.1 var(--font-cjk-display); }
+    .watch-task ol { margin:0; padding-left:44px; font:400 31px/1.65 var(--font-body); }
+    .watch-task li { margin-bottom:18px; }
+    .video-shell { position:absolute; left:86px; right:86px; top:150px; bottom:126px; border:3px solid currentColor; background:#060a12; display:grid; place-items:center; overflow:hidden; }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video { display:flex; flex-direction:column; align-items:center; gap:22px; color:var(--paper); background:transparent; border:0; cursor:pointer; }
+    .play-icon { width:132px; height:94px; border:3px solid currentColor; display:grid; place-items:center; font:500 55px/1 var(--font-mono); transition:transform .22s ease,background .22s ease,color .22s ease; }
+    .load-video:hover .play-icon { transform:translateY(-5px); background:var(--paper); color:var(--ink); }
+    .load-video span:last-child { font:500 23px/1.4 var(--font-body); }
+    .video-caption { position:absolute; left:86px; right:86px; bottom:82px; display:flex; justify-content:space-between; align-items:center; gap:30px; z-index:6; color:currentColor; font:500 18px/1.3 var(--font-mono); }
+    .video-caption a { text-underline-offset:5px; }
+
+    /* ===========================================
+       DARK COVER AND CHAPTER SYSTEM
+       =========================================== */
+    .dark .hairlines { color:rgba(244,240,232,.82); }
+    .cover-kicker,.chapter-kicker { position:absolute; left:100px; top:82px; color:var(--cyan); font:600 21px/1 var(--font-mono); letter-spacing:.14em; }
+    .cover-serial,.chapter-serial { position:absolute; right:96px; top:80px; color:#91a4b3; font:500 20px/1 var(--font-mono); }
+    .cover h1 { position:absolute; left:94px; top:194px; width:1000px; margin:0; font:900 128px/1.14 'Noto Sans TC',sans-serif; letter-spacing:-.055em; }
+    .cover-sub { position:absolute; left:103px; top:650px; color:#aebcc5; font:400 35px/1.5 var(--font-body); }.cover-sub strong{color:var(--amber)}
+    .cover-timeline { position:absolute; left:104px; bottom:110px; width:1010px; display:flex; gap:0; border-top:2px solid var(--cyan); }
+    .cover-timeline div { width:33.333%; padding-top:22px; font:600 23px/1 var(--font-body); }
+    .signal { position:absolute; right:100px; top:172px; width:620px; height:620px; border:2px solid rgba(53,217,207,.32); }
+    .signal::before,.signal::after { content:""; position:absolute; border:1px solid rgba(255,181,71,.38); }.signal::before{inset:70px}.signal::after{inset:160px;border-color:rgba(53,217,207,.45)}
+    .signal-core { position:absolute; right:282px; top:354px; width:255px; height:255px; background:var(--cyan); color:var(--dark); display:grid; place-items:center; font:800 54px/1 var(--font-body); }
+    .chapter .frame { inset:126px 100px 128px; display:grid; grid-template-columns:1.15fr .85fr; gap:70px; align-items:center; }
+    .chapter h2 { margin:0; font:900 112px/1.18 'Noto Sans TC',sans-serif; letter-spacing:-.05em; }
+    .chapter .chapter-sub { margin-top:32px; max-width:950px; color:#bdc9cf; font:400 35px/1.6 var(--font-body); }
+    .chapter .chapter-no { font:500 170px/.9 var(--font-mono); color:var(--amber); text-align:right; }
+    .chapter .chapter-data { margin-top:54px; border-top:2px solid var(--cyan); padding-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:28px; font:500 21px/1.5 var(--font-mono); }
+    .chapter .chapter-question { margin-top:40px; color:var(--light); font:600 29px/1.55 var(--font-body); }
+
+    /* ===========================================
+       COURSE MAP AND SUMMARY
+       =========================================== */
+    .map-grid { height:640px; padding-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+    .map-item { border:3px solid currentColor; padding:34px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; }
+    .map-item .map-no { font:500 22px/1 var(--font-mono); }.map-item h3{margin:0;font:400 54px/1.12 var(--font-cjk-display)}.map-item p{margin:0;font:400 27px/1.6 var(--font-body)}
+    .map-item:hover { background:var(--ink); color:var(--paper); }
+    .protocol { height:640px; padding-top:46px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+    .protocol-step { border-top:8px solid currentColor; padding:28px 18px 0 0; }
+    .protocol-step b{font:500 24px/1 var(--font-mono)}.protocol-step h3{margin:48px 0 24px;font:400 50px/1.12 var(--font-cjk-display)}.protocol-step p{margin:0;font:400 28px/1.65 var(--font-body)}
+    .final-grid { height:620px; padding-top:54px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+    .final-item { border-top:10px solid currentColor; padding:28px 16px 0 0; }
+    .final-item .big { font:400 70px/1 var(--font-cjk-display); }.final-item p{font:400 28px/1.65 var(--font-body)}
+    .closing .frame { display:flex; flex-direction:column; justify-content:center; }
+    .closing h2 { max-width:1580px; margin:0; font:900 80px/1.3 'Noto Sans TC',sans-serif; letter-spacing:-.04em; }
+    .closing .questions { margin-top:60px; border-top:2px solid var(--cyan); padding-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; color:#c4d0d6; font:500 25px/1.55 var(--font-body); }
+
+    /* ===========================================
+       OUTSIDE-STAGE NAVIGATION AND MENU
+       =========================================== */
+    .deck-controls { display:flex; align-items:center; gap:8px; padding:7px; background:rgba(7,12,22,.88); border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(12px); opacity:.24; transition:opacity .2s ease; }
+    .deck-controls:hover,.deck-controls:focus-within { opacity:1; }
+    .deck-controls button { width:42px; height:34px; color:#fff; background:transparent; border:1px solid rgba(255,255,255,.25); cursor:pointer; }
+    .deck-controls button:hover { background:#fff; color:#07101b; }
+    .counter { min-width:92px; text-align:center; color:#fff; font:500 13px/1 var(--font-mono); }
+    .progress { position:fixed; left:0; bottom:0; height:4px; width:0; background:var(--cyan); z-index:1200; transition:width .28s ease; }
+    .chapter-menu { position:fixed; inset:0; z-index:9000; display:grid; place-items:center; background:rgba(4,8,15,.86); backdrop-filter:blur(16px); opacity:0; visibility:hidden; pointer-events:none; transition:.22s ease; }
+    .chapter-menu.open { opacity:1; visibility:visible; pointer-events:auto; }
+    .menu-panel { width:min(980px,88vw); max-height:82vh; overflow:auto; background:var(--paper); color:var(--ink); border:3px solid var(--ink); padding:38px; }
+    .menu-head { display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid var(--ink); padding-bottom:20px; }
+    .menu-head h2 { margin:0; font:400 42px/1 var(--font-cjk-display); }.menu-head button{border:2px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
+    .menu-links { display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; padding-top:24px; }
+    .menu-links button { text-align:left; color:var(--ink); background:transparent; border:0; border-bottom:1px solid var(--ink-faint); padding:14px 8px; cursor:pointer; font:500 21px/1.35 var(--font-body); }
+    .menu-links button:hover { background:var(--ink); color:var(--paper); }
+
+    /* ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== */
+    .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+    .edit-toggle { position:fixed; top:16px; left:16px; width:46px; height:46px; z-index:10001; border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; opacity:0; pointer-events:none; transition:opacity .3s ease; cursor:pointer; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; top:16px; left:74px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; padding:10px 14px; cursor:pointer; font:500 13px/1 var(--font-body); }
+    body.editing [data-editable] { outline:2px dashed rgba(255,181,71,.8); outline-offset:5px; cursor:text; }
+
+    /* V4 compatibility layer: content is visible even when local JavaScript is blocked. */
+    .deck-viewport { top:0; right:0; bottom:0; left:0; }
+    .deck-stage {
+      left:50%; top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+    }
+    .slide { top:0; right:0; bottom:0; left:0; }
+    .frame { top:92px; right:86px; bottom:118px; left:86px; }
+    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:5; }
+    .slide:target .reveal { opacity:1; transform:none; }
+    .fallback-controls {
+      position:absolute; left:50%; bottom:34px; z-index:80;
+      display:flex; align-items:center; gap:14px;
+      transform:translateX(-50%); -ms-transform:translateX(-50%);
+      padding:8px 12px; color:#fff; background:#08111f;
+      border:1px solid rgba(255,255,255,.45);
+      font:500 18px/1 Arial,sans-serif;
+    }
+    .fallback-controls a {
+      width:42px; height:34px; display:flex; align-items:center; justify-content:center;
+      color:#fff; border:1px solid rgba(255,255,255,.5); text-decoration:none;
+    }
+    .fallback-controls span { min-width:82px; text-align:center; }
+    .deck-controls, .progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .legacy-note {
+      position:fixed; right:10px; top:10px; z-index:20000;
+      padding:7px 10px; color:#fff; background:#08111f;
+      border:1px solid #fff; font:14px/1.4 Arial,sans-serif;
+    }
+    @media (min-width:1600px) and (min-height:900px) {
+      .deck-stage {
+        transform:translate(-50%,-50%) scale(.85);
+        -ms-transform:translate(-50%,-50%) scale(.85);
+      }
+    }
+    @media (max-width:700px) {
+      .deck-stage {
+        transform:translate(-50%,-50%) scale(.25);
+        -ms-transform:translate(-50%,-50%) scale(.25);
+      }
+    }
+    /* Concrete color fallbacks for browsers without CSS custom properties. */
+    html, body, .deck-viewport { background:#080d17; }
+    .slide.light { color:#1f2be0; background:#f0ebde; }
+    .slide.dark { color:#f4f0e8; background:#08111f; }
+
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+<section id="slide-1" class="slide active visible dark cover" data-title="封面"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">01 / 31</div><div class="cover-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="cover-serial">MOBILE + AI EVOLUTION / V2</div><h1 class="reveal" data-editable>行動通訊、手機<br>與 AI 演進</h1><div class="cover-sub reveal" data-editable>從<strong>隨時連線</strong>，走向系統能學習、生成與協作</div><div class="cover-timeline reveal"><div>行動網路</div><div>智慧型手機</div><div>人工智慧</div></div><div class="signal"></div><div class="signal-core">AI × IS</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">&#8592;</a><span>01 / 31</span><a href="#slide-2" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-2" class="slide light" data-title="從固定地點，到隨時連線"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">02 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>從固定地點，到隨時連線</h2><div class="lab">WHY MOBILE MATTERS</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01 / COMPUTE</div><h3 data-editable>固定運算</h3><p data-editable>電腦先把資訊處理帶進機房、辦公室與家庭，但人仍要走到設備前。</p></article><article class="concept-card reveal"><div class="no">02 / CONNECT</div><h3 data-editable>網路連結</h3><p data-editable>網際網路讓資訊跨越距離流動，行動通訊再把「地點」的限制鬆開。</p></article><article class="concept-card reveal"><div class="no">03 / CONTEXT</div><h3 data-editable>行動情境</h3><p data-editable>位置、時間、相機與感測器，使資訊系統開始理解使用者當下的處境。</p></article></div><div class="source-tag">教師統整：本教材銜接「電腦—網路—資訊系統」三條演進線</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">&#8592;</a><span>02 / 31</span><a href="#slide-3" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-3" class="slide light" data-title="看影片時，追三條線"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">03 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>看影片時，追三條線</h2><div class="lab">HOW TO WATCH</div></header><div class="protocol"><article class="protocol-step reveal"><b>CAPABILITY</b><h3 data-editable>能做什麼</h3><p data-editable>從語音、簡訊、上網，到低延遲與大量裝置連線，每一代增加了哪些能力？</p></article><article class="protocol-step reveal"><b>EXPERIENCE</b><h3 data-editable>怎麼使用</h3><p data-editable>手機的大小、輸入方式、畫面與應用程式，如何跟著網路能力改變？</p></article><article class="protocol-step reveal"><b>MANAGEMENT</b><h3 data-editable>如何管理</h3><p data-editable>當員工與顧客隨時在線上，流程、資料、服務與責任如何重新安排？</p></article></div><div class="source-tag">課堂提示：影片中的速度數字因標準、頻段與實際環境而異；本課聚焦能力與管理意義</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-2" aria-label="上一張">&#8592;</a><span>03 / 31</span><a href="#slide-4" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-4" class="slide dark chapter" data-title="行動網路的世代演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">04 / 31</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 01</div><div class="frame"><div class="reveal"><h2 data-editable>行動網路的世代演進</h2><div class="chapter-sub" data-editable>從「無線通話」，走向<br>人、裝置與服務的持續連結</div><div class="chapter-data"><span>1 部影片 · 8:15</span><span>關鍵詞：語音、資料、延遲</span></div><div class="chapter-question" data-editable>本章核心問題：每一代究竟解除了哪一個限制？</div></div><div class="chapter-no reveal">01</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-3" aria-label="上一張">&#8592;</a><span>04 / 31</span><a href="#slide-5" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-5" class="slide light" data-title="Every Mobile Network Explained in 8 Minutes"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">05 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Every Mobile Network Explained in 8 Minutes</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">1G → 5G，並帶到 6G</div><div class="duration">8:15</div><div class="maker">Byte Sized Explainer<br><a href="https://www.youtube.com/watch?v=4BZg9YQy5WY" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>1G 到 2G 的關鍵，為何不只是「更快」？</li><li data-editable>3G 與 4G 如何讓手機從通訊工具變成上網裝置？</li><li data-editable>5G 強調的低延遲與大量連線，會改變哪些使用情境？</li></ol></div></div><div class="source-tag">影片提供英文自動字幕；YouTube 自動翻譯與可用語言可能隨平台狀態變動</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-4" aria-label="上一張">&#8592;</a><span>05 / 31</span><a href="#slide-6" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-6" class="slide dark video-page" data-title="播放｜Every Mobile Network Explained in 8 Minutes"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">06 / 31</div><div class="cover-kicker">VIDEO / 06</div><div class="cover-serial">8:15 · 英文自動字幕</div><div class="video-shell" data-video-id="4BZg9YQy5WY" data-video-title="Every Mobile Network Explained in 8 Minutes"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Every Mobile Network Explained in 8 Minutes</span><a href="https://www.youtube.com/watch?v=4BZg9YQy5WY" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-5" aria-label="上一張">&#8592;</a><span>06 / 31</span><a href="#slide-7" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-7" class="slide light" data-title="1G 到 2G：從類比語音走向數位服務"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">07 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>1G 到 2G：從類比語音走向數位服務</h2><div class="lab">VIDEO 01 / 1G → 2G</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>1G｜類比行動語音</h3><ul><li data-editable>1980 年代的核心突破，是能在移動中通話</li><li data-editable>系統以類比訊號傳送語音，品質、容量與保密性有限</li><li data-editable>手機主要是通話終端，服務內容單一</li></ul></article><article class="panel reveal"><h3 data-editable>2G｜數位語音與簡訊</h3><ul><li data-editable>1990 年代轉向數位傳輸，提升容量、品質與安全性</li><li data-editable>簡訊成為新的非同步溝通方式</li><li data-editable>GPRS、EDGE 等技術讓封包資料逐步進入手機</li></ul></article></div><div class="source-tag">來源：3GPP「Generations of Mobile Standards」；ITU 行動通訊世代資料</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-6" aria-label="上一張">&#8592;</a><span>07 / 31</span><a href="#slide-8" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-8" class="slide light" data-title="3G：行動網際網路開始成形"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">08 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>3G：行動網際網路開始成形</h2><div class="lab">VIDEO 01 / MOBILE INTERNET</div></header><div class="statement"><p class="quote reveal" data-editable>手機不再只是聯絡工具，<br>也開始連結資訊與服務</p><p class="explain reveal" data-editable>3G 以 IMT-2000 標準家族推動行動資料服務。電子郵件、網頁、影音與社群服務逐漸能在手機上使用；相機手機也讓「拍攝—上傳—分享」變成新的資訊流程。</p></div><div class="source-tag">來源：ITU IMT-2000 歷史資料；ITU「Internet for a Mobile Generation」</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-7" aria-label="上一張">&#8592;</a><span>08 / 31</span><a href="#slide-9" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-9" class="slide light" data-title="4G 與 5G：從行動寬頻走向多元場景"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">09 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>4G 與 5G：從行動寬頻走向多元場景</h2><div class="lab">VIDEO 01 / 4G ↔ 5G</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>4G｜以資料為中心</h3><ul><li data-editable>LTE／LTE-Advanced 推動更高容量的行動寬頻</li><li data-editable>影音串流、雲端服務、地圖與應用程式成為日常</li><li data-editable>手機逐漸成為主要的個人上網裝置</li></ul></article><article class="panel reveal"><h3 data-editable>5G｜能力不只給手機</h3><ul><li data-editable>增強行動寬頻：支援更大量的影音與資料</li><li data-editable>高可靠、低延遲通訊：回應即時控制需求</li><li data-editable>大量機器型通訊：讓更多感測器與設備連線</li></ul></article></div><div class="source-tag">來源：3GPP「The Mobile Broadband Standard」；5G 能力分為 eMBB、URLLC、mMTC</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-8" aria-label="上一張">&#8592;</a><span>09 / 31</span><a href="#slide-10" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-10" class="slide light" data-title="6G：現在是標準形成期，不是商用世代"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">10 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>6G：現在是標準形成期，不是商用世代</h2><div class="lab">TEACHER CHECK / IMT-2030</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>目前已確立</h3><ul><li data-editable>ITU 將下一代行動通訊命名為 IMT-2030</li><li data-editable>2023 年公布整體架構；2026 年持續形成技術需求</li><li data-editable>3GPP 先進行研究，再逐步進入正式規格工作</li></ul></article><article class="panel reveal"><h3 data-editable>課堂上要保留</h3><ul><li data-editable>6G 尚未成為一般消費者可使用的商用網路</li><li data-editable>沉浸式通訊、感測整合與 AI 原生網路仍是發展方向</li><li data-editable>速度與應用情境多屬目標或實驗結果，不宜當成既成事實</li></ul></article></div><div class="source-tag">來源：ITU IMT-2030 Framework（M.2160）；ITU 2026 technical requirements；3GPP Release 20／21 規劃</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-9" aria-label="上一張">&#8592;</a><span>10 / 31</span><a href="#slide-11" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-11" class="slide dark chapter" data-title="手機如何成為資訊入口"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">11 / 31</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 02</div><div class="frame"><div class="reveal"><h2 data-editable>手機如何成為資訊入口</h2><div class="chapter-sub" data-editable>從厚重的通話設備，走向<br>結合軟體、感測器與平台的隨身電腦</div><div class="chapter-data"><span>1 部影片 · 10:30</span><span>關鍵詞：介面、應用、平台</span></div><div class="chapter-question" data-editable>本章核心問題：真正改變世界的是手機，還是手機背後的生態系？</div></div><div class="chapter-no reveal">02</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-10" aria-label="上一張">&#8592;</a><span>11 / 31</span><a href="#slide-12" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-12" class="slide light" data-title="Evolution of Mobile Phones"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">12 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Evolution of Mobile Phones</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">手機外型與功能的視覺年表</div><div class="duration">10:30</div><div class="maker">Magnify<br><a href="https://www.youtube.com/watch?v=xnobktms0TM" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>手機從「可以帶著走」到「可以處理資訊」，外型出現哪些轉折？</li><li data-editable>哪些功能最後被整合進同一部裝置？</li><li data-editable>大螢幕、觸控介面與應用程式，如何改變使用習慣？</li></ol></div></div><div class="source-tag">本片以畫面與年代為主；自動字幕幾乎只有音樂辨識，請以視覺年表觀看</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-11" aria-label="上一張">&#8592;</a><span>12 / 31</span><a href="#slide-13" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-13" class="slide dark video-page" data-title="播放｜Evolution of Mobile Phones"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">13 / 31</div><div class="cover-kicker">VIDEO / 13</div><div class="cover-serial">10:30 · 視覺年表；字幕資訊有限</div><div class="video-shell" data-video-id="xnobktms0TM" data-video-title="Evolution of Mobile Phones"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Evolution of Mobile Phones</span><a href="https://www.youtube.com/watch?v=xnobktms0TM" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-12" aria-label="上一張">&#8592;</a><span>13 / 31</span><a href="#slide-14" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-14" class="slide light" data-title="四個轉折：手機逐步吸收其他裝置"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">14 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>四個轉折：手機逐步吸收其他裝置</h2><div class="lab">VIDEO 02 / DEVICE TIMELINE</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1983</b><h3 data-editable>DynaTAC</h3><p data-editable>第一款商用手持式行動電話，證明「個人可攜通訊」可成為產品。</p></article><article class="milestone reveal"><b>1994</b><h3 data-editable>IBM Simon</h3><p data-editable>把電話、通訊錄、行事曆、電子郵件、傳真與觸控螢幕放在一起。</p></article><article class="milestone reveal"><b>1999–2000s</b><h3 data-editable>相機與功能型手機</h3><p data-editable>簡訊、遊戲、相機、音樂與行動上網逐步整合，手機成為生活媒介。</p></article><article class="milestone reveal"><b>2007</b><h3 data-editable>iPhone</h3><p data-editable>多點觸控、完整網頁與軟體整合，重新定義人們對智慧型手機的期待。</p></article></div><div class="source-tag">來源：Motorola DynaTAC 歷史；Smithsonian IBM Simon；Apple 2007 iPhone 發表資料</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-13" aria-label="上一張">&#8592;</a><span>14 / 31</span><a href="#slide-15" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-15" class="slide light" data-title="真正的轉折：手機成為一個平台"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">15 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>真正的轉折：手機成為一個平台</h2><div class="lab">MANAGEMENT SYNTHESIS</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>一部手機裡的系統</h3><ul><li data-editable>觸控介面：降低操作門檻</li><li data-editable>應用程式：持續增加新功能</li><li data-editable>定位、相機與感測器：產生情境資料</li><li data-editable>雲端帳號與平台：同步服務、身分與付款</li></ul></article><article class="panel reveal"><h3 data-editable>組織因此改變</h3><ul><li data-editable>服務從營業時間變成隨時可用</li><li data-editable>流程從事後輸入變成現場即時回報</li><li data-editable>顧客接觸從門市與網站延伸到個人裝置</li><li data-editable>便利同時帶來資安、隱私與數位落差責任</li></ul></article></div><div class="source-tag">教師統整：行動化是「裝置＋網路＋平台＋資料」共同形成的組織能力</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-14" aria-label="上一張">&#8592;</a><span>15 / 31</span><a href="#slide-16" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-16" class="slide dark chapter" data-title="人工智慧的演進"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">16 / 31</div><div class="chapter-kicker">MANAGEMENT INFORMATION SYSTEMS</div><div class="chapter-serial">CHAPTER 03</div><div class="frame"><div class="reveal"><h2 data-editable>人工智慧的演進</h2><div class="chapter-sub" data-editable>從人寫下每一條規則，走向<br>系統能從資料學習、生成內容並協助完成任務</div><div class="chapter-data"><span>2 部影片 · 63:03</span><span>關鍵詞：規則、學習、生成</span></div><div class="chapter-question" data-editable>本章核心問題：AI 改變的是工具，還是組織分配任務的方式？</div></div><div class="chapter-no reveal">03</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-15" aria-label="上一張">&#8592;</a><span>16 / 31</span><a href="#slide-17" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-17" class="slide light" data-title="AI 不是一種單一技術"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">17 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>AI 不是一種單一技術</h2><div class="lab">COURSE MAP / FOUR SHIFTS</div></header><div class="flow"><article class="flow-node reveal"><b>01</b><h3 data-editable>照規則做</h3><p data-editable>人把知識寫成邏輯與規則，系統依條件推論。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>02</b><h3 data-editable>從例子學</h3><p data-editable>模型從資料找出模式，用來分類、預測與推薦。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>03</b><h3 data-editable>創造內容</h3><p data-editable>模型依提示產生文字、影像、聲音與程式碼。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>04</b><h3 data-editable>朝目標行動</h3><p data-editable>系統串接工具與流程，協助完成多步驟任務。</p></article></div><div class="source-tag">教師統整：四個階段彼此重疊；新方法並未把舊方法全部淘汰</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-16" aria-label="上一張">&#8592;</a><span>17 / 31</span><a href="#slide-18" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-18" class="slide light" data-title="What Is Artificial Intelligence? Crash Course AI #1"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">18 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>What Is Artificial Intelligence? Crash Course AI #1</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">AI 定義、歷史與兩項基礎條件</div><div class="duration">11:45</div><div class="maker">Crash Course × PBS Digital Studios<br><a href="https://www.youtube.com/watch?v=a0_lo_GDcFw" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>影片如何區分「特定任務的 AI」與科幻作品中的通用 AI？</li><li data-editable>為什麼 1956 年的樂觀預測沒有快速實現？</li><li data-editable>運算能力與大量資料如何共同推動近代 AI？</li></ol></div></div><div class="source-tag">英文人工字幕；可在 YouTube 嘗試自動翻譯為繁體中文</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-17" aria-label="上一張">&#8592;</a><span>18 / 31</span><a href="#slide-19" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-19" class="slide dark video-page" data-title="播放｜What Is Artificial Intelligence? Crash Course AI #1"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">19 / 31</div><div class="cover-kicker">VIDEO / 19</div><div class="cover-serial">11:45 · 英文人工字幕</div><div class="video-shell" data-video-id="a0_lo_GDcFw" data-video-title="What Is Artificial Intelligence? Crash Course AI #1"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div><div class="video-caption"><span data-editable>What Is Artificial Intelligence? Crash Course AI #1</span><a href="https://www.youtube.com/watch?v=a0_lo_GDcFw" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-18" aria-label="上一張">&#8592;</a><span>19 / 31</span><a href="#slide-20" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-20" class="slide light" data-title="先把 AI 定義清楚"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">20 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>先把 AI 定義清楚</h2><div class="lab">VIDEO 03 / DEFINITION</div></header><div class="flow"><article class="flow-node reveal"><b>INPUT</b><h3 data-editable>解讀資料</h3><p data-editable>接收文字、影像、聲音、感測或交易紀錄。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>MODEL</b><h3 data-editable>找出模式</h3><p data-editable>依規則、統計或學習所得的表示處理資料。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>DECIDE</b><h3 data-editable>做出判斷</h3><p data-editable>分類、預測、推薦、生成或選擇下一個動作。</p></article><div class="arrow">→</div><article class="flow-node reveal"><b>GOAL</b><h3 data-editable>達成目標</h3><p data-editable>在特定情境完成任務，而不是自動擁有人類心智。</p></article></div><div class="source-tag">影片定義整理；AI 的能力必須連同任務、資料、目標與評估方式一起說明</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-19" aria-label="上一張">&#8592;</a><span>20 / 31</span><a href="#slide-21" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-21" class="slide light" data-title="AI 成為一個研究領域"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">21 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>AI 成為一個研究領域</h2><div class="lab">FOUNDATIONS / 1943–1966</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1943</b><h3 data-editable>人工神經元</h3><p data-editable>McCulloch 與 Pitts 用數學模型描述神經元如何形成邏輯運算。</p></article><article class="milestone reveal"><b>1950</b><h3 data-editable>圖靈的問題</h3><p data-editable>圖靈以「模仿遊戲」重新提出：機器能否呈現可視為智慧的行為？</p></article><article class="milestone reveal"><b>1955–56</b><h3 data-editable>Dartmouth</h3><p data-editable>研究提案首次使用 artificial intelligence 一詞，並在隔年形成研究社群。</p></article><article class="milestone reveal"><b>1966</b><h3 data-editable>ELIZA</h3><p data-editable>以文字規則模擬對話，讓人看見介面能製造「好像理解」的感受。</p></article></div><div class="source-tag">來源：Dartmouth AI 歷史；Alan Turing（1950）；MIT／IBM AI 歷史資料</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-20" aria-label="上一張">&#8592;</a><span>21 / 31</span><a href="#slide-22" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-22" class="slide light" data-title="符號式 AI：把專家的知識寫成規則"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">22 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>符號式 AI：把專家的知識寫成規則</h2><div class="lab">SYMBOLIC AI + EXPERT SYSTEMS</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>基本想法</h3><ul><li data-editable>用符號表示事物、關係與問題狀態</li><li data-editable>以 IF–THEN 規則、搜尋與邏輯推論解題</li><li data-editable>專家系統把領域知識整理成知識庫</li></ul></article><article class="panel reveal"><h3 data-editable>管理上的限制</h3><ul><li data-editable>知識擷取耗時，專家未必能說清楚判斷過程</li><li data-editable>規則增加後容易衝突，維護成本快速上升</li><li data-editable>遇到規則以外的新情況，系統缺乏彈性</li></ul></article></div><div class="source-tag">教師補充：規則式系統至今仍常與機器學習共同使用，尤其在法規與控制要求較高的流程</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-21" aria-label="上一張">&#8592;</a><span>22 / 31</span><a href="#slide-23" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-23" class="slide light" data-title="AI 寒冬：承諾跑得比能力更快"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">23 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>AI 寒冬：承諾跑得比能力更快</h2><div class="lab">EXPECTATION ↔ REALITY</div></header><div class="statement"><p class="quote reveal" data-editable>AI 的發展不是一路上升，<br>而是期待、投資與成果反覆校準</p><p class="explain reveal" data-editable>1960 年代的高度樂觀，遇上運算能力、資料量與方法的限制；1980 年代專家系統商業化後，也因成本與維護問題再次降溫。所謂「AI 寒冬」不是研究完全停止，而是資金與信心明顯退潮。</p></div><div class="source-tag">來源：Gresham College「Economics and Artificial Intelligence」全文；AI 歷史常見分期</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-22" aria-label="上一張">&#8592;</a><span>23 / 31</span><a href="#slide-24" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-24" class="slide light" data-title="學習式 AI 的幾個轉折"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">24 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>學習式 AI 的幾個轉折</h2><div class="lab">1997–2017 / PRAGMATIC TURN</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>1997</b><h3 data-editable>Deep Blue</h3><p data-editable>以高速搜尋與棋局評估擊敗世界棋王，重點是完成任務，而非模仿人類思考。</p></article><article class="milestone reveal"><b>2012</b><h3 data-editable>AlexNet</h3><p data-editable>深度卷積網路結合大量影像與 GPU，在 ImageNet 競賽大幅改善辨識表現。</p></article><article class="milestone reveal"><b>2016</b><h3 data-editable>AlphaGo</h3><p data-editable>深度神經網路、搜尋與強化學習結合，擊敗圍棋高手李世乭。</p></article><article class="milestone reveal"><b>2017</b><h3 data-editable>Transformer</h3><p data-editable>以注意力機制處理序列，讓大型語言模型的平行訓練與擴展更可行。</p></article></div><div class="source-tag">來源：IBM Deep Blue；NeurIPS AlexNet（2012）、Transformer（2017）；Google DeepMind AlphaGo</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-23" aria-label="上一張">&#8592;</a><span>24 / 31</span><a href="#slide-25" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-25" class="slide light" data-title="從「告訴電腦規則」到「讓模型從資料學」"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">25 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>從「告訴電腦規則」到「讓模型從資料學」</h2><div class="lab">RULES ↔ MACHINE LEARNING</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>規則式方法</h3><ul><li data-editable>人先定義條件、例外與處理步驟</li><li data-editable>容易追溯，適合穩定且可明確描述的問題</li><li data-editable>環境變化時，需要人工更新規則</li></ul></article><article class="panel reveal"><h3 data-editable>機器學習方法</h3><ul><li data-editable>人準備資料、目標與評估標準</li><li data-editable>模型從案例中估計規律，再處理新資料</li><li data-editable>表現可能提升，但也會繼承資料偏差</li></ul></article></div><div class="source-tag">教師統整：兩者不是二選一；企業系統常以規則守住邊界，再用模型處理不確定性</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-24" aria-label="上一張">&#8592;</a><span>25 / 31</span><a href="#slide-26" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-26" class="slide light" data-title="深度學習為何在 2010 年代加速"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">26 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>深度學習為何在 2010 年代加速</h2><div class="lab">THREE CONDITIONS</div></header><div class="content-grid"><article class="concept-card reveal"><div class="no">01 / ALGORITHM</div><h3 data-editable>方法累積</h3><p data-editable>神經網路、反向傳播與各種架構長期改良，讓模型能學到多層次表示。</p></article><article class="concept-card reveal"><div class="no">02 / DATA</div><h3 data-editable>資料規模</h3><p data-editable>網際網路、手機與數位服務累積大量文字、影像與行為紀錄。</p></article><article class="concept-card reveal"><div class="no">03 / COMPUTE</div><h3 data-editable>運算能力</h3><p data-editable>GPU、雲端與專用晶片，讓大規模訓練的時間與成本逐步可承受。</p></article></div><div class="source-tag">影片重點＋教師校正：突破來自方法、資料與運算共同成熟，不是單一發明</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-25" aria-label="上一張">&#8592;</a><span>26 / 31</span><a href="#slide-27" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-27" class="slide light" data-title="Economics and Artificial Intelligence"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">27 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Economics and Artificial Intelligence</h2><div class="lab">WATCH / 觀看任務</div></header><div class="video-intro"><div class="video-meta reveal"><div class="micro">AI 歷史、工作與「任務侵入」</div><div class="duration">51:18</div><div class="maker">Daniel Susskind｜Gresham College<br><a href="https://www.youtube.com/watch?v=WtE0trXodXo" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div></div><div class="watch-task reveal"><h3>觀看時，請注意</h3><ol><li data-editable>講者為何把 Deep Blue 視為「實用主義轉折」？</li><li data-editable>AI 不模仿人類思考，也可能完成哪些原本被視為需要智慧的任務？</li><li data-editable>當 AI 逐步承接任務，管理者應重新設計工作，還是只減少人力？</li></ol></div></div><div class="source-tag">建議課堂節選 07:20–28:50；英文自動逐字稿，Gresham 官網另有完整文字稿</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-26" aria-label="上一張">&#8592;</a><span>27 / 31</span><a href="#slide-28" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-28" class="slide dark video-page" data-title="播放｜Economics and Artificial Intelligence"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">28 / 31</div><div class="cover-kicker">VIDEO / 28</div><div class="cover-serial">51:18 · 英文自動逐字稿；可節選播放</div><div class="video-shell" data-video-id="WtE0trXodXo" data-video-title="Economics and Artificial Intelligence"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下以載入並播放影片</span></button></div><div class="video-caption"><span data-editable>Economics and Artificial Intelligence</span><a href="https://www.youtube.com/watch?v=WtE0trXodXo" target="_blank" rel="noopener">若無法嵌入播放，改在 YouTube 開啟 ↗</a></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-27" aria-label="上一張">&#8592;</a><span>28 / 31</span><a href="#slide-29" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-29" class="slide light" data-title="Susskind 的觀察：不必像人，也能完成任務"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">29 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>Susskind 的觀察：不必像人，也能完成任務</h2><div class="lab">VIDEO 04 / PRAGMATIST REVOLUTION</div></header><div class="two-col"><article class="panel reveal"><h3 data-editable>模仿人的路線</h3><ul><li data-editable>先觀察人類如何看、想、判斷與解題</li><li data-editable>再嘗試把相同的思考程序做進機器</li><li data-editable>容易把「不像人」誤判成「機器做不到」</li></ul></article><article class="panel reveal"><h3 data-editable>完成任務的路線</h3><ul><li data-editable>先定義輸入、輸出與成功標準</li><li data-editable>允許系統使用與人不同的方法取得結果</li><li data-editable>管理焦點轉向可靠度、成本、責任與流程整合</li></ul></article></div><div class="source-tag">影片觀點：Daniel Susskind 稱為 Pragmatist Revolution；這是一種詮釋框架，不是唯一的 AI 史分期</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-28" aria-label="上一張">&#8592;</a><span>29 / 31</span><a href="#slide-30" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-30" class="slide light" data-title="生成式 AI：從預測下一步，擴展到新的工作介面"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">30 / 31</div><div class="frame"><header class="topbar reveal"><h2 data-editable>生成式 AI：從預測下一步，擴展到新的工作介面</h2><div class="lab">2017–2026 / GENERATIVE TURN</div></header><div class="timeline" style="--steps:4"><article class="milestone reveal"><b>2017</b><h3 data-editable>Transformer</h3><p data-editable>注意力架構提升序列處理與平行訓練能力，成為大型語言模型的重要基礎。</p></article><article class="milestone reveal"><b>2018</b><h3 data-editable>生成式預訓練</h3><p data-editable>先從大量未標註文字學習通用表示，再調整到不同語言任務。</p></article><article class="milestone reveal"><b>2022</b><h3 data-editable>ChatGPT</h3><p data-editable>對話介面降低使用門檻，讓生成式 AI 快速進入一般人的工作與學習。</p></article><article class="milestone reveal"><b>2023–26</b><h3 data-editable>多模態與代理式流程</h3><p data-editable>文字、影像、聲音與工具逐步整合；多步驟任務仍需權限、驗證與人員監督。</p></article></div><div class="source-tag">來源：NeurIPS Transformer；OpenAI GPT（2018）、ChatGPT（2022）；Stanford AI Index 2026</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-29" aria-label="上一張">&#8592;</a><span>30 / 31</span><a href="#slide-31" aria-label="下一張">&#8594;</a></nav></section>
+<section id="slide-31" class="slide dark closing" data-title="AI 演進的管理意義"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 章節　E 編輯</div><div class="page-num">31 / 31</div><div class="chapter-kicker">MANAGEMENT QUESTION / HUMAN ACCOUNTABILITY</div><div class="chapter-serial">END / BEGIN</div><div class="frame"><h2 class="reveal" data-editable>AI 演進的重點，不只是機器更聰明；<br>而是更多任務可以重新分配</h2><div class="questions reveal"><div data-editable>哪些任務交給 AI、哪些判斷必須由人負責？</div><div data-editable>組織如何確保資料、模型輸出與決策流程可以被檢查？</div><div data-editable>下一步：把 AI 放回資訊系統，重新設計人、流程、資料與控制。</div></div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-30" aria-label="上一張">&#8592;</a><span>31 / 31</span><a href="#slide-31" aria-label="下一張">&#8594;</a></nav></section>
+    </main>
+  </div>
+
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button>
+    <button id="menuBtn" type="button" aria-label="開啟章節選單">☰</button>
+    <span class="counter" id="counter">01 / 31</span>
+    <button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress"></div>
+
+  <aside class="chapter-menu" id="chapterMenu" aria-label="章節選單">
+    <div class="menu-panel">
+      <div class="menu-head"><h2>章節與影片</h2><button id="closeMenu" type="button">關閉</button></div>
+      <div class="menu-links" id="menuLinks"></div>
+    </div>
+  </aside>
+
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <div class="edit-toolbar" id="editToolbar">
+    <button id="saveFile" type="button">下載目前版本</button>
+    <button id="resetEdits" type="button">清除本機修改</button>
+  </div>
+
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的左右箭頭翻頁</div></noscript>
+
+
+  <script>
+  (function () {
+    'use strict';
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el, name) { return new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className); }
+    function addClass(el, name) { if (!hasClass(el, name)) el.className += ' ' + name; }
+    function removeClass(el, name) { el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(?=\\s|$)', 'g'), ' ').replace(/^\\s+|\\s+$/g, ''); }
+    function closestWithClass(el, name) { while (el && el !== document) { if (hasClass(el, name)) return el; el = el.parentNode; } return null; }
+    function closestWithAttr(el, attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr) !== null) return el; el = el.parentNode; } return null; }
+    function pad2(n) { return n < 10 ? '0' + n : String(n); }
+
+    var stage = byId('deckStage');
+    var storageKey = 'mis-mobile-ai-evolution-v2';
+    function storageGet() { try { return window.localStorage.getItem(storageKey); } catch (ignore) { return null; } }
+    function storageSet(value) { try { window.localStorage.setItem(storageKey, value); return true; } catch (ignore) { return false; } }
+    function storageRemove() { try { window.localStorage.removeItem(storageKey); return true; } catch (ignore) { return false; } }
+    var saved = storageGet();
+    if (saved && saved.indexOf('fallback-controls') !== -1) stage.innerHTML = saved;
+    var slides = stage.getElementsByTagName('section');
+    var current = 0;
+    var locked = false;
+    var touchStart = null;
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      var value = 'translate(-50%,-50%) scale(' + factor + ')';
+      stage.style.transform = value;
+      stage.style.msTransform = value;
+      stage.style.webkitTransform = value;
+    }
+    function resetVideo(slide) {
+      var shells = slide.getElementsByClassName('video-shell');
+      if (!shells.length || !shells[0].getElementsByTagName('iframe').length) return;
+      shells[0].innerHTML = '<button class="load-video" type="button"><span class="play-icon">&#9654;</span><span>點一下以載入並播放影片</span></button>';
+    }
+    function show(index, updateHash) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      current = index;
+      for (var i = 0; i < slides.length; i += 1) {
+        if (i === current) { addClass(slides[i], 'active'); addClass(slides[i], 'visible'); }
+        else { removeClass(slides[i], 'active'); removeClass(slides[i], 'visible'); resetVideo(slides[i]); }
+      }
+      byId('counter').innerHTML = pad2(current + 1) + ' / ' + slides.length;
+      byId('progress').style.width = ((current + 1) / slides.length * 100) + '%';
+      if (updateHash !== false) {
+        try { window.history.replaceState(null, '', '#slide-' + (current + 1)); }
+        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
+      }
+    }
+    function indexFromHash() {
+      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, slides.length - 1)) : 0;
+    }
+    function toggleMenu(force) {
+      var menu = byId('chapterMenu');
+      var open = typeof force === 'boolean' ? force : !hasClass(menu, 'open');
+      if (open) addClass(menu, 'open'); else removeClass(menu, 'open');
+    }
+    function buildMenu() {
+      var holder = byId('menuLinks');
+      holder.innerHTML = '';
+      for (var i = 0; i < slides.length; i += 1) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('data-jump', i);
+        button.appendChild(document.createTextNode(pad2(i + 1) + '　' + (slides[i].getAttribute('data-title') || '投影片')));
+        holder.appendChild(button);
+      }
+    }
+    function loadVideo(shell) {
+      var id = shell.getAttribute('data-video-id');
+      var title = shell.getAttribute('data-video-title') || '課程影片';
+      shell.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="' + title.replace(/"/g, '&quot;') + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+    function requestFullscreen() {
+      var root = document.documentElement;
+      var exit = document.exitFullscreen || document.msExitFullscreen || document.webkitExitFullscreen;
+      if (document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement) { if (exit) exit.call(document); return; }
+      var enter = root.requestFullscreen || root.msRequestFullscreen || root.webkitRequestFullscreen;
+      if (enter) enter.call(root);
+    }
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { toggleMenu(true); };
+    byId('closeMenu').onclick = function () { toggleMenu(false); };
+    byId('fullBtn').onclick = requestFullscreen;
+    byId('chapterMenu').onclick = function (event) { event = event || window.event; if ((event.target || event.srcElement).id === 'chapterMenu') toggleMenu(false); };
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      var load = closestWithClass(target, 'load-video');
+      if (load) loadVideo(closestWithClass(load, 'video-shell'));
+      var jump = closestWithAttr(target, 'data-jump');
+      if (jump) { show(parseInt(jump.getAttribute('data-jump'), 10)); toggleMenu(false); }
+    };
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var eventTarget = event.target || event.srcElement;
+      if (eventTarget && (eventTarget.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(eventTarget.tagName))) return;
+      var key = event.key || event.keyCode;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) { if (event.preventDefault) event.preventDefault(); show(current + 1); }
+      else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) { if (event.preventDefault) event.preventDefault(); show(current - 1); }
+      else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) toggleMenu();
+      else if (key === 'Escape' || key === 27) toggleMenu(false);
+      else if (key === 'e' || key === 'E' || key === 69) toggleEditing();
+    };
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(), false); };
+    if (window.addEventListener) {
+      window.addEventListener('wheel', function (event) { if (locked || Math.abs(event.deltaY) < 18) return; locked = true; show(current + (event.deltaY > 0 ? 1 : -1)); window.setTimeout(function () { locked = false; }, 550); }, false);
+      window.addEventListener('touchstart', function (event) { touchStart = event.changedTouches[0].clientX; }, false);
+      window.addEventListener('touchend', function (event) { if (touchStart === null) return; var d = event.changedTouches[0].clientX - touchStart; if (Math.abs(d) > 50) show(current + (d < 0 ? 1 : -1)); touchStart = null; }, false);
+    }
+    var editing = false;
+    var editTimer = null;
+    function toggleEditing() {
+      editing = !editing;
+      var editable = document.querySelectorAll('[data-editable]');
+      for (var i = 0; i < editable.length; i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
+      if (editing) { addClass(document.body, 'editing'); addClass(byId('editToggle'), 'active'); addClass(byId('editToolbar'), 'show'); }
+      else { removeClass(document.body, 'editing'); removeClass(byId('editToggle'), 'active'); removeClass(byId('editToolbar'), 'show'); }
+    }
+    byId('editToggle').onclick = toggleEditing;
+    byId('editToggle').style.opacity = '1';
+    byId('editToggle').style.pointerEvents = 'auto';
+    stage.oninput = function () { window.clearTimeout(editTimer); editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); }, 350); };
+    byId('resetEdits').onclick = function () { if (window.confirm('要清除目前瀏覽器中儲存的文字修改嗎？')) { storageRemove(); window.location.reload(); } };
+    byId('saveFile').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html], { type:'text/html;charset=utf-8' });
+      if (window.navigator.msSaveOrOpenBlob) window.navigator.msSaveOrOpenBlob(blob, '管理資訊系統_行動通訊手機與AI演進教材_V2_編輯版.html');
+      else {
+        var urlApi = window.URL || window.webkitURL;
+        var anchor = document.createElement('a');
+        anchor.href = urlApi.createObjectURL(blob);
+        anchor.download = '管理資訊系統_行動通訊手機與AI演進教材_V2_編輯版.html';
+        document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor);
+        window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); }, 1200);
+      }
+    };
+    buildMenu();
+    scaleStage();
+    show(indexFromHash(), false);
+    addClass(document.body, 'js-ready');
+  }());
+  </script>
+</body>
+</html>
