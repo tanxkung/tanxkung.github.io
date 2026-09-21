@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <script src="access-gate-config.js?v=14b"></script>
+  <script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>行銷企劃｜第三部分：科技與AI如何重塑行銷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&amp;family=Noto+Sans+TC:wght@400;500;700;800&amp;family=Noto+Serif+TC:wght@600;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS：課堂筆記本
+       =========================================== */
+    :root{
+      --stage-bg:#262625;--slide-bg:#262625;--paper:#f7f2e7;--paper-deep:#eee6d5;
+      --ink:#20201f;--ink-2:#4d4b46;--muted:#77736b;--rule:rgba(63,74,68,.13);
+      --mint:#91cdb1;--lav:#baa9df;--coral:#eea9aa;--sky:#92c9dd;--gold:#f0d38b;
+      --red:#d95848;--green:#38715c;--white:#fffdf7;--shadow:rgba(0,0,0,.34);
+      --font-display:"Noto Serif TC",serif;--font-body:"Noto Sans TC",sans-serif;
+      --font-label:"DM Sans",sans-serif;--ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET, FALLBACK, AND PAPER SURFACE
+       =========================================== */
+    *{box-sizing:border-box}
+    body{font-family:var(--font-body);color:var(--ink)}
+    button,a{font:inherit}
+    .deck-stage{transform:scale(.5)}
+    .slide{transition:opacity .28s ease}
+    .slide:target{visibility:visible;opacity:1;pointer-events:auto;z-index:5}
+    .slide:target .reveal,.slide:target .step{opacity:1;transform:none}
+    .paper{
+      position:absolute;left:76px;right:94px;top:50px;bottom:50px;overflow:hidden;
+      color:var(--ink);background-color:var(--paper);
+      background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 65px,var(--rule) 66px,transparent 67px);
+      border-radius:10px;box-shadow:0 22px 78px var(--shadow)
+    }
+    .paper::before{content:"";position:absolute;left:160px;top:0;bottom:0;width:2px;background:rgba(217,88,72,.36)}
+    .holes{position:absolute;left:39px;top:95px;bottom:95px;display:flex;flex-direction:column;justify-content:space-between;z-index:5}
+    .holes i{display:block;width:27px;height:27px;border-radius:50%;background:var(--stage-bg);box-shadow:inset 0 3px 6px rgba(0,0,0,.8)}
+    .tabs{position:absolute;right:0;top:116px;display:grid;gap:14px;z-index:6}
+    .tabs span{width:126px;height:69px;display:grid;place-items:center;border-radius:16px 0 0 16px;font:800 21px/1 var(--font-body);letter-spacing:.05em;opacity:.45;transform:translateX(24px)}
+    .tabs span:nth-child(1){background:var(--mint)}.tabs span:nth-child(2){background:var(--lav)}
+    .tabs span:nth-child(3){background:var(--coral)}.tabs span:nth-child(4){background:var(--sky)}
+    .tabs span:nth-child(5){background:var(--gold)}
+    .tab-overview .tabs span:nth-child(1),.tab-stp .tabs span:nth-child(2),
+    .tab-position .tabs span:nth-child(3),.tab-mix .tabs span:nth-child(4),
+    .tab-case .tabs span:nth-child(5){opacity:1;transform:translateX(0)}
+    .content{position:absolute;left:218px;right:176px;top:92px;bottom:92px;z-index:3}
+    .topline{display:flex;align-items:center;justify-content:space-between;min-height:72px;padding-bottom:18px;border-bottom:3px solid var(--ink)}
+    .topline h2{margin:0;max-width:1250px;font:900 57px/1.14 var(--font-display);letter-spacing:-.025em}
+    .label{flex:0 0 auto;margin-left:28px;padding:11px 16px;background:var(--gold);font:700 20px/1 var(--font-label);letter-spacing:.08em;transform:rotate(-1deg)}
+    .page-no{position:absolute;right:164px;bottom:62px;z-index:7;font:700 18px/1 var(--font-label);letter-spacing:.08em;color:var(--ink-2)}
+    .source{position:absolute;left:218px;bottom:58px;z-index:7;max-width:1320px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:600 16px/1.3 var(--font-label);color:var(--muted)}
+    .teacher-note{position:absolute;right:16px;bottom:18px;max-width:460px;padding:16px 20px;background:var(--gold);box-shadow:5px 5px 0 rgba(32,32,31,.2);font:700 22px/1.45 var(--font-body);transform:rotate(-1deg)}
+    h1,h2,h3,p{overflow-wrap:break-word}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+    .slide.visible .reveal{opacity:1;transform:none}
+    .delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}
+    .step{opacity:1;transform:none;transition:opacity .42s var(--ease),transform .42s var(--ease)}
+    .js-ready .step:not(.shown){opacity:0;transform:translateY(18px)}
+    .highlight{display:inline;padding:0 .12em;background:linear-gradient(transparent 57%,var(--gold) 57%)}
+    .red{color:var(--red)}.green{color:var(--green)}
+
+    /* ===========================================
+       TITLE AND GENERAL COMPONENTS
+       =========================================== */
+    .title-layout{position:absolute;left:226px;right:190px;top:115px;bottom:110px}
+    .title-kicker{font:700 24px/1 var(--font-label);letter-spacing:.12em;color:var(--muted);padding-bottom:24px;border-bottom:3px solid var(--ink)}
+    .title-layout h1{margin:82px 0 0;font:900 108px/1.22 var(--font-display);letter-spacing:-.03em}
+    .title-question{position:absolute;left:0;bottom:82px;font:700 39px/1.4 var(--font-body);color:var(--muted)}
+    .title-stamp{position:absolute;right:52px;bottom:35px;width:230px;height:230px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;text-align:center;font:700 29px/1.35 var(--font-label);transform:rotate(-8deg)}
+    .chip{display:inline-flex;align-items:center;padding:12px 18px;border:2px solid var(--ink);border-radius:999px;background:var(--white);font:700 24px/1 var(--font-body)}
+    .big-statement{margin-top:102px;font:900 72px/1.35 var(--font-display);letter-spacing:-.02em}
+    .substatement{margin-top:34px;max-width:1210px;font:500 33px/1.65 var(--font-body);color:var(--ink-2)}
+
+    /* ===========================================
+       SLIDE-SPECIFIC LAYOUTS
+       =========================================== */
+    .daily-grid{margin-top:62px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+    .daily-card{height:248px;padding:34px 30px;background:var(--white);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--mint);display:flex;flex-direction:column;justify-content:space-between}
+    .daily-card b{font:800 31px/1.3 var(--font-body)}.daily-card span{font:600 21px/1.4 var(--font-body);color:var(--muted)}
+    .action-grid{margin-top:50px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .action{min-height:205px;padding:27px 25px;border:2px solid var(--ink);background:var(--white);font:700 27px/1.45 var(--font-body);position:relative}
+    .action em{position:absolute;right:16px;bottom:12px;font:700 17px/1 var(--font-label);font-style:normal;color:var(--muted)}
+    .answer-band{margin-top:26px;padding:18px 28px;background:var(--mint);font:800 31px/1.4 var(--font-body);text-align:center;border:2px solid var(--ink)}
+    .concept-table{margin-top:58px;display:grid;grid-template-columns:250px 1fr 1fr;border:3px solid var(--ink);background:var(--ink);gap:3px}
+    .concept-table div{min-height:108px;padding:25px 28px;background:var(--white);font:600 26px/1.45 var(--font-body)}
+    .concept-table .head{background:var(--gold);font-weight:800}.concept-table .term{font-weight:900;font-size:31px}
+    .keywords{margin-top:135px;display:flex;justify-content:space-between;align-items:center}
+    .keyword{width:238px;height:238px;border-radius:50%;display:grid;place-items:center;text-align:center;border:3px solid var(--ink);background:var(--white);font:900 38px/1.3 var(--font-display)}
+    .keyword:nth-child(2){background:var(--mint)}.keyword:nth-child(3){background:var(--gold)}.keyword:nth-child(4){background:var(--sky)}.keyword:nth-child(5){background:var(--coral)}
+    .student-definition{margin-top:105px;padding:48px 58px;background:var(--white);border:3px solid var(--ink);box-shadow:12px 12px 0 var(--lav);font:800 50px/1.55 var(--font-display)}
+    .memory-nodes{margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+    .memory-node{padding:28px 24px;text-align:center;border-top:9px solid var(--mint);background:var(--white);font:800 28px/1.35 var(--font-body)}
+    .need-stack{margin-top:52px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    .need-card{min-height:410px;padding:32px 28px;background:var(--white);border:2px solid var(--ink);position:relative}
+    .need-card b{display:block;margin-bottom:26px;font:900 34px/1.2 var(--font-display)}
+    .need-card p{font:600 27px/1.6 var(--font-body)}.need-card:nth-child(2){box-shadow:8px 8px 0 var(--mint)}.need-card:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.need-card:nth-child(4){box-shadow:8px 8px 0 var(--coral)}
+    .coffee{position:absolute;left:560px;top:315px;width:345px;height:345px;border:4px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--gold);font:900 51px/1.25 var(--font-display);text-align:center}
+    .value-chip{position:absolute;padding:16px 25px;border:2px solid var(--ink);border-radius:999px;background:var(--white);font:800 28px/1 var(--font-body)}
+    .v1{left:210px;top:260px}.v2{left:245px;top:505px}.v3{left:335px;top:705px}.v4{right:210px;top:260px}.v5{right:230px;top:505px}.v6{right:350px;top:705px}
+    .process{margin-top:138px;display:grid;grid-template-columns:repeat(11,auto);align-items:center;justify-content:center;gap:15px}
+    .process-node{width:205px;min-height:154px;padding:24px 18px;border:2px solid var(--ink);background:var(--white);display:grid;place-items:center;text-align:center;font:800 28px/1.45 var(--font-body)}
+    .process-node:nth-of-type(3){background:var(--mint)}.process-node:nth-of-type(7){background:var(--gold)}
+    .process-arrow{font:900 34px/1 var(--font-body);color:var(--red)}
+    .video-title{position:absolute;left:120px;right:120px;top:72px;display:flex;justify-content:space-between;align-items:flex-start}
+    .video-title h2{max-width:1300px;margin:0;font:900 51px/1.25 var(--font-display)}.video-title span{padding:12px 18px;background:var(--coral);font:700 19px/1 var(--font-label)}
+    .video-shell{position:absolute;left:120px;right:120px;top:190px;bottom:145px;background:#1f2421;border:3px solid var(--ink);display:grid;place-items:center;overflow:hidden}
+    .video-shell iframe{width:100%;height:100%;border:0}
+    .load-video{display:flex;align-items:center;gap:22px;padding:25px 34px;border:0;background:var(--gold);color:var(--ink);cursor:pointer;font:800 29px/1 var(--font-body);box-shadow:8px 8px 0 rgba(0,0,0,.4)}
+    .play-icon{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--white)}
+    .video-fallback{position:absolute;left:120px;right:120px;bottom:72px;display:flex;justify-content:space-between;align-items:center;font:700 23px/1.4 var(--font-body)}
+    .video-fallback a{color:var(--green);text-decoration-thickness:2px;text-underline-offset:5px}
+    .takeaways{margin-top:66px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+    .takeaway{min-height:310px;padding:38px 34px;background:var(--white);border:2px solid var(--ink)}
+    .takeaway b{display:block;margin-bottom:22px;color:var(--red);font:700 19px/1 var(--font-label);letter-spacing:.1em}
+    .takeaway h3{margin:0 0 20px;font:900 33px/1.35 var(--font-display)}.takeaway p{font:600 25px/1.55 var(--font-body)}
+    .exchange-box{margin-top:32px;padding:23px 30px;background:var(--mint);font:800 28px/1.45 var(--font-body);text-align:center}
+    .choice-cards{margin-top:82px;display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+    .choice{min-height:360px;padding:40px 36px;background:var(--white);border:3px solid var(--ink);position:relative}
+    .choice strong{display:block;font:900 40px/1.3 var(--font-display);margin-bottom:24px}.choice p{font:600 27px/1.65 var(--font-body)}
+    .choice.good{background:var(--mint);box-shadow:12px 12px 0 var(--ink)}.choice .num{position:absolute;right:24px;bottom:18px;font:700 54px/1 var(--font-label);opacity:.22}
+    .stakeholders{margin-top:92px;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+    .stakeholder{min-height:370px;padding:45px 38px;background:var(--white);border:2px solid var(--ink);text-align:center}
+    .stakeholder .role{display:inline-block;padding:12px 22px;border-radius:999px;background:var(--gold);font:800 25px/1 var(--font-body)}
+    .stakeholder h3{font:900 39px/1.35 var(--font-display);margin:36px 0 20px}.stakeholder p{font:600 26px/1.65 var(--font-body)}
+    .decision-grid{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .decision{min-height:205px;padding:30px 29px;background:var(--white);border-left:10px solid var(--mint)}
+    .decision b{display:block;margin-bottom:14px;font:900 31px/1.2 var(--font-display)}.decision p{font:600 24px/1.5 var(--font-body)}
+    .map-story{margin-top:72px;display:grid;grid-template-columns:1fr 110px 1fr 110px 1fr;align-items:center;gap:12px}
+    .map-node{min-height:305px;padding:38px 32px;border:3px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:center}
+    .map-node b{font:900 35px/1.35 var(--font-display);margin-bottom:24px}.map-node p{font:600 26px/1.6 var(--font-body)}
+    .map-node:last-child{background:var(--mint)}.map-arrow{text-align:center;font:900 52px/1 var(--font-body);color:var(--red)}
+    .balance{margin-top:62px;display:grid;grid-template-columns:1fr 1fr;gap:34px}
+    .balance-col{min-height:470px;padding:38px 40px;background:var(--white);border:3px solid var(--ink)}
+    .balance-col.can{box-shadow:11px 11px 0 var(--mint)}.balance-col.cannot{box-shadow:11px 11px 0 var(--coral)}
+    .balance-col h3{font:900 38px/1.3 var(--font-display);margin:0 0 27px}.balance-col ul{margin:0;padding-left:31px;font:600 27px/1.8 var(--font-body)}
+    .closing-flow{margin-top:115px;display:flex;align-items:center;justify-content:center;gap:18px}
+    .closing-node{width:210px;min-height:142px;padding:24px 18px;background:var(--white);border:2px solid var(--ink);display:grid;place-items:center;text-align:center;font:800 26px/1.4 var(--font-body)}
+    .closing-arrow{font:900 32px/1 var(--font-body);color:var(--red)}
+    .closing-quote{margin-top:75px;padding:31px 44px;background:var(--gold);border:3px solid var(--ink);font:900 43px/1.45 var(--font-display);text-align:center}
+
+    /* ===========================================
+       MODULE 2: STP, POSITIONING, AND 4P COMPONENTS
+       =========================================== */
+    .brand-strip{margin-top:68px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+    .brand-card{min-height:360px;padding:38px 30px;border:3px solid var(--ink);background:var(--white);position:relative;overflow:hidden}
+    .brand-card::after{content:"";position:absolute;right:-38px;bottom:-48px;width:145px;height:145px;border-radius:50%;background:var(--card-accent,var(--mint));opacity:.8}
+    .brand-card:nth-child(1){--card-accent:var(--mint)}.brand-card:nth-child(2){--card-accent:var(--gold)}.brand-card:nth-child(3){--card-accent:var(--coral)}.brand-card:nth-child(4){--card-accent:var(--lav)}
+    .brand-card b{display:block;margin-bottom:24px;font:900 38px/1.25 var(--font-display)}
+    .brand-card p{max-width:280px;font:600 25px/1.6 var(--font-body);color:var(--ink-2)}
+    .brand-card small{position:absolute;left:30px;bottom:25px;font:700 17px/1 var(--font-label);letter-spacing:.09em;color:var(--muted)}
+    .scenario-grid{margin-top:60px;display:grid;grid-template-columns:repeat(4,1fr);gap:23px}
+    .scenario{min-height:390px;padding:35px 29px;background:var(--white);border-top:11px solid var(--mint)}
+    .scenario:nth-child(2){border-color:var(--gold)}.scenario:nth-child(3){border-color:var(--coral)}.scenario:nth-child(4){border-color:var(--lav)}
+    .scenario .icon{font:900 52px/1 var(--font-display);color:var(--red)}.scenario h3{margin:27px 0 19px;font:900 35px/1.28 var(--font-display)}.scenario p{font:600 25px/1.6 var(--font-body)}
+    .overview-chain{margin-top:118px;display:flex;align-items:center;justify-content:center;gap:14px}
+    .chain-node{width:205px;min-height:168px;padding:22px 16px;border:3px solid var(--ink);background:var(--white);display:grid;place-items:center;text-align:center;font:800 25px/1.42 var(--font-body)}
+    .chain-node strong{display:block;font:900 38px/1 var(--font-label);color:var(--red)}
+    .chain-node.stp{background:var(--lav)}.chain-node.mix{background:var(--sky)}.chain-node.feedback{background:var(--gold)}
+    .chain-arrow{font:900 32px/1 var(--font-body);color:var(--red)}
+    .definition-panel{margin-top:105px;padding:48px 56px;background:var(--white);border:3px solid var(--ink);box-shadow:12px 12px 0 var(--lav)}
+    .definition-panel .letter{float:left;width:116px;height:116px;margin-right:34px;border-radius:50%;display:grid;place-items:center;background:var(--lav);font:900 62px/1 var(--font-label)}
+    .definition-panel p{font:800 42px/1.58 var(--font-display)}
+    .guardrails{clear:both;margin-top:55px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.guardrail{padding:26px 28px;border-left:9px solid var(--red);background:var(--paper-deep);font:700 25px/1.5 var(--font-body)}
+    .segment-table{margin-top:48px;display:grid;grid-template-columns:270px 1fr;border:3px solid var(--ink);background:var(--ink);gap:3px}
+    .segment-table div{min-height:88px;padding:20px 26px;background:var(--white);font:600 25px/1.45 var(--font-body)}
+    .segment-table .seg-head{background:var(--gold);font-weight:900}.segment-table .seg-key{font-weight:900;font-size:28px}
+    .wrong-right{margin-top:72px;display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:22px}
+    .claim{min-height:390px;padding:43px 42px;border:3px solid var(--ink);background:var(--white)}
+    .claim.wrong{box-shadow:12px 12px 0 var(--coral)}.claim.right{box-shadow:12px 12px 0 var(--mint)}
+    .claim b{display:block;margin-bottom:30px;font:800 22px/1 var(--font-label);letter-spacing:.12em}.claim p{font:800 34px/1.6 var(--font-display)}
+    .fix-arrow{text-align:center;font:900 58px/1 var(--font-body);color:var(--red)}
+    .matrix{position:relative;margin:32px auto 0;width:1040px;height:540px;border-left:4px solid var(--ink);border-bottom:4px solid var(--ink);background:linear-gradient(rgba(32,32,31,.06) 2px,transparent 2px),linear-gradient(90deg,rgba(32,32,31,.06) 2px,transparent 2px);background-size:50% 50%}
+    .matrix::before{content:"聚會與體驗 →";position:absolute;left:370px;bottom:-44px;font:700 22px/1 var(--font-body)}.matrix::after{content:"願意提高預算 →";position:absolute;left:-165px;top:230px;transform:rotate(-90deg);font:700 22px/1 var(--font-body)}
+    .matrix-label{position:absolute;font:700 19px/1.3 var(--font-label);color:var(--muted)}.ml-left{left:18px;bottom:16px}.ml-bottom{right:18px;bottom:16px}.ml-top{left:18px;top:16px}
+    .brand-dot{position:absolute;min-width:170px;padding:15px 19px;border:3px solid var(--ink);background:var(--white);font:900 25px/1 var(--font-body);text-align:center;box-shadow:7px 7px 0 var(--dot,var(--mint))}
+    .dot-mini{left:130px;bottom:95px;--dot:var(--gold)}.dot-stone{left:350px;bottom:180px;--dot:var(--mint)}.dot-spicy{right:170px;top:180px;--dot:var(--coral)}.dot-wagyu{right:75px;top:50px;--dot:var(--lav)}
+    .target-checks{margin-top:55px;display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.target-check{min-height:330px;padding:31px 24px;border:2px solid var(--ink);background:var(--white)}
+    .target-check span{display:block;margin-bottom:27px;font:900 48px/1 var(--font-label);color:var(--red)}.target-check b{display:block;margin-bottom:18px;font:900 29px/1.3 var(--font-display)}.target-check p{font:600 22px/1.55 var(--font-body)}
+    .promise-cloud{margin-top:85px;display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.promise{min-height:190px;padding:28px 20px;border:3px solid var(--ink);background:var(--white);display:grid;place-items:center;text-align:center;font:900 28px/1.4 var(--font-display)}
+    .promise:nth-child(2){background:var(--mint)}.promise:nth-child(3){background:var(--gold)}.promise:nth-child(4){background:var(--coral)}.promise:nth-child(5){background:var(--lav)}
+    .position-grid{margin-top:45px;display:grid;grid-template-columns:repeat(2,1fr);gap:22px}.position-card{min-height:255px;padding:30px 34px;border:3px solid var(--ink);background:var(--white);display:grid;grid-template-columns:175px 1fr;gap:28px;align-items:center}
+    .position-card b{font:900 36px/1.25 var(--font-display)}.position-card p{font:600 24px/1.55 var(--font-body)}.position-card:nth-child(1){box-shadow:8px 8px 0 var(--mint)}.position-card:nth-child(2){box-shadow:8px 8px 0 var(--gold)}.position-card:nth-child(3){box-shadow:8px 8px 0 var(--coral)}.position-card:nth-child(4){box-shadow:8px 8px 0 var(--lav)}
+    .formula{margin-top:86px;padding:45px 50px;background:var(--white);border:3px solid var(--ink);font:800 40px/1.65 var(--font-display);box-shadow:12px 12px 0 var(--coral)}
+    .formula span{display:inline-block;padding:0 12px;background:var(--gold)}.formula-example{margin-top:45px;font:600 29px/1.65 var(--font-body);color:var(--ink-2)}
+    .fact-grid{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:34px}.fact-col{min-height:470px;padding:39px 40px;border:3px solid var(--ink);background:var(--white)}
+    .fact-col.fact{box-shadow:11px 11px 0 var(--mint)}.fact-col.infer{box-shadow:11px 11px 0 var(--coral)}.fact-col h3{margin:0 0 28px;font:900 36px/1.25 var(--font-display)}.fact-col ul{padding-left:30px;font:600 25px/1.72 var(--font-body)}
+    .p-bridge{margin-top:90px;display:grid;grid-template-columns:320px 1fr;gap:42px;align-items:center}.position-badge{height:330px;border-radius:50%;border:4px solid var(--ink);background:var(--coral);display:grid;place-items:center;text-align:center;font:900 48px/1.3 var(--font-display)}
+    .p-questions{display:grid;grid-template-columns:1fr 1fr;gap:20px}.p-question{min-height:145px;padding:25px 28px;border:3px solid var(--ink);background:var(--white);font:800 25px/1.42 var(--font-body)}.p-question b{display:block;margin-bottom:11px;font:900 25px/1 var(--font-label);color:var(--red)}
+    .p-detail{margin-top:55px;display:grid;grid-template-columns:430px 1fr;gap:42px}.p-letter{min-height:520px;padding:48px 40px;background:var(--accent-bg,var(--mint));border:3px solid var(--ink);display:flex;flex-direction:column;justify-content:space-between}.p-letter strong{font:900 150px/1 var(--font-label)}.p-letter h3{font:900 48px/1.2 var(--font-display)}
+    .p-list{min-height:520px;padding:40px 44px;background:var(--white);border:3px solid var(--ink)}.p-list ul{padding-left:32px;font:600 28px/1.78 var(--font-body)}.p-list .p-quote{margin-top:30px;padding:22px 25px;background:var(--paper-deep);font:800 27px/1.5 var(--font-body)}
+    .video-compare{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:34px}.video-column{min-height:470px;padding:38px 40px;border:3px solid var(--ink);background:var(--white)}
+    .video-column:first-child{box-shadow:11px 11px 0 var(--coral)}.video-column:last-child{box-shadow:11px 11px 0 var(--sky)}.video-column b{display:block;margin-bottom:18px;font:800 19px/1 var(--font-label);letter-spacing:.1em;color:var(--red)}.video-column h3{margin:0 0 25px;font:900 35px/1.35 var(--font-display)}.video-column p{font:600 25px/1.65 var(--font-body)}
+
+    /* ===========================================
+       CONTROLS, MENU, EDITOR, AND LEGACY NOTICE
+       =========================================== */
+    .fallback-controls{position:absolute;left:93px;bottom:61px;z-index:10;display:flex;align-items:center;gap:10px}
+    .fallback-controls a,.fallback-controls span{width:44px;height:36px;display:grid;place-items:center;border:2px solid var(--ink);background:var(--white);color:var(--ink);text-decoration:none;font:700 17px/1 var(--font-label)}
+    .fallback-controls span{width:72px;background:var(--paper-deep)}
+    .deck-controls{display:flex;align-items:center;gap:8px;padding:8px;border-radius:999px;background:rgba(27,27,26,.92);box-shadow:0 7px 26px rgba(0,0,0,.32)}
+    .deck-controls button{width:44px;height:40px;border:0;border-radius:50%;background:transparent;color:white;cursor:pointer;font-size:21px}
+    .deck-controls button:hover{background:rgba(255,255,255,.15)}
+    .counter{min-width:92px;text-align:center;color:white;font:700 15px/1 var(--font-label);letter-spacing:.07em}
+    .progress{position:fixed;left:0;bottom:0;height:4px;background:var(--mint);z-index:1200;transition:width .3s ease}
+    .chapter-menu{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.58);opacity:0;visibility:hidden;transition:.25s}
+    .chapter-menu.open{opacity:1;visibility:visible}
+    .menu-panel{position:absolute;right:0;top:0;bottom:0;width:440px;padding:28px;background:var(--paper);overflow:auto}
+    .menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.menu-head h2{font:900 28px/1 var(--font-display)}
+    .menu-head button,.menu-links button{border:2px solid var(--ink);background:var(--white);cursor:pointer}
+    .menu-head button{padding:8px 12px}.menu-links{display:grid;gap:9px}.menu-links button{padding:13px 15px;text-align:left;font:700 15px/1.35 var(--font-body)}
+    .edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer}
+    .edit-toggle{position:fixed;left:17px;top:17px;width:45px;height:45px;border:0;border-radius:50%;background:var(--gold);color:var(--ink);opacity:0;pointer-events:none;z-index:10001;transition:opacity .3s}
+    .edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}
+    .edit-toolbar{position:fixed;left:74px;top:17px;z-index:10001;display:flex;gap:8px;opacity:0;pointer-events:none}
+    .edit-toolbar.show{opacity:1;pointer-events:auto}.edit-toolbar button{padding:10px 14px;border:0;border-radius:7px;background:var(--paper);color:var(--ink)}
+    body.editing [data-editable]{outline:2px dashed var(--red);outline-offset:4px;cursor:text}
+    .legacy-note{position:fixed;left:16px;right:16px;top:16px;z-index:3000;padding:10px 14px;background:#fff2b7;color:#272727;font:700 15px/1.4 sans-serif;text-align:center}
+  
+
+    /* ===========================================
+       MODULE 3: TECHNOLOGY, DATA, AND AI
+       Extends the established classroom-notebook system.
+       =========================================== */
+    .big-statement.compact{margin-top:70px;font-size:58px;line-height:1.45}
+    .core-chain{margin-top:72px;display:flex;align-items:center;justify-content:center;gap:17px}.core-chain span{min-width:150px;padding:26px 20px;border:3px solid var(--ink);background:var(--white);text-align:center;font:800 28px/1.25 var(--font-body)}.core-chain span:nth-of-type(2),.core-chain span:nth-of-type(3),.core-chain span:nth-of-type(4){min-width:105px;background:var(--lav)}.core-chain span:nth-of-type(5){background:var(--sky)}.core-chain b{font:900 28px/1 var(--font-body);color:var(--red)}
+    .binary-grid{margin-top:70px;display:grid;grid-template-columns:1fr 1fr;gap:40px}.binary-card{min-height:450px;padding:48px 46px;border:3px solid var(--ink);background:var(--white);box-shadow:12px 12px 0 var(--gold)}.binary-card.ai{box-shadow-color:var(--mint)}.binary-card b{display:block;margin-bottom:28px;font:900 46px/1.2 var(--font-display)}.binary-card p{font:600 30px/1.65 var(--font-body)}.example-tag{margin-top:42px;padding:18px 22px;background:var(--paper-deep);font:800 24px/1.45 var(--font-body)}
+    .level-ladder{margin-top:95px;display:grid;grid-template-columns:repeat(5,1fr);gap:18px;align-items:end}.level{height:330px;padding:30px 24px;border:3px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:space-between}.level:nth-child(2){height:370px;background:#f3ecce}.level:nth-child(3){height:410px;background:var(--lav)}.level:nth-child(4){height:450px;background:var(--coral)}.level:nth-child(5){height:490px;background:var(--mint)}.level span{font:900 44px/1 var(--font-label);color:var(--red)}.level b{font:900 34px/1.25 var(--font-display)}.level small{font:600 22px/1.5 var(--font-body)}
+    .netflix-scene{margin-top:78px;display:grid;grid-template-columns:1fr 100px 1fr;align-items:center;gap:25px}.catalog{min-height:440px;padding:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:#171717;border:4px solid var(--ink)}.catalog span{background:linear-gradient(145deg,#585858,#202020);border:2px solid #777}.catalog span:nth-child(2),.catalog span:nth-child(5){background:linear-gradient(145deg,#c4483d,#3b1715)}.scene-arrow{font:900 68px/1 var(--font-body);text-align:center;color:var(--red)}.personal-home{min-height:440px;padding:52px;border:4px solid var(--ink);background:var(--mint);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.profile-dot{width:108px;height:108px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:white;font:800 34px/1 var(--font-body)}.personal-home b{margin:35px 0 20px;font:900 41px/1.35 var(--font-display)}.personal-home small{font:600 24px/1.5 var(--font-body)}
+    .signal-grid{margin-top:60px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.signal{min-height:190px;padding:31px 35px;border:3px solid var(--ink);background:var(--white)}.signal:nth-child(2){box-shadow:8px 8px 0 var(--lav)}.signal:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.signal:nth-child(4){box-shadow:8px 8px 0 var(--gold)}.signal b{display:block;margin-bottom:14px;font:900 32px/1.25 var(--font-display)}.signal p{font:600 24px/1.5 var(--font-body)}.evidence-note{margin-top:30px;padding:18px 25px;background:var(--mint);border:2px solid var(--ink);font:800 25px/1.45 var(--font-body);text-align:center}
+    .home-wireframe{margin-top:48px;padding:28px;background:#20201f;border:4px solid var(--ink);color:white}.hero-row{height:95px;display:flex;align-items:center;gap:20px}.hero-row b{margin-right:auto;font:800 31px/1 var(--font-body)}.hero-row span{padding:12px 18px;background:#444;font:600 19px/1 var(--font-body)}.content-row{height:115px;display:grid;grid-template-columns:210px repeat(4,1fr);gap:16px;align-items:center;border-top:1px solid #555}.content-row em{font:700 22px/1.3 var(--font-body);font-style:normal}.content-row i{height:82px;background:linear-gradient(145deg,#777,#292929)}.content-row:nth-child(3) i:nth-of-type(2),.content-row:nth-child(4) i:nth-of-type(4){background:linear-gradient(145deg,#bb5548,#3b1715)}.annotation{margin-top:25px;padding:18px 25px;background:var(--gold);font:800 24px/1.4 var(--font-body)}
+    .stp-cards{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.stp-card{min-height:470px;padding:38px 34px;border:3px solid var(--ink);background:var(--white)}.stp-card:nth-child(1){box-shadow:10px 10px 0 var(--lav)}.stp-card:nth-child(2){box-shadow:10px 10px 0 var(--sky)}.stp-card:nth-child(3){box-shadow:10px 10px 0 var(--coral)}.stp-card strong{display:block;font:900 72px/1 var(--font-label);color:var(--red)}.stp-card b{display:block;margin:27px 0 20px;font:900 33px/1.25 var(--font-display)}.stp-card p{font:600 25px/1.6 var(--font-body)}
+    .mix-grid{margin-top:60px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.mix-grid article{min-height:235px;padding:34px 37px;border:3px solid var(--ink);background:var(--white)}.mix-grid article:nth-child(1){box-shadow:8px 8px 0 var(--mint)}.mix-grid article:nth-child(2){box-shadow:8px 8px 0 var(--gold)}.mix-grid article:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.mix-grid article:nth-child(4){box-shadow:8px 8px 0 var(--coral)}.mix-grid b{display:block;margin-bottom:16px;font:900 29px/1 var(--font-label);color:var(--red)}.mix-grid p{font:700 27px/1.5 var(--font-body)}
+    .feedback-loop{margin-top:145px;display:flex;align-items:center;justify-content:center;gap:18px}.feedback-loop span{width:250px;min-height:155px;padding:25px;border:3px solid var(--ink);background:var(--white);display:grid;place-items:center;text-align:center;font:800 29px/1.35 var(--font-body)}.feedback-loop span:nth-of-type(3){background:var(--lav)}.feedback-loop span:nth-of-type(4){background:var(--mint)}.feedback-loop b{font:900 38px/1 var(--font-body);color:var(--red)}.loop-caption{margin:72px auto 0;max-width:1250px;padding:25px 32px;background:var(--gold);border:3px solid var(--ink);text-align:center;font:800 31px/1.5 var(--font-body)}
+    .risk-balance{margin-top:65px;display:grid;grid-template-columns:1fr 1fr;gap:38px}.risk-side{min-height:500px;padding:42px 45px;border:3px solid var(--ink);background:var(--white)}.risk-side.value{box-shadow:12px 12px 0 var(--mint)}.risk-side.risk{box-shadow:12px 12px 0 var(--coral)}.risk-side h3{margin:0 0 34px;font:900 40px/1.2 var(--font-display)}.risk-side ul{padding-left:33px;font:600 29px/1.9 var(--font-body)}
+    .journey-compare{margin-top:82px;display:grid;grid-template-columns:1fr 1fr;gap:38px}.journey{min-height:330px;padding:44px 42px;border:3px solid var(--ink);background:var(--white)}.journey.digital{background:var(--mint);box-shadow:12px 12px 0 var(--ink)}.journey b{display:block;margin-bottom:34px;font:900 40px/1.2 var(--font-display)}.journey p{font:700 29px/1.7 var(--font-body)}.question-band{margin-top:44px;padding:24px 30px;background:var(--gold);border:3px solid var(--ink);text-align:center;font:900 34px/1.4 var(--font-display)}
+    .metric-row{margin-top:92px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.metric{min-height:290px;padding:35px 28px;border:3px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:center;text-align:center}.metric:nth-child(1){box-shadow:8px 8px 0 var(--lav)}.metric:nth-child(2){box-shadow:8px 8px 0 var(--mint)}.metric:nth-child(3){box-shadow:8px 8px 0 var(--gold)}.metric:nth-child(4){box-shadow:8px 8px 0 var(--sky)}.metric strong{font:900 68px/1 var(--font-label);color:var(--red)}.metric span{margin-top:25px;font:700 25px/1.4 var(--font-body)}
+    .external-video-card{position:absolute;left:120px;right:120px;top:190px;bottom:145px;background:#1f2421;border:3px solid var(--ink);display:grid;place-items:center;overflow:hidden}.screen-lines{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:46px;opacity:.28}.screen-lines i{background:linear-gradient(145deg,#888,#222);transform:skew(-6deg)}.external-play{position:relative;z-index:2;min-width:640px;padding:32px 40px;background:var(--gold);color:var(--ink);text-decoration:none;border:3px solid var(--ink);box-shadow:10px 10px 0 rgba(0,0,0,.5);display:grid;grid-template-columns:72px 1fr;column-gap:24px;align-items:center}.external-play .play-icon{grid-row:1/3}.external-play b{font:800 29px/1.35 var(--font-body)}.external-play small{font:600 20px/1.5 var(--font-body);color:var(--ink-2)}
+    .interface-cues{margin-top:72px;display:grid;grid-template-columns:1fr 1fr;gap:25px}.cue{min-height:220px;padding:34px 38px;border:3px solid var(--ink);background:var(--white)}.cue:nth-child(1){box-shadow:8px 8px 0 var(--gold)}.cue:nth-child(2){box-shadow:8px 8px 0 var(--mint)}.cue:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.cue:nth-child(4){box-shadow:8px 8px 0 var(--coral)}.cue b{display:block;margin-bottom:16px;font:900 34px/1.2 var(--font-display)}.cue p{font:600 25px/1.5 var(--font-body)}
+    .layer-stack{margin-top:65px;display:grid;gap:22px}.layer{min-height:150px;padding:27px 35px;border:3px solid var(--ink);background:var(--white);display:grid;grid-template-columns:260px 1fr;align-items:center}.layer:nth-child(2){background:#f3ecce}.layer.ai{background:var(--mint);box-shadow:10px 10px 0 var(--ink)}.layer span{font:900 35px/1.2 var(--font-display)}.layer p{font:700 27px/1.5 var(--font-body)}
+    .predict-generate{margin-top:90px;display:grid;grid-template-columns:1fr 110px 1fr;align-items:center}.predict-generate article{min-height:430px;padding:50px 46px;border:3px solid var(--ink);background:var(--white)}.predict{box-shadow:12px 12px 0 var(--lav)}.predict-generate .generate{background:var(--mint);box-shadow:12px 12px 0 var(--ink)}.predict-generate small{font:800 19px/1 var(--font-label);letter-spacing:.1em;color:var(--red)}.predict-generate b{display:block;margin:38px 0 28px;font:900 46px/1.2 var(--font-display)}.predict-generate p{font:600 28px/1.65 var(--font-body)}.pg-arrow{text-align:center;font:900 64px/1 var(--font-body);color:var(--red)}
+    .work-grid{margin-top:78px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}.work{min-height:440px;padding:35px 30px;border:3px solid var(--ink);background:var(--white)}.work:nth-child(1){box-shadow:8px 8px 0 var(--lav)}.work:nth-child(2){box-shadow:8px 8px 0 var(--coral)}.work:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.work:nth-child(4){box-shadow:8px 8px 0 var(--mint)}.work span{font:900 50px/1 var(--font-label);color:var(--red)}.work b{display:block;margin:36px 0 24px;font:900 38px/1.2 var(--font-display)}.work p{font:600 25px/1.6 var(--font-body)}
+    .proof-grid{margin-top:64px;display:grid;grid-template-columns:1fr 1fr;gap:40px}.proof{min-height:510px;padding:43px 47px;border:3px solid var(--ink);background:var(--white)}.proof.can{box-shadow:12px 12px 0 var(--mint)}.proof.cannot{box-shadow:12px 12px 0 var(--coral)}.proof h3{margin:0 0 34px;font:900 42px/1.2 var(--font-display)}.proof ul{padding-left:32px;font:600 28px/1.9 var(--font-body)}
+    .ad-story{margin-top:100px;display:grid;grid-template-columns:1fr 100px 1fr;align-items:center}.ad-story article{min-height:410px;padding:48px 43px;border:3px solid var(--ink);background:var(--white)}.ad-story .problem{box-shadow:12px 12px 0 var(--coral)}.ad-story .solution{background:var(--mint);box-shadow:12px 12px 0 var(--ink)}.ad-story b{display:block;margin-bottom:35px;font:900 40px/1.2 var(--font-display)}.ad-story p{font:600 28px/1.65 var(--font-body)}.story-arrow{text-align:center;font:900 64px/1 var(--font-body);color:var(--red)}
+    .pipeline{margin-top:125px;display:grid;grid-template-columns:repeat(11,auto);gap:12px;align-items:center;justify-content:center}.pipeline article{width:185px;min-height:190px;padding:25px 18px;border:3px solid var(--ink);background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.pipeline article:nth-of-type(2),.pipeline article:nth-of-type(5){background:var(--mint)}.pipeline span{font:900 43px/1 var(--font-label);color:var(--red)}.pipeline b{margin-top:22px;font:800 24px/1.35 var(--font-body)}.pipeline i{font:900 28px/1 var(--font-body);font-style:normal;color:var(--red)}
+    .pedigree-map{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:25px}.pedigree-map article{min-height:240px;padding:35px 39px;border:3px solid var(--ink);background:var(--white)}.pedigree-map article:nth-child(1){box-shadow:8px 8px 0 var(--lav)}.pedigree-map article:nth-child(2){box-shadow:8px 8px 0 var(--coral)}.pedigree-map article:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.pedigree-map article:nth-child(4){box-shadow:8px 8px 0 var(--mint)}.pedigree-map b{display:block;margin-bottom:18px;font:900 31px/1.2 var(--font-label);color:var(--red)}.pedigree-map p{font:650 25px/1.55 var(--font-body)}
+    .outcome-row{margin-top:95px;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}.outcome{min-height:300px;padding:35px;border:3px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:center;text-align:center}.outcome:nth-child(1){box-shadow:9px 9px 0 var(--mint)}.outcome:nth-child(2){box-shadow:9px 9px 0 var(--gold)}.outcome:nth-child(3){box-shadow:9px 9px 0 var(--coral)}.outcome strong{font:900 60px/1.1 var(--font-label);color:var(--red)}.outcome span{margin-top:25px;font:700 25px/1.4 var(--font-body)}.boundary-note{margin-top:42px;padding:23px 30px;background:var(--paper-deep);border:3px solid var(--ink);font:800 26px/1.5 var(--font-body);text-align:center}
+    .case-compare{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.case-compare article{min-height:242px;padding:32px 36px;border:3px solid var(--ink);background:var(--white)}.case-compare article:nth-child(1){box-shadow:8px 8px 0 var(--lav)}.case-compare article:nth-child(2){box-shadow:8px 8px 0 var(--gold)}.case-compare article:nth-child(3){box-shadow:8px 8px 0 var(--sky)}.case-compare article:nth-child(4){box-shadow:8px 8px 0 var(--mint)}.case-compare b{font:900 33px/1.2 var(--font-display)}.case-compare span{float:right;padding:8px 12px;background:var(--paper-deep);font:700 17px/1 var(--font-body)}.case-compare p{clear:both;padding-top:24px;font:600 25px/1.55 var(--font-body)}
+    .six-questions{margin-top:55px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.six-questions article{min-height:200px;padding:28px 30px;border:3px solid var(--ink);background:var(--white);position:relative}.six-questions article:nth-child(2),.six-questions article:nth-child(5){background:var(--mint)}.six-questions article:nth-child(3),.six-questions article:nth-child(6){background:#f3ecce}.six-questions span{position:absolute;right:18px;top:15px;font:900 36px/1 var(--font-label);opacity:.22}.six-questions b{display:block;margin-bottom:14px;font:900 31px/1.2 var(--font-display)}.six-questions p{font:600 22px/1.45 var(--font-body)}.final-line{margin-top:28px;padding:22px 30px;background:var(--coral);border:3px solid var(--ink);text-align:center;font:900 27px/1.48 var(--font-display)}
+    .source{left:265px;max-width:1260px}.source a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+      <!-- 01｜科技如何重塑行銷 -->
+      <section id="slide-1" class="slide active visible tab-overview" data-title="科技如何重塑行銷">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div>
+  <div class="title-layout"><div class="title-kicker">行銷企劃・第三部分</div><h1 class="reveal" data-editable>科技如何<br><span class="green">重塑行銷</span></h1><div class="title-question reveal delay-1" data-editable>從數位化、個人化，到生成式AI</div><div class="title-stamp reveal delay-2">MARKETING<br>03</div></div></div>
+        <div class="page-no">01 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-1" aria-label="上一張">←</a><span>01 / 29</span><a href="#slide-2" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 02｜科技沒有取代行銷的基本問題 -->
+      <section id="slide-2" class="slide tab-overview" data-title="科技沒有取代行銷的基本問題">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>科技沒有取代行銷的基本問題</h2><div class="label">BRIDGE</div></header>
+  <div class="core-chain reveal delay-1"><span>市場差異</span><b>→</b><span>S</span><b>→</b><span>T</span><b>→</b><span>P</span><b>→</b><span>4P</span><b>→</b><span>顧客反應</span></div>
+  <div class="big-statement compact step" data-editable>科技改變的是<span class="highlight">看見、判斷、接觸與調整</span>的方法；<br>沒有替企業回答「要為誰創造什麼價值」。</div></div><div class="teacher-note step" data-editable>前一部分的STP與4P仍然有效；今天看科技如何讓這條決策鏈變得更細、更快，也更需要清楚的責任界線。</div></div>
+        <div class="page-no">02 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-1" aria-label="上一張">←</a><span>02 / 29</span><a href="#slide-3" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 03｜不是有螢幕、有機器就是AI -->
+      <section id="slide-3" class="slide tab-overview" data-title="不是有螢幕、有機器就是AI">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>不是有螢幕、有機器就是AI</h2><div class="label">DON’T CONFUSE</div></header>
+  <div class="binary-grid">
+    <article class="binary-card reveal delay-1"><b>數位化／自動化</b><p data-editable>固定規則、固定流程；把原本由人或紙本完成的工作移到系統。</p><div class="example-tag">例：固定菜單的自助點餐機</div></article>
+    <article class="binary-card ai reveal delay-2"><b>AI化</b><p data-editable>根據資料進行預測、生成或調整；輸出可能隨對象與情境改變。</p><div class="example-tag">例：依情境改變排序與推薦</div></article>
+  </div></div><div class="teacher-note step" data-editable>判斷重點不是設備長什麼樣子，而是系統究竟做了什麼。</div></div>
+        <div class="page-no">03 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-2" aria-label="上一張">←</a><span>03 / 29</span><a href="#slide-4" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 04｜從數位化到AI的五個層次 -->
+      <section id="slide-4" class="slide tab-overview" data-title="從數位化到AI的五個層次">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>從數位化到AI的五個層次</h2><div class="label">FIVE LEVELS</div></header>
+  <div class="level-ladder">
+    <article class="level reveal delay-1"><span>01</span><b>數位化</b><small>流程進入數位介面</small></article>
+    <article class="level reveal delay-1"><span>02</span><b>資料化</b><small>行為成為可分析紀錄</small></article>
+    <article class="level reveal delay-2"><span>03</span><b>預測式AI</b><small>估計較可能的行動</small></article>
+    <article class="level reveal delay-3"><span>04</span><b>生成式AI</b><small>產生新的內容</small></article>
+    <article class="level reveal delay-4"><span>05</span><b>動態服務</b><small>依情境持續更新</small></article>
+  </div></div><div class="teacher-note step" data-editable>五層可以組合使用，不代表每一家企業都必須一路做到最高層。</div></div>
+        <div class="page-no">04 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-3" aria-label="上一張">←</a><span>04 / 29</span><a href="#slide-5" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 05｜Netflix不是一座影片倉庫 -->
+      <section id="slide-5" class="slide tab-stp" data-title="Netflix不是一座影片倉庫">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Netflix不是一座影片倉庫</h2><div class="label">CASE 01</div></header>
+  <div class="netflix-scene">
+    <div class="catalog reveal delay-1"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="scene-arrow">→</div>
+    <div class="personal-home reveal delay-2"><div class="profile-dot">你</div><b data-editable>一個替你重新排列內容的首頁</b><small>內容列、作品順序、縮圖都可能不同</small></div>
+  </div></div><div class="teacher-note step" data-editable>真正的行銷問題不是「有多少內容」，而是如何讓人更快找到願意觀看的內容。</div></div>
+        <div class="page-no">05 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-4" aria-label="上一張">←</a><span>05 / 29</span><a href="#slide-6" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 06｜Netflix使用哪些訊號？ -->
+      <section id="slide-6" class="slide tab-stp" data-title="Netflix使用哪些訊號？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Netflix使用哪些訊號？</h2><div class="label">DATA SIGNALS</div></header>
+  <div class="signal-grid">
+    <article class="signal reveal delay-1"><b>你的行為</b><p>開始觀看、是否看完與評分</p></article>
+    <article class="signal reveal delay-1"><b>相似會員</b><p>偏好相近的人如何選擇</p></article>
+    <article class="signal reveal delay-2"><b>內容資料</b><p>類型、演員、主題與作品特徵</p></article>
+    <article class="signal reveal delay-3"><b>使用情境</b><p>時間、語言、裝置與觀看長度</p></article>
+  </div>
+  <div class="evidence-note step" data-editable>Netflix說明：年齡與性別等人口資料，不會納入推薦系統的判斷。</div></div></div>
+        <div class="source"><a href="https://help.netflix.com/en/node/100639" target="_blank" rel="noopener">Netflix Help Center</a>｜推薦系統說明</div><div class="page-no">06 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-5" aria-label="上一張">←</a><span>06 / 29</span><a href="#slide-7" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 07｜推薦的不是一張清單，而是一個首頁 -->
+      <section id="slide-7" class="slide tab-stp" data-title="推薦的不是一張清單，而是一個首頁">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>推薦的不是一張清單，而是一個首頁</h2><div class="label">PERSONALIZED HOME</div></header>
+  <div class="home-wireframe reveal delay-1">
+    <div class="hero-row"><b>今晚想看什麼？</b><span>熱門作品</span><span>繼續觀看</span></div>
+    <div class="content-row"><em>因為你看過…</em><i></i><i></i><i></i><i></i></div>
+    <div class="content-row"><em>可能適合你</em><i></i><i></i><i></i><i></i></div>
+    <div class="content-row"><em>只有30分鐘？</em><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="annotation step" data-editable>系統同時決定：顯示哪些內容列、內容列的順序、作品順序，以及用哪一張縮圖呈現。</div></div></div>
+        <div class="source"><a href="https://netflixtechblog.com/learning-a-personalized-homepage-aa8ec670359a" target="_blank" rel="noopener">Netflix Tech Blog：個人化首頁</a>｜<a href="https://netflixtechblog.com/artwork-personalization-c589f074ad76" target="_blank" rel="noopener">縮圖個人化</a></div><div class="page-no">07 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-6" aria-label="上一張">←</a><span>07 / 29</span><a href="#slide-8" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 08｜影片一｜為什麼你看到的Netflix縮圖和我不同？ -->
+      <section id="slide-8" class="slide tab-stp" data-title="影片一｜為什麼你看到的Netflix縮圖和我不同？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div>
+          <div class="video-title"><h2 data-editable>影片一｜為什麼你看到的Netflix縮圖和我不同？</h2><span>VIDEO 01 · 05:49</span></div>
+          <div class="external-video-card">
+            <div class="screen-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <a class="external-play" href="https://tw.voicetube.com/videos/71802" target="_blank" rel="noopener"><span class="play-icon">▶</span><b>完整播放：影片推薦如何讓你追劇追不停？</b><small>另開分頁播放中英雙語版本</small></a>
+          </div>
+          <div class="video-fallback"><span data-editable>觀察：同一部作品如何用不同縮圖吸引不同偏好的觀眾？哪些做法屬於個人化與A/B測試？</span><a href="https://www.youtube.com/watch?v=axCBA3VD5dQ" target="_blank" rel="noopener">YouTube原始影片 ↗</a></div>
+        </div><div class="page-no">08 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-7" aria-label="上一張">←</a><span>08 / 29</span><a href="#slide-9" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 09｜Netflix如何改變STP？ -->
+      <section id="slide-9" class="slide tab-stp" data-title="Netflix如何改變STP？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Netflix如何改變STP？</h2><div class="label">STP × DATA</div></header>
+  <div class="stp-cards">
+    <article class="stp-card reveal delay-1"><strong>S</strong><b>區隔變得流動</b><p>不只用年齡或地區，也依觀看行為與情境形成微型群組。</p></article>
+    <article class="stp-card reveal delay-2"><strong>T</strong><b>每次開啟都重新排序</b><p>同一位會員在不同時間與裝置，可能得到不同的推薦排序。</p></article>
+    <article class="stp-card reveal delay-3"><strong>P</strong><b>定位落在體驗裡</b><p>「更快找到可能喜歡的內容」由首頁與推薦持續表現。</p></article>
+  </div></div><div class="teacher-note step" data-editable>科技讓區隔更細，不代表企業可以不做策略選擇。</div></div>
+        <div class="page-no">09 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-8" aria-label="上一張">←</a><span>09 / 29</span><a href="#slide-10" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 10｜Netflix如何改變4P？ -->
+      <section id="slide-10" class="slide tab-stp" data-title="Netflix如何改變4P？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Netflix如何改變4P？</h2><div class="label">4P × INTERFACE</div></header>
+  <div class="mix-grid">
+    <article><b>Product</b><p>首頁與推薦體驗成為服務的一部分</p></article>
+    <article><b>Price</b><p>方案是否值得，也會受到找內容是否方便的影響</p></article>
+    <article><b>Place</b><p>多裝置、跨時間接續觀看</p></article>
+    <article><b>Promotion</b><p>縮圖、預告與排序直接影響注意</p></article>
+  </div></div><div class="teacher-note step" data-editable>在平台裡，產品、通路與推廣常發生在同一個畫面。</div></div>
+        <div class="page-no">10 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-9" aria-label="上一張">←</a><span>10 / 29</span><a href="#slide-11" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 11｜每次選擇，都會影響下一次推薦 -->
+      <section id="slide-11" class="slide tab-stp" data-title="每次選擇，都會影響下一次推薦">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>每次選擇，都會影響下一次推薦</h2><div class="label">FEEDBACK LOOP</div></header>
+  <div class="feedback-loop reveal delay-1">
+    <span>看見推薦</span><b>→</b><span>選擇／略過</span><b>→</b><span>形成資料</span><b>→</b><span>更新預測</span><b>↺</b>
+  </div>
+  <div class="loop-caption step" data-editable>顧客不只是被動接收行銷訊息；每一次點擊、觀看與離開，都會影響下一輪推薦。</div></div><div class="teacher-note step" data-editable>這是一個持續學習的循環；但「學到什麼」仍取決於企業設定的目標與資料。</div></div>
+        <div class="page-no">11 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-10" aria-label="上一張">←</a><span>11 / 29</span><a href="#slide-12" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 12｜個人化的價值與風險同時存在 -->
+      <section id="slide-12" class="slide tab-stp" data-title="個人化的價值與風險同時存在">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>個人化的價值與風險同時存在</h2><div class="label">VALUE / RISK</div></header>
+  <div class="risk-balance">
+    <article class="risk-side value reveal delay-1"><h3>可能的價值</h3><ul><li>降低搜尋成本</li><li>讓小眾內容被發現</li><li>提高內容與情境的相關性</li></ul></article>
+    <article class="risk-side risk reveal delay-2"><h3>可能的風險</h3><ul><li>探索範圍被縮小</li><li>過去行為限制新選擇</li><li>資料與排序不透明</li></ul></article>
+  </div></div><div class="teacher-note step" data-editable>重點不是判斷AI好或不好，而是同時檢查它帶來的好處與風險。</div></div>
+        <div class="page-no">12 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-11" aria-label="上一張">←</a><span>12 / 29</span><a href="#slide-13" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 13｜一台點餐機改變了什麼？ -->
+      <section id="slide-13" class="slide tab-position" data-title="一台點餐機改變了什麼？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>一台點餐機改變了什麼？</h2><div class="label">CASE 02</div></header>
+  <div class="journey-compare">
+    <article class="journey reveal delay-1"><b>傳統櫃檯</b><p>排隊 → 表達需求 → 店員輸入 → 付款 → 取餐</p></article>
+    <article class="journey digital reveal delay-2"><b>自助點餐</b><p>自行瀏覽 → 客製 → 優惠／加購 → 數位付款 → 取餐或送餐到桌</p></article>
+  </div>
+  <div class="question-band step" data-editable>它只是節省人力的工具，還是一個新的行銷接觸點？</div></div></div>
+        <div class="page-no">13 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-12" aria-label="上一張">←</a><span>13 / 29</span><a href="#slide-14" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 14｜台灣麥當勞的數位化事實 -->
+      <section id="slide-14" class="slide tab-position" data-title="台灣麥當勞的數位化事實">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>台灣麥當勞的數位化事實</h2><div class="label">TAIWAN FACTS</div></header>
+  <div class="metric-row">
+    <article class="metric reveal delay-1"><strong>2018</strong><span>部分門市導入</span></article>
+    <article class="metric reveal delay-2"><strong>+4%</strong><span>初期整體滿意度</span></article>
+    <article class="metric reveal delay-3"><strong>65%</strong><span>受訪者非常滿意</span></article>
+    <article class="metric reveal delay-4"><strong>6成</strong><span>使用者以非現金方式付款</span></article>
+  </div>
+  <div class="evidence-note step" data-editable>官方資料可確認：自主瀏覽、多元支付、送餐到桌、餐點客製與App優惠券掃描。</div></div><div class="teacher-note step" data-editable>這些是數位服務的成果；不能因此推定台灣點餐機已採AI個人化推薦。</div></div>
+        <div class="source"><a href="https://news.mcdonalds.com.tw/focus/433/" target="_blank" rel="noopener">台灣麥當勞：2018數位點餐機</a>｜<a href="https://news.mcdonalds.com.tw/focus/20220901/index.html" target="_blank" rel="noopener">2022服務整理</a>｜<a href="https://news.mcdonalds.com.tw/news/20240603/index.html" target="_blank" rel="noopener">2024介面更新</a></div><div class="page-no">14 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-13" aria-label="上一張">←</a><span>14 / 29</span><a href="#slide-15" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 15｜點餐機同時影響服務與4P -->
+      <section id="slide-15" class="slide tab-position" data-title="點餐機同時影響服務與4P">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>點餐機同時影響服務與4P</h2><div class="label">TOUCHPOINT × 4P</div></header>
+  <div class="mix-grid kiosk-mix">
+    <article><b>Product</b><p>客製餐點，服務流程也成為體驗</p></article>
+    <article><b>Price</b><p>套餐、優惠券與加購同時呈現</p></article>
+    <article><b>Place</b><p>櫃檯不再是唯一入口</p></article>
+    <article><b>Promotion</b><p>排序、圖片與提示成為現場推廣</p></article>
+  </div></div><div class="teacher-note step" data-editable>交易、服務與溝通，開始發生在同一個畫面。</div></div>
+        <div class="page-no">15 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-14" aria-label="上一張">←</a><span>15 / 29</span><a href="#slide-16" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 16｜影片二｜點餐介面如何影響選擇？ -->
+      <section id="slide-16" class="slide tab-position" data-title="影片二｜點餐介面如何影響選擇？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div>
+          <div class="video-title"><h2 data-editable>影片二｜點餐介面如何影響選擇？</h2><span>VIDEO 02 · 10:34</span></div>
+          <div class="external-video-card">
+            <div class="screen-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <a class="external-play" href="https://tw.voicetube.com/videos/182182" target="_blank" rel="noopener"><span class="play-icon">▶</span><b>完整播放：The $2.1 Billion McDonald’s Machine</b><small>另開分頁播放中英雙語版本</small></a>
+          </div>
+          <div class="video-fallback"><span data-editable>觀察：選項位置、套餐加購、付款方式；全球經驗不可直接當成台灣事實。</span><a href="https://www.youtube.com/watch?v=BKX6EhDrgqQ" target="_blank" rel="noopener">YouTube原始影片 ↗</a></div>
+        </div><div class="page-no">16 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-15" aria-label="上一張">←</a><span>16 / 29</span><a href="#slide-17" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 17｜介面不是中立的容器 -->
+      <section id="slide-17" class="slide tab-position" data-title="介面不是中立的容器">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>介面不是中立的容器</h2><div class="label">AFTER THE VIDEO</div></header>
+  <div class="interface-cues">
+    <article class="cue reveal delay-1"><b>錨定</b><p>先看到的價格，改變後續比較基準</p></article>
+    <article class="cue reveal delay-1"><b>顯著性</b><p>圖片大小與位置會引導注意力</p></article>
+    <article class="cue reveal delay-2"><b>流程</b><p>系統決定先看什麼、下一步去哪裡</p></article>
+    <article class="cue reveal delay-3"><b>加購</b><p>每一步都可能提出升級選擇</p></article>
+  </div></div><div class="teacher-note step" data-editable>影片中的德國數字不能當作台灣的成效證據；本課只採用可直接觀察的介面與行銷概念。</div></div>
+        <div class="page-no">17 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-16" aria-label="上一張">←</a><span>17 / 29</span><a href="#slide-18" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 18｜點餐機什麼時候才算AI？ -->
+      <section id="slide-18" class="slide tab-position" data-title="點餐機什麼時候才算AI？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>點餐機什麼時候才算AI？</h2><div class="label">THREE LAYERS</div></header>
+  <div class="layer-stack">
+    <article class="layer reveal delay-1"><span>數位化</span><p>固定菜單與點餐流程放上螢幕</p></article>
+    <article class="layer reveal delay-2"><span>資料化</span><p>記錄瀏覽、修改、加購、付款與時段</p></article>
+    <article class="layer ai reveal delay-3"><span>AI化</span><p>依情境預測需要、改變排序、產生推薦或自然語言互動</p></article>
+  </div></div><div class="teacher-note step" data-editable>全球麥當勞曾使用決策技術；不能據此推定台灣門市已全面採用。</div></div>
+        <div class="source"><a href="https://corporate.mcdonalds.com/corpmcd/our-stories/article/dynamic_yield_1164112100.html" target="_blank" rel="noopener">McDonald’s Corporation：Dynamic Yield</a>｜全球案例，不等同台灣現況</div><div class="page-no">18 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-17" aria-label="上一張">←</a><span>18 / 29</span><a href="#slide-19" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 19｜從預測，走向生成 -->
+      <section id="slide-19" class="slide tab-mix" data-title="從預測，走向生成">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>從預測，走向生成</h2><div class="label">PREDICT → GENERATE</div></header>
+  <div class="predict-generate">
+    <article class="predict reveal delay-1"><small>PREDICTIVE AI</small><b>預測式AI</b><p>從既有選項中排序、分類，或估計某件事發生的可能性。</p></article>
+    <div class="pg-arrow">→</div>
+    <article class="generate reveal delay-2"><small>GENERATIVE AI</small><b>生成式AI</b><p>根據指令與資料，產生新的文字、圖片、聲音或影片。</p></article>
+  </div></div><div class="teacher-note step" data-editable>兩者可以一起工作：先預測受眾，再生成素材，最後依結果繼續調整。</div></div>
+        <div class="page-no">19 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-18" aria-label="上一張">←</a><span>19 / 29</span><a href="#slide-20" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 20｜影片三｜Google「AI台味夜市」 -->
+      <section id="slide-20" class="slide tab-mix" data-title="影片三｜Google「AI台味夜市」">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div>
+          <div class="video-title"><h2 data-editable>影片三｜Google「AI台味夜市」</h2><span>VIDEO 03 · 10:16</span></div>
+          <div class="video-shell" data-provider="youtube" data-video-id="-4GUsTBf2Fs" data-start="0" data-video-title="影片三｜Google「AI台味夜市」"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下，完整播放中文案例影片</span></button></div>
+          <div class="video-fallback"><span data-editable>觀察：哪些是研究與預測？哪些是生成？哪些只是展示，尚未證明成效？</span><a href="https://www.youtube.com/watch?v=-4GUsTBf2Fs" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
+        </div><div class="source">受Google邀請的活動體驗影片；屬工具與活動展示，不是獨立成效評估</div><div class="page-no">20 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-19" aria-label="上一張">←</a><span>20 / 29</span><a href="#slide-21" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 21｜一支影片，看見四種行銷工作 -->
+      <section id="slide-21" class="slide tab-mix" data-title="一支影片，看見四種行銷工作">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>一支影片，看見四種行銷工作</h2><div class="label">AI FOR MARKETING</div></header>
+  <div class="work-grid">
+    <article class="work reveal delay-1"><span>01</span><b>研究</b><p>整理資料、摘要並提出分析線索</p></article>
+    <article class="work reveal delay-1"><span>02</span><b>創作</b><p>由文字或草圖生成圖片與影片</p></article>
+    <article class="work reveal delay-2"><span>03</span><b>素材擴散</b><p>依不同平台調整尺寸、旁白、文案與畫面</p></article>
+    <article class="work reveal delay-3"><span>04</span><b>互動</b><p>結合辨識與生成提供即時建議</p></article>
+  </div></div></div>
+        <div class="source"><a href="https://business.google.com/tw/think/ai-excellence/google-ai-marketing-night-market/" target="_blank" rel="noopener">Google官方</a>｜2025 Google Marketing Live「AI台味夜市」</div><div class="page-no">21 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-20" aria-label="上一張">←</a><span>21 / 29</span><a href="#slide-22" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 22｜工具展示，不等於成效證明 -->
+      <section id="slide-22" class="slide tab-mix" data-title="工具展示，不等於成效證明">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>工具展示，不等於成效證明</h2><div class="label">SHOWCASE ≠ OUTCOME</div></header>
+  <div class="proof-grid">
+    <article class="proof can reveal delay-1"><h3>可以證明</h3><ul><li>工具能完成哪些任務</li><li>操作流程與產出內容</li><li>素材如何改作成不同格式</li></ul></article>
+    <article class="proof cannot reveal delay-2"><h3>不能單獨證明</h3><ul><li>顧客一定更喜歡AI內容</li><li>一定降低總成本</li><li>一定提高轉換或營收</li></ul></article>
+  </div></div><div class="teacher-note step" data-editable>「做不做得到」是工具問題；「是否改善結果」才是行銷問題。</div></div>
+        <div class="page-no">22 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-21" aria-label="上一張">←</a><span>22 / 29</span><a href="#slide-23" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 23｜每一則廣告，都能幫一隻狗找家 -->
+      <section id="slide-23" class="slide tab-mix" data-title="每一則廣告，都能幫一隻狗找家">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>每一則廣告，都能幫一隻狗找家</h2><div class="label">CASE 03</div></header>
+  <div class="ad-story">
+    <article class="problem reveal delay-1"><b>原本的問題</b><p>收容所犬隻多、照片品質不一，曝光資源有限。</p></article>
+    <div class="story-arrow">→</div>
+    <article class="solution reveal delay-2"><b>Pedigree的轉念</b><p>把既有狗食廣告，變成附近真實犬隻的領養入口。</p></article>
+  </div></div><div class="teacher-note step" data-editable>AI不是先出現的答案；它是品牌找到問題之後，用來把廣告改造成服務的方法。</div></div>
+        <div class="page-no">23 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-22" aria-label="上一張">←</a><span>23 / 29</span><a href="#slide-24" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 24｜Pedigree Adoptable如何運作？ -->
+      <section id="slide-24" class="slide tab-mix" data-title="Pedigree Adoptable如何運作？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Pedigree Adoptable如何運作？</h2><div class="label">SIX STEPS</div></header>
+  <div class="pipeline">
+    <article><span>1</span><b>真實照片</b></article><i>→</i><article><span>2</span><b>生成影像</b></article><i>→</i><article><span>3</span><b>保留特徵</b></article><i>→</i><article><span>4</span><b>放入廣告</b></article><i>→</i><article><span>5</span><b>連到附近收容所</b></article><i>→</i><article><span>6</span><b>領養後更新</b></article>
+  </div>
+  <div class="evidence-note step" data-editable>把影像、地區、廣告版位、收容所頁面與領養狀態串在一起，成為能持續更新的服務。</div></div></div>
+        <div class="source"><a href="https://www.pedigreeadoptable.com/tech" target="_blank" rel="noopener">Pedigree Adoptable：The Tech</a></div><div class="page-no">24 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-23" aria-label="上一張">←</a><span>24 / 29</span><a href="#slide-25" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 25｜短片揭曉｜AI不是主角，犬隻才是 -->
+      <section id="slide-25" class="slide tab-mix" data-title="短片揭曉｜AI不是主角，犬隻才是">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div>
+          <div class="video-title"><h2 data-editable>短片揭曉｜AI不是主角，犬隻才是</h2><span>VIDEO 04 · 02:08</span></div>
+          <div class="video-shell" data-provider="vimeo" data-video-id="1022858211" data-start="0" data-video-title="短片揭曉｜AI不是主角，犬隻才是"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下，完整播放案例短片</span></button></div>
+          <div class="video-fallback"><span data-editable>片後思考：這個案例的價值，是漂亮圖片，還是把廣告、導流與更新連成服務？</span><a href="https://vimeo.com/1022858211" target="_blank" rel="noopener">在 Vimeo 開啟 ↗</a></div>
+        </div><div class="source"><a href="https://vimeo.com/1022858211" target="_blank" rel="noopener">案例影片：Adoptable. By PEDIGREE</a></div><div class="page-no">25 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-24" aria-label="上一張">←</a><span>25 / 29</span><a href="#slide-26" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 26｜Pedigree如何改變STP與4P？ -->
+      <section id="slide-26" class="slide tab-case" data-title="Pedigree如何改變STP與4P？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>Pedigree如何改變STP與4P？</h2><div class="label">STP × 4P</div></header>
+  <div class="pedigree-map">
+    <article><b>S／T</b><p>依地區與可能飼養條件，優先接觸可能領養的家庭</p></article>
+    <article><b>P</b><p>品牌從「販售狗食」延伸成「實際幫狗找到家」</p></article>
+    <article><b>Product／Place</b><p>廣告兼具媒合服務，直接連到當地犬隻資料</p></article>
+    <article><b>Promotion</b><p>每個版位動態呈現附近真實待領養犬隻</p></article>
+  </div></div><div class="teacher-note step" data-editable>本案例不以個人化價格為主，不必勉強把每一個P都寫成AI。</div></div>
+        <div class="page-no">26 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-25" aria-label="上一張">←</a><span>26 / 29</span><a href="#slide-27" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 27｜成果值得看，也要看證據邊界 -->
+      <section id="slide-27" class="slide tab-case" data-title="成果值得看，也要看證據邊界">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>成果值得看，也要看證據邊界</h2><div class="label">RESULTS / LIMITS</div></header>
+  <div class="outcome-row">
+    <article class="outcome reveal delay-1"><strong>約6倍</strong><span>收容所網站流量</span></article>
+    <article class="outcome reveal delay-2"><strong>50%</strong><span>試行犬隻在兩週內獲得領養</span></article>
+    <article class="outcome reveal delay-3"><strong>Grand Prix</strong><span>2024 Cannes Lions Outdoor</span></article>
+  </div>
+  <div class="boundary-note step" data-editable>領養也會受到地區、收容所流程與媒體曝光影響；試行階段看見成效，不代表換到其他市場也會有相同結果。</div></div></div>
+        <div class="source"><a href="https://www.omnicomgroup.com/wp-content/uploads/2024/09/OMC_A-Look-Back-at-Cannes-Lions_2024.pdf" target="_blank" rel="noopener">Omnicom官方案例報告</a>｜<a href="https://www.canneslions.com/news/first-winners-announced-at-the-71st-cannes-lions-festival" target="_blank" rel="noopener">Cannes Lions官方得獎公告</a></div><div class="page-no">27 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-26" aria-label="上一張">←</a><span>27 / 29</span><a href="#slide-28" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 28｜四個案例放在一起看 -->
+      <section id="slide-28" class="slide tab-case" data-title="四個案例放在一起看">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>四個案例放在一起看</h2><div class="label">COMPARE</div></header>
+  <div class="case-compare">
+    <article><b>Netflix</b><span>預測、排序</span><p>協助觀眾從大量內容中找到較可能想看的作品</p></article>
+    <article><b>台灣麥當勞</b><span>數位流程</span><p>重新設計點餐、客製、付款與現場推廣</p></article>
+    <article><b>Google「AI台味夜市」</b><span>分析、生成</span><p>協助研究、創作、素材擴散與互動</p></article>
+    <article><b>Pedigree</b><span>生成、在地投放</span><p>讓廣告同時成為可更新的領養服務</p></article>
+  </div></div><div class="teacher-note step" data-editable>科技重新安排「誰看見什麼、如何完成行動，以及品牌願意為結果負什麼責任」。</div></div>
+        <div class="page-no">28 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-27" aria-label="上一張">←</a><span>28 / 29</span><a href="#slide-29" aria-label="下一張">→</a></nav>
+      </section>
+
+      <!-- 29｜把AI寫進企劃前，先回答六問 -->
+      <section id="slide-29" class="slide tab-case" data-title="把AI寫進企劃前，先回答六問">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tabs"><span>全觀</span><span>Netflix</span><span>麥當勞</span><span>生成AI</span><span>收束</span></div><div class="content"><header class="topline reveal"><h2 data-editable>把AI寫進企劃前，先回答六問</h2><div class="label">FINAL CHECK</div></header>
+  <div class="six-questions">
+    <article><span>01</span><b>問題</b><p>要處理哪個具體問題？</p></article>
+    <article><span>02</span><b>對象</b><p>為誰改善？誰可能被忽略？</p></article>
+    <article><span>03</span><b>資料</b><p>來源合法、正確且必要嗎？</p></article>
+    <article><span>04</span><b>作用</b><p>預測、生成、推薦或自動化？</p></article>
+    <article><span>05</span><b>驗證</b><p>用什麼結果判斷有效？</p></article>
+    <article><span>06</span><b>責任</b><p>錯誤與風險由誰處理？</p></article>
+  </div>
+  <div class="final-line step" data-editable>行銷企劃不是為了證明用了AI，而是要證明：它能以負責任的方式，為清楚界定的顧客創造更好的價值。</div></div></div>
+        <div class="page-no">29 / 29</div><nav class="fallback-controls" aria-label="靜態翻頁"><a href="#slide-28" aria-label="上一張">←</a><span>29 / 29</span><a href="#slide-29" aria-label="下一張">→</a></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" type="button" aria-label="上一個步驟">←</button>
+    <button id="menuBtn" type="button" aria-label="開啟投影片選單">☰</button>
+    <span class="counter" id="counter">01 / 29</span>
+    <button id="nextBtn" type="button" aria-label="下一個步驟">→</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress"></div>
+  <aside class="chapter-menu" id="chapterMenu" aria-label="投影片選單"><div class="menu-panel"><div class="menu-head"><h2>投影片</h2><button id="closeMenu" type="button">關閉</button></div><div class="menu-links" id="menuLinks"></div></div></aside>
+
+  <!-- ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <div class="edit-toolbar" id="editToolbar"><button id="saveFile" type="button">下載目前版本</button><button id="resetEdits" type="button">清除本機修改</button></div>
+  <noscript><div class="legacy-note">相容模式：請使用投影片左下角的左右箭頭翻頁；影片請點選頁面上的外部連結。</div></noscript>
+
+  <script>
+  /* ===========================================
+     SLIDE CONTROLLER, STEP REVEALS, VIDEO, EDITOR
+     =========================================== */
+  (function(){
+    "use strict";
+    function id(x){return document.getElementById(x)}
+    function has(el,n){return new RegExp("(^|\\s)"+n+"(\\s|$)").test(el.className)}
+    function add(el,n){if(!has(el,n))el.className+=" "+n}
+    function remove(el,n){el.className=el.className.replace(new RegExp("(^|\\s)"+n+"(?=\\s|$)","g")," ").replace(/^\\s+|\\s+$/g,"")}
+    function closestClass(el,n){while(el&&el!==document){if(has(el,n))return el;el=el.parentNode}return null}
+    function closestAttr(el,a){while(el&&el!==document){if(el.getAttribute&&el.getAttribute(a)!==null)return el;el=el.parentNode}return null}
+    function pad(n){return n<10?"0"+n:String(n)}
+
+    var stage=id("deckStage"),slides=stage.getElementsByTagName("section"),current=0,wheelLock=false,touchX=null;
+    var storageKey="marketing-module3-v4";
+    function sget(){try{return localStorage.getItem(storageKey)}catch(e){return null}}
+    function sset(v){try{localStorage.setItem(storageKey,v);return true}catch(e){return false}}
+    function sremove(){try{localStorage.removeItem(storageKey);return true}catch(e){return false}}
+    var saved=sget();if(saved&&saved.indexOf("fallback-controls")!==-1){stage.innerHTML=saved;slides=stage.getElementsByTagName("section")}
+
+    function scale(){
+      var f=Math.min(innerWidth/1920,innerHeight/1080);
+      var x=(innerWidth-1920*f)/2,y=(innerHeight-1080*f)/2;
+      var t="translate("+x+"px,"+y+"px) scale("+f+")";
+      stage.style.transform=t;stage.style.webkitTransform=t;stage.style.msTransform=t
+    }
+    function resetSteps(slide){var a=slide.getElementsByClassName("step");for(var i=0;i<a.length;i++)remove(a[i],"shown")}
+    function resetVideo(slide){
+      var shells=slide.getElementsByClassName("video-shell");
+      for(var i=0;i<shells.length;i++)if(shells[i].getElementsByTagName("iframe").length){
+        var start=shells[i].getAttribute("data-start")||"0";
+        shells[i].innerHTML="<button class=\"load-video\" type=\"button\"><span class=\"play-icon\">&#9654;</span><span>"+(start==="0"?"點一下以載入並播放完整案例":"點一下，從 00:20 載入並播放")+"</span></button>"
+      }
+    }
+    function show(n,hash){
+      if(n<0)n=0;if(n>=slides.length)n=slides.length-1;
+      if(n!==current)resetVideo(slides[current]);current=n;
+      for(var i=0;i<slides.length;i++){if(i===current){add(slides[i],"active");add(slides[i],"visible")}else{remove(slides[i],"active");remove(slides[i],"visible")}}
+      resetSteps(slides[current]);
+      id("counter").innerHTML=pad(current+1)+" / "+slides.length;
+      id("progress").style.width=((current+1)/slides.length*100)+"%";
+      if(hash!==false){try{history.replaceState(null,"","#slide-"+(current+1))}catch(e){location.hash="slide-"+(current+1)}}
+    }
+    function fromHash(){var m=location.hash.match(/^#(?:slide-)?(\d+)$/);return m?Math.max(0,Math.min(parseInt(m[1],10)-1,slides.length-1)):0}
+    function advance(){
+      var steps=slides[current].getElementsByClassName("step");
+      for(var i=0;i<steps.length;i++)if(!has(steps[i],"shown")){add(steps[i],"shown");return}
+      show(current+1)
+    }
+    function back(){
+      var steps=slides[current].getElementsByClassName("step");
+      for(var i=steps.length-1;i>=0;i--)if(has(steps[i],"shown")){remove(steps[i],"shown");return}
+      show(current-1)
+    }
+    function loadVideo(shell){
+      var v=shell.getAttribute("data-video-id"),start=shell.getAttribute("data-start")||"0",provider=shell.getAttribute("data-provider")||"youtube";
+      var title=(shell.getAttribute("data-video-title")||"課程影片").replace(/"/g,"&quot;");
+      if(provider==="vimeo")shell.innerHTML="<iframe src=\"https://player.vimeo.com/video/"+v+"?autoplay=1&title=0&byline=0&portrait=0\" title=\""+title+"\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen></iframe>";
+      else shell.innerHTML="<iframe src=\"https://www.youtube-nocookie.com/embed/"+v+"?start="+start+"&rel=0&hl=zh-TW&autoplay=1\" title=\""+title+"\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+    }
+    function fullscreen(){var root=document.documentElement,exit=document.exitFullscreen||document.webkitExitFullscreen;if(document.fullscreenElement||document.webkitFullscreenElement){if(exit)exit.call(document);return}var enter=root.requestFullscreen||root.webkitRequestFullscreen;if(enter)enter.call(root)}
+    function menu(force){var m=id("chapterMenu"),open=typeof force==="boolean"?force:!has(m,"open");if(open)add(m,"open");else remove(m,"open")}
+    function buildMenu(){var h=id("menuLinks");h.innerHTML="";for(var i=0;i<slides.length;i++){var b=document.createElement("button");b.type="button";b.setAttribute("data-jump",i);b.appendChild(document.createTextNode(pad(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片")));h.appendChild(b)}}
+
+    id("prevBtn").onclick=back;id("nextBtn").onclick=advance;id("menuBtn").onclick=function(){menu(true)};id("closeMenu").onclick=function(){menu(false)};id("fullBtn").onclick=fullscreen;
+    id("chapterMenu").onclick=function(e){e=e||window.event;if((e.target||e.srcElement).id==="chapterMenu")menu(false)};
+    document.onclick=function(e){e=e||window.event;var t=e.target||e.srcElement;var l=closestClass(t,"load-video");if(l)loadVideo(closestClass(l,"video-shell"));var j=closestAttr(t,"data-jump");if(j){show(parseInt(j.getAttribute("data-jump"),10));menu(false)}};
+    document.onkeydown=function(e){
+      e=e||window.event;var t=e.target||e.srcElement;var k=e.key||e.keyCode;
+      if((e.ctrlKey||e.metaKey)&&(k==="s"||k==="S"||k===83)){if(e.preventDefault)e.preventDefault();id("saveFile").onclick();return}
+      if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA)$/i.test(t.tagName)))return;
+      if(k==="ArrowRight"||k==="ArrowDown"||k==="PageDown"||k===39||k===40||k===34||k===32){if(e.preventDefault)e.preventDefault();advance()}
+      else if(k==="ArrowLeft"||k==="ArrowUp"||k==="PageUp"||k===37||k===38||k===33){if(e.preventDefault)e.preventDefault();back()}
+      else if(k==="Home"||k===36)show(0);else if(k==="End"||k===35)show(slides.length-1);
+      else if(k==="m"||k==="M"||k===77)menu();else if(k==="f"||k==="F"||k===70)fullscreen();else if(k==="Escape"||k===27)menu(false);else if(k==="e"||k==="E"||k===69)toggleEdit()
+    };
+    addEventListener("resize",scale);addEventListener("hashchange",function(){show(fromHash(),false)});
+    addEventListener("wheel",function(e){if(wheelLock||Math.abs(e.deltaY)<18)return;wheelLock=true;e.deltaY>0?advance():back();setTimeout(function(){wheelLock=false},550)},{passive:true});
+    addEventListener("touchstart",function(e){touchX=e.changedTouches[0].clientX},{passive:true});
+    addEventListener("touchend",function(e){if(touchX===null)return;var d=e.changedTouches[0].clientX-touchX;if(Math.abs(d)>50){d<0?advance():back()}touchX=null},{passive:true});
+
+    /* Inline editing: hover hotzone, E key, local storage, HTML download. */
+    var editing=false,editTimer=null,hideTimer=null,hot=document.getElementsByClassName("edit-hotzone")[0],toggle=id("editToggle");
+    function toggleEdit(){editing=!editing;var a=document.querySelectorAll("[data-editable]");for(var i=0;i<a.length;i++)a[i].contentEditable=editing?"true":"false";if(editing){add(document.body,"editing");add(toggle,"active");add(id("editToolbar"),"show")}else{remove(document.body,"editing");remove(toggle,"active");remove(id("editToolbar"),"show")}}
+    toggle.onclick=toggleEdit;hot.onclick=toggleEdit;
+    hot.onmouseenter=function(){clearTimeout(hideTimer);add(toggle,"show")};hot.onmouseleave=function(){hideTimer=setTimeout(function(){if(!editing)remove(toggle,"show")},400)};
+    toggle.onmouseenter=function(){clearTimeout(hideTimer)};toggle.onmouseleave=function(){hideTimer=setTimeout(function(){if(!editing)remove(toggle,"show")},400)};
+    stage.oninput=function(){clearTimeout(editTimer);editTimer=setTimeout(function(){sset(stage.innerHTML)},350)};
+    id("resetEdits").onclick=function(){if(confirm("要清除目前瀏覽器中儲存的文字修改嗎？")){sremove();location.reload()}};
+    id("saveFile").onclick=function(){sset(stage.innerHTML);var data="<!doctype html>\n"+document.documentElement.outerHTML;var blob=new Blob([data],{type:"text/html;charset=utf-8"});var api=window.URL||window.webkitURL,a=document.createElement("a");a.href=api.createObjectURL(blob);a.download="行銷企劃_第三部分_科技與AI如何重塑行銷_V4_編輯版.html";document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){api.revokeObjectURL(a.href)},1200)};
+
+    add(document.body,"js-ready");buildMenu();scale();show(fromHash(),false)
+  }());
+  </script>
+</body>
+</html>
