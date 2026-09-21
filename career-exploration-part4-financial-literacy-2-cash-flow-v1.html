@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="職涯探索與專業倫理第四部分：為大一新生設計的財商（二）教材，從現金流、消費衝動與真資產，練習把錢放到真正重要的地方。">
+  <link rel="icon" href="data:,">
+  <title>職涯探索與專業倫理｜第四部分：財商（二）管理現金流｜V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&amp;family=Noto+Sans+TC:wght@400;500;600;700;800;900&amp;family=Noto+Serif+TC:wght@600;700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS｜延續前三部分的 A 版溫暖編輯風
+       =========================================== */
+    :root{
+      --stage-bg:#272b27;--slide-bg:#f2eadc;--paper:#f2eadc;--paper-deep:#e7dcc9;
+      --ink:#162d24;--ink-2:#315246;--muted:#667069;--coral:#e65e43;
+      --sage:#7a9a7d;--sage-light:#c9d7c9;--sun:#f2c94c;--blue:#8eb1bf;
+      --cream:#fffaf0;--rule:rgba(22,45,36,.24);--ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --font-display:"Fraunces","Noto Serif TC",serif;
+      --font-body:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff)}
+    .slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff)}
+    .slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+    .slide:target{visibility:visible;opacity:1;pointer-events:auto;z-index:5}
+    img,video,canvas,svg{max-width:100%;max-height:100%}
+    .deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+    @media print{
+      html,body{width:1920px;height:auto;overflow:visible;background:#fff}
+      .deck-viewport{position:static;overflow:visible;background:#fff}
+      .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
+      .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
+      .slide:last-child{break-after:auto;page-break-after:auto}.deck-controls{display:none!important}
+    }
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+    /* ===========================================
+       RESET, STAGE TYPOGRAPHY, AND BACKGROUNDS
+       =========================================== */
+    *{box-sizing:border-box}button{font:inherit;cursor:pointer}
+    .slide{color:var(--ink);font-family:var(--font-body);background:
+      radial-gradient(circle at 86% 12%,rgba(242,201,76,.18),transparent 25%),
+      linear-gradient(90deg,rgba(22,45,36,.035) 1px,transparent 1px),
+      linear-gradient(rgba(22,45,36,.035) 1px,transparent 1px),var(--paper);
+      background-size:auto,64px 64px,64px 64px,auto}
+    .slide::after{content:"";position:absolute;inset:24px;border:1px solid rgba(22,45,36,.18);pointer-events:none}
+    .slide.dark{color:var(--cream);background:
+      radial-gradient(circle at 84% 18%,rgba(242,201,76,.14),transparent 28%),
+      radial-gradient(circle at 12% 88%,rgba(122,154,125,.22),transparent 34%),var(--ink)}
+    .slide.dark::after{border-color:rgba(255,250,240,.16)}
+    .masthead{position:absolute;left:92px;right:92px;top:48px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:2px solid currentColor;font:800 18px/1 var(--font-body);letter-spacing:.12em}
+    .masthead .chapter{color:var(--coral)}.dark .masthead .chapter{color:var(--sun)}
+    .frame{position:absolute;left:110px;right:110px;top:145px;bottom:100px}
+    .eyebrow{margin:0 0 18px;color:var(--coral);font:900 20px/1 var(--font-body);letter-spacing:.15em;text-transform:uppercase}.dark .eyebrow{color:var(--sun)}
+    .title{margin:0;max-width:1640px;font:900 70px/1.08 var(--font-display);letter-spacing:-.035em}
+    .lead{max-width:1250px;color:var(--ink-2);font:600 29px/1.55 var(--font-body)}.dark .lead{color:rgba(255,250,240,.82)}
+    .accent{color:var(--coral)}.dark .accent{color:var(--sun)}
+    .page-no{position:absolute;right:58px;bottom:43px;z-index:8;font:900 18px/1 var(--font-body)}
+
+    /* ===========================================
+       ENTRANCE ANIMATIONS
+       =========================================== */
+    .reveal,.reveal-left,.reveal-scale{opacity:0;transition:opacity .65s var(--ease-out-expo),transform .65s var(--ease-out-expo)}
+    .reveal{transform:translateY(34px)}.reveal-left{transform:translateX(-48px)}.reveal-scale{transform:scale(.93)}
+    .slide.visible .reveal,.slide.visible .reveal-left,.slide.visible .reveal-scale{opacity:1;transform:none}
+    .delay-1{transition-delay:.12s}.delay-2{transition-delay:.24s}.delay-3{transition-delay:.36s}.delay-4{transition-delay:.48s}.delay-5{transition-delay:.6s}
+
+    /* ===========================================
+       COVER AND BIG-IDEA LAYOUTS
+       =========================================== */
+    .cover .copy{position:absolute;left:115px;top:205px;width:1120px}.cover .kicker{margin:0 0 26px;color:var(--coral);font:900 22px/1 var(--font-body);letter-spacing:.14em}.cover h1{margin:0;font:900 102px/.98 var(--font-display);letter-spacing:-.045em}.cover h1 em{color:var(--coral);font-style:normal}.cover .subtitle{max-width:930px;margin:34px 0 0;color:var(--ink-2);font:600 31px/1.48 var(--font-body)}
+    .ledger-art{position:absolute;right:118px;top:205px;width:480px;height:620px;padding:42px;border:4px solid var(--ink);background:var(--cream);box-shadow:24px 24px 0 var(--sun);transform:rotate(2deg)}
+    .ledger-art::before{content:"MONEY / CHOICES";display:block;padding-bottom:20px;border-bottom:3px solid var(--ink);font:900 20px/1 var(--font-body);letter-spacing:.13em}
+    .ledger-row{display:flex;align-items:center;justify-content:space-between;padding:25px 0;border-bottom:2px solid var(--rule);font:800 28px/1.15 var(--font-body)}.ledger-row b{font:900 38px/1 var(--font-display)}.ledger-row:last-child{margin-top:42px;padding:28px;background:var(--ink);color:var(--cream);border:0}
+    .route-note{position:absolute;left:115px;bottom:82px;display:flex;align-items:center;gap:20px;font:800 22px/1.4 var(--font-body)}.route-note i{display:block;width:74px;height:5px;background:var(--coral)}
+    .big-question{display:grid;place-items:center;height:100%;text-align:center}.big-question p{margin:0 0 24px;color:var(--sun);font:900 22px/1 var(--font-body);letter-spacing:.15em}.big-question h2{max-width:1450px;margin:0;font:900 92px/1.05 var(--font-display);letter-spacing:-.04em}.big-question small{display:block;margin-top:38px;color:rgba(255,250,240,.72);font:600 28px/1.5 var(--font-body)}
+
+    /* ===========================================
+       CARDS, FLOWS, AND DISCUSSION LAYOUTS
+       =========================================== */
+    .cards{display:grid;gap:28px;margin-top:48px}.cards.two{grid-template-columns:repeat(2,1fr)}.cards.three{grid-template-columns:repeat(3,1fr)}.cards.four{grid-template-columns:repeat(4,1fr)}
+    .card{min-height:270px;padding:34px;border:3px solid var(--ink);background:var(--cream);box-shadow:10px 10px 0 rgba(22,45,36,.08)}
+    .card:nth-child(2n){background:var(--paper-deep)}.card:nth-child(3n){background:var(--sage-light)}.dark .card{color:var(--cream);border-color:rgba(255,250,240,.72);background:rgba(255,250,240,.06);box-shadow:none}
+    .card .no{margin:0 0 22px;color:var(--coral);font:900 18px/1 var(--font-body);letter-spacing:.14em}.dark .card .no{color:var(--sun)}
+    .card h3{margin:0 0 16px;font:900 38px/1.12 var(--font-display)}.card p{margin:0;color:var(--ink-2);font:600 24px/1.48 var(--font-body)}.dark .card p{color:rgba(255,250,240,.76)}
+    .choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px;margin-top:55px}.choice{position:relative;min-height:440px;padding:44px 46px;border:4px solid var(--cream);background:rgba(255,250,240,.06)}.choice:last-child{color:var(--ink);background:var(--sun);border-color:var(--sun)}.choice .letter{font:900 94px/1 var(--font-display)}.choice h3{margin:45px 0 15px;font:900 43px/1.12 var(--font-display)}.choice p{font:600 25px/1.5 var(--font-body)}.choice .vote{position:absolute;right:28px;bottom:24px;font:900 18px/1 var(--font-body);letter-spacing:.12em}
+    .flow{display:flex;align-items:stretch;justify-content:center;gap:18px;margin-top:85px}.flow-node{display:grid;place-items:center;width:300px;min-height:225px;padding:30px;border:3px solid var(--ink);background:var(--cream);text-align:center;font:900 35px/1.18 var(--font-display)}.flow-node:nth-of-type(2){background:var(--sage-light)}.flow-node:nth-of-type(3){background:var(--paper-deep)}.flow-node:nth-of-type(4){background:var(--sun)}.flow-arrow{align-self:center;color:var(--coral);font:900 48px/1 var(--font-body)}
+    .discussion-prompt{margin:84px auto 0;max-width:1510px;font:900 69px/1.23 var(--font-display);letter-spacing:-.035em;text-align:center}.discussion-prompt::before{content:"討論";display:block;width:max-content;margin:0 auto 32px;padding:12px 22px;color:var(--ink);background:var(--sun);font:900 18px/1 var(--font-body);letter-spacing:.16em;transform:rotate(-2deg)}
+    .question-list{display:grid;gap:18px;max-width:1500px;margin:50px auto 0;counter-reset:q}.question-list li{display:grid;grid-template-columns:72px 1fr;align-items:center;min-height:105px;padding:20px 30px;border:2px solid rgba(255,250,240,.55);background:rgba(255,250,240,.05);font:700 30px/1.35 var(--font-body);list-style:none}.question-list li::before{counter-increment:q;content:counter(q);color:var(--sun);font:900 48px/1 var(--font-display)}
+
+    /* ===========================================
+       VIDEO, CHAPTER MAP, AND SEGMENT BREAKS
+       =========================================== */
+    .video-grid{display:grid;grid-template-columns:1.38fr .82fr;gap:34px;margin-top:18px}.video-shell{position:relative;display:grid;place-items:center;aspect-ratio:16/9;border:4px solid var(--cream);background:#0b1713;box-shadow:14px 14px 0 rgba(242,201,76,.22);overflow:hidden}.video-shell iframe{width:100%;height:100%;border:0}.load-video{display:grid;place-items:center;gap:18px;width:100%;height:100%;border:0;color:var(--cream);background:radial-gradient(circle at center,rgba(230,94,67,.25),transparent 42%),#0b1713}.play-icon{display:grid;place-items:center;width:110px;height:110px;border-radius:50%;color:var(--ink);background:var(--sun);font:900 42px/1 var(--font-body);box-shadow:0 0 0 18px rgba(242,201,76,.12)}.load-video strong{font:800 26px/1.3 var(--font-body)}
+    .watch-task{padding:32px;border:3px solid var(--cream);background:rgba(255,250,240,.06)}.watch-task h3{margin:0 0 22px;color:var(--sun);font:900 31px/1.15 var(--font-display)}.watch-task ol{margin:0;padding-left:28px}.watch-task li{margin:0 0 18px;font:600 23px/1.42 var(--font-body)}.video-link{display:inline-block;margin-top:12px;color:var(--sun);font:800 18px/1.3 var(--font-body)}
+    .chapter-map{display:grid;grid-template-columns:1fr 1fr;gap:12px 30px;margin-top:40px}.chapter-item{display:grid;grid-template-columns:105px 1fr 70px;align-items:center;min-height:95px;padding:15px 20px;border:2px solid var(--ink);background:var(--cream)}.chapter-item b{font:900 22px/1 var(--font-body)}.chapter-item span{font:800 25px/1.25 var(--font-body)}.chapter-item i{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;color:var(--cream);background:var(--ink);font:900 16px/1 var(--font-body);font-style:normal}.chapter-item:nth-child(-n+4) i{background:var(--coral)}.chapter-item:nth-child(n+5):nth-child(-n+6) i{color:var(--ink);background:var(--sun)}.chapter-item:nth-child(n+7):nth-child(-n+8) i{background:var(--sage)}.chapter-item:nth-child(n+9) i{background:var(--blue)}
+    .segment .frame{display:grid;grid-template-columns:1fr 610px;align-items:center;gap:75px}.segment-time{font:900 130px/.9 var(--font-display);letter-spacing:-.05em}.segment-time small{display:block;margin-top:30px;color:rgba(255,250,240,.7);font:700 24px/1.45 var(--font-body);letter-spacing:0}.segment-list{padding:38px;border:3px solid rgba(255,250,240,.7);background:rgba(255,250,240,.06)}.segment-list b{display:block;margin-bottom:24px;color:var(--sun);font:900 19px/1 var(--font-body);letter-spacing:.15em}.segment-list div{padding:17px 0;border-bottom:1px solid rgba(255,250,240,.22);font:800 27px/1.25 var(--font-body)}.segment-list div:last-child{border-bottom:0}
+
+    /* ===========================================
+       FINANCIAL MODELS AND CHECKPOINTS
+       =========================================== */
+    .cashflow{display:grid;grid-template-columns:1fr 120px 1fr;gap:25px;align-items:center;margin-top:48px}.statement{padding:34px;border:4px solid var(--ink);background:var(--cream)}.statement h3{margin:0 0 24px;padding-bottom:18px;border-bottom:3px solid var(--ink);font:900 38px/1.1 var(--font-display)}.statement-row{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--rule);font:700 24px/1.3 var(--font-body)}.statement-row.in{color:#2f7552}.statement-row.out{color:#b74835}.cash-arrow{text-align:center;color:var(--coral);font:900 64px/1 var(--font-display)}
+    .lens-note{margin-top:34px;padding:20px 28px;border-left:8px solid var(--coral);background:rgba(230,94,67,.09);font:700 22px/1.5 var(--font-body)}
+    .debate{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:45px}.debate-side{min-height:430px;padding:40px;border:4px solid var(--ink);background:var(--cream)}.debate-side:last-child{background:var(--sage-light)}.debate-side b{color:var(--coral);font:900 20px/1 var(--font-body);letter-spacing:.14em}.debate-side h3{margin:30px 0 20px;font:900 45px/1.08 var(--font-display)}.debate-side ul{margin:0;padding-left:26px}.debate-side li{margin-bottom:16px;font:650 24px/1.42 var(--font-body)}
+    .filter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:55px}.filter-card{min-height:400px;padding:38px;border:3px solid var(--ink);background:var(--cream)}.filter-card:nth-child(2){background:var(--sage-light)}.filter-card:nth-child(3){background:var(--sun)}.filter-card .icon{font:900 72px/1 var(--font-display)}.filter-card h3{margin:38px 0 18px;font:900 38px/1.1 var(--font-display)}.filter-card p{font:600 23px/1.5 var(--font-body)}
+    .checkpoint{text-align:center}.checkpoint .stamp{display:inline-block;margin-top:70px;padding:20px 34px;border:4px solid var(--sun);color:var(--sun);font:900 26px/1 var(--font-body);letter-spacing:.12em;transform:rotate(-2deg)}.checkpoint h2{max-width:1400px;margin:48px auto 24px;font:900 80px/1.06 var(--font-display)}.checkpoint p{margin:0;color:rgba(255,250,240,.75);font:600 28px/1.5 var(--font-body)}.resume-set{margin-top:44px;padding:18px 30px;border:0;color:var(--ink);background:var(--sun);font:900 21px/1 var(--font-body);box-shadow:8px 8px 0 var(--coral)}
+    .resume-toast{position:fixed;left:50%;top:30px;z-index:9000;padding:15px 24px;color:var(--cream);background:var(--ink);font:800 17px/1 var(--font-body);opacity:0;pointer-events:none;transform:translate(-50%,-20px);transition:.25s ease}.resume-toast.show{opacity:1;transform:translate(-50%,0)}
+    .resume-jump{position:fixed;left:50%;top:16px;z-index:1200;display:none;padding:11px 18px;border:2px solid var(--sun);color:var(--cream);background:rgba(22,45,36,.95);font:800 15px/1 var(--font-body);transform:translateX(-50%)}.resume-jump.show{display:block}
+
+    /* ===========================================
+       CASE, TAKEAWAYS, LIVE CONTROLS, AND EDITING
+       =========================================== */
+    .case-board{display:grid;grid-template-columns:480px 1fr;gap:38px;margin-top:42px}.case-budget{padding:34px;border:4px solid var(--ink);background:var(--cream)}.case-budget h3{margin:0 0 22px;font:900 39px/1.1 var(--font-display)}.budget-line{display:flex;justify-content:space-between;padding:17px 0;border-bottom:2px solid var(--rule);font:750 24px/1.25 var(--font-body)}.budget-line.left{margin-top:20px;padding:22px;color:var(--cream);background:var(--ink);border:0;font-size:27px}.case-options{display:grid;grid-template-columns:1fr 1fr;gap:20px}.case-option{padding:26px;border:3px solid var(--ink);background:var(--paper-deep)}.case-option:nth-child(2){background:var(--sage-light)}.case-option:nth-child(3){background:var(--sun)}.case-option:nth-child(4){background:var(--cream)}.case-option b{display:block;margin-bottom:12px;color:var(--coral);font:900 17px/1 var(--font-body)}.case-option h3{margin:0 0 10px;font:900 31px/1.1 var(--font-display)}.case-option p{margin:0;font:600 20px/1.42 var(--font-body)}
+    .fallback-controls{position:absolute;left:50%;bottom:22px;z-index:20;display:flex;align-items:center;gap:18px;transform:translateX(-50%)}.fallback-controls a,.fallback-controls span{min-width:74px;padding:10px 14px;border:1px solid currentColor;background:var(--paper);color:var(--ink);text-align:center;text-decoration:none;font:800 16px/1 var(--font-body)}.dark .fallback-controls a,.dark .fallback-controls span{color:var(--cream);background:var(--ink)}
+    .deck-controls{display:none;align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(18,35,29,.92);box-shadow:0 10px 30px rgba(0,0,0,.25)}.deck-controls button{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;color:var(--cream);background:transparent}.deck-controls button:hover{color:var(--ink);background:var(--sun)}.deck-controls .counter{min-width:92px;color:var(--cream);text-align:center;font:800 15px/1 var(--font-body)}
+    .progress{position:fixed;left:0;bottom:0;z-index:1100;display:none;width:0;height:4px;background:var(--coral);transition:width .28s ease}.overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:40px;background:rgba(8,20,15,.88)}.overlay.open{display:flex}.overlay-panel{position:relative;width:min(1040px,92vw);max-height:88vh;overflow:auto;padding:42px;border:2px solid var(--ink);background:var(--paper);box-shadow:18px 18px 0 rgba(242,201,76,.42)}.overlay-panel h2{margin:0 0 20px;font:900 42px/1.15 var(--font-display)}.overlay-panel p,.overlay-panel li{font:600 21px/1.5 var(--font-body)}.overlay-close{position:absolute;right:18px;top:18px;width:42px;height:42px;border:2px solid var(--ink);background:var(--sun);font:900 24px/1 var(--font-body)}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.menu-grid button{padding:13px 16px;border:1px solid var(--ink);background:transparent;text-align:left;font:700 17px/1.25 var(--font-body)}.menu-grid button:hover{background:var(--sage-light)}.teacher-trigger{position:absolute;right:112px;bottom:58px;z-index:8;display:none;padding:10px 15px;border:2px solid var(--ink);background:var(--sun);font:900 16px/1 var(--font-body);transform:rotate(-1deg)}.slide.has-note .teacher-trigger{display:block}
+    .edit-hotzone{position:fixed;left:0;top:0;z-index:10000;width:80px;height:80px;cursor:pointer}.edit-toggle{position:fixed;left:16px;top:16px;z-index:10001;width:48px;height:48px;border:1px solid rgba(255,255,255,.38);border-radius:50%;color:var(--cream);background:var(--ink);opacity:0;pointer-events:none;transition:opacity .3s ease}.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}.edit-toolbar{position:fixed;left:76px;top:17px;z-index:10001;display:none;gap:8px}.edit-toolbar.show{display:flex}.edit-toolbar button{padding:12px 16px;border:1px solid rgba(255,255,255,.38);color:var(--cream);background:var(--ink);font:700 14px/1 var(--font-body)}body.editing [data-editable]{outline:2px dashed var(--coral);outline-offset:5px;cursor:text}.legacy-note{position:fixed;left:12px;right:12px;top:12px;z-index:9000;padding:10px;color:var(--cream);background:var(--ink);text-align:center;font:700 16px/1.4 var(--font-body)}
+    body.js-ready .deck-controls{display:flex}body.js-ready .progress{display:block}body.js-ready .fallback-controls{display:none}
+    @media print{.progress,.overlay,.edit-hotzone,.edit-toggle,.edit-toolbar,.teacher-trigger,.fallback-controls,.legacy-note,.resume-jump,.resume-toast{display:none!important}}
+  
+    /* ===========================================
+       V3 LONG-FORM TEACHING AND VIDEO FALLBACK ADDITIONS
+       =========================================== */
+    .cards.five{grid-template-columns:repeat(5,1fr);gap:20px}
+    .cards.five .card{min-height:320px;padding:28px 24px}
+    .cards.five .card h3{font-size:32px}.cards.five .card p{font-size:21px}
+    .cards.three .card{min-height:260px}.cards.four .card{min-height:300px}
+    .choice-grid{margin-top:45px}.choice{min-height:420px}
+    .video-grid{margin-top:14px}.video-shell{max-height:520px}.watch-task{align-self:stretch}
+    .video-open-overlay{position:absolute;right:16px;bottom:16px;z-index:3;padding:12px 16px;border:2px solid var(--cream);color:var(--ink);background:var(--sun);text-decoration:none;font:900 16px/1 var(--font-body);box-shadow:5px 5px 0 rgba(0,0,0,.28)}
+    .dark .filter-card{color:var(--ink)}
+    .session-tag{display:inline-block;padding:10px 18px;color:var(--ink);background:var(--sun);font:900 18px/1 var(--font-body);letter-spacing:.12em}
+
+  
+    /* ===========================================
+       FINANCIAL LITERACY 02｜CASH-FLOW DETAILS
+       =========================================== */
+    .cards.three .card{min-height:260px}.cards.four .card{min-height:300px}
+    .choice-grid{margin-top:42px}.choice{min-height:410px}
+    .video-grid{margin-top:14px}.video-shell{max-height:520px}.watch-task{align-self:stretch}
+    .video-open-overlay{position:absolute;right:16px;bottom:16px;z-index:3;padding:12px 16px;border:2px solid var(--cream);color:var(--ink);background:var(--sun);text-decoration:none;font:900 16px/1 var(--font-body);box-shadow:5px 5px 0 rgba(0,0,0,.28)}
+    .dark .filter-card{color:var(--ink)}
+    .segment-time{min-width:310px}
+    .cover .route-note{bottom:142px}
+
+  </style>
+  <style>
+    /* ===========================================
+       PUBLIC SITE HOME LINK
+       =========================================== */
+    .site-home-link {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 9900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 999px;
+      color: #fffaf0;
+      background: rgba(18,35,29,.9);
+      box-shadow: 0 8px 24px rgba(0,0,0,.24);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font: 700 14px/1.2 "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      text-decoration: none;
+      opacity: .78;
+      transition: opacity .2s ease, background .2s ease;
+    }
+    .site-home-link:hover,
+    .site-home-link:focus-visible {
+      opacity: 1;
+      background: rgba(9,24,38,.96);
+      outline: 3px solid rgba(255,255,255,.7);
+      outline-offset: 2px;
+    }
+    @media (max-width: 520px) {
+      .site-home-link {
+        top: 10px;
+        bottom: auto;
+        left: 88px;
+        min-height: 40px;
+        padding: 8px 11px;
+        font-size: 13px;
+      }
+    }
+    @media print {
+      .site-home-link { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="site-home-link" href="./" aria-label="返回龔鴻裕教學與教材首頁">← 教材首頁</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+      <!-- 01｜管理現金流 -->
+      <section id="slide-1" class="slide cover active visible" data-title="管理現金流">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">第四部分｜FINANCIAL LITERACY 02</span></header>
+        <div class="copy"><p class="kicker reveal" data-editable>錢花出去，不只是少了一個數字</p><h1 class="reveal delay-1" data-editable>錢要去哪裡，<br>才會留下<em>選擇？</em></h1><p class="subtitle reveal delay-2" data-editable>看懂現金流、消費衝動與「真資產」，練習把有限的錢放到真正重要的地方。</p></div><div class="ledger-art reveal-scale delay-2" aria-hidden="true"><div class="ledger-row"><span>現金流</span><b>→</b></div><div class="ledger-row"><span>消費選擇</span><b>?</b></div><div class="ledger-row"><span>真資產</span><b>＋</b></div><div class="ledger-row"><span>未來選擇</span><b>↗</b></div></div><div class="route-note reveal delay-3"><i></i><span data-editable>三支影片　×　三次判斷　×　一個 30 天行動</span></div>
+        
+        <span class="page-no">01</span><nav class="fallback-controls"><span>←</span><span>01 / 36</span><a href="#slide-2">→</a></nav>
+      </section>
+
+      <!-- 02｜先接回財商（一） -->
+      <section id="slide-2" class="slide has-note" data-title="先接回財商（一）">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">上一次建立了資產思維</p><h2 class="title reveal delay-1" data-editable>收入進來以後，<br>流向決定你<span class="accent">留下什麼</span>。</h2><div class="flow reveal-scale delay-2"><div class="flow-node" data-editable>收入</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>支出與選擇</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>累積或壓力</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>未來的選擇空間</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>銜接方式</h2><p>財商（一）談「什麼值得累積」；財商（二）把鏡頭拉近到每一次收入與支出。不要把問題簡化成「少花錢就好」，而要追問錢去了哪裡、留下了什麼。</p></template>
+        <span class="page-no">02</span><nav class="fallback-controls"><a href="#slide-1">←</a><span>02 / 36</span><a href="#slide-3">→</a></nav>
+      </section>
+
+      <!-- 03｜今天只回答三個問題 -->
+      <section id="slide-3" class="slide dark has-note" data-title="今天只回答三個問題">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不談快速致富</p><h2 class="title reveal delay-1" data-editable>把錢看清楚，<br>才能把選擇說清楚。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">01</p><h3 data-editable>錢怎麼流？</h3><p data-editable>不只看月底剩多少，也看流入、流出與時間。</p></article><article class="card"><p class="no">02</p><h3 data-editable>為什麼會想買？</h3><p data-editable>辨認需要、享受、壓力與衝動的差別。</p></article><article class="card"><p class="no">03</p><h3 data-editable>花完留下什麼？</h3><p data-editable>判斷支出是否形成安全、能力或長期效益。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>課程定位</h2><p>這堂課不是節儉比賽，也不要求學生投資。成果是能說明一筆錢的流向、代價與後續行動。</p></template>
+        <span class="page-no">03</span><nav class="fallback-controls"><a href="#slide-2">←</a><span>03 / 36</span><a href="#slide-4">→</a></nav>
+      </section>
+
+      <!-- 04｜三支影片，各自負責一件事 -->
+      <section id="slide-4" class="slide has-note" data-title="三支影片，各自負責一件事">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">影片不是答案，是討論起點</p><h2 class="title reveal delay-1" data-editable>先看見，再理解，最後做判斷。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">影片 1</p><h3 data-editable>看見現金流</h3><p data-editable>用記帳與淨值概念，把錢的移動畫出來。</p></article><article class="card"><p class="no">影片 2</p><h3 data-editable>理解消費衝動</h3><p data-editable>從大腦與情緒，看見「想買」怎麼發生。</p></article><article class="card"><p class="no">影片 3</p><h3 data-editable>判斷真資產</h3><p data-editable>檢查花大錢改善自己，究竟是投資還是浪費。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>授課節奏</h2><p>每支影片前先給三個觀察題；影片後不急著問感想，先由教師整理關鍵概念，再用虛構案例練習。</p></template>
+        <span class="page-no">04</span><nav class="fallback-controls"><a href="#slide-3">←</a><span>04 / 36</span><a href="#slide-5">→</a></nav>
+      </section>
+
+      <!-- 05｜談錢，也要保留安全感 -->
+      <section id="slide-5" class="slide dark has-note" data-title="談錢，也要保留安全感">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">先說好課堂界線</p><h2 class="title reveal delay-1" data-editable>不公開私人數字，<br>也不替別人貼標籤。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">不揭露</p><h3 data-editable>不必說家裡有多少錢</h3><p data-editable>所有練習都能使用虛構金額。</p></article><article class="card"><p class="no">不比較</p><h3 data-editable>不同條件不能直接排名</h3><p data-editable>收入、家庭責任與生活成本都不相同。</p></article><article class="card"><p class="no">不羞辱</p><h3 data-editable>消費不等於不自律</h3><p data-editable>先理解情境，再討論可以調整的地方。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>倫理提醒</h2><p>避免請學生公開債務、生活費或家庭收入。學生若主動分享，只回到判斷架構，不追問個資。</p></template>
+        <span class="page-no">05</span><nav class="fallback-controls"><a href="#slide-4">←</a><span>05 / 36</span><a href="#slide-6">→</a></nav>
+      </section>
+
+      <!-- 06｜單元 1：先看錢怎麼流 -->
+      <section id="slide-6" class="slide dark segment" data-title="單元 1：先看錢怎麼流">
+        <header class="masthead"><span>財商（二）｜單元 1</span><span class="chapter">UNIT 01 / 03</span></header>
+        <div class="frame"><div><p class="eyebrow reveal">本單元主題</p><div class="segment-time reveal delay-1">01<small data-editable>先看錢怎麼流<br>從月底餘額，走向完整的流向圖。</small></div></div><div class="segment-list reveal delay-2"><b>這一段會走過</b><div data-editable>同樣收入，為什麼結果不同？</div><div data-editable>觀看：滿月記帳法</div><div data-editable>建立自己的四格現金流地圖</div></div></div>
+        
+        <span class="page-no">06</span><nav class="fallback-controls"><a href="#slide-5">←</a><span>06 / 36</span><a href="#slide-7">→</a></nav>
+      </section>
+
+      <!-- 07｜同樣每月有 12,000 元 -->
+      <section id="slide-7" class="slide dark has-note" data-title="同樣每月有 12,000 元">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">虛構案例：阿哲與小芸</p><h2 class="title reveal delay-1" data-editable>一個月底剩 2,000；<br>一個月底也剩 2,000。<br>他們的狀況一樣嗎？</h2><div class="choice-grid reveal delay-2"><article class="choice"><div class="letter">A</div><h3 data-editable>阿哲</h3><p data-editable>先存 2,000，再用 10,000 支付生活與娛樂；沒有分期。</p><div class="vote">剩下 2,000</div></article><article class="choice"><div class="letter">B</div><h3 data-editable>小芸</h3><p data-editable>本月收到 12,000，另刷卡分期 4,000；帳戶最後還有 2,000。</p><div class="vote">也剩 2,000</div></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>教師揭露</h2><p>兩人帳戶餘額一樣，但小芸把一部分支出推到未來。現金流要同時看本月流向與已經承諾的未來付款。</p></template>
+        <span class="page-no">07</span><nav class="fallback-controls"><a href="#slide-6">←</a><span>07 / 36</span><a href="#slide-8">→</a></nav>
+      </section>
+
+      <!-- 08｜餘額是一張照片；現金流是一段影片 -->
+      <section id="slide-8" class="slide has-note" data-title="餘額是一張照片；現金流是一段影片">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不要只看最後一個數字</p><h2 class="title reveal delay-1" data-editable>同樣的餘額，<br>可能來自完全不同的路徑。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">流入</p><h3 data-editable>錢從哪裡來？</h3><p data-editable>生活費、打工、獎學金或其他來源。</p></article><article class="card"><p class="no">流出</p><h3 data-editable>錢去了哪裡？</h3><p data-editable>基本生活、享受、分期、儲蓄與學習。</p></article><article class="card"><p class="no">承諾</p><h3 data-editable>未來還要付什麼？</h3><p data-editable>訂閱、分期與借款會占用之後的收入。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>核心比喻</h2><p>帳戶餘額像在月底拍照；現金流像把整個月錄成影片。照片重要，但影片才能看見事情怎麼發生。</p></template>
+        <span class="page-no">08</span><nav class="fallback-controls"><a href="#slide-7">←</a><span>08 / 36</span><a href="#slide-9">→</a></nav>
+      </section>
+
+      <!-- 09｜再也沒失敗的：滿月記帳法 -->
+      <section id="slide-9" class="slide dark has-note has-note" data-title="再也沒失敗的：滿月記帳法">
+        <header class="masthead"><span>財商（二）｜課堂影片</span><span class="chapter">VIDEO｜09:53</span></header>
+        <div class="frame"><p class="eyebrow reveal">播放前，先帶著問題看</p><h2 class="title reveal delay-1" data-editable>記帳不是抓犯人；<br>而是把錢的<span class="accent">路線</span>畫出來。</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="juLfUYkCVDI" data-video-start="0" data-video-title="再也沒失敗的：滿月記帳法"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>播放 09:53</strong></button></div><aside class="watch-task"><h3>邊看邊找</h3><ol><li data-editable>影片記錄了哪些流入與流出？</li><li data-editable>它如何連結資產、負債與淨值？</li><li data-editable>哪一種資訊最能幫助你做下一次決定？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=juLfUYkCVDI" target="_blank" rel="noopener">無法嵌入時，開啟 YouTube ↗</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>播放提醒</h2><p>柴鼠兄弟影片，約 9 分 53 秒。畫面有圖表與內嵌中文字。正式授課前仍須重新確認連結、嵌入播放與教室網路。</p></template>
+        <span class="page-no">09</span><nav class="fallback-controls"><a href="#slide-8">←</a><span>09 / 36</span><a href="#slide-10">→</a></nav>
+      </section>
+
+      <!-- 10｜影片後先分清兩張表 -->
+      <section id="slide-10" class="slide has-note" data-title="影片後先分清兩張表">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">一張看流動，一張看累積</p><h2 class="title reveal delay-1" data-editable>現金流回答「這段時間怎麼走」；<br>淨值回答「目前累積多少」。</h2><div class="cards two reveal delay-2"><article class="card"><p class="no">現金流</p><h3 data-editable>一段時間的進出</h3><p data-editable>收入減支出，還要留意付款時間與固定承諾。</p></article><article class="card"><p class="no">淨值</p><h3 data-editable>一個時間點的累積</h3><p data-editable>擁有的資產減去需要償還的負債。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>避免混淆</h2><p>學生容易把「這個月有剩」等同於「財務狀況很好」。可以提醒：若同時新增高額分期，短期有剩不代表整體累積增加。</p></template>
+        <span class="page-no">10</span><nav class="fallback-controls"><a href="#slide-9">←</a><span>10 / 36</span><a href="#slide-11">→</a></nav>
+      </section>
+
+      <!-- 11｜先把支出放進四個抽屜 -->
+      <section id="slide-11" class="slide has-note" data-title="先把支出放進四個抽屜">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">分類不是定罪</p><h2 class="title reveal delay-1" data-editable>目的不是找出「壞支出」，<br>而是看見可以調整的地方。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">基本生活</p><h3 data-editable>讓日常能運作</h3><p data-editable>餐食、交通、房租、必要通訊。</p></article><article class="card"><p class="no">固定承諾</p><h3 data-editable>未來會自動扣走</h3><p data-editable>訂閱、分期、保費或還款。</p></article><article class="card"><p class="no">彈性享受</p><h3 data-editable>讓生活有樂趣</h3><p data-editable>聚餐、娛樂、興趣與想要的東西。</p></article><article class="card"><p class="no">未來累積</p><h3 data-editable>把選擇留到以後</h3><p data-editable>安全墊、能力、工具與長期目標。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>不是固定比例</h2><p>四類沒有全班通用的標準比例。分類的價值在於：學生能說明哪一類太擠、哪一類幾乎沒有，而不是互相比誰花得少。</p></template>
+        <span class="page-no">11</span><nav class="fallback-controls"><a href="#slide-10">←</a><span>11 / 36</span><a href="#slide-12">→</a></nav>
+      </section>
+
+      <!-- 12｜虛構的一萬元，要怎麼走？ -->
+      <section id="slide-12" class="slide has-note" data-title="虛構的一萬元，要怎麼走？">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">先排流向，再談比例</p><h2 class="title reveal delay-1" data-editable>不是每一塊錢都能自由安排。</h2><div class="case-board reveal delay-2"><article class="case-budget"><h3 data-editable>小岑本月可用</h3><div class="budget-line"><span>生活費＋打工</span><b>10,000</b></div><div class="budget-line"><span>必要交通餐食</span><b>5,600</b></div><div class="budget-line"><span>固定訂閱分期</span><b>1,400</b></div><div class="budget-line left"><span>還能安排</span><b>3,000</b></div></article><div class="case-options"><article class="case-option"><b>選擇 1</b><h3 data-editable>先留安全墊</h3><p data-editable>降低臨時支出造成的壓力。</p></article><article class="case-option"><b>選擇 2</b><h3 data-editable>買必要工具</h3><p data-editable>確認是否真的改善學習或工作。</p></article><article class="case-option"><b>選擇 3</b><h3 data-editable>保留休閒</h3><p data-editable>可持續的計畫不必完全取消享受。</p></article><article class="case-option"><b>選擇 4</b><h3 data-editable>調整固定支出</h3><p data-editable>先找出不再使用的訂閱與分期。</p></article></div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>帶領方式</h2><p>先問「哪些錢已經不能自由移動？」再討論剩下的 3,000 元。教師可示範：好決定不只看金額，也看緊急程度與後續效益。</p></template>
+        <span class="page-no">12</span><nav class="fallback-controls"><a href="#slide-11">←</a><span>12 / 36</span><a href="#slide-13">→</a></nav>
+      </section>
+
+      <!-- 13｜記帳方法，愈簡單愈容易持續 -->
+      <section id="slide-13" class="slide has-note" data-title="記帳方法，愈簡單愈容易持續">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">工具不是重點，回頭看才是</p><h2 class="title reveal delay-1" data-editable>選一種你願意用四週的方法。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">手機備忘錄</p><h3 data-editable>最快開始</h3><p data-editable>每天只記類別與大約金額。</p></article><article class="card"><p class="no">App 或試算表</p><h3 data-editable>方便加總</h3><p data-editable>適合想看趨勢與固定支出的人。</p></article><article class="card"><p class="no">帳戶與發票回顧</p><h3 data-editable>每週補記</h3><p data-editable>適合不想逐筆輸入，但願意固定整理的人。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>降低門檻</h2><p>不要求下載特定 App，也不把連續記錄當成意志力測驗。漏記後能重新開始，比追求完美重要。</p></template>
+        <span class="page-no">13</span><nav class="fallback-controls"><a href="#slide-12">←</a><span>13 / 36</span><a href="#slide-14">→</a></nav>
+      </section>
+
+      <!-- 14｜每週只檢查三個訊號 -->
+      <section id="slide-14" class="slide dark has-note" data-title="每週只檢查三個訊號">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不必每天責備自己</p><h2 class="title reveal delay-1" data-editable>看懂變化，才知道下一步。</h2><div class="filter-grid reveal delay-2"><article class="filter-card"><div class="icon">↗</div><h3 data-editable>流入變化</h3><p data-editable>這週多了或少了哪些收入？是一次性的嗎？</p></article><article class="filter-card"><div class="icon">↘</div><h3 data-editable>流出集中</h3><p data-editable>哪一類支出特別高？原因是必要、選擇還是突發？</p></article><article class="filter-card"><div class="icon">→</div><h3 data-editable>未來承諾</h3><p data-editable>下個月已經有哪些錢被訂閱、分期或還款占用？</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>教師收束</h2><p>第一單元的目標不是省下某個金額，而是能回答：錢從哪裡來、去了哪裡、哪些支出已經延伸到未來。</p></template>
+        <span class="page-no">14</span><nav class="fallback-controls"><a href="#slide-13">←</a><span>14 / 36</span><a href="#slide-15">→</a></nav>
+      </section>
+
+      <!-- 15｜第一個結論 -->
+      <section id="slide-15" class="slide dark has-note" data-title="第一個結論">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">看見，才有選擇</p><h2 class="title reveal delay-1" data-editable>現金流管理不是控制每一塊錢；<br>而是避免每一塊錢都<span class="accent">自動消失</span>。</h2></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>轉場</h2><p>接著進入第二單元：即使已經記錄了，為什麼人還是會在某些時刻特別想買？</p></template>
+        <span class="page-no">15</span><nav class="fallback-controls"><a href="#slide-14">←</a><span>15 / 36</span><a href="#slide-16">→</a></nav>
+      </section>
+
+      <!-- 16｜單元 2：理解「為什麼想買」 -->
+      <section id="slide-16" class="slide dark segment" data-title="單元 2：理解「為什麼想買」">
+        <header class="masthead"><span>財商（二）｜單元 2</span><span class="chapter">UNIT 02 / 03</span></header>
+        <div class="frame"><div><p class="eyebrow reveal">本單元主題</p><div class="segment-time reveal delay-1">02<small data-editable>理解「為什麼想買」<br>不是禁止享受，而是把決定拿回來。</small></div></div><div class="segment-list reveal delay-2"><b>這一段會走過</b><div data-editable>消費衝動如何形成？</div><div data-editable>觀看：購物狂注意</div><div data-editable>建立暫停與選擇的距離</div></div></div>
+        
+        <span class="page-no">16</span><nav class="fallback-controls"><a href="#slide-15">←</a><span>16 / 36</span><a href="#slide-17">→</a></nav>
+      </section>
+
+      <!-- 17｜很多消費不是從「需要」開始 -->
+      <section id="slide-17" class="slide has-note" data-title="很多消費不是從「需要」開始">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">先看見觸發點</p><h2 class="title reveal delay-1" data-editable>累、悶、焦慮、怕錯過，<br>都可能讓「想買」變得很大聲。</h2><div class="flow reveal-scale delay-2"><div class="flow-node" data-editable>情緒或刺激</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>想像得到的快樂</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>立刻購買</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>短暫滿足或後悔</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>保持中性</h2><p>享受消費本身不是錯。問題在於：當下的情緒替我們決定，卻把成本留給未來。</p></template>
+        <span class="page-no">17</span><nav class="fallback-controls"><a href="#slide-16">←</a><span>17 / 36</span><a href="#slide-18">→</a></nav>
+      </section>
+
+      <!-- 18｜購物狂注意！一直買不停怎麼辦？ -->
+      <section id="slide-18" class="slide dark has-note has-note" data-title="購物狂注意！一直買不停怎麼辦？">
+        <header class="masthead"><span>財商（二）｜課堂影片</span><span class="chapter">VIDEO｜06:29</span></header>
+        <div class="frame"><p class="eyebrow reveal">播放前，先帶著問題看</p><h2 class="title reveal delay-1" data-editable>「我想買」是怎麼發生的？<br>先理解大腦，再練習<span class="accent">暫停</span>。</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="TEYyDAo0r-k" data-video-start="0" data-video-title="購物狂注意！一直買不停怎麼辦？"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>播放 06:29</strong></button></div><aside class="watch-task"><h3>邊看邊找</h3><ol><li data-editable>影片怎麼解釋購物帶來的快樂？</li><li data-editable>什麼情況最容易讓人一直買？</li><li data-editable>它提出哪些中斷衝動的方法？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=TEYyDAo0r-k" target="_blank" rel="noopener">無法嵌入時，開啟 YouTube ↗</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>播放提醒</h2><p>啾啾鞋影片，約 6 分 29 秒。單人解說並有大型內嵌繁體中文字幕；YouTube 沒有可切換 CC。正式授課前仍須重新確認播放狀態。</p></template>
+        <span class="page-no">18</span><nav class="fallback-controls"><a href="#slide-17">←</a><span>18 / 36</span><a href="#slide-19">→</a></nav>
+      </section>
+
+      <!-- 19｜理解大腦，不等於替消費找藉口 -->
+      <section id="slide-19" class="slide has-note" data-title="理解大腦，不等於替消費找藉口">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">影片後的第一個整理</p><h2 class="title reveal delay-1" data-editable>衝動很正常；<br>但正常，不代表只能照著做。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">觸發</p><h3 data-editable>什麼讓我開始想買？</h3><p data-editable>情緒、廣告、限時、同儕或社群比較。</p></article><article class="card"><p class="no">獎勵</p><h3 data-editable>我期待得到什麼？</h3><p data-editable>快樂、安慰、認同、效率或安全感。</p></article><article class="card"><p class="no">代價</p><h3 data-editable>這筆錢會排擠什麼？</h3><p data-editable>未來生活、其他目標、時間或注意力。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>教師示範</h2><p>可用深夜滑手機看到限時折扣做例子：觸發是疲累與限時，期待的是放鬆與不錯過，代價則可能是下週餐費或原本的目標。</p></template>
+        <span class="page-no">19</span><nav class="fallback-controls"><a href="#slide-18">←</a><span>19 / 36</span><a href="#slide-20">→</a></nav>
+      </section>
+
+      <!-- 20｜四種特別容易失守的時刻 -->
+      <section id="slide-20" class="slide has-note" data-title="四種特別容易失守的時刻">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">先認識自己的高風險情境</p><h2 class="title reveal delay-1" data-editable>不是每天都一樣；<br>有些時刻更需要暫停。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">情緒低落</p><h3 data-editable>用購物換安慰</h3><p data-editable>短暫有效，但問題可能仍在。</p></article><article class="card"><p class="no">領到收入</p><h3 data-editable>覺得終於可以補償自己</h3><p data-editable>容易把可用金額誤認為都能花。</p></article><article class="card"><p class="no">限時促銷</p><h3 data-editable>怕現在不買就損失</h3><p data-editable>折扣不等於需要，也不等於省錢。</p></article><article class="card"><p class="no">同儕比較</p><h3 data-editable>想跟上別人的生活</h3><p data-editable>社群畫面看不到對方的條件與代價。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>課堂語氣</h2><p>不要用「購物狂」稱呼學生。影片標題可以保留，但教師應以「高風險情境」與「消費衝動」討論。</p></template>
+        <span class="page-no">20</span><nav class="fallback-controls"><a href="#slide-19">←</a><span>20 / 36</span><a href="#slide-21">→</a></nav>
+      </section>
+
+      <!-- 21｜在想買和真的買之間，放一道門 -->
+      <section id="slide-21" class="slide has-note" data-title="在想買和真的買之間，放一道門">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">增加一點決定距離</p><h2 class="title reveal delay-1" data-editable>不是永遠不買；<br>是讓明天的自己也能參與。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">先離開頁面</p><h3 data-editable>中斷刺激</h3><p data-editable>把商品放入清單，不立刻結帳。</p></article><article class="card"><p class="no">設定等待期</p><h3 data-editable>依金額延後</h3><p data-editable>小額等一天，大額等七天或更久。</p></article><article class="card"><p class="no">寫下用途</p><h3 data-editable>把理由說清楚</h3><p data-editable>要解決什麼問題？使用頻率多高？</p></article><article class="card"><p class="no">比較替代方案</p><h3 data-editable>不只比較價格</h3><p data-editable>借用、二手、租用、延後或不買都算。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>避免硬規則</h2><p>等待天數可依個人情況調整。醫療、安全或真正急迫的必需品，不適合機械式等待。</p></template>
+        <span class="page-no">21</span><nav class="fallback-controls"><a href="#slide-20">←</a><span>21 / 36</span><a href="#slide-22">→</a></nav>
+      </section>
+
+      <!-- 22｜分期，會把今天的想要搬到未來 -->
+      <section id="slide-22" class="slide dark has-note" data-title="分期，會把今天的想要搬到未來">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">每月金額小，不代表總成本小</p><h2 class="title reveal delay-1" data-editable>真正要問的是：<br>未來幾個月，還剩多少自由？</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">總成本</p><h3 data-editable>最後一共付多少？</h3><p data-editable>把利息、手續費與附加條件一起算。</p></article><article class="card"><p class="no">占用時間</p><h3 data-editable>要付到什麼時候？</h3><p data-editable>未來收入還沒進來，已經先被安排。</p></article><article class="card"><p class="no">同時累積</p><h3 data-editable>有幾筆一起扣？</h3><p data-editable>每一筆看起來不大，加總後可能很重。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>安全界線</h2><p>不把分期說成一定錯誤；必要設備或醫療可能需要分期。重點是看總成本、期限與未來現金流。</p></template>
+        <span class="page-no">22</span><nav class="fallback-controls"><a href="#slide-21">←</a><span>22 / 36</span><a href="#slide-23">→</a></nav>
+      </section>
+
+      <!-- 23｜虛構案例：領薪日的耳機 -->
+      <section id="slide-23" class="slide has-note" data-title="虛構案例：領薪日的耳機">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">小凱剛領到 9,000 元</p><h2 class="title reveal delay-1" data-editable>原本的耳機還能用，<br>新款今天限時折 1,200 元。</h2><div class="case-board reveal delay-2"><article class="case-budget"><h3 data-editable>小凱的本月狀況</h3><div class="budget-line"><span>打工收入</span><b>9,000</b></div><div class="budget-line"><span>必要生活</span><b>6,500</b></div><div class="budget-line"><span>下月分期</span><b>1,200</b></div><div class="budget-line left"><span>耳機售價</span><b>3,600</b></div></article><div class="case-options"><article class="case-option"><b>觸發</b><h3 data-editable>領薪＋限時</h3><p data-editable>「現在不買，好像就虧了。」</p></article><article class="case-option"><b>用途</b><h3 data-editable>改善通勤</h3><p data-editable>要確認現有耳機是否真的不敷使用。</p></article><article class="case-option"><b>代價</b><h3 data-editable>壓縮下週生活</h3><p data-editable>也可能再增加一筆未來付款。</p></article><article class="case-option"><b>做法</b><h3 data-editable>先等七天</h3><p data-editable>再查二手、維修與替代款。</p></article></div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>教師統整</h2><p>答案不必是「不能買」。好的回答要包含：使用問題、現金流、替代方案與等待後的判斷。</p></template>
+        <span class="page-no">23</span><nav class="fallback-controls"><a href="#slide-22">←</a><span>23 / 36</span><a href="#slide-24">→</a></nav>
+      </section>
+
+      <!-- 24｜會享受，才比較能長期管理 -->
+      <section id="slide-24" class="slide has-note" data-title="會享受，才比較能長期管理">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">預算不是只有禁止</p><h2 class="title reveal delay-1" data-editable>把休閒放進計畫，<br>就不用每次都靠內疚控制。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">先保留</p><h3 data-editable>安排可以放心使用的金額</h3><p data-editable>享受是生活的一部分，不必假裝不存在。</p></article><article class="card"><p class="no">先排序</p><h3 data-editable>挑真正重視的享受</h3><p data-editable>少買不重要的，保留最有感的。</p></article><article class="card"><p class="no">先停止</p><h3 data-editable>用完就等下一個週期</h3><p data-editable>不再從基本生活或未來目標挪用。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>可持續性</h2><p>過度嚴格的預算容易反彈。讓學生知道：財商不是把生活過得愈苦愈好，而是讓花錢和價值一致。</p></template>
+        <span class="page-no">24</span><nav class="fallback-controls"><a href="#slide-23">←</a><span>24 / 36</span><a href="#slide-25">→</a></nav>
+      </section>
+
+      <!-- 25｜第二個結論 -->
+      <section id="slide-25" class="slide dark has-note" data-title="第二個結論">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">理解，才有距離</p><h2 class="title reveal delay-1" data-editable>不是把所有想要都消滅；<br>而是把「我想買」改成<span class="accent">我決定要不要買</span>。</h2></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>轉場</h2><p>第三單元再往前一步：即使一筆支出不是衝動，它是否真的形成了值得累積的東西？</p></template>
+        <span class="page-no">25</span><nav class="fallback-controls"><a href="#slide-24">←</a><span>25 / 36</span><a href="#slide-26">→</a></nav>
+      </section>
+
+      <!-- 26｜單元 3：把錢放進「真資產」 -->
+      <section id="slide-26" class="slide dark segment" data-title="單元 3：把錢放進「真資產」">
+        <header class="masthead"><span>財商（二）｜單元 3</span><span class="chapter">UNIT 03 / 03</span></header>
+        <div class="frame"><div><p class="eyebrow reveal">本單元主題</p><div class="segment-time reveal delay-1">03<small data-editable>把錢放進「真資產」<br>支出之後，留下能繼續發揮作用的東西。</small></div></div><div class="segment-list reveal delay-2"><b>這一段會走過</b><div data-editable>什麼是本課程說的「真資產」？</div><div data-editable>觀看：投資自己還是浪費？</div><div data-editable>建立四個判斷問題</div></div></div>
+        
+        <span class="page-no">26</span><nav class="fallback-controls"><a href="#slide-25">←</a><span>26 / 36</span><a href="#slide-27">→</a></nav>
+      </section>
+
+      <!-- 27｜「真資產」是本課程的廣義說法 -->
+      <section id="slide-27" class="slide has-note" data-title="「真資產」是本課程的廣義說法">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是正式會計科目</p><h2 class="title reveal delay-1" data-editable>一筆支出之後，<br>是否留下<span class="accent">未來仍能使用的價值</span>？</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">安全</p><h3 data-editable>降低被突發狀況打亂</h3><p data-editable>例如合理的安全墊與必要保障。</p></article><article class="card"><p class="no">能力</p><h3 data-editable>讓你能完成更難的事</h3><p data-editable>需要練習、回饋與成果，不是只買課。</p></article><article class="card"><p class="no">工具</p><h3 data-editable>穩定提升效率或品質</h3><p data-editable>要看使用頻率、維護成本與替代方案。</p></article><article class="card"><p class="no">健康與關係</p><h3 data-editable>支持長期生活與合作</h3><p data-editable>未必直接帶來收入，仍可能很有價值。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>名詞界線</h2><p>請明確說明：「真資產」是這套課程用來討論生活與長期效益的廣義概念，不等於會計學的資產定義。</p></template>
+        <span class="page-no">27</span><nav class="fallback-controls"><a href="#slide-26">←</a><span>27 / 36</span><a href="#slide-28">→</a></nav>
+      </section>
+
+      <!-- 28｜花大錢改善自己，是投資還是浪費？ -->
+      <section id="slide-28" class="slide dark has-note has-note" data-title="花大錢改善自己，是投資還是浪費？">
+        <header class="masthead"><span>財商（二）｜課堂影片</span><span class="chapter">VIDEO｜09:40</span></header>
+        <div class="frame"><p class="eyebrow reveal">播放前，先帶著問題看</p><h2 class="title reveal delay-1" data-editable>買課、買設備、做療程，<br>都叫「投資自己」嗎？</h2><div class="video-grid reveal delay-2"><div class="video-shell" data-video-id="qWUPvIYqq00" data-video-start="0" data-video-title="花大錢改善自己，是投資還是浪費？"><button class="load-video" type="button"><span class="play-icon">▶</span><strong>播放 09:40</strong></button></div><aside class="watch-task"><h3>邊看邊找</h3><ol><li data-editable>影片如何區分修復型、能力型與焦慮型支出？</li><li data-editable>為什麼金額大小不是唯一標準？</li><li data-editable>一筆高額支出後，還需要哪個後續行動？</li></ol><a class="video-link" href="https://www.youtube.com/watch?v=qWUPvIYqq00" target="_blank" rel="noopener">無法嵌入時，開啟 YouTube ↗</a></aside></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>播放提醒</h2><p>碩說說影片，約 9 分 40 秒。單人解說並有內嵌中英文字幕。正式授課前仍須重新確認連結、嵌入播放與字幕。</p></template>
+        <span class="page-no">28</span><nav class="fallback-controls"><a href="#slide-27">←</a><span>28 / 36</span><a href="#slide-29">→</a></nav>
+      </section>
+
+      <!-- 29｜同樣花大錢，目的可能完全不同 -->
+      <section id="slide-29" class="slide has-note" data-title="同樣花大錢，目的可能完全不同">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">影片後先分三種類型</p><h2 class="title reveal delay-1" data-editable>分類不是為了貼標籤；<br>而是找到真正要解決的問題。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">修復型</p><h3 data-editable>先回到可運作狀態</h3><p data-editable>處理健康、安全或已經影響生活的問題。</p></article><article class="card"><p class="no">能力型</p><h3 data-editable>建立可重複使用的本領</h3><p data-editable>課程、設備與練習要能轉成成果。</p></article><article class="card"><p class="no">焦慮型</p><h3 data-editable>想買一個安心感</h3><p data-editable>若沒有明確問題與行動，容易只得到短暫安慰。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>避免武斷</h2><p>同一筆支出可能同時包含三種成分。例如換電腦可能是修復工作問題，也可能受焦慮與比較影響；要看具體情境。</p></template>
+        <span class="page-no">29</span><nav class="fallback-controls"><a href="#slide-28">←</a><span>29 / 36</span><a href="#slide-30">→</a></nav>
+      </section>
+
+      <!-- 30｜判斷「真資產」的四個問題 -->
+      <section id="slide-30" class="slide dark has-note" data-title="判斷「真資產」的四個問題">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">買之前與買之後都要問</p><h2 class="title reveal delay-1" data-editable>不是東西的名字決定價值；<br>是你如何把它<span class="accent">轉化</span>。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">問題</p><h3 data-editable>它要解決什麼？</h3><p data-editable>若說不清楚，先不要急著付款。</p></article><article class="card"><p class="no">行動</p><h3 data-editable>買了之後要做什麼？</h3><p data-editable>排入時間，設定使用與練習方式。</p></article><article class="card"><p class="no">證據</p><h3 data-editable>最後留下什麼？</h3><p data-editable>健康改善、作品、效率、收入或可驗證成果。</p></article><article class="card"><p class="no">代價</p><h3 data-editable>為它放棄了什麼？</h3><p data-editable>不只看價格，也看時間、風險與其他選擇。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>核心判斷</h2><p>「課程」「證照」「筆電」都不會自動變成資產。只有後續使用與成果，才能把支出轉成可持續的價值。</p></template>
+        <span class="page-no">30</span><nav class="fallback-controls"><a href="#slide-29">←</a><span>30 / 36</span><a href="#slide-31">→</a></nav>
+      </section>
+
+      <!-- 31｜虛構案例：12,000 元的線上課程 -->
+      <section id="slide-31" class="slide has-note" data-title="虛構案例：12,000 元的線上課程">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">小蓉想學影片剪輯</p><h2 class="title reveal delay-1" data-editable>這筆錢是投資自己，<br>還是焦慮消費？</h2><div class="case-board reveal delay-2"><article class="case-budget"><h3 data-editable>目前資訊</h3><div class="budget-line"><span>課程價格</span><b>12,000</b></div><div class="budget-line"><span>每週可練習</span><b>2 小時</b></div><div class="budget-line"><span>現有免費資源</span><b>未試</b></div><div class="budget-line left"><span>想要成果</span><b>作品集</b></div></article><div class="case-options"><article class="case-option"><b>問題</b><h3 data-editable>要補哪個能力？</h3><p data-editable>先說清楚剪輯中的具體困難。</p></article><article class="case-option"><b>行動</b><h3 data-editable>每週如何練？</h3><p data-editable>時間不足，買了也可能用不完。</p></article><article class="case-option"><b>證據</b><h3 data-editable>留下三支作品</h3><p data-editable>用作品檢查是否真正進步。</p></article><article class="case-option"><b>替代</b><h3 data-editable>先試免費小專案</h3><p data-editable>先確認興趣與需求，再決定是否付費。</p></article></div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>教師揭露</h2><p>目前資訊不足以直接判定。較安全的順序是：先做一個免費小專案、確認卡點、排出練習時間，再比較課程是否真的補足需求。</p></template>
+        <span class="page-no">31</span><nav class="fallback-controls"><a href="#slide-30">←</a><span>31 / 36</span><a href="#slide-32">→</a></nav>
+      </section>
+
+      <!-- 32｜錢進來後，可以先走一個順序 -->
+      <section id="slide-32" class="slide has-note" data-title="錢進來後，可以先走一個順序">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是全班共用比例</p><h2 class="title reveal delay-1" data-editable>先站穩，再把錢放到更遠的地方。</h2><div class="flow reveal-scale delay-2"><div class="flow-node" data-editable>基本生活</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>小額安全墊</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>處理高成本承諾</div><span class="flow-arrow">→</span><div class="flow-node" data-editable>真資產與享受</div></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>順序可以調整</h2><p>若有立即醫療、安全或生存需要，當然優先處理。這是思考順序，不是財務處方，也不是要求學生照固定比例分配。</p></template>
+        <span class="page-no">32</span><nav class="fallback-controls"><a href="#slide-31">←</a><span>32 / 36</span><a href="#slide-33">→</a></nav>
+      </section>
+
+      <!-- 33｜不是只有會生錢的東西才有價值 -->
+      <section id="slide-33" class="slide has-note" data-title="不是只有會生錢的東西才有價值">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">金錢要服務生活</p><h2 class="title reveal delay-1" data-editable>有些真資產先帶來的，<br>是穩定、健康與選擇。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">睡眠與健康</p><h3 data-editable>讓身體能長期運作</h3><p data-editable>不是偷懶，而是維持學習與工作的條件。</p></article><article class="card"><p class="no">可靠工具</p><h3 data-editable>減少重複摩擦</h3><p data-editable>真正高頻使用，才可能值得投入。</p></article><article class="card"><p class="no">能力與作品</p><h3 data-editable>讓價值被看見</h3><p data-editable>學會後要能做出成果，也能說明過程。</p></article><article class="card"><p class="no">可信任關係</p><h3 data-editable>增加合作與支持</h3><p data-editable>需要時間、誠信與互相尊重，不是把人當資源。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>倫理補充</h2><p>避免把所有人生價值換算成收入。健康與關係不是因為能賺錢才重要；財商的目的，是讓金錢支持人想過的生活。</p></template>
+        <span class="page-no">33</span><nav class="fallback-controls"><a href="#slide-32">←</a><span>33 / 36</span><a href="#slide-34">→</a></nav>
+      </section>
+
+      <!-- 34｜做一個 30 天現金流小實驗 -->
+      <section id="slide-34" class="slide dark has-note" data-title="做一個 30 天現金流小實驗">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不交私人金額，也能完成</p><h2 class="title reveal delay-1" data-editable>只改一件事，<br>看看選擇空間有沒有變大。</h2><div class="cards four reveal delay-2"><article class="card"><p class="no">第 1 週</p><h3 data-editable>畫出流向</h3><p data-editable>選一種簡單方法，記錄四類支出。</p></article><article class="card"><p class="no">第 2 週</p><h3 data-editable>找出觸發</h3><p data-editable>記下三次最想衝動購買的時刻。</p></article><article class="card"><p class="no">第 3 週</p><h3 data-editable>暫停一次</h3><p data-editable>挑一筆非急迫支出，使用等待期。</p></article><article class="card"><p class="no">第 4 週</p><h3 data-editable>轉向真資產</h3><p data-editable>把省下的錢或時間，放到一個明確目標。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>成果方式</h2><p>學生只需交一段反思：我看見了什麼、試了什麼、下次要怎麼調整。不要求繳交金額、帳戶畫面或消費明細。</p></template>
+        <span class="page-no">34</span><nav class="fallback-controls"><a href="#slide-33">←</a><span>34 / 36</span><a href="#slide-35">→</a></nav>
+      </section>
+
+      <!-- 35｜最後留下六句話 -->
+      <section id="slide-35" class="slide dark has-note" data-title="最後留下六句話">
+        <header class="masthead"><span>職涯探索與專業倫理</span><span class="chapter">FINANCIAL LITERACY 02</span></header>
+        <div class="frame"><p class="eyebrow reveal">不是省錢口號，是判斷架構</p><h2 class="title reveal delay-1" data-editable>讓錢支持現在，<br>也保留未來。</h2><div class="cards three reveal delay-2"><article class="card"><p class="no">01</p><h3 data-editable>先看流向</h3><p data-editable>餘額之外，也看錢怎麼進、怎麼出。</p></article><article class="card"><p class="no">02</p><h3 data-editable>看見未來承諾</h3><p data-editable>訂閱與分期會先占用之後的收入。</p></article><article class="card"><p class="no">03</p><h3 data-editable>辨認消費觸發</h3><p data-editable>情緒、限時與比較都可能放大想要。</p></article><article class="card"><p class="no">04</p><h3 data-editable>保留享受</h3><p data-editable>可持續的管理，不必把生活變成懲罰。</p></article><article class="card"><p class="no">05</p><h3 data-editable>檢查後續行動</h3><p data-editable>支出要經過使用與練習，才可能成為真資產。</p></article><article class="card"><p class="no">06</p><h3 data-editable>尊重不同條件</h3><p data-editable>好的方法要能放進真實生活，而不是羞辱個人。</p></article></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>總整理</h2><p>可逐格揭露；每格停兩秒，讓學生先在心中補完。若時間不足，直接用六句話收束即可。</p></template>
+        <span class="page-no">35</span><nav class="fallback-controls"><a href="#slide-34">←</a><span>35 / 36</span><a href="#slide-36">→</a></nav>
+      </section>
+
+      <!-- 36｜讓每一筆錢，留下你重視的東西 -->
+      <section id="slide-36" class="slide dark has-note has-note" data-title="讓每一筆錢，留下你重視的東西">
+        <header class="masthead"><span>第四部分｜財商（二）完成</span><span class="chapter">CASH FLOW SERVES LIFE</span></header>
+        <div class="big-question"><div><p class="reveal">最後留下一個判斷標準</p><h2 class="reveal delay-1" data-editable>好的現金流，<br>不是什麼都不花；<br>而是花完以後，仍留下選擇。</h2><small class="reveal delay-2" data-editable>看見流向　×　理解衝動　×　累積真資產</small></div></div>
+        <button class="teacher-trigger" type="button">講師提示</button><template class="teacher-note"><h2>收尾提問</h2><p>請學生完成一句話：「接下來 30 天，我想讓一筆錢或一段時間，改流向＿＿，因為我想留下＿＿。」本課程提供觀念與判斷架構，不構成個別投資、稅務或法律建議。</p></template>
+        <span class="page-no">36</span><nav class="fallback-controls"><a href="#slide-35">←</a><span>36 / 36</span><span>→</span></nav>
+      </section>
+    </main>
+  </div>
+
+  <!-- LIVE PRESENTATION CONTROLS -->
+  <div class="deck-controls" aria-label="簡報控制列"><button id="prevBtn" type="button" title="上一張">←</button><button id="menuBtn" type="button" title="目錄（M）">☰</button><span class="counter" id="counter">01 / 36</span><button id="noteBtn" type="button" title="講師提示（T）">T</button><button id="helpBtn" type="button" title="操作說明">?</button><button id="fullBtn" type="button" title="全螢幕（F）">⛶</button><button id="nextBtn" type="button" title="下一張">→</button></div>
+  <button class="resume-jump" id="resumeJump" type="button">接續上次進度</button>
+  <div class="resume-toast" id="resumeToast" role="status">已記錄下次接續位置</div>
+  <div class="progress" id="progress"></div>
+
+  <!-- OVERLAYS -->
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="投影片目錄"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>投影片目錄</h2><div class="menu-grid" id="menuGrid"></div></div></div>
+  <div class="overlay" id="noteOverlay" role="dialog" aria-modal="true" aria-label="講師提示"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><div id="noteContent"></div></div></div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明"><div class="overlay-panel"><button class="overlay-close" data-close type="button" aria-label="關閉">×</button><h2>操作方式</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：翻頁</li><li>滑鼠滾輪或手機左右滑動：翻頁</li><li>M：目錄；T：講師提示；F：全螢幕；E：文字編輯</li><li>三支影片皆先提問、再觀看、最後由教師統整；授課前請重新測試播放。</li><li>本機檔案會在 YouTube 新分頁播放；部署到網站後，可直接在投影片內播放。</li><li>若 JavaScript 被封鎖，仍可使用每張下方的左右箭頭與 YouTube 文字連結。</li></ul></div></div>
+
+  <!-- INLINE EDITING CONTROLS -->
+  <div class="edit-hotzone" aria-hidden="true"></div><button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）" aria-label="切換編輯模式">✎</button>
+  <div class="edit-toolbar" id="editToolbar"><button id="saveFile" type="button">下載修訂版 HTML</button><button id="resetEdits" type="button">清除本機修改</button></div>
+  <noscript><div class="legacy-note">相容模式：請使用每張投影片下方的左右箭頭翻頁；講師提示、進度記錄與內嵌影片需啟用 JavaScript，影片仍可使用 YouTube 文字連結。</div></noscript>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    (function(){
+      "use strict";
+      function byId(id){return document.getElementById(id)}
+      function pad2(number){return number<10?"0"+number:String(number)}
+      function closeOverlays(){var open=document.querySelectorAll(".overlay.open");for(var i=0;i<open.length;i+=1){open[i].classList.remove("open")}}
+      var stage=byId("deckStage"),storageKey="career-exploration-financial-literacy-part2-v1",resumeKey=storageKey+"-resume";
+      try{var saved=window.localStorage.getItem(storageKey);if(saved&&saved.indexOf("slide-36")!==-1){stage.innerHTML=saved}}catch(ignore){}
+      var slides=stage.querySelectorAll(".slide"),current=0,wheelLocked=false,touchStart=null;
+      function scaleStage(){var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080),x=(window.innerWidth-1920*factor)/2,y=(window.innerHeight-1080*factor)/2;stage.style.transform="translate("+x+"px,"+y+"px) scale("+factor+")"}
+      function resetVideo(slide){var shell=slide.querySelector(".video-shell");if(shell&&shell.querySelector("iframe")){var start=shell.getAttribute("data-video-start")||"0",end=shell.getAttribute("data-video-end"),prefix=isLocalFile()?"在 YouTube 播放 ":"播放 ",icon=isLocalFile()?"↗":"▶",label=end?prefix+formatTime(start)+"—"+formatTime(end):prefix+formatTime(start)+"—結束";shell.innerHTML='<button class="load-video" type="button"><span class="play-icon">'+icon+'</span><strong>'+label+'</strong></button>'}}
+      function formatTime(value){var seconds=parseInt(value,10)||0,minutes=Math.floor(seconds/60),remain=seconds%60;return pad2(minutes)+":"+pad2(remain)}function isLocalFile(){return window.location.protocol==="file:"}function watchUrl(shell){var id=shell.getAttribute("data-video-id"),start=shell.getAttribute("data-video-start")||"0";return "https://www.youtube.com/watch?v="+encodeURIComponent(id)+"&t="+encodeURIComponent(start)+"s"}function configureVideoButtons(){if(!isLocalFile()){return}var buttons=document.querySelectorAll(".load-video");for(var i=0;i<buttons.length;i+=1){var strong=buttons[i].querySelector("strong"),icon=buttons[i].querySelector(".play-icon");if(strong){strong.textContent=strong.textContent.replace(/^播放 /,"在 YouTube 播放 ")}if(icon){icon.textContent="↗"}}}
+      function show(index,updateHash){if(index<0){index=0}if(index>=slides.length){index=slides.length-1}for(var i=0;i<slides.length;i+=1){if(i===index){slides[i].classList.add("active");slides[i].classList.add("visible")}else{slides[i].classList.remove("active");slides[i].classList.remove("visible");resetVideo(slides[i])}}current=index;byId("counter").textContent=pad2(current+1)+" / "+slides.length;byId("progress").style.width=((current+1)/slides.length*100)+"%";byId("noteBtn").style.opacity=slides[current].querySelector(".teacher-note")?"1":".35";if(updateHash!==false){try{window.history.replaceState(null,"","#slide-"+(current+1))}catch(ignore){window.location.hash="slide-"+(current+1)}}}
+      function indexFromHash(){var match=window.location.hash.match(/^#slide-(\d+)$/);return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0}
+      function openOverlay(id){closeOverlays();byId(id).classList.add("open")}
+      function showNote(){var template=slides[current].querySelector(".teacher-note");if(!template){return}byId("noteContent").innerHTML="";byId("noteContent").appendChild(template.content.cloneNode(true));openOverlay("noteOverlay")}
+      function requestFullscreen(){var root=document.documentElement,exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement){if(exit){exit.call(document)}return}var enter=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(enter){enter.call(root)}}
+      function buildMenu(){var grid=byId("menuGrid");grid.innerHTML="";for(var i=0;i<slides.length;i+=1){var button=document.createElement("button");button.type="button";button.setAttribute("data-jump",i);button.textContent=pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片");grid.appendChild(button)}}
+
+      /* ===========================================
+         VIDEO LAZY LOADING WITH CHAPTER BOUNDARIES
+         =========================================== */
+      function loadVideo(shell){var id=shell.getAttribute("data-video-id"),start=shell.getAttribute("data-video-start")||"0",end=shell.getAttribute("data-video-end"),title=shell.getAttribute("data-video-title")||"課程影片",url=watchUrl(shell);if(isLocalFile()){var opened=window.open(url,"_blank");if(!opened){window.location.href=url}return}var params="?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1&start="+start+"&origin="+encodeURIComponent(window.location.origin);if(end){params+="&end="+end}shell.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+params+'" title="'+title.replace(/"/g,"&quot;")+'" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><a class="video-open-overlay" href="'+url+'" target="_blank" rel="noopener">改在 YouTube 播放 ↗</a>'}
+
+      /* ===========================================
+         RESUME CHECKPOINTS STORED ONLY IN THIS BROWSER
+         =========================================== */
+      var resumeJump=byId("resumeJump"),resumeToast=byId("resumeToast"),toastTimer=null;
+      function readResume(){try{var value=parseInt(window.localStorage.getItem(resumeKey),10);return isNaN(value)?null:value}catch(ignore){return null}}
+      function refreshResume(){var value=readResume();resumeJump.classList.toggle("show",value!==null&&value>=0&&value<slides.length)}
+      function saveResume(index){try{window.localStorage.setItem(resumeKey,String(index))}catch(ignore){}refreshResume();resumeToast.classList.add("show");window.clearTimeout(toastTimer);toastTimer=window.setTimeout(function(){resumeToast.classList.remove("show")},1800)}
+      resumeJump.onclick=function(){var value=readResume();if(value!==null){show(value)}};
+
+      /* ===========================================
+         INPUT AND NAVIGATION EVENTS
+         =========================================== */
+      byId("prevBtn").onclick=function(){show(current-1)};byId("nextBtn").onclick=function(){show(current+1)};byId("menuBtn").onclick=function(){openOverlay("menuOverlay")};byId("noteBtn").onclick=showNote;byId("helpBtn").onclick=function(){openOverlay("helpOverlay")};byId("fullBtn").onclick=requestFullscreen;
+      document.addEventListener("click",function(event){var close=event.target.closest("[data-close]");if(close){closeOverlays();return}if(event.target.classList.contains("overlay")){closeOverlays();return}var jump=event.target.closest("[data-jump]");if(jump){show(parseInt(jump.getAttribute("data-jump"),10));closeOverlays();return}var load=event.target.closest(".load-video");if(load){loadVideo(load.closest(".video-shell"));return}var teacher=event.target.closest(".teacher-trigger");if(teacher){showNote();return}var resume=event.target.closest("[data-resume]");if(resume){saveResume(parseInt(resume.getAttribute("data-resume"),10))}});
+      document.addEventListener("keydown",function(event){var target=event.target;if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName))){return}if(event.key==="ArrowRight"||event.key==="ArrowDown"||event.key==="PageDown"||event.key===" "){event.preventDefault();show(current+1)}else if(event.key==="ArrowLeft"||event.key==="ArrowUp"||event.key==="PageUp"){event.preventDefault();show(current-1)}else if(event.key==="Home"){show(0)}else if(event.key==="End"){show(slides.length-1)}else if(event.key==="m"||event.key==="M"){openOverlay("menuOverlay")}else if(event.key==="t"||event.key==="T"){showNote()}else if(event.key==="f"||event.key==="F"){requestFullscreen()}else if(event.key==="Escape"){closeOverlays()}else if(event.key==="e"||event.key==="E"){toggleEditing()}});
+      window.addEventListener("resize",scaleStage);window.addEventListener("hashchange",function(){show(indexFromHash(),false)});window.addEventListener("wheel",function(event){if(document.querySelector(".overlay.open")||wheelLocked||Math.abs(event.deltaY)<18){return}wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false},520)},{passive:true});window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX},{passive:true});window.addEventListener("touchend",function(event){if(touchStart===null||document.querySelector(".overlay.open")){return}var delta=event.changedTouches[0].clientX-touchStart;if(Math.abs(delta)>50){show(current+(delta<0?1:-1))}touchStart=null},{passive:true});
+
+      /* ===========================================
+         INLINE EDITOR AND FILE EXPORT
+         =========================================== */
+      var editing=false,hideTimer=null,saveTimer=null,hotzone=document.querySelector(".edit-hotzone"),editToggle=byId("editToggle");
+      function setStored(value){try{window.localStorage.setItem(storageKey,value);return true}catch(ignore){return false}}
+      function toggleEditing(){editing=!editing;var editable=stage.querySelectorAll("[data-editable]");for(var i=0;i<editable.length;i+=1){editable[i].contentEditable=editing?"true":"false"}document.body.classList.toggle("editing",editing);editToggle.classList.toggle("active",editing);byId("editToolbar").classList.toggle("show",editing)}
+      editToggle.onclick=toggleEditing;hotzone.onclick=toggleEditing;hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);editToggle.classList.add("show")};hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show")}},400)};editToggle.onmouseenter=function(){window.clearTimeout(hideTimer)};editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing){editToggle.classList.remove("show")}},400)};
+      stage.addEventListener("input",function(){window.clearTimeout(saveTimer);saveTimer=window.setTimeout(function(){setStored(stage.innerHTML)},350)});byId("resetEdits").onclick=function(){if(window.confirm("要清除這台瀏覽器儲存的文字修改嗎？")){try{window.localStorage.removeItem(storageKey)}catch(ignore){}window.location.reload()}};byId("saveFile").onclick=function(){if(editing){toggleEditing()}setStored(stage.innerHTML);var html="<!doctype html>\n"+document.documentElement.outerHTML,blob=new Blob([html],{type:"text/html;charset=utf-8"}),urlApi=window.URL||window.webkitURL,anchor=document.createElement("a");anchor.href=urlApi.createObjectURL(blob);anchor.download="職涯探索與專業倫理_第四部分_財商二_管理現金流_V1_編輯版.html";document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href)},1200)};
+      configureVideoButtons();buildMenu();scaleStage();show(indexFromHash(),false);refreshResume();document.body.classList.add("js-ready");
+    }());
+  </script>
+</body>
+</html>
