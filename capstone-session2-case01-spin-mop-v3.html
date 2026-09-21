@@ -1,0 +1,1620 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="access-gate-config.js?v=14b"></script>
+<script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>從不方便開始｜好神拖案例 V3</title>
+  <meta name="description" content="專題研究第二回：以好神拖案例練習發掘、理解、重新界定問題並發展解答">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&amp;family=Shippori+Mincho:wght@700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME: 課堂筆記本 A
+       修改下列變數，即可調整整份教材的顏色與字體。
+       =========================================== */
+    :root {
+      --stage-bg: #262724;
+      --slide-bg: #262724;
+      --paper: #f8f4e9;
+      --paper-deep: #eee7d8;
+      --ink: #17251f;
+      --muted: #65716b;
+      --line: #d9d1c3;
+      --green: #72b59b;
+      --green-deep: #2f725d;
+      --gold: #e5ba50;
+      --coral: #ed907d;
+      --blue: #78a9c7;
+      --lavender: #a998d0;
+      --sage: #9bc49e;
+      --shadow: rgba(0, 0, 0, .34);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --font-display: "Shippori Mincho", "Noto Sans TC", sans-serif;
+      --font-body: "Noto Sans TC", sans-serif;
+    }
+
+    /* ===========================================
+       RESET
+       =========================================== */
+    * { box-sizing: border-box; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Included in full from viewport-base.css.
+       =========================================== */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       NO-JAVASCRIPT FALLBACK
+       內容直接存在 HTML；錨點可在停用 JavaScript 時翻頁。
+       =========================================== */
+    .slide:target {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    /* ===========================================
+       NOTEBOOK PAPER
+       =========================================== */
+    .paper {
+      position: absolute;
+      inset: 58px 108px 58px 90px;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        linear-gradient(90deg, transparent 0 116px, rgba(178, 83, 70, .18) 117px, rgba(178, 83, 70, .18) 119px, transparent 120px),
+        repeating-linear-gradient(0deg, transparent 0 53px, rgba(132, 124, 109, .14) 54px, transparent 55px),
+        var(--paper);
+      box-shadow: 0 30px 90px var(--shadow);
+    }
+
+    .paper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 8%, rgba(255,255,255,.72), transparent 24%),
+        linear-gradient(110deg, rgba(255,255,255,.14), transparent 38%, rgba(120,100,74,.03));
+      mix-blend-mode: screen;
+    }
+
+    .holes {
+      position: absolute;
+      left: 38px;
+      top: 78px;
+      display: grid;
+      gap: 73px;
+      z-index: 3;
+    }
+
+    .hole {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--stage-bg);
+      box-shadow: inset 0 0 0 6px #d7d0c5;
+    }
+
+    .page-head {
+      position: absolute;
+      left: 168px;
+      right: 150px;
+      top: 48px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #52635c;
+      font: 700 22px/1 var(--font-body);
+      letter-spacing: .08em;
+    }
+
+    .chapter {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .chapter::before {
+      content: "";
+      width: 44px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--section-color, var(--green));
+    }
+
+    .page-no { color: #7a847f; font-size: 18px; letter-spacing: .14em; }
+
+    .content {
+      position: absolute;
+      left: 168px;
+      right: 144px;
+      top: 116px;
+      bottom: 82px;
+      z-index: 4;
+    }
+
+    .slide-title {
+      margin: 0 0 28px;
+      color: var(--ink);
+      font: 900 72px/1.18 var(--font-body);
+      letter-spacing: -.035em;
+    }
+
+    .deck-title {
+      margin: 0;
+      color: var(--ink);
+      font: 900 112px/1.08 var(--font-body);
+      letter-spacing: -.05em;
+    }
+
+    .kicker {
+      margin-bottom: 24px;
+      color: var(--green-deep);
+      font: 800 24px/1.25 var(--font-body);
+      letter-spacing: .12em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 1280px;
+      color: #43534d;
+      font: 500 34px/1.55 var(--font-body);
+    }
+
+    .small-note { color: var(--muted); font: 500 22px/1.45 var(--font-body); }
+    .marker { box-shadow: inset 0 -.42em 0 color-mix(in srgb, var(--section-color, var(--gold)) 58%, transparent); }
+
+    /* ===========================================
+       REVEAL MOTION
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .58s var(--ease), transform .58s var(--ease);
+    }
+
+    .slide.visible .reveal,
+    .slide:target .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .slide.visible .reveal:nth-child(2) { transition-delay: .08s; }
+    .slide.visible .reveal:nth-child(3) { transition-delay: .16s; }
+    .slide.visible .reveal:nth-child(4) { transition-delay: .24s; }
+    .slide.visible .reveal:nth-child(5) { transition-delay: .32s; }
+
+    /* ===========================================
+       CHAPTER TABS
+       =========================================== */
+    .tabs {
+      position: absolute;
+      z-index: 8;
+      right: 0;
+      top: 105px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .tab {
+      width: 84px;
+      height: 150px;
+      border: 0;
+      border-radius: 18px 0 0 18px;
+      display: grid;
+      place-items: center;
+      color: #24322d;
+      opacity: .56;
+      cursor: pointer;
+      writing-mode: vertical-rl;
+      font: 800 19px/1 var(--font-body);
+      letter-spacing: .1em;
+      transition: width .25s var(--ease), opacity .25s ease;
+    }
+
+    .tab:hover, .tab.current { width: 106px; opacity: 1; }
+    .tab[data-go="observe"] { background: #ead99d; }
+    .tab[data-go="understand"] { background: var(--coral); }
+    .tab[data-go="solve"] { background: var(--green); }
+    .tab[data-go="reflect"] { background: var(--blue); }
+
+    /* ===========================================
+       VIDEO PANELS
+       =========================================== */
+    .video-layout {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 46px;
+      align-items: stretch;
+      height: 640px;
+    }
+
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      border: 4px solid #183028;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(119,184,159,.32), transparent 24%),
+        linear-gradient(145deg, #14211d, #07100d 72%);
+      box-shadow: 16px 18px 0 rgba(22,34,30,.12);
+    }
+
+    .video-illustration {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .bucket {
+      position: relative;
+      width: 270px;
+      height: 240px;
+      border: 18px solid #e9eee9;
+      border-top-width: 24px;
+      border-radius: 30px 30px 72px 72px;
+      transform: translateY(50px);
+      opacity: .94;
+    }
+
+    .bucket::before {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 88px;
+      left: 72px;
+      top: 42px;
+      border: 10px dotted var(--gold);
+      border-radius: 50%;
+      animation: spin 5s linear infinite;
+    }
+
+    .mop-stick {
+      position: absolute;
+      width: 22px;
+      height: 330px;
+      left: 50%;
+      top: 40px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #b7c2bc, #fff, #9da8a2);
+      transform: rotate(11deg);
+      transform-origin: 50% 100%;
+    }
+
+    .mop-stick::after {
+      content: "";
+      position: absolute;
+      left: -93px;
+      bottom: -26px;
+      width: 210px;
+      height: 44px;
+      border-radius: 50%;
+      background: repeating-linear-gradient(90deg, #dfe7e2 0 8px, #9ab6a9 9px 14px);
+      box-shadow: 0 18px 28px rgba(0,0,0,.32);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .play-button {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 124px;
+      height: 124px;
+      transform: translate(-50%, -50%);
+      border: 4px solid white;
+      border-radius: 50%;
+      background: rgba(10,20,17,.74);
+      color: white;
+      cursor: pointer;
+      font-size: 48px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.32);
+      transition: transform .25s var(--ease), background .25s ease;
+    }
+
+    .play-button:hover { transform: translate(-50%, -50%) scale(1.07); background: var(--green-deep); }
+
+    .video-meta {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      font: 700 22px/1.3 var(--font-body);
+    }
+
+    .video-meta a { text-underline-offset: 5px; }
+
+    .prompt-panel {
+      display: grid;
+      align-content: center;
+      gap: 24px;
+      padding: 46px;
+      border: 3px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255,255,255,.62);
+    }
+
+    .prompt-panel strong { color: var(--ink); font: 900 46px/1.25 var(--font-body); }
+    .prompt-panel p { margin: 0; color: #4b5a54; font: 500 29px/1.55 var(--font-body); }
+
+    /* ===========================================
+       CARDS, NOTES, AND COMPARISONS
+       =========================================== */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+
+    .note-card, .scene-card, .person-card, .step-card, .question-card {
+      position: relative;
+      border: 3px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.64);
+      box-shadow: 10px 12px 0 rgba(22,34,30,.08);
+    }
+
+    .note-card { min-height: 470px; padding: 42px 44px; }
+    .note-card h3, .scene-card h3, .person-card h3, .question-card h3 {
+      margin: 0 0 20px;
+      color: var(--ink);
+      font: 900 38px/1.3 var(--font-body);
+    }
+
+    .writing-lines {
+      height: 290px;
+      margin-top: 28px;
+      background: repeating-linear-gradient(0deg, transparent 0 60px, #cfc8ba 61px, transparent 62px);
+    }
+
+    .pin {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      width: 56px;
+      height: 22px;
+      transform: translateX(-50%) rotate(-4deg);
+      background: color-mix(in srgb, var(--accent, var(--gold)) 55%, white);
+      opacity: .85;
+    }
+
+    .scene-card { height: 450px; padding: 34px 34px 28px; text-align: center; }
+    .scene-card p { margin: 16px 0 0; color: #53625c; font: 500 27px/1.45 var(--font-body); }
+    .scene-icon { height: 245px; display: grid; place-items: center; }
+
+    .line-icon { position: relative; width: 245px; height: 210px; }
+    .table-icon::before { content:""; position:absolute; left:30px; top:35px; width:185px; height:34px; border:8px solid var(--ink); border-radius:8px; }
+    .table-icon::after { content:""; position:absolute; left:52px; top:74px; width:145px; height:130px; border-left:10px solid var(--ink); border-right:10px solid var(--ink); }
+    .mop-dot { position:absolute; width:96px; height:28px; left:75px; top:145px; border-radius:50%; background:var(--green); transform:rotate(-12deg); box-shadow:0 10px 0 rgba(47,114,93,.25); }
+    .sofa-icon::before { content:""; position:absolute; left:24px; top:70px; width:196px; height:100px; border:9px solid var(--ink); border-radius:32px 32px 15px 15px; background:#ead99d; }
+    .sofa-icon::after { content:""; position:absolute; left:52px; top:176px; width:145px; height:14px; border-radius:99px; background:var(--ink); box-shadow:0 28px 0 -3px var(--green); }
+    .water-icon::before { content:""; position:absolute; left:42px; top:25px; width:160px; height:150px; border:10px solid var(--ink); border-radius:20px 20px 65px 65px; background:linear-gradient(0deg, rgba(120,169,199,.72) 0 58%, transparent 59%); }
+    .water-icon::after { content:""; position:absolute; left:83px; top:88px; width:78px; height:35px; border:8px solid var(--coral); border-radius:50%; transform:rotate(-12deg); }
+
+    .night-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 55px; align-items: center; height: 650px; }
+    .night-card { height: 610px; border-radius: 30px; background: linear-gradient(155deg, #17211f, #31483f); position: relative; overflow: hidden; box-shadow: 16px 18px 0 rgba(22,34,30,.12); }
+    .moon { position:absolute; right:70px; top:55px; width:125px; height:125px; border-radius:50%; background:#f6e9b0; box-shadow:0 0 60px rgba(246,233,176,.38); }
+    .restaurant { position:absolute; left:65px; right:65px; bottom:74px; height:280px; border-radius:20px 20px 0 0; background:#efe5cf; }
+    .restaurant::before { content:"打烊"; position:absolute; left:50%; top:42px; transform:translateX(-50%); padding:12px 32px; border:6px solid var(--ink); color:var(--ink); font:900 34px/1 var(--font-body); }
+    .restaurant::after { content:""; position:absolute; left:45px; right:45px; bottom:0; height:115px; background:repeating-linear-gradient(90deg,#27372f 0 18px,#85ae9e 19px 42px); opacity:.82; }
+
+    .story-copy { display:grid; gap:26px; }
+    .story-copy blockquote { margin:0; color:var(--ink); font:900 55px/1.45 var(--font-body); }
+    .story-copy p { margin:0; color:#4b5a54; font:500 29px/1.6 var(--font-body); }
+
+    /* ===========================================
+       SKETCH AND PRODUCT CONCEPTS
+       =========================================== */
+    .sketch-layout { display:grid; grid-template-columns:1.25fr .75fr; gap:42px; height:620px; }
+    .sketch-pad { position:relative; border:4px dashed #9f9a8e; border-radius:28px; background:rgba(255,255,255,.48); }
+    .sketch-pad::before { content:"在這裡畫一張草圖"; position:absolute; inset:0; display:grid; place-items:center; color:#9a9b92; font:700 34px/1 var(--font-body); }
+    .constraints { display:grid; align-content:center; gap:24px; }
+    .constraint { display:flex; align-items:center; gap:22px; padding:24px 28px; border-radius:20px; background:#fff9; color:var(--ink); font:800 30px/1.2 var(--font-body); border:3px solid var(--line); }
+    .no { width:58px; height:58px; display:grid; place-items:center; border:5px solid var(--coral); border-radius:50%; color:#a84939; font-weight:900; }
+
+    .word-trio { display:grid; grid-template-columns:repeat(3,1fr); gap:38px; margin-top:55px; }
+    .big-word { min-height:360px; display:grid; align-content:center; justify-items:center; gap:24px; border:4px solid var(--ink); border-radius:32px; background:color-mix(in srgb, var(--accent) 42%, white); box-shadow:14px 16px 0 rgba(22,34,30,.12); transform:rotate(var(--turn,0deg)); }
+    .big-word strong { font:900 90px/1 var(--font-body); color:var(--ink); }
+    .big-word span { max-width:310px; text-align:center; color:#44534d; font:600 26px/1.45 var(--font-body); }
+
+    .tension { height:650px; display:grid; place-items:center; text-align:center; }
+    .tension strong { display:block; color:var(--ink); font:900 116px/1.2 var(--font-body); letter-spacing:-.05em; }
+    .tension span { display:inline-block; margin-top:48px; padding:15px 30px; border-radius:999px; background:var(--coral); color:#46241d; font:800 28px/1.2 var(--font-body); transform:rotate(-1.5deg); }
+
+    .reframe-grid { display:grid; grid-template-columns:.82fr 100px 1.18fr; gap:28px; align-items:stretch; margin-top:55px; }
+    .question-card { min-height:390px; padding:44px; display:grid; align-content:center; }
+    .question-card.old { opacity:.72; border-style:dashed; }
+    .question-card.new { border-color:var(--green-deep); background:color-mix(in srgb,var(--green) 18%,white); box-shadow:16px 18px 0 rgba(47,114,93,.18); }
+    .question-card p { margin:0; color:var(--ink); font:800 37px/1.5 var(--font-body); }
+    .arrow { display:grid; place-items:center; color:var(--green-deep); font:900 72px/1 var(--font-body); }
+
+    /* ===========================================
+       PEOPLE AND PROCESS
+       =========================================== */
+    .people-grid { display:grid; grid-template-columns:1fr 160px 1fr; gap:28px; align-items:center; margin-top:34px; }
+    .person-card { min-height:440px; padding:42px; }
+    .person-mark { width:96px; height:96px; display:grid; place-items:center; margin-bottom:24px; border-radius:26px; background:var(--accent); color:var(--ink); font:900 46px/1 var(--font-body); transform:rotate(-3deg); }
+    .person-card ul { margin:20px 0 0; padding-left:1.2em; color:#475750; font:500 27px/1.7 var(--font-body); }
+    .bridge { display:grid; place-items:center; gap:14px; color:var(--green-deep); font:900 34px/1.2 var(--font-body); text-align:center; }
+    .bridge b { font-size:78px; }
+
+    .process { display:flex; align-items:center; gap:18px; margin-top:72px; }
+    .step-card { flex:1; min-height:245px; padding:32px 24px; display:grid; align-content:center; justify-items:center; text-align:center; background:color-mix(in srgb,var(--accent) 28%,white); }
+    .step-card b { display:grid; place-items:center; width:58px; height:58px; margin-bottom:22px; border-radius:50%; background:var(--ink); color:white; font:800 25px/1 var(--font-body); }
+    .step-card span { color:var(--ink); font:900 31px/1.3 var(--font-body); }
+    .process-arrow { color:#819087; font:900 42px/1 var(--font-body); }
+    .loop-note { margin-top:52px; color:#4b5a54; text-align:center; font:700 30px/1.5 var(--font-body); }
+
+    /* ===========================================
+       PROBLEM CHAIN AND QUESTION COMPARISON
+       =========================================== */
+    .chain { display:grid; grid-template-columns:repeat(5,1fr); gap:19px; align-items:stretch; margin-top:50px; }
+    .chain-item { position:relative; min-height:370px; padding:30px 24px; border:3px solid var(--line); border-radius:24px; background:color-mix(in srgb,var(--accent) 26%,white); }
+    .chain-item:not(:last-child)::after { content:"→"; position:absolute; right:-25px; top:46%; z-index:2; color:var(--ink); font:900 36px/1 var(--font-body); }
+    .chain-item b { display:block; margin-bottom:24px; color:var(--green-deep); font:900 24px/1 var(--font-body); }
+    .chain-item h3 { margin:0 0 16px; color:var(--ink); font:900 31px/1.35 var(--font-body); }
+    .chain-item p { margin:0; color:#506059; font:500 24px/1.55 var(--font-body); }
+
+    .compare { display:grid; grid-template-columns:1fr 1fr; gap:42px; margin-top:42px; }
+    .compare .question-card { min-height:420px; }
+    .label { display:inline-flex; width:max-content; margin-bottom:25px; padding:9px 18px; border-radius:999px; background:var(--accent); color:var(--ink); font:800 23px/1 var(--font-body); }
+    .compare small { display:block; margin-top:32px; color:#5c6863; font:600 24px/1.45 var(--font-body); }
+
+    /* ===========================================
+       FOUR ACTIONS AND EXIT TICKET
+       =========================================== */
+    .actions { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; margin-top:48px; }
+    .action { min-height:400px; padding:34px 28px; border:4px solid var(--ink); border-radius:28px; background:color-mix(in srgb,var(--accent) 34%,white); box-shadow:11px 13px 0 rgba(22,34,30,.11); }
+    .action b { display:block; margin-bottom:22px; color:var(--ink); font:900 54px/1 var(--font-body); }
+    .action p { margin:0; color:#45554e; font:600 27px/1.55 var(--font-body); }
+    .formal-route { display:flex; align-items:center; justify-content:center; gap:18px; margin-top:40px; color:#4e5d57; font:700 24px/1 var(--font-body); }
+    .formal-route span { padding:10px 18px; border:2px solid #8e9993; border-radius:999px; background:#fff8; }
+
+    .exit-layout { display:grid; grid-template-columns:.78fr 1.22fr; gap:48px; height:630px; }
+    .exit-message { display:grid; align-content:center; }
+    .exit-message strong { color:var(--ink); font:900 70px/1.3 var(--font-body); }
+    .exit-message p { margin:35px 0 0; color:#4a5a53; font:500 29px/1.55 var(--font-body); }
+    .ticket { position:relative; padding:42px 48px; border:4px solid var(--ink); border-radius:28px; background:#fffdf5; box-shadow:16px 18px 0 rgba(22,34,30,.12); transform:rotate(1deg); }
+    .ticket::before { content:"離堂小卡"; position:absolute; right:34px; top:28px; padding:10px 18px; border-radius:999px; background:var(--gold); color:var(--ink); font:800 22px/1 var(--font-body); }
+    .ticket ol { margin:30px 0 0; padding-left:1.45em; color:var(--ink); font:800 34px/1.75 var(--font-body); }
+    .ticket-footer { margin-top:20px; padding-top:20px; border-top:3px dashed var(--line); color:#9b4d3d; font:800 26px/1.4 var(--font-body); }
+
+    /* ===========================================
+       OPTIONAL EXTENSION
+       =========================================== */
+    .extension-layout { display:grid; grid-template-columns:1.02fr .98fr; gap:42px; height:640px; }
+    .extension-list { display:grid; align-content:center; gap:22px; }
+    .extension-list h2 { margin:0 0 12px; color:var(--ink); font:900 58px/1.25 var(--font-body); }
+    .extension-item { display:flex; gap:20px; align-items:center; padding:22px 26px; border:3px solid var(--line); border-radius:20px; background:#fff9; color:var(--ink); font:700 28px/1.35 var(--font-body); }
+    .extension-item b { display:grid; place-items:center; flex:0 0 48px; width:48px; height:48px; border-radius:50%; background:var(--green); }
+
+    /* ===========================================
+       FALLBACK CONTROLS INSIDE EVERY SLIDE
+       =========================================== */
+    .fallback-controls {
+      position:absolute;
+      left:168px;
+      right:150px;
+      bottom:26px;
+      z-index:7;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#69756f;
+      font:800 20px/1 var(--font-body);
+    }
+    .fallback-controls a { text-decoration:none; padding:11px 18px; border:2px solid #8b9791; border-radius:999px; background:rgba(255,255,255,.92); }
+    .fallback-controls a:hover, .fallback-controls a:focus { border-color:var(--green-deep); background:var(--green); color:var(--ink); }
+
+    /* ===========================================
+       OUTSIDE-STAGE CONTROLS AND OVERLAYS
+       =========================================== */
+    .deck-controls {
+      display:none;
+      align-items:center;
+      gap:8px;
+      padding:7px 9px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      background:rgba(15,17,15,.84);
+      box-shadow:0 12px 34px rgba(0,0,0,.3);
+      backdrop-filter:blur(10px);
+    }
+    .js-ready .deck-controls { display:flex; }
+    .deck-controls button { width:42px; height:42px; border:0; border-radius:50%; background:transparent; color:white; cursor:pointer; }
+    .deck-controls button:hover { background:var(--green); color:var(--ink); }
+    #counter { min-width:72px; color:white; text-align:center; font:700 15px/1 var(--font-body); }
+    .progress { position:fixed; left:0; right:0; bottom:0; z-index:1001; height:5px; background:rgba(255,255,255,.08); }
+    #progressBar { width:6.25%; height:100%; background:var(--green); transition:width .35s var(--ease); }
+
+    .overlay { position:fixed; inset:0; z-index:2000; display:grid; place-items:center; padding:48px; background:rgba(7,10,8,.78); opacity:0; visibility:hidden; pointer-events:none; transition:.25s ease; }
+    .overlay.open { opacity:1; visibility:visible; pointer-events:auto; }
+    .overlay-card { position:relative; width:min(1120px,90vw); max-height:86vh; overflow:auto; padding:46px; border-radius:28px; background:var(--paper); color:var(--ink); box-shadow:0 30px 90px rgba(0,0,0,.48); font:500 23px/1.65 var(--font-body); }
+    .overlay-card h2 { margin:0 0 24px; font:900 42px/1.25 var(--font-body); }
+    .overlay-card li { margin:.5em 0; }
+    .overlay-close { position:absolute; right:20px; top:18px; width:44px; height:44px; border:0; border-radius:50%; background:#e7ded0; color:var(--ink); cursor:pointer; font-size:25px; }
+    .video-overlay-card { width:min(1280px,92vw); padding:18px; background:#0b100e; }
+    .video-frame-wrap { position:relative; padding-top:56.25%; }
+    .video-frame-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:14px; }
+
+    .chapter-menu { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    .chapter-menu button { padding:22px; border:3px solid var(--line); border-left:14px solid var(--menu-color); border-radius:18px; background:white; color:var(--ink); cursor:pointer; text-align:left; font:800 26px/1.3 var(--font-body); }
+
+    /* ===========================================
+       INLINE EDITOR
+       =========================================== */
+    .edit-hotzone { position:fixed; left:0; top:0; z-index:10000; width:80px; height:80px; cursor:pointer; }
+    .edit-toggle { position:fixed; left:16px; top:16px; z-index:10001; width:48px; height:48px; border:0; border-radius:50%; background:var(--paper); color:var(--ink); box-shadow:0 8px 24px rgba(0,0,0,.26); opacity:0; pointer-events:none; cursor:pointer; transition:opacity .3s ease; }
+    .edit-toggle.show, .edit-toggle.active { opacity:1; pointer-events:auto; }
+    .editing [contenteditable="true"] { outline:3px dashed var(--coral); outline-offset:5px; cursor:text; }
+    .save-button { display:none; position:fixed; right:18px; top:18px; z-index:10001; padding:12px 18px; border:0; border-radius:999px; background:var(--gold); color:var(--ink); cursor:pointer; font:800 16px/1 var(--font-body); }
+    .editing .save-button { display:block; }
+
+    /* ===========================================
+       V3 LOCAL-FILE COMPATIBILITY LAYER
+       Uses the same conservative fixed-stage pattern as the verified MIS V4 deck.
+       =========================================== */
+    .deck-stage {
+      left:50%;
+      top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      -webkit-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+      -webkit-transform:translate(-50%,-50%) scale(.5);
+    }
+    .deck-controls, .progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .legacy-note {
+      position:fixed;
+      right:10px;
+      top:10px;
+      z-index:20000;
+      padding:8px 12px;
+      color:#fff;
+      background:#17251f;
+      border:1px solid #fff;
+      font:700 15px/1.4 Arial,sans-serif;
+    }
+  </style>
+<style id="site-home-link-style">
+.site-home-link{position:fixed;left:18px;bottom:18px;z-index:2147483646;display:grid;place-items:center;width:48px;height:48px;border:2px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(22,30,30,.9);color:#fff;text-decoration:none;font:900 24px/1 system-ui,-apple-system,"Noto Sans TC",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.site-home-link:hover,.site-home-link:focus{background:#2a8b87;outline:3px solid rgba(255,255,255,.82);outline-offset:2px}body.editing .site-home-link{display:none}@media print{.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+<a class="site-home-link" href="index.html" title="返回教材首頁" aria-label="返回教材首頁">⌂</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="好神拖問題發掘案例投影片">
+
+      <!-- =========================================
+           01｜先看結果
+           ========================================= -->
+      <section class="slide active visible" id="slide-1" data-section="observe" data-note="<h2>教師提示｜先看，不解釋</h2><p>播放約 40 秒。請學生只記錄看見的動作與設計，不先評價產品，也不揭露創辦人或研發歷程。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">案例 01｜先看結果</span><span class="page-no">01</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>專題研究第二回｜問題從哪裡來？</div>
+            <h1 class="deck-title reveal" style="font-size:104px" data-editable>這支拖把，<br>有什麼不一樣？</h1>
+            <div class="video-layout reveal" style="height:420px;margin-top:24px">
+              <article class="video-card" style="min-height:420px">
+                <div class="video-illustration" aria-hidden="true"><div class="mop-stick"></div><div class="bucket"></div></div>
+                <button class="play-button" type="button" data-video="wtdiXIBIuLM" aria-label="播放好神拖官方影片">▶</button>
+                <div class="video-meta"><span>官方影片｜約 40 秒</span><a href="https://www.youtube.com/watch?v=wtdiXIBIuLM" target="_blank" rel="noopener">YouTube 備援 ↗</a></div>
+              </article>
+              <aside class="prompt-panel">
+                <strong data-editable>先觀察，<br>不急著下結論。</strong>
+                <p data-editable>只記下你確實看到的動作或設計。</p>
+              </aside>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-1">起點</a><span>使用方向鍵、空白鍵或下方按鈕翻頁</span><a href="#slide-2">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           02｜區分觀察與推測
+           ========================================= -->
+      <section class="slide" id="slide-2" data-section="observe" data-note="<h2>教師提示｜寫兩點</h2><p>請學生各寫一項「動作」與「產品設計」。追問：這是你真的看到的，還是你猜的？</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">觀察</span><span class="page-no">02</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>先把「看到的」和「猜到的」分開</div>
+            <h2 class="slide-title reveal" data-editable>你確實看見了什麼？</h2>
+            <div class="two-col reveal" style="margin-top:54px">
+              <article class="note-card" style="--accent:var(--gold)"><i class="pin"></i><h3 data-editable>我看到的動作</h3><div class="writing-lines" aria-label="學生書寫區"></div></article>
+              <article class="note-card" style="--accent:var(--green)"><i class="pin"></i><h3 data-editable>我看到的產品設計</h3><div class="writing-lines" aria-label="學生書寫區"></div></article>
+            </div>
+            <p class="small-note reveal" style="margin-top:34px" data-editable>先寫看到的，不寫自己猜的。</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-1">← 上一張</a><span>個人書寫｜約 1 分鐘</span><a href="#slide-3">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           03｜生活中的不方便
+           ========================================= -->
+      <section class="slide" id="slide-3" data-section="observe" data-note="<h2>教師提示｜交換經驗</h2><p>請兩人交換答案。先從日常經驗出發，不急著找正確答案。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">觀察</span><span class="page-no">03</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>如果沒有剛才的產品</div>
+            <h2 class="slide-title reveal" data-editable>拖地時，哪裡最麻煩？</h2>
+            <div class="three-col reveal" style="margin-top:48px">
+              <article class="scene-card"><div class="scene-icon"><div class="line-icon table-icon"><i class="mop-dot"></i></div></div><h3 data-editable>遇到桌腳</h3><p data-editable>拖把容易卡住，方向不好改。</p></article>
+              <article class="scene-card"><div class="scene-icon"><div class="line-icon sofa-icon"></div></div><h3 data-editable>家具底下</h3><p data-editable>拖把太厚，伸不進低矮空間。</p></article>
+              <article class="scene-card"><div class="scene-icon"><div class="line-icon water-icon"></div></div><h3 data-editable>清洗之後</h3><p data-editable>要用手擰乾，又濕、又髒、又費力。</p></article>
+            </div>
+            <p class="lead reveal" style="margin-top:36px;font-size:30px" data-editable>哪一個情況你最熟悉？還有沒有別的經驗？</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-2">← 上一張</a><span>兩人討論｜約 1 分鐘</span><a href="#slide-4">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           04｜故事起點
+           ========================================= -->
+      <section class="slide" id="slide-4" data-section="understand" data-note="<h2>教師提示｜故事起點</h2><p>依早期報導，丁明哲在花蓮開餐廳，每天打烊後要拖地。桌腳、柱子與低矮家具讓這項工作反覆卡住。重點不是天才靈光，而是長期使用後注意到不方便。</p><p><a href='https://stock.pchome.com.tw/magazine/report/fi/WEALTH/1545/125916480073345049002.htm' target='_blank'>《財訊》早期報導 ↗</a></p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">理解情境</span><span class="page-no">04</span></div>
+          <div class="content">
+            <div class="night-layout">
+              <div class="night-card reveal" aria-hidden="true"><i class="moon"></i><div class="restaurant"></div></div>
+              <div class="story-copy">
+                <div class="kicker reveal" data-editable>故事從每天都要做的工作開始</div>
+                <blockquote class="reveal" data-editable>餐廳打烊後，<br>還有一件事沒有結束：<span class="marker">拖地</span>。</blockquote>
+                <p class="reveal" data-editable>拖把卡在桌腳旁，也伸不進較低的家具底下。這不是偶爾發生，而是每天都會遇到。</p>
+                <p class="small-note reveal" data-editable>問題不是憑空想像，而是長期使用後看見的。</p>
+              </div>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-3">← 上一張</a><span>真實使用情境</span><a href="#slide-5">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           05｜先限制解答
+           ========================================= -->
+      <section class="slide" id="slide-5" data-section="understand" data-note="<h2>教師提示｜只改形狀</h2><p>請學生畫草圖。刻意限制不能加馬達、不能加 App，避免一開始就堆很多功能。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">理解問題</span><span class="page-no">05</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>先不要做完整產品</div>
+            <h2 class="slide-title reveal" data-editable>如果只能改變拖把的形狀，你會怎麼改？</h2>
+            <div class="sketch-layout reveal" style="margin-top:38px">
+              <div class="sketch-pad" aria-label="草圖書寫區"></div>
+              <div class="constraints">
+                <div class="constraint"><span class="no">×</span><span data-editable>不能加馬達</span></div>
+                <div class="constraint"><span class="no">×</span><span data-editable>不能加手機 App</span></div>
+                <div class="constraint"><span class="no">✓</span><span data-editable>先處理「卡住、伸不進去」</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-4">← 上一張</a><span>快速草圖｜約 2 分鐘</span><a href="#slide-6">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           06｜第一個解答
+           ========================================= -->
+      <section class="slide" id="slide-6" data-section="solve" data-note="<h2>教師提示｜第一個解答</h2><p>揭露扁平圓形拖把。請學生圈出自己的草圖有哪些相似或不同之處，不把原設計說成唯一答案。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">第一個解答</span><span class="page-no">06</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>先回應最早看見的不方便</div>
+            <h2 class="slide-title reveal" data-editable>第一個解答：扁、圓、會轉</h2>
+            <div class="word-trio reveal">
+              <article class="big-word" style="--accent:var(--gold);--turn:-2deg"><strong data-editable>扁</strong><span data-editable>伸入較低的家具底下</span></article>
+              <article class="big-word" style="--accent:var(--green);--turn:1.5deg"><strong data-editable>圓</strong><span data-editable>碰到桌腳或轉角，比較容易滑過</span></article>
+              <article class="big-word" style="--accent:var(--blue);--turn:-1deg"><strong data-editable>轉</strong><span data-editable>改變方向，不必一直抬起拖把</span></article>
+            </div>
+            <p class="lead reveal" style="margin-top:44px;font-size:30px" data-editable>它回應了前面的哪一個不方便？</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-5">← 上一張</a><span>比較自己的草圖</span><a href="#slide-7">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           07｜解答帶來新問題
+           ========================================= -->
+      <section class="slide" id="slide-7" data-section="understand" data-note="<h2>教師提示｜先停在問題</h2><p>不要立刻揭露水桶。請學生先想：扁平圓形拖把清洗後，要怎麼擰乾？</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">新的問題</span><span class="page-no">07</span></div>
+          <div class="content">
+            <div class="tension">
+              <div>
+                <div class="kicker reveal" data-editable>解決了，真的嗎？</div>
+                <strong class="reveal" data-editable>拖得到，<br>卻不容易<span class="marker">擰乾</span>。</strong>
+                <span class="reveal" data-editable>產品能動，不等於產品好用。</span>
+              </div>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-6">← 上一張</a><span>第一個解答帶來第二個問題</span><a href="#slide-8">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           08｜重新界定問題
+           ========================================= -->
+      <section class="slide" id="slide-8" data-section="understand" data-note="<h2>教師提示｜正式帶入概念</h2><p>先有具體故事，再補上正式名稱「重新界定問題」。提醒學生：問法改變，接下來搜尋的技術與解答也會改變。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">重新界定問題</span><span class="page-no">08</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>第一個解答改變了眼前的情況</div>
+            <h2 class="slide-title reveal" data-editable>現在，問題要重新問</h2>
+            <div class="reframe-grid reveal">
+              <article class="question-card old"><h3 data-editable>原來的問法</h3><p data-editable>拖把的形狀怎麼改？</p></article>
+              <div class="arrow" aria-hidden="true">→</div>
+              <article class="question-card new"><h3 data-editable>新的問法</h3><p data-editable>怎麼讓扁平圓形拖把快速脫水，又不必用手碰髒水？</p></article>
+            </div>
+            <p class="small-note reveal" style="margin-top:38px" data-editable>這個動作叫做：重新界定問題。</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-7">← 上一張</a><span>問題問得不同，方向也會不同</span><a href="#slide-9">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           09｜合作能力
+           ========================================= -->
+      <section class="slide" id="slide-9" data-section="solve" data-note="<h2>教師提示｜合作不是補名字</h2><p>丁明哲熟悉拖地情境並提出扁平圓形拖把；林長儀具有彈簧、模具、塑膠射出與商品化經驗。請學生回答：這時還缺哪些能力？</p><p><a href='https://www.innosociety.org/files/404-1649-55202.php' target='_blank'>中華創新發明學會整理 ↗</a></p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">發展解答</span><span class="page-no">09</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>一個人不一定會全部</div>
+            <h2 class="slide-title reveal" data-editable>找對合作的人，問題才有機會繼續往前</h2>
+            <div class="people-grid reveal">
+              <article class="person-card" style="--accent:var(--gold)"><div class="person-mark">丁</div><h3 data-editable>丁明哲</h3><ul><li data-editable>熟悉每天拖地的使用情境</li><li data-editable>提出扁平圓形拖把</li><li data-editable>看見原有工具卡住的地方</li></ul></article>
+              <div class="bridge"><b>＋</b><span data-editable>合作開發</span></div>
+              <article class="person-card" style="--accent:var(--green)"><div class="person-mark">林</div><h3 data-editable>林長儀</h3><ul><li data-editable>熟悉彈簧與機構</li><li data-editable>熟悉模具與塑膠射出</li><li data-editable>具備把設計做成商品的經驗</li></ul></article>
+            </div>
+            <p class="lead reveal" style="font-size:29px;margin-top:34px" data-editable>看懂問題的人，不一定具備完成所有技術的能力。</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-8">← 上一張</a><span>問題：如果只有點子，還缺少什麼？</span><a href="#slide-10">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           10｜測試與修改
+           ========================================= -->
+      <section class="slide" id="slide-10" data-section="solve" data-note="<h2>教師提示｜不是一次成功</h2><p>請學生先排列五個步驟，再顯示本頁。提醒：製作模型不是為了證明自己一開始就是對的，而是讓問題更早出現。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">發展解答</span><span class="page-no">10</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>想法只是起點</div>
+            <h2 class="slide-title reveal" data-editable>不是一次成功，是一路試出來</h2>
+            <div class="process reveal">
+              <article class="step-card" style="--accent:var(--gold)"><b>1</b><span data-editable>想法</span></article><i class="process-arrow">→</i>
+              <article class="step-card" style="--accent:var(--blue)"><b>2</b><span data-editable>測試模型</span></article><i class="process-arrow">→</i>
+              <article class="step-card" style="--accent:var(--coral)"><b>3</b><span data-editable>發現問題</span></article><i class="process-arrow">→</i>
+              <article class="step-card" style="--accent:var(--lavender)"><b>4</b><span data-editable>修改</span></article><i class="process-arrow">→</i>
+              <article class="step-card" style="--accent:var(--green)"><b>5</b><span data-editable>再測試</span></article>
+            </div>
+            <p class="loop-note reveal" data-editable>如果還是不夠好，就回到前面，重新看問題。</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-9">← 上一張</a><span>把五張流程卡排順序</span><a href="#slide-11">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           11｜第二次觀看
+           ========================================= -->
+      <section class="slide" id="slide-11" data-section="solve" data-note="<h2>教師提示｜再看一次</h2><p>重播同一支 40 秒影片。請學生找三件事：轉動、脫水、不碰髒水。追問第一次和第二次注意到的事情是否相同。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">再看結果</span><span class="page-no">11</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>知道故事之後，注意到的事情會改變</div>
+            <h2 class="slide-title reveal" data-editable>再看一次，你看懂的已經不同</h2>
+            <div class="video-layout reveal" style="height:540px;margin-top:34px">
+              <article class="video-card" style="min-height:540px">
+                <div class="video-illustration" aria-hidden="true"><div class="mop-stick"></div><div class="bucket"></div></div>
+                <button class="play-button" type="button" data-video="wtdiXIBIuLM" aria-label="重播好神拖官方影片">▶</button>
+                <div class="video-meta"><span>再看一次｜約 40 秒</span><a href="https://www.youtube.com/watch?v=wtdiXIBIuLM" target="_blank" rel="noopener">YouTube 備援 ↗</a></div>
+              </article>
+              <aside class="prompt-panel">
+                <strong data-editable>這次找三件事</strong>
+                <p data-editable>① 轉動<br>② 脫水<br>③ 不碰髒水</p>
+                <p class="small-note" data-editable>第一次看和第二次看，你注意到的事情一樣嗎？</p>
+              </aside>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-10">← 上一張</a><span>帶著問題看結果</span><a href="#slide-12">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           12｜問題鏈
+           ========================================= -->
+      <section class="slide" id="slide-12" data-section="reflect" data-note="<h2>教師提示｜倒回去看</h2><p>請學生說出每個箭頭為什麼成立。強調：產品故事不是只有開始和結果，中間還有新問題、合作、製作與測試。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">整理問題鏈</span><span class="page-no">12</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>把結果倒回去看</div>
+            <h2 class="slide-title reveal" data-editable>一個產品，經過了哪些問題與解答？</h2>
+            <div class="chain reveal">
+              <article class="chain-item" style="--accent:var(--coral)"><b>問題 1</b><h3 data-editable>拖把卡住</h3><p data-editable>也伸不進家具底下。</p></article>
+              <article class="chain-item" style="--accent:var(--gold)"><b>解答 1</b><h3 data-editable>改變形狀</h3><p data-editable>扁平、圓形、容易轉向。</p></article>
+              <article class="chain-item" style="--accent:var(--coral)"><b>問題 2</b><h3 data-editable>不容易擰乾</h3><p data-editable>第一個解答帶來新困難。</p></article>
+              <article class="chain-item" style="--accent:var(--green)"><b>解答 2</b><h3 data-editable>離心脫水</h3><p data-editable>加入水桶與脫水機構。</p></article>
+              <article class="chain-item" style="--accent:var(--blue)"><b>做出來</b><h3 data-editable>模型與測試</h3><p data-editable>修改後再進入生產。</p></article>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-11">← 上一張</a><span>從問題到可檢查的成果</span><a href="#slide-13">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           13｜比較兩種問法
+           ========================================= -->
+      <section class="slide" id="slide-13" data-section="reflect" data-note="<h2>教師提示｜不公布標準答案</h2><p>請學生選一句，說明哪一句比較能幫助研發。重點是對象、情境與需要處理的困難是否清楚。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">重新問一次</span><span class="page-no">13</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>問法不同，找到的解答也會不同</div>
+            <h2 class="slide-title reveal" data-editable>哪一句比較能幫助我們往下做？</h2>
+            <div class="compare reveal">
+              <article class="question-card" style="--accent:#d7d1c6"><span class="label" data-editable>比較模糊</span><p data-editable>怎麼發明一支厲害的拖把？</p><small data-editable>「厲害」是什麼？誰覺得厲害？要改善哪件事？</small></article>
+              <article class="question-card new" style="--accent:var(--green)"><span class="label" data-editable>比較清楚</span><p data-editable>怎麼讓人拖地時不卡住、不碰髒水，也不用費力擰乾？</p><small data-editable>情境與不方便比較明確，較容易繼續找方法。</small></article>
+            </div>
+            <p class="lead reveal" style="font-size:28px;margin-top:38px" data-editable>不用找「標準答案」，請說明你選擇的理由。</p>
+          </div>
+          <div class="fallback-controls"><a href="#slide-12">← 上一張</a><span>說明你的判斷理由</span><a href="#slide-14">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           14｜四個基本動作
+           ========================================= -->
+      <section class="slide" id="slide-14" data-section="reflect" data-note="<h2>教師提示｜回到學生生活</h2><p>請學生想一件今天在學校遇到的事情：卡、慢、容易忘記，或一直重做。先寫情況，不寫產品名稱。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">回到自己的生活</span><span class="page-no">14</span></div>
+          <div class="content">
+            <div class="kicker reveal" data-editable>問題發掘的四個動作</div>
+            <h2 class="slide-title reveal" data-editable>先把問題看清楚，再想解答</h2>
+            <div class="actions reveal">
+              <article class="action" style="--accent:var(--gold)"><b data-editable>看見</b><p data-editable>哪裡不方便？實際發生了什麼？</p></article>
+              <article class="action" style="--accent:var(--coral)"><b data-editable>問清楚</b><p data-editable>誰在什麼時候遇到？</p></article>
+              <article class="action" style="--accent:var(--blue)"><b data-editable>找原因</b><p data-editable>真正卡住的是哪一步？</p></article>
+              <article class="action" style="--accent:var(--green)"><b data-editable>再問一次</b><p data-editable>換一種問法，會不會找到不同解答？</p></article>
+            </div>
+            <div class="formal-route reveal" aria-label="正式學習步驟"><span>發掘問題</span>→<span>理解問題</span>→<span>重新界定問題</span>→<span>發展解答</span></div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-13">← 上一張</a><span>從案例回到自己的生活</span><a href="#slide-15">下一張 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           15｜離堂小卡
+           ========================================= -->
+      <section class="slide" id="slide-15" data-section="reflect" data-note="<h2>教師提示｜離堂小卡</h2><p>給學生 2 分鐘完成。這一頁只寫觀察到的情況，不准先寫解答、產品名稱或功能。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">離開教室前</span><span class="page-no">15</span></div>
+          <div class="content">
+            <div class="exit-layout">
+              <div class="exit-message">
+                <div class="kicker reveal" data-editable>今天先做到這一步</div>
+                <strong class="reveal" data-editable>先找問題，<br>不急著想產品。</strong>
+                <p class="reveal" data-editable>從今天在學校遇到的一件小事開始：卡、慢、容易忘記，或一直重做。</p>
+              </div>
+              <article class="ticket reveal">
+                <ol>
+                  <li data-editable>誰遇到？</li>
+                  <li data-editable>什麼時候發生？</li>
+                  <li data-editable>實際發生了什麼事？</li>
+                  <li data-editable>現在怎麼處理？</li>
+                </ol>
+                <div class="ticket-footer" data-editable>提醒：這一頁先不要寫解答。</div>
+              </article>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-14">← 上一張</a><span>核心課程結束｜約 22–25 分鐘</span><a href="#slide-16">選配延伸 →</a></div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           16｜選配延伸：後續產品改良
+           ========================================= -->
+      <section class="slide" id="slide-16" data-section="reflect" data-note="<h2>教師提示｜選配延伸</h2><p>這是 2023 年後續產品的操作影片，不是早期發明過程的歷史影像。用途是讓學生看見：產品上市後，品牌仍會繼續發現問題、修改設計。</p><p>實播抽查約 0:20、0:48、1:17，畫面清楚；正式授課前 48 小時仍須再次確認。</p>">
+        <div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">選配延伸｜持續改良</span><span class="page-no">16</span></div>
+          <div class="content">
+            <div class="extension-layout">
+              <article class="video-card reveal" style="min-height:640px">
+                <div class="video-illustration" aria-hidden="true"><div class="mop-stick"></div><div class="bucket" style="width:320px"></div></div>
+                <button class="play-button" type="button" data-video="nNhEL7lwd_k" aria-label="播放好神拖極淨拖使用教學影片">▶</button>
+                <div class="video-meta"><span>官方影片｜1 分 36 秒｜HD</span><a href="https://www.youtube.com/watch?v=nNhEL7lwd_k" target="_blank" rel="noopener">YouTube 備援 ↗</a></div>
+              </article>
+              <div class="extension-list">
+                <div class="kicker reveal" data-editable>產品上市後，問題不會就此消失</div>
+                <h2 class="reveal" data-editable>品牌後來又發現了哪些新問題？</h2>
+                <div class="extension-item reveal"><b>1</b><span data-editable>拖地時，清水與污水怎麼分開？</span></div>
+                <div class="extension-item reveal"><b>2</b><span data-editable>牆角與邊緣怎麼更容易清潔？</span></div>
+                <div class="extension-item reveal"><b>3</b><span data-editable>毛髮與髒污怎麼從拖布上清除？</span></div>
+                <p class="small-note reveal" data-editable>這是後續產品的操作影片，不是早期研發史料。</p>
+              </div>
+            </div>
+          </div>
+          <div class="fallback-controls"><a href="#slide-15">← 回到核心結尾</a><span>選配｜約 2 分鐘</span><a href="#slide-1">回到起點 ↺</a></div>
+        </div>
+      </section>
+
+      <!-- Decorative chapter tabs are repeated at stage level. -->
+      <nav class="tabs" aria-label="課程段落">
+        <button class="tab" type="button" data-go="observe">觀察</button>
+        <button class="tab" type="button" data-go="understand">理解</button>
+        <button class="tab" type="button" data-go="solve">解答</button>
+        <button class="tab" type="button" data-go="reflect">反思</button>
+      </nav>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button type="button" id="prevBtn" title="上一張">←</button>
+    <button type="button" id="menuBtn" title="段落選單">☰</button>
+    <span id="counter" aria-live="polite">1 / 16</span>
+    <button type="button" id="teacherBtn" title="教師提示（T）">T</button>
+    <button type="button" id="helpBtn" title="操作說明">?</button>
+    <button type="button" id="nextBtn" title="下一張">→</button>
+  </nav>
+  <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+
+  <!-- ===========================================
+       OVERLAYS: VIDEO, NOTES, MENU, HELP
+       =========================================== -->
+  <div class="overlay" id="videoOverlay" role="dialog" aria-modal="true" aria-label="影片播放器">
+    <div class="overlay-card video-overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉影片">×</button><div class="video-frame-wrap"><iframe id="videoFrame" title="YouTube 影片" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div></div>
+  </div>
+  <div class="overlay" id="teacherOverlay" role="dialog" aria-modal="true" aria-label="教師提示">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉教師提示">×</button><div id="teacherNote"></div></div>
+  </div>
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="段落選單">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉選單">×</button><h2>課程段落</h2><div class="chapter-menu" id="chapterMenu"></div></div>
+  </div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉操作說明">×</button><h2>操作方式</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：前後翻頁</li><li>Home／End：第一張／最後一張</li><li>滑鼠滾輪、觸控左右滑動：前後翻頁</li><li>T：開啟目前頁面的教師提示</li><li>M：開啟段落選單</li><li>E：進入文字編輯模式；⌘S 或 Ctrl+S 儲存到瀏覽器</li><li>沒有網路時，投影片文字仍可閱讀；影片需使用網路播放。</li></ul></div>
+  </div>
+
+  <!-- Inline editing controls. -->
+  <div class="edit-hotzone" title="編輯模式"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <button class="save-button" id="saveButton" type="button">下載修訂版 HTML</button>
+
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的「上一張／下一張」翻頁</div></noscript>
+
+  <script type="text/plain" id="disabledControllerV2">
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Keyboard, touch, wheel, hash, videos, notes.
+       =========================================== */
+    (function () {
+      "use strict";
+
+      function eachNode(list, callback) {
+        Array.prototype.forEach.call(list, callback);
+      }
+
+      var sectionStarts = { observe: 0, understand: 3, solve: 5, reflect: 11 };
+      var sectionTitles = {
+        observe: { title: "觀察｜先看見發生了什麼", color: "#ead99d" },
+        understand: { title: "理解｜找出真正卡住的地方", color: "#ed907d" },
+        solve: { title: "解答｜合作、製作與測試", color: "#72b59b" },
+        reflect: { title: "反思｜重新問一次", color: "#78a9c7" }
+      };
+
+      function SlidePresentation(stage) {
+        this.stage = stage;
+        this.slides = Array.prototype.slice.call(stage.querySelectorAll(".slide"));
+        this.currentSlide = 0;
+        this.wheelLock = false;
+        this.touchStartX = null;
+        this.setupStageScale();
+        this.setupControls();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupWheelNav();
+        this.setupInteractiveElements();
+        this.buildChapterMenu();
+        this.showSlide(this.indexFromHash());
+      }
+
+      SlidePresentation.prototype.setupStageScale = function () {
+        var self = this;
+        function scale() {
+          var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          var x = (window.innerWidth - 1920 * factor) / 2;
+          var y = (window.innerHeight - 1080 * factor) / 2;
+          self.stage.style.transform = "translate(" + x + "px," + y + "px) scale(" + factor + ")";
+        }
+        scale();
+        window.addEventListener("resize", scale);
+      };
+
+      SlidePresentation.prototype.indexFromHash = function () {
+        var match = location.hash.match(/slide-(\d+)/);
+        return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, this.slides.length - 1)) : 0;
+      };
+
+      SlidePresentation.prototype.showSlide = function (index) {
+        var self = this;
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach(function (slide, i) {
+          if (i === self.currentSlide) {
+            slide.classList.add("active");
+            slide.classList.add("visible");
+          } else {
+            slide.classList.remove("active");
+            slide.classList.remove("visible");
+          }
+        });
+        document.getElementById("counter").textContent = (this.currentSlide + 1) + " / " + this.slides.length;
+        document.getElementById("progressBar").style.width = (((this.currentSlide + 1) / this.slides.length) * 100) + "%";
+        try {
+          history.replaceState(null, "", "#slide-" + (this.currentSlide + 1));
+        } catch (error) {
+          /* Some local-file viewers do not allow History API updates. */
+        }
+        var activeSection = this.slides[this.currentSlide].getAttribute("data-section");
+        eachNode(document.querySelectorAll(".tab"), function (tab) {
+          if (tab.getAttribute("data-go") === activeSection) tab.classList.add("current");
+          else tab.classList.remove("current");
+        });
+        var title = this.slides[this.currentSlide].querySelector(".slide-title,.deck-title");
+        document.title = (title ? title.textContent.trim().replace(/\s+/g, " ") : "好神拖案例") + "｜專題研究第二回";
+      };
+
+      SlidePresentation.prototype.next = function () { this.showSlide(this.currentSlide + 1); };
+      SlidePresentation.prototype.prev = function () { this.showSlide(this.currentSlide - 1); };
+      SlidePresentation.prototype.anyOverlayOpen = function () { return !!document.querySelector(".overlay.open"); };
+      SlidePresentation.prototype.closeOverlays = function () {
+        eachNode(document.querySelectorAll(".overlay.open"), function (el) { el.classList.remove("open"); });
+        document.getElementById("videoFrame").src = "";
+      };
+
+      SlidePresentation.prototype.setupControls = function () {
+        var self = this;
+        document.getElementById("nextBtn").addEventListener("click", function () { self.next(); });
+        document.getElementById("prevBtn").addEventListener("click", function () { self.prev(); });
+        document.getElementById("menuBtn").addEventListener("click", function () { document.getElementById("menuOverlay").classList.add("open"); });
+        document.getElementById("helpBtn").addEventListener("click", function () { document.getElementById("helpOverlay").classList.add("open"); });
+        document.getElementById("teacherBtn").addEventListener("click", function () { self.openTeacherNote(); });
+        eachNode(document.querySelectorAll("[data-close-overlay]"), function (btn) { btn.addEventListener("click", function () { self.closeOverlays(); }); });
+        eachNode(document.querySelectorAll(".overlay"), function (overlay) { overlay.addEventListener("click", function (e) { if (e.target === overlay) self.closeOverlays(); }); });
+      };
+
+      SlidePresentation.prototype.setupKeyboardNav = function () {
+        var self = this;
+        document.addEventListener("keydown", function (e) {
+          if (document.body.classList.contains("editing") && e.target.getAttribute("contenteditable")) return;
+          if (e.key === "Escape") { self.closeOverlays(); return; }
+          if (self.anyOverlayOpen()) return;
+          if (["ArrowRight", "ArrowDown", "PageDown", " "].indexOf(e.key) >= 0) { e.preventDefault(); self.next(); }
+          if (["ArrowLeft", "ArrowUp", "PageUp"].indexOf(e.key) >= 0) { e.preventDefault(); self.prev(); }
+          if (e.key === "Home") { e.preventDefault(); self.showSlide(0); }
+          if (e.key === "End") { e.preventDefault(); self.showSlide(self.slides.length - 1); }
+          if (e.key === "m" || e.key === "M") document.getElementById("menuOverlay").classList.add("open");
+          if (e.key === "t" || e.key === "T") self.openTeacherNote();
+        });
+      };
+
+      SlidePresentation.prototype.setupTouchNav = function () {
+        var self = this;
+        document.addEventListener("touchstart", function (e) { self.touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        document.addEventListener("touchend", function (e) {
+          if (self.touchStartX === null || self.anyOverlayOpen()) return;
+          var dx = e.changedTouches[0].screenX - self.touchStartX;
+          if (Math.abs(dx) > 60) dx < 0 ? self.next() : self.prev();
+          self.touchStartX = null;
+        }, { passive: true });
+      };
+
+      SlidePresentation.prototype.setupWheelNav = function () {
+        var self = this;
+        document.addEventListener("wheel", function (e) {
+          if (self.anyOverlayOpen() || self.wheelLock || Math.abs(e.deltaY) < 18) return;
+          self.wheelLock = true;
+          e.deltaY > 0 ? self.next() : self.prev();
+          window.setTimeout(function () { self.wheelLock = false; }, 550);
+        }, { passive: true });
+      };
+
+      SlidePresentation.prototype.setupInteractiveElements = function () {
+        var self = this;
+        eachNode(document.querySelectorAll("[data-video]"), function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            document.getElementById("videoFrame").src = "https://www.youtube-nocookie.com/embed/" + btn.getAttribute("data-video") + "?autoplay=1&rel=0";
+            document.getElementById("videoOverlay").classList.add("open");
+          });
+        });
+        eachNode(document.querySelectorAll(".tab"), function (btn) { btn.addEventListener("click", function () { self.showSlide(sectionStarts[btn.getAttribute("data-go")]); }); });
+        window.addEventListener("hashchange", function () { self.showSlide(self.indexFromHash()); });
+      };
+
+      SlidePresentation.prototype.openTeacherNote = function () {
+        var note = this.slides[this.currentSlide].getAttribute("data-note");
+        document.getElementById("teacherNote").innerHTML = note || "<h2>教師提示</h2><p>本頁沒有額外提示。</p>";
+        document.getElementById("teacherOverlay").classList.add("open");
+      };
+
+      SlidePresentation.prototype.buildChapterMenu = function () {
+        var self = this;
+        var menu = document.getElementById("chapterMenu");
+        menu.innerHTML = Object.keys(sectionTitles).map(function (key) {
+          return '<button type="button" data-menu-go="' + key + '" style="--menu-color:' + sectionTitles[key].color + '">' + sectionTitles[key].title + '</button>';
+        }).join("");
+        eachNode(menu.querySelectorAll("[data-menu-go]"), function (btn) { btn.addEventListener("click", function () { self.showSlide(sectionStarts[btn.getAttribute("data-menu-go")]); self.closeOverlays(); }); });
+      };
+
+      /* =========================================
+         INLINE EDITOR
+         Edits autosave to this browser only. Download creates a new file.
+         ========================================= */
+      function InlineEditor(stage) {
+        this.stage = stage;
+        this.isActive = false;
+        this.storageKey = "capstone-session2-goodmop-html-v2-edits";
+        this.bind();
+      }
+
+      InlineEditor.prototype.bind = function () {
+        var self = this;
+        var toggle = document.getElementById("editToggle");
+        var hotzone = document.querySelector(".edit-hotzone");
+        var hideTimeout = null;
+        toggle.addEventListener("click", function () { self.toggleEditMode(); });
+        hotzone.addEventListener("click", function () { self.toggleEditMode(); });
+        hotzone.addEventListener("mouseenter", function () { window.clearTimeout(hideTimeout); toggle.classList.add("show"); });
+        hotzone.addEventListener("mouseleave", function () { hideTimeout = window.setTimeout(function () { if (!self.isActive) toggle.classList.remove("show"); }, 400); });
+        toggle.addEventListener("mouseenter", function () { window.clearTimeout(hideTimeout); });
+        toggle.addEventListener("mouseleave", function () { hideTimeout = window.setTimeout(function () { if (!self.isActive) toggle.classList.remove("show"); }, 400); });
+        document.addEventListener("keydown", function (e) {
+          if ((e.key === "e" || e.key === "E") && !e.target.getAttribute("contenteditable")) self.toggleEditMode();
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s" && self.isActive) { e.preventDefault(); self.persist(); }
+        });
+        this.stage.addEventListener("input", function () { if (self.isActive) self.persist(); });
+        document.getElementById("saveButton").addEventListener("click", function () { self.downloadHtml(); });
+      };
+
+      InlineEditor.prototype.toggleEditMode = function () {
+        this.isActive = !this.isActive;
+        if (this.isActive) {
+          document.body.classList.add("editing");
+          document.getElementById("editToggle").classList.add("active");
+        } else {
+          document.body.classList.remove("editing");
+          document.getElementById("editToggle").classList.remove("active");
+        }
+        eachNode(document.querySelectorAll("[data-editable]"), function (el) { el.setAttribute("contenteditable", document.body.classList.contains("editing") ? "true" : "false"); });
+        if (!this.isActive) this.persist();
+      };
+
+      InlineEditor.prototype.persist = function () {
+        try { localStorage.setItem(this.storageKey, this.stage.innerHTML); } catch (error) { /* Local storage may be disabled. */ }
+      };
+
+      InlineEditor.prototype.restore = function () {
+        try {
+          var saved = localStorage.getItem(this.storageKey);
+          if (saved) this.stage.innerHTML = saved;
+        } catch (error) { /* Keep original HTML when local storage is unavailable. */ }
+      };
+
+      InlineEditor.prototype.downloadHtml = function () {
+        this.persist();
+        var clone = document.documentElement.cloneNode(true);
+        eachNode(clone.querySelectorAll("[contenteditable]"), function (el) { el.setAttribute("contenteditable", "false"); });
+        eachNode(clone.querySelectorAll(".slide"), function (slide, i) {
+          if (i === 0) {
+            slide.classList.add("active");
+            slide.classList.add("visible");
+          } else {
+            slide.classList.remove("active");
+            slide.classList.remove("visible");
+          }
+        });
+        var blob = new Blob(["<!doctype html>\n" + clone.outerHTML], { type: "text/html;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = "專題研究第二回_案例01_好神拖_HTML_修訂版.html";
+        link.click();
+        window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      };
+
+      var stage = document.getElementById("deckStage");
+      try {
+        var editor = new InlineEditor(stage);
+        editor.restore();
+        var deck = new SlidePresentation(stage);
+        document.documentElement.classList.add("js-ready");
+        window.capstoneDeck = deck;
+        window.capstoneEditor = editor;
+      } catch (error) {
+        document.documentElement.classList.add("js-failed");
+        if (window.console && console.error) console.error("投影片程式未啟動，請使用每頁下方的靜態翻頁連結。", error);
+      }
+    }());
+  </script>
+
+  <script>
+  /* ===========================================
+     V3 VERIFIED COMPATIBILITY CONTROLLER
+     ES5-style code for local files, older browsers, and teaching computers.
+     =========================================== */
+  (function () {
+    'use strict';
+
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el, name) { return new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className); }
+    function addClass(el, name) { if (!hasClass(el, name)) el.className += ' ' + name; }
+    function removeClass(el, name) {
+      el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(?=\\s|$)', 'g'), ' ').replace(/^\\s+|\\s+$/g, '');
+    }
+    function closestWithAttr(el, attr) {
+      while (el && el !== document) {
+        if (el.getAttribute && el.getAttribute(attr) !== null) return el;
+        el = el.parentNode;
+      }
+      return null;
+    }
+    function pad2(number) { return number < 10 ? '0' + number : String(number); }
+
+    var stage = byId('deckStage');
+    var slides = stage.getElementsByTagName('section');
+    var current = 0;
+    var wheelLocked = false;
+    var touchStart = null;
+    var storageKey = 'capstone-session2-goodmop-html-v3-edits';
+
+    function storageGet() {
+      try { return window.localStorage.getItem(storageKey); }
+      catch (ignore) { return null; }
+    }
+    function storageSet(value) {
+      try { window.localStorage.setItem(storageKey, value); return true; }
+      catch (ignore) { return false; }
+    }
+
+    var saved = storageGet();
+    if (saved && saved.indexOf('fallback-controls') !== -1) {
+      stage.innerHTML = saved;
+      slides = stage.getElementsByTagName('section');
+    }
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      var value = 'translate(-50%,-50%) scale(' + factor + ')';
+      stage.style.transform = value;
+      stage.style.msTransform = value;
+      stage.style.webkitTransform = value;
+    }
+
+    function indexFromHash() {
+      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, slides.length - 1)) : 0;
+    }
+
+    function updateTabs(section) {
+      var tabs = stage.getElementsByClassName('tab');
+      for (var i = 0; i < tabs.length; i += 1) {
+        if (tabs[i].getAttribute('data-go') === section) addClass(tabs[i], 'current');
+        else removeClass(tabs[i], 'current');
+      }
+    }
+
+    function show(index, updateHash) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      current = index;
+      for (var i = 0; i < slides.length; i += 1) {
+        if (i === current) {
+          addClass(slides[i], 'active');
+          addClass(slides[i], 'visible');
+        } else {
+          removeClass(slides[i], 'active');
+          removeClass(slides[i], 'visible');
+        }
+      }
+      byId('counter').innerHTML = (current + 1) + ' / ' + slides.length;
+      byId('progressBar').style.width = ((current + 1) / slides.length * 100) + '%';
+      updateTabs(slides[current].getAttribute('data-section'));
+      if (updateHash !== false) {
+        try { window.history.replaceState(null, '', '#slide-' + (current + 1)); }
+        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
+      }
+    }
+
+    function closeOverlays() {
+      var overlays = document.getElementsByClassName('overlay');
+      for (var i = 0; i < overlays.length; i += 1) removeClass(overlays[i], 'open');
+      byId('videoFrame').src = '';
+    }
+
+    function openTeacherNote() {
+      var note = slides[current].getAttribute('data-note');
+      byId('teacherNote').innerHTML = note || '<h2>教師提示</h2><p>本頁沒有額外提示。</p>';
+      addClass(byId('teacherOverlay'), 'open');
+    }
+
+    function goToSection(section) {
+      for (var i = 0; i < slides.length; i += 1) {
+        if (slides[i].getAttribute('data-section') === section) {
+          show(i);
+          return;
+        }
+      }
+    }
+
+    function buildChapterMenu() {
+      var items = [
+        ['observe', '觀察｜先看見發生了什麼', '#ead99d'],
+        ['understand', '理解｜找出真正卡住的地方', '#ed907d'],
+        ['solve', '解答｜合作、製作與測試', '#72b59b'],
+        ['reflect', '反思｜重新問一次', '#78a9c7']
+      ];
+      var menu = byId('chapterMenu');
+      var html = '';
+      for (var i = 0; i < items.length; i += 1) {
+        html += '<button type="button" data-menu-go="' + items[i][0] + '" style="--menu-color:' + items[i][2] + '">' + items[i][1] + '</button>';
+      }
+      menu.innerHTML = html;
+    }
+
+    function openVideo(id) {
+      byId('videoFrame').src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      addClass(byId('videoOverlay'), 'open');
+    }
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { addClass(byId('menuOverlay'), 'open'); };
+    byId('helpBtn').onclick = function () { addClass(byId('helpOverlay'), 'open'); };
+    byId('teacherBtn').onclick = openTeacherNote;
+
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      if (target.getAttribute && target.getAttribute('data-close-overlay') !== null) {
+        closeOverlays();
+        return;
+      }
+      var overlay = target;
+      if (overlay && hasClass(overlay, 'overlay')) {
+        closeOverlays();
+        return;
+      }
+      var videoButton = closestWithAttr(target, 'data-video');
+      if (videoButton) {
+        openVideo(videoButton.getAttribute('data-video'));
+        return;
+      }
+      var tab = closestWithAttr(target, 'data-go');
+      if (tab) {
+        goToSection(tab.getAttribute('data-go'));
+        return;
+      }
+      var menuButton = closestWithAttr(target, 'data-menu-go');
+      if (menuButton) {
+        goToSection(menuButton.getAttribute('data-menu-go'));
+        closeOverlays();
+      }
+    };
+
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      if (target && (target.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(target.tagName))) return;
+      var key = event.key || event.keyCode;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) {
+        if (event.preventDefault) event.preventDefault();
+        show(current + 1);
+      } else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) {
+        if (event.preventDefault) event.preventDefault();
+        show(current - 1);
+      } else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) addClass(byId('menuOverlay'), 'open');
+      else if (key === 't' || key === 'T' || key === 84) openTeacherNote();
+      else if (key === 'Escape' || key === 27) closeOverlays();
+    };
+
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(), false); };
+
+    if (window.addEventListener) {
+      window.addEventListener('wheel', function (event) {
+        if (wheelLocked || Math.abs(event.deltaY) < 18) return;
+        wheelLocked = true;
+        show(current + (event.deltaY > 0 ? 1 : -1));
+        window.setTimeout(function () { wheelLocked = false; }, 550);
+      }, false);
+      window.addEventListener('touchstart', function (event) { touchStart = event.changedTouches[0].clientX; }, false);
+      window.addEventListener('touchend', function (event) {
+        if (touchStart === null) return;
+        var distance = event.changedTouches[0].clientX - touchStart;
+        if (Math.abs(distance) > 50) show(current + (distance < 0 ? 1 : -1));
+        touchStart = null;
+      }, false);
+    }
+
+    var editing = false;
+    var editTimer = null;
+    function toggleEditing() {
+      editing = !editing;
+      var editable = document.querySelectorAll('[data-editable]');
+      for (var i = 0; i < editable.length; i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
+      if (editing) {
+        addClass(document.body, 'editing');
+        addClass(byId('editToggle'), 'active');
+      } else {
+        removeClass(document.body, 'editing');
+        removeClass(byId('editToggle'), 'active');
+      }
+    }
+
+    byId('editToggle').onclick = toggleEditing;
+    byId('editToggle').style.opacity = '1';
+    byId('editToggle').style.pointerEvents = 'auto';
+    stage.oninput = function () {
+      window.clearTimeout(editTimer);
+      editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); }, 350);
+    };
+
+    byId('saveButton').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html], { type:'text/html;charset=utf-8' });
+      var urlApi = window.URL || window.webkitURL;
+      var anchor = document.createElement('a');
+      anchor.href = urlApi.createObjectURL(blob);
+      anchor.download = '專題研究第二回_案例01_好神拖_HTML_V3_修訂版.html';
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); }, 1200);
+    };
+
+    buildChapterMenu();
+    scaleStage();
+    show(indexFromHash(), false);
+    addClass(document.body, 'js-ready');
+  }());
+  </script>
+</body>
+</html>

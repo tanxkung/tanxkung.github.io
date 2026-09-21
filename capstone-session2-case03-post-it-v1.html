@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="access-gate-config.js?v=14b"></script>
+<script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>黏不牢，也可以有價值？｜3M Post-it 案例 V1</title>
+  <meta name="description" content="專題研究第二回：以 3M Post-it 便利貼案例練習發掘、理解、重新界定問題並發展解答">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&amp;family=Shippori+Mincho:wght@700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME: 課堂筆記本 A × Post-it 黃
+       =========================================== */
+    :root {
+      --stage-bg:#272824;
+      --slide-bg:#272824;
+      --paper:#fbf7ec;
+      --paper-deep:#f0e9d9;
+      --ink:#17251f;
+      --muted:#65716b;
+      --line:#d9d1c3;
+      --yellow:#f4d45c;
+      --yellow-deep:#c29b18;
+      --green:#73b59b;
+      --green-deep:#2f725d;
+      --coral:#eb8b78;
+      --blue:#78a9c7;
+      --lavender:#a998d0;
+      --shadow:rgba(0,0,0,.34);
+      --ease:cubic-bezier(.16,1,.3,1);
+      --font-display:"Shippori Mincho","Noto Sans TC",sans-serif;
+      --font-body:"Noto Sans TC",sans-serif;
+    }
+
+    /* ===========================================
+       RESET
+       =========================================== */
+    * { box-sizing:border-box; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; }
+    a { color:inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Included in full from viewport-base.css
+       =========================================== */
+    html,
+    body {
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      background:var(--stage-bg,#000);
+    }
+    .deck-viewport {
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      background:var(--stage-bg,#000);
+    }
+    .deck-stage {
+      position:absolute;
+      left:0;
+      top:0;
+      width:1920px;
+      height:1080px;
+      overflow:hidden;
+      transform-origin:0 0;
+      background:var(--slide-bg,#fff);
+    }
+    .slide {
+      position:absolute;
+      inset:0;
+      width:1920px;
+      height:1080px;
+      overflow:hidden;
+      display:block;
+      visibility:hidden;
+      opacity:0;
+      pointer-events:none;
+      background:var(--slide-bg,#fff);
+    }
+    .slide.active,
+    .slide.visible {
+      visibility:visible;
+      opacity:1;
+      pointer-events:auto;
+      z-index:1;
+    }
+    img,
+    video,
+    canvas,
+    svg {
+      max-width:100%;
+      max-height:100%;
+    }
+    .deck-controls {
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      z-index:1000;
+    }
+    @media print {
+      html,body { width:1920px;height:auto;overflow:visible;background:#fff; }
+      .deck-viewport { position:static;overflow:visible;background:#fff; }
+      .deck-stage { position:static;width:auto;height:auto;transform:none !important;background:none; }
+      .slide { position:relative;display:block !important;visibility:visible !important;opacity:1 !important;pointer-events:auto !important;width:1920px;height:1080px;break-after:page;page-break-after:always; }
+      .slide:last-child { break-after:auto;page-break-after:auto; }
+      .deck-controls { display:none !important; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms !important;transition-duration:.2s !important; }
+    }
+
+    /* ===========================================
+       PAPER, BINDING AND SLIDE CHROME
+       =========================================== */
+    body { font-family:var(--font-body);color:var(--ink); }
+    .paper {
+      position:absolute;
+      inset:28px 34px;
+      overflow:hidden;
+      border:3px solid var(--ink);
+      border-radius:34px;
+      background:
+        linear-gradient(rgba(31,55,46,.045) 1px,transparent 1px),
+        var(--paper);
+      background-size:100% 42px;
+      box-shadow:0 18px 0 rgba(0,0,0,.16);
+    }
+    .paper::before {
+      content:"";
+      position:absolute;
+      top:0;bottom:0;left:126px;
+      width:2px;
+      background:rgba(235,139,120,.55);
+    }
+    .holes {
+      position:absolute;
+      z-index:3;
+      left:43px;
+      top:104px;
+      display:grid;
+      gap:78px;
+    }
+    .holes i {
+      width:24px;height:24px;border-radius:50%;display:block;
+      background:#4c504b;border:5px solid #ded8ca;box-shadow:inset 0 0 0 2px #181d1a;
+    }
+    .content {
+      position:absolute;
+      inset:48px 54px 54px 162px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+    .topline { display:flex;align-items:center;justify-content:space-between;height:45px;gap:26px;flex:0 0 auto; }
+    .case-label { font-size:22px;font-weight:900;letter-spacing:.08em;color:var(--green-deep); }
+    .stage-label { display:flex;align-items:center;gap:12px;font-size:20px;font-weight:800;color:var(--muted);white-space:nowrap; }
+    .stage-dot { width:14px;height:14px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink); }
+    .page-no { font-size:19px;font-weight:900;letter-spacing:.14em;color:var(--muted); }
+    .rule { height:3px;background:var(--line);margin:12px 0 24px;flex:0 0 auto;position:relative; }
+    .rule::before { content:"";position:absolute;left:0;top:0;width:115px;height:3px;background:var(--yellow-deep); }
+    .slide-title { margin:0 0 18px;font-family:var(--font-display);font-size:63px;line-height:1.16;letter-spacing:-.04em;flex:0 0 auto; }
+    .slide-kicker { margin:0 0 10px;font-size:23px;font-weight:900;letter-spacing:.08em;color:var(--green-deep); }
+    .lead { margin:0;font-size:35px;line-height:1.55;font-weight:700;color:#31423b; }
+    .source { margin-top:auto;padding-top:12px;font-size:18px;line-height:1.45;color:#7a817c; }
+    .source a { text-decoration-thickness:1px;text-underline-offset:4px; }
+
+    /* ===========================================
+       REVEAL MOTION
+       =========================================== */
+    .reveal { opacity:0;transform:translateY(28px);transition:opacity .56s var(--ease),transform .56s var(--ease); }
+    .slide.visible .reveal { opacity:1;transform:translateY(0); }
+    .slide.visible .reveal:nth-child(2) { transition-delay:.07s; }
+    .slide.visible .reveal:nth-child(3) { transition-delay:.14s; }
+    .slide.visible .reveal:nth-child(4) { transition-delay:.21s; }
+    .slide.visible .reveal:nth-child(5) { transition-delay:.28s; }
+
+    /* ===========================================
+       GENERAL CARDS AND TYPOGRAPHY
+       =========================================== */
+    .card {
+      border:3px solid var(--ink);border-radius:24px;background:rgba(255,255,255,.78);
+      box-shadow:8px 9px 0 rgba(23,37,31,.11);padding:28px 30px;
+    }
+    .card h3 { margin:0 0 10px;font-size:29px;line-height:1.25; }
+    .card p { margin:0;font-size:25px;line-height:1.5;color:#405149; }
+    .tag { display:inline-flex;align-items:center;gap:9px;border:2px solid var(--ink);border-radius:999px;padding:8px 16px;background:#fff;font-size:19px;font-weight:900; }
+    .tag.yellow { background:#fff0a6; }
+    .tag.green { background:#cce9dd; }
+    .tag.coral { background:#f9c9be; }
+    .big-question { font-family:var(--font-display);font-size:76px;line-height:1.22;letter-spacing:-.05em;max-width:1300px; }
+    .highlight { background:linear-gradient(transparent 58%,rgba(244,212,92,.78) 58%);padding:0 .08em; }
+    .note-square {
+      width:330px;height:330px;background:var(--yellow);border:3px solid var(--ink);padding:42px 34px 30px;
+      box-shadow:14px 16px 0 rgba(23,37,31,.14);font-size:35px;font-weight:900;line-height:1.35;position:relative;
+    }
+    .note-square::after { content:"";position:absolute;right:0;bottom:0;border-style:solid;border-width:0 0 72px 72px;border-color:transparent transparent #e2b934 transparent;filter:drop-shadow(-4px -4px 0 rgba(23,37,31,.18)); }
+    .arrow { font-size:55px;font-weight:900;color:var(--green-deep); }
+
+    /* ===========================================
+       TITLE SLIDE
+       =========================================== */
+    .title-layout { flex:1;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;gap:80px;min-height:0;overflow:hidden; }
+    .deck-title { margin:0;font-family:var(--font-display);font-size:91px;line-height:1.1;letter-spacing:-.055em; }
+    .deck-subtitle { margin:28px 0 0;font-size:32px;font-weight:800;color:var(--green-deep); }
+    .watch-task { display:flex;gap:14px;margin-top:48px;flex-wrap:wrap; }
+    .stacked-notes { position:relative;height:560px;overflow:hidden; }
+    .stacked-notes .note-square { position:absolute; }
+    .stacked-notes .n1 { left:60px;top:34px;transform:rotate(-7deg);background:#cde9dd; }
+    .stacked-notes .n2 { left:260px;top:145px;transform:rotate(6deg);background:#f8c5bb; }
+    .stacked-notes .n3 { left:110px;top:265px;transform:rotate(-1deg); }
+
+    /* ===========================================
+       VIDEO SLIDE
+       =========================================== */
+    .video-layout { display:grid;grid-template-columns:1.18fr .82fr;gap:34px;min-height:0;height:650px; }
+    .video-card { position:relative;border:4px solid var(--ink);border-radius:25px;overflow:hidden;background:#0d1511;box-shadow:10px 12px 0 rgba(23,37,31,.13); }
+    .video-card img { width:100%;height:100%;object-fit:cover;opacity:.74; }
+    .video-card::after { content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(5,12,9,.82));pointer-events:none; }
+    .play-button { position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:122px;height:122px;border:4px solid #fff;border-radius:50%;background:rgba(20,40,31,.78);color:#fff;font-size:54px;display:grid;place-items:center;text-decoration:none;box-shadow:0 8px 30px rgba(0,0,0,.35);transition:transform .2s ease,background .2s ease; }
+    .play-button:hover { transform:translate(-50%,-50%) scale(1.06);background:var(--green-deep); }
+    .video-meta { position:absolute;z-index:3;left:24px;right:24px;bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:end;gap:18px; }
+    .video-meta strong { font-size:23px;line-height:1.35;max-width:75%; }
+    .video-meta span { font-size:21px;font-weight:900;white-space:nowrap; }
+    .watch-grid { display:grid;grid-template-rows:repeat(3,1fr) auto;gap:16px; }
+    .watch-item { border-left:10px solid var(--yellow);border-radius:18px;background:rgba(255,255,255,.8);padding:22px 25px;box-shadow:0 7px 0 rgba(23,37,31,.08); }
+    .watch-item:nth-child(2) { border-left-color:var(--green); }
+    .watch-item:nth-child(3) { border-left-color:var(--coral); }
+    .watch-item strong { display:block;font-size:25px;margin-bottom:6px; }
+    .watch-item span { font-size:22px;line-height:1.42;color:#4b5a54; }
+    .backup-link { display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border:2px dashed var(--muted);border-radius:14px;font-size:19px;font-weight:800;color:#52615a;text-decoration:none; }
+
+    /* ===========================================
+       COMPARISONS AND DIAGRAMS
+       =========================================== */
+    .two-col { display:grid;grid-template-columns:1fr 1fr;gap:32px;min-height:0;flex:1; }
+    .two-col > * { min-width:0; }
+    .fact-card,.idea-card { display:flex;flex-direction:column;justify-content:center;gap:20px; }
+    .fact-card { background:#edf6f1; }
+    .idea-card { background:#fff4d0; }
+    .examples { display:grid;gap:14px; }
+    .example { padding:17px 20px;border-radius:14px;background:rgba(255,255,255,.8);font-size:25px;font-weight:700; }
+    .goal-result { display:grid;grid-template-columns:1fr 95px 1fr;align-items:center;gap:20px;flex:1; }
+    .goal-box { height:430px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:24px;border-radius:30px;border:4px solid var(--ink);background:#fff;box-shadow:10px 12px 0 rgba(23,37,31,.11);padding:44px; }
+    .goal-box.bad { background:#f7d1c8; }
+    .goal-box.good { background:#fff0a6; }
+    .goal-box .small { font-size:22px;font-weight:900;color:var(--muted); }
+    .goal-box strong { font-family:var(--font-display);font-size:54px;line-height:1.25; }
+    .goal-box p { font-size:27px;line-height:1.45;margin:0; }
+    .properties { display:grid;grid-template-columns:repeat(4,1fr);gap:24px;flex:1;align-items:center;min-height:0; }
+    .property { height:350px;border:3px solid var(--ink);border-radius:26px;background:#fff;box-shadow:8px 9px 0 rgba(23,37,31,.1);padding:27px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px; }
+    .property b { width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:var(--yellow);font-size:33px;border:3px solid var(--ink); }
+    .property strong { font-size:31px; }
+    .property span { font-size:23px;line-height:1.45;color:#4d5a55; }
+    .gap-map { display:grid;grid-template-columns:1fr 140px 1fr;gap:28px;align-items:center;flex:1;min-height:0; }
+    .gap-box { min-height:390px;border:4px solid var(--ink);border-radius:30px;padding:36px;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:18px; }
+    .gap-box strong { font-size:38px; }
+    .gap-box p { font-size:27px;line-height:1.55;margin:0; }
+    .gap-mark { width:140px;height:140px;border:4px dashed var(--coral);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:24px;font-weight:900;color:#9b493a;transform:rotate(-6deg); }
+
+    /* ===========================================
+       BOOKMARK AND MATCHING VISUALS
+       =========================================== */
+    .book-layout { display:grid;grid-template-columns:.9fr 1.1fr;gap:55px;flex:1;align-items:center; }
+    .book {
+      position:relative;width:610px;height:430px;border-radius:24px 24px 38px 38px;background:#f2e5c7;border:4px solid var(--ink);box-shadow:16px 18px 0 rgba(23,37,31,.12);
+    }
+    .book::before { content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;background:#b6a98a; }
+    .book::after { content:"♫  詩歌本";position:absolute;left:88px;top:170px;font-family:var(--font-display);font-size:48px;color:#665d49; }
+    .bookmark { position:absolute;right:78px;top:-34px;width:92px;height:330px;background:var(--coral);border:3px solid var(--ink);transform:rotate(5deg); }
+    .fallen { position:absolute;right:-72px;bottom:-74px;width:96px;height:270px;background:var(--yellow);border:3px solid var(--ink);transform:rotate(68deg);box-shadow:7px 8px 0 rgba(23,37,31,.12); }
+    .situation { display:grid;gap:18px; }
+    .situation-row { display:grid;grid-template-columns:145px 1fr;gap:18px;align-items:center;padding:20px 22px;border-bottom:2px dashed var(--line); }
+    .situation-row strong { font-size:24px;color:var(--green-deep); }
+    .situation-row span { font-size:29px;font-weight:800;line-height:1.4; }
+    .match-layout { display:grid;grid-template-columns:1fr 130px 1fr;gap:28px;align-items:center;flex:1;min-height:0; }
+    .match-list { display:grid;gap:14px; }
+    .match-item { border:3px solid var(--ink);border-radius:20px;padding:18px 24px;background:#fff;font-size:27px;font-weight:800;box-shadow:6px 7px 0 rgba(23,37,31,.09); }
+    .match-list.need .match-item { background:#e3f1eb; }
+    .match-symbol { font-size:76px;text-align:center;color:var(--yellow-deep);font-weight:900; }
+
+    /* ===========================================
+       PROTOTYPE, BRANCH AND QUESTION REFRAME
+       =========================================== */
+    .test-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1;align-items:center;min-height:0; }
+    .test-card { min-height:370px;border:4px solid var(--ink);border-radius:28px;background:#fff;padding:32px 30px;box-shadow:9px 10px 0 rgba(23,37,31,.11);display:flex;flex-direction:column;gap:20px; }
+    .test-card .num { width:70px;height:70px;border-radius:50%;background:var(--yellow);border:3px solid var(--ink);display:grid;place-items:center;font-size:31px;font-weight:900; }
+    .test-card h3 { font-size:34px;margin:0; }
+    .test-card p { font-size:27px;line-height:1.5;margin:0;color:#47564f; }
+    .branch { display:grid;grid-template-columns:.72fr 100px 1.28fr;gap:20px;align-items:center;flex:1; }
+    .branch-origin { height:360px;background:var(--yellow);border:4px solid var(--ink);border-radius:28px;display:flex;align-items:center;justify-content:center;text-align:center;padding:36px;font-size:40px;font-weight:900;box-shadow:10px 12px 0 rgba(23,37,31,.12); }
+    .branch-lines { font-size:64px;text-align:center;color:var(--green-deep); }
+    .branch-uses { display:grid;grid-template-columns:1fr 1fr;gap:22px; }
+    .use { min-height:170px;border:3px solid var(--ink);border-radius:22px;background:#fff;padding:24px;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;text-align:center; }
+    .question-shift { display:grid;grid-template-rows:1fr 54px 1fr;gap:12px;flex:1;min-height:0; }
+    .question-box { border:4px solid var(--ink);border-radius:28px;padding:23px 36px;background:#f4d0c8;display:grid;grid-template-columns:230px 1fr;align-items:center;gap:30px; }
+    .question-box.after { background:#d8eee5; }
+    .question-box span { font-size:24px;font-weight:900;color:#6f433a; }
+    .question-box.after span { color:var(--green-deep); }
+    .question-box strong { font-family:var(--font-display);font-size:42px;line-height:1.3; }
+    .down-arrow { text-align:center;font-size:46px;color:var(--yellow-deep);font-weight:900; }
+
+    /* ===========================================
+       MARKET TEST AND FULL CHAIN
+       =========================================== */
+    .market-layout { display:grid;grid-template-columns:1fr 1fr;gap:38px;flex:1;align-items:center; }
+    .market-card { height:440px;border:4px solid var(--ink);border-radius:30px;background:#fff;padding:40px;box-shadow:10px 12px 0 rgba(23,37,31,.11);display:flex;flex-direction:column;justify-content:center;gap:22px; }
+    .market-card h3 { margin:0;font-size:37px; }
+    .market-card p { margin:0;font-size:28px;line-height:1.55;color:#44534c; }
+    .market-card.mixed { background:#f7d4cc; }
+    .market-card.sample { background:#d9eee5; }
+    .percent { font-family:var(--font-display);font-size:118px;line-height:1;color:var(--green-deep); }
+    .chain { display:grid;grid-template-columns:repeat(6,1fr);gap:14px;align-items:stretch;flex:1; }
+    .chain-item { position:relative;border:3px solid var(--ink);border-radius:22px;background:#fff;padding:24px 18px;display:flex;flex-direction:column;justify-content:center;gap:14px;text-align:center;box-shadow:5px 6px 0 rgba(23,37,31,.08); }
+    .chain-item:not(:last-child)::after { content:"→";position:absolute;right:-26px;top:50%;transform:translateY(-50%);z-index:2;font-size:31px;font-weight:900;color:var(--green-deep); }
+    .chain-item b { font-size:19px;color:var(--green-deep); }
+    .chain-item strong { font-size:26px;line-height:1.35; }
+    .chain-item:nth-child(1),.chain-item:nth-child(4) { background:#fff1ad; }
+    .chain-item:nth-child(2),.chain-item:nth-child(5) { background:#def0e8; }
+    .chain-item:nth-child(3),.chain-item:nth-child(6) { background:#f8d6ce; }
+
+    /* ===========================================
+       EXIT TICKET
+       =========================================== */
+    .ticket-layout { display:grid;grid-template-columns:1.2fr .8fr;gap:44px;flex:1;align-items:center;min-height:0; }
+    .ticket { border:4px solid var(--ink);border-radius:26px;background:#fff8ca;padding:28px 34px;box-shadow:12px 14px 0 rgba(23,37,31,.13); }
+    .ticket h3 { margin:0 0 22px;font-size:34px; }
+    .ticket ol { margin:0;padding-left:34px;display:grid;gap:12px;font-size:25px;line-height:1.42;font-weight:700; }
+    .closing-note { display:flex;justify-content:center; }
+    .closing-note .note-square { width:360px;height:360px;font-size:30px;transform:rotate(2deg); }
+
+    /* ===========================================
+       FALLBACK AND SCREEN CONTROLS
+       =========================================== */
+    .fallback-controls { position:absolute;right:34px;bottom:26px;display:flex;gap:12px;z-index:8; }
+    .fallback-controls a { border:2px solid var(--ink);border-radius:999px;background:#fff;padding:8px 15px;text-decoration:none;font-size:18px;font-weight:900; }
+    .js-ready .fallback-controls { display:none; }
+    .deck-controls { left:auto;right:18px;bottom:17px;transform:none;display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:999px;background:rgba(22,30,26,.88);box-shadow:0 7px 22px rgba(0,0,0,.25); }
+    .deck-controls button { width:42px;height:42px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:21px;font-weight:900; }
+    .deck-controls button:hover { background:var(--green-deep); }
+    .counter { min-width:72px;text-align:center;color:#fff;font-size:16px;font-weight:900; }
+    .help-button,.teacher-button { position:fixed;z-index:1002;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(22,30,26,.88);color:#fff;font-weight:900;cursor:pointer; }
+    .help-button { right:18px;top:18px; }
+    .teacher-button { right:70px;top:18px; }
+    .edit-hotzone { position:fixed;z-index:10000;left:0;top:0;width:80px;height:80px;cursor:pointer; }
+    .edit-toggle { position:fixed;z-index:10001;left:18px;top:18px;width:46px;height:46px;border-radius:50%;border:2px solid #fff;background:#223129;color:#fff;opacity:0;pointer-events:none;transition:opacity .25s ease;cursor:pointer; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1;pointer-events:auto; }
+    .save-button { position:fixed;z-index:1001;left:18px;bottom:18px;border:2px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(22,30,26,.88);color:#fff;padding:10px 18px;font-size:15px;font-weight:900;cursor:pointer;display:none; }
+    body.editing .save-button { display:block; }
+    body.editing [data-editable] { outline:3px dashed rgba(47,114,93,.52);outline-offset:5px;cursor:text; }
+
+    /* ===========================================
+       OVERLAYS
+       =========================================== */
+    .overlay { position:fixed;z-index:2000;inset:0;background:rgba(12,17,14,.78);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease; }
+    .overlay.open { opacity:1;visibility:visible;pointer-events:auto; }
+    .overlay-panel { width:min(860px,88vw);max-height:82vh;overflow:auto;border:3px solid var(--ink);border-radius:24px;background:var(--paper);padding:34px;box-shadow:0 24px 80px rgba(0,0,0,.38); }
+    .overlay-panel h2 { margin:0 0 18px;font-family:var(--font-display);font-size:39px; }
+    .overlay-panel p,.overlay-panel li { font-size:20px;line-height:1.65; }
+    .overlay-actions { display:flex;justify-content:flex-end;margin-top:22px; }
+    .overlay-actions button { border:2px solid var(--ink);border-radius:999px;background:var(--yellow);padding:10px 18px;font-weight:900;cursor:pointer; }
+    .menu-grid { display:grid;grid-template-columns:1fr 1fr;gap:13px; }
+    .menu-grid button { text-align:left;border:2px solid var(--line);border-radius:15px;background:#fff;padding:15px 17px;font-weight:800;cursor:pointer; }
+    .menu-grid button:hover { border-color:var(--green-deep);background:#e8f4ef; }
+  </style>
+<style id="site-home-link-style">
+.site-home-link{position:fixed;left:18px;bottom:18px;z-index:2147483646;display:grid;place-items:center;width:48px;height:48px;border:2px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(22,30,30,.9);color:#fff;text-decoration:none;font:900 24px/1 system-ui,-apple-system,"Noto Sans TC",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.site-home-link:hover,.site-home-link:focus{background:#2a8b87;outline:3px solid rgba(255,255,255,.82);outline-offset:2px}body.editing .site-home-link{display:none}@media print{.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+<a class="site-home-link" href="index.html" title="返回教材首頁" aria-label="返回教材首頁">⌂</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+
+      <!-- ===========================================
+           SLIDE 01: OPENING QUESTION
+           =========================================== -->
+      <section class="slide active" id="slide-1" data-section="開場" data-note="先請學生判斷：黏不牢的黏著劑是成功還是失敗？不要立刻公布 Post-it 的故事。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>開場</div><div class="page-no">01</div></div><div class="rule"></div>
+            <div class="title-layout">
+              <div>
+                <p class="slide-kicker reveal" data-editable>專題研究第二回｜發掘問題</p>
+                <h1 class="deck-title reveal" data-editable>為什麼「<span class="highlight">黏不牢</span>」，也可以有價值？</h1>
+                <p class="deck-subtitle reveal" data-editable>先別急著判斷失敗，試著把特性說清楚。</p>
+                <div class="watch-task reveal"><span class="tag yellow">它有什麼特性？</span><span class="tag green">誰正好需要？</span><span class="tag coral">要怎麼證明？</span></div>
+              </div>
+              <div class="stacked-notes reveal" aria-hidden="true"><div class="note-square n1">黏得住</div><div class="note-square n2">撕得下</div><div class="note-square n3">還能再黏</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-2">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 02: VIDEO
+           =========================================== -->
+      <section class="slide" id="slide-2" data-section="看故事" data-note="播放 7:46 主片。提醒學生只記三件事：技術特性、出現的情境、人們實際的反應。影片為英文旁白與英文字幕，教師可在播放前先解釋三個關鍵詞。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>看故事</div><div class="page-no">02</div></div><div class="rule"></div>
+            <p class="slide-kicker reveal">主片 7:46｜4K｜動畫與情境畫面</p>
+            <h2 class="slide-title reveal" data-editable>先看故事，不急著找標準答案</h2>
+            <div class="video-layout reveal">
+              <div class="video-card">
+                <img src="https://i.ytimg.com/vi/Mbz46Rz677w/hqdefault.jpg" alt="Post-it 影片縮圖">
+                <a class="play-button" href="https://www.youtube.com/watch?v=Mbz46Rz677w" target="_blank" rel="noopener" aria-label="在 YouTube 播放 Post-it 影片">▶</a>
+                <div class="video-meta"><strong>How Post-it Notes Are Made<br>– The Accidental Invention</strong><span>7:46 · YouTube ↗</span></div>
+              </div>
+              <div class="watch-grid">
+                <div class="watch-item"><strong data-editable>技術特性</strong><span data-editable>這種黏著劑和原先想要的，有什麼不同？</span></div>
+                <div class="watch-item"><strong data-editable>使用情境</strong><span data-editable>什麼事發生時，它突然變得有用？</span></div>
+                <div class="watch-item"><strong data-editable>實際反應</strong><span data-editable>公司同事與消費者真正怎麼用它？</span></div>
+                <a class="backup-link" href="https://www.youtube.com/watch?v=bvalMbOdseU" target="_blank" rel="noopener"><span>備援｜NBC News Learn</span><span>3:02 ↗</span></a>
+              </div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-1">← 上一頁</a><a href="#slide-3">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 03: FACT VS INTERPRETATION
+           =========================================== -->
+      <section class="slide" id="slide-3" data-section="看故事" data-note="請學生先寫事件，不要寫「很有創意」「他運氣很好」。把觀察與解釋分開，後面才能對照證據。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>看故事</div><div class="page-no">03</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>先分清楚：看到的事，和我的解釋</h2>
+            <div class="two-col reveal">
+              <article class="card fact-card"><span class="tag green">可以在影片中指出來</span><h3 data-editable>我確實看到的事件</h3><div class="examples"><div class="example" data-editable>黏著劑可以撕下後再黏</div><div class="example" data-editable>詩歌本裡的書籤掉出來</div><div class="example" data-editable>同事開始在紙條上留言</div></div></article>
+              <article class="card idea-card"><span class="tag yellow">現在還是我的看法</span><h3 data-editable>我對這些事的解釋</h3><div class="examples"><div class="example" data-editable>這是一次幸運的意外</div><div class="example" data-editable>這是一項失敗的實驗</div><div class="example" data-editable>他們很有創意</div></div></article>
+            </div>
+            <p class="source" data-editable>先講「發生了什麼」，再討論「這代表什麼」。</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-2">← 上一頁</a><a href="#slide-4">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 04: ORIGINAL GOAL AND RESULT
+           =========================================== -->
+      <section class="slide" id="slide-4" data-section="發掘問題" data-note="原來的目標是更強的黏著劑。但這次結果不是「什麼都沒有」，而是出現了一種和原目標不同的材料特性。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>發掘問題</div><div class="page-no">04</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>原來想做得更強，實驗結果卻正好相反</h2>
+            <div class="goal-result reveal">
+              <div class="goal-box"><span class="small">原來的目標</span><strong data-editable>更強、更牢的黏著劑</strong><p data-editable>黏上後，不容易分開。</p></div>
+              <div class="arrow">→</div>
+              <div class="goal-box good"><span class="small">實際的結果</span><strong data-editable>輕輕黏住，還能撕下</strong><p data-editable>黏性沒有符合原來的目標，卻留下一組特殊性質。</p></div>
+            </div>
+            <p class="source">Source: 3M Post-it History Timeline</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-3">← 上一頁</a><a href="#slide-5">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 05: DESCRIBE PROPERTIES
+           =========================================== -->
+      <section class="slide" id="slide-5" data-section="發掘問題" data-note="請學生不用「好」「壞」判斷，而是將研究結果改寫成可觀察、可測試的特性。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>發掘問題</div><div class="page-no">05</div></div><div class="rule"></div>
+            <p class="slide-kicker reveal">把「失敗」改成可以檢查的句子</p>
+            <h2 class="slide-title reveal" data-editable>先別急著說它失敗，這種黏著劑其實是……</h2>
+            <div class="properties reveal">
+              <article class="property"><b>1</b><strong data-editable>黏得住</strong><span data-editable>紙張可以暫時固定在表面上。</span></article>
+              <article class="property"><b>2</b><strong data-editable>撕得下</strong><span data-editable>不需要用很大的力氣就能移除。</span></article>
+              <article class="property"><b>3</b><strong data-editable>還能再黏</strong><span data-editable>撕下來之後，仍可再放到別的位置。</span></article>
+              <article class="property"><b>4</b><strong data-editable>不易傷表面</strong><span data-editable>比較不會讓書頁破損或留下難清的痕跡。</span></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-4">← 上一頁</a><a href="#slide-6">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 06: SOLUTION WITHOUT PROBLEM
+           =========================================== -->
+      <section class="slide" id="slide-6" data-section="發掘問題" data-note="這一頁是重點：技術特性不等於產品。還要找出哪一群人、在哪一種情境、因為什麼後果而需要它。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>發掘問題</div><div class="page-no">06</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>技術已經出現，產品卻還沒有出現</h2>
+            <div class="gap-map reveal">
+              <article class="gap-box"><span class="tag yellow">已經知道</span><strong data-editable>這種黏著劑有哪些特性</strong><p data-editable>黏得住、撕得下、能重複黏貼。</p></article>
+              <div class="gap-mark">還差<br>一個問題</div>
+              <article class="gap-box"><span class="tag green">還不知道</span><strong data-editable>誰在什麼時候，正好需要這些特性</strong><p data-editable>使用者是誰？情境是什麼？原來的做法為什麼不理想？</p></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-5">← 上一頁</a><a href="#slide-7">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 07: USER SITUATION
+           =========================================== -->
+      <section class="slide" id="slide-7" data-section="理解問題" data-note="把故事從「靈機一動」拆成情境、當事人、原做法與後果。這是學生未來描述問題時可直接套用的格式。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>理解問題</div><div class="page-no">07</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>問題出現在一個很具體的時刻</h2>
+            <div class="book-layout reveal">
+              <div class="book" aria-label="書籤從詩歌本掉出來的示意圖"><div class="bookmark"></div><div class="fallen"></div></div>
+              <div class="situation">
+                <div class="situation-row"><strong>誰？</strong><span data-editable>Art Fry，3M 的產品開發人員</span></div>
+                <div class="situation-row"><strong>什麼時候？</strong><span data-editable>在教會詩班練習，使用詩歌本時</span></div>
+                <div class="situation-row"><strong>原做法？</strong><span data-editable>把小紙片夾在書頁裡當書籤</span></div>
+                <div class="situation-row"><strong>後果？</strong><span data-editable>紙片容易掉出來，找不到原來標記的位置</span></div>
+              </div>
+            </div>
+            <p class="source">Source: 3M Post-it History Timeline; National Inventors Hall of Fame</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-6">← 上一頁</a><a href="#slide-8">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 08: PROPERTY MEETS NEED
+           =========================================== -->
+      <section class="slide" id="slide-8" data-section="理解問題" data-note="請學生逐一對應：黏得住回應了哪個需求？撕得下又回應了哪個擔心？這是把功能和問題接起來的練習。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>理解問題</div><div class="page-no">08</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>技術特性，終於遇到了需要它的情境</h2>
+            <div class="match-layout reveal">
+              <div class="match-list"><div class="match-item" data-editable>黏得住</div><div class="match-item" data-editable>撕得下</div><div class="match-item" data-editable>可以再黏</div><div class="match-item" data-editable>不容易傷紙</div></div>
+              <div class="match-symbol">↔</div>
+              <div class="match-list need"><div class="match-item" data-editable>書籤不要掉出來</div><div class="match-item" data-editable>需要時可以移走</div><div class="match-item" data-editable>下次還能放在別頁</div><div class="match-item" data-editable>不破壞詩歌本</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-7">← 上一頁</a><a href="#slide-9">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 09: PROTOTYPE TEST
+           =========================================== -->
+      <section class="slide" id="slide-9" data-section="發展解答" data-note="第一個原型不用先有品牌、包裝與完整產線。它只要回答三個可以實際測試的問題。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>發展解答</div><div class="page-no">09</div></div><div class="rule"></div>
+            <p class="slide-kicker reveal">第一個解答：在紙條上塗上這種黏著劑</p>
+            <h2 class="slide-title reveal" data-editable>第一個原型，先回答三件事</h2>
+            <div class="test-grid reveal">
+              <article class="test-card"><span class="num">1</span><h3 data-editable>會不會掉？</h3><p data-editable>書籤夾在常翻動的書裡，還能保持在原來位置嗎？</p></article>
+              <article class="test-card"><span class="num">2</span><h3 data-editable>會不會傷紙？</h3><p data-editable>撕下來時，書頁會不會破損，或留下黏著劑？</p></article>
+              <article class="test-card"><span class="num">3</span><h3 data-editable>能不能重複用？</h3><p data-editable>從這一頁移到別頁後，還能保持必要的黏性嗎？</p></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-8">← 上一頁</a><a href="#slide-10">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 10: USE REVEALS MORE USES
+           =========================================== -->
+      <section class="slide" id="slide-10" data-section="重新界定" data-note="說明一個實作結果可能被使用者用出研發團隊未預期的新方式。這不是功能自然增加，而是觀察人們怎麼真的使用。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>重新界定</div><div class="page-no">10</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>真正的用法，有時是被人們「用出來」的</h2>
+            <div class="branch reveal">
+              <div class="branch-origin" data-editable>一張可黏貼的書籤</div>
+              <div class="branch-lines">→</div>
+              <div class="branch-uses"><div class="use" data-editable>在文件上留言</div><div class="use" data-editable>標記待辦事項</div><div class="use" data-editable>把訊息貼在看得到的地方</div><div class="use" data-editable>移動、分類與重新排列</div></div>
+            </div>
+            <p class="source">3M 官方歷史記載，Fry 與同事開始用新紙條傳遞留言，才看見書籤以外的溝通價值。</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-9">← 上一頁</a><a href="#slide-11">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 11: REFRAME QUESTION
+           =========================================== -->
+      <section class="slide" id="slide-11" data-section="重新界定" data-note="比較兩句問題會帶團隊往哪裡走。第一句限定在書籤；第二句把核心特性留住，但打開了更多使用情境。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>重新界定</div><div class="page-no">11</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>從「書籤」到「隨處留下可移動的訊息」</h2>
+            <div class="question-shift reveal">
+              <div class="question-box"><span>第一版問法</span><strong data-editable>怎麼做一張不會從書裡掉出來的書籤？</strong></div>
+              <div class="down-arrow">↓</div>
+              <div class="question-box after"><span>重新界定</span><strong data-editable>怎麼讓一段訊息暫時黏在需要的地方，之後還能移動？</strong></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-10">← 上一頁</a><a href="#slide-12">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 12: MARKET RESPONSE
+           =========================================== -->
+      <section class="slide" id="slide-12" data-section="驗證解答" data-note="產品能用，試賣還是可能反應普通。請學生提出多種可能原因，不要立刻說產品沒有價值。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>驗證解答</div><div class="page-no">12</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>產品明明能用，為什麼試賣反應還是普通？</h2>
+            <div class="market-layout reveal">
+              <article class="market-card mixed"><span class="tag coral">1977 · Press 'n Peel</span><h3 data-editable>四個城市試賣，結果並不理想</h3><p data-editable>可能是不知道它能做什麼、只看包裝無法想像使用情境，或還沒有機會親手試用。</p></article>
+              <article class="market-card"><span class="tag yellow">新的問題</span><h3 data-editable>顧客看不懂價值，不一定等於產品沒有價值</h3><p data-editable>接下來不是只問「怎麼多賣一點」，而是要驗證：人們真正使用後，會不會認為有幫助？</p></article>
+            </div>
+            <p class="source">Source: 3M Post-it History Timeline</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-11">← 上一頁</a><a href="#slide-13">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 13: BOISE BLITZ
+           =========================================== -->
+      <section class="slide" id="slide-13" data-section="驗證解答" data-note="把 Boise 試用當作一次驗證。重點不是 90% 這個數字本身，而是它回答了哪個問題：人們用過後，是否願意購買？">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>驗證解答</div><div class="page-no">13</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>不再只用說的，先讓人們親手用過</h2>
+            <div class="market-layout reveal">
+              <article class="market-card sample"><span class="tag green">Boise 試用活動</span><h3 data-editable>大規模發放試用品</h3><p data-editable>讓人們在真實工作與生活中使用，而不是只看廣告或包裝。</p></article>
+              <article class="market-card"><div class="percent">90%</div><h3 data-editable>試用者表示願意購買</h3><p data-editable>這項結果支持一個新判斷：問題可能不是「沒有需求」，而是「沒有使用過，就很難看懂它的價值」。</p></article>
+            </div>
+            <p class="source">3M 官方歷史記載：Boise 試用者中 90% 表示願意購買。</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-12">← 上一頁</a><a href="#slide-14">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 14: FULL PROBLEM CHAIN
+           =========================================== -->
+      <section class="slide" id="slide-14" data-section="總結" data-note="用六格將故事倒回去看。請學生不看畫面，用自己的話口頭重述一次。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>總結</div><div class="page-no">14</div></div><div class="rule"></div>
+            <p class="slide-kicker reveal">把「意外發明」拆成看得見的步驟</p>
+            <h2 class="slide-title reveal" data-editable>把故事倒回去看，發明不只是靈機一動</h2>
+            <div class="chain reveal">
+              <div class="chain-item"><b>01 研究結果</b><strong data-editable>出現黏不牢的黏著劑</strong></div>
+              <div class="chain-item"><b>02 說清特性</b><strong data-editable>可黏、可撕、可再黏</strong></div>
+              <div class="chain-item"><b>03 遇到情境</b><strong data-editable>書籤容易從詩歌本掉出</strong></div>
+              <div class="chain-item"><b>04 原型測試</b><strong data-editable>製作可黏貼書籤</strong></div>
+              <div class="chain-item"><b>05 重新界定</b><strong data-editable>從書籤變成留言工具</strong></div>
+              <div class="chain-item"><b>06 市場驗證</b><strong data-editable>讓人親手試用再判斷價值</strong></div>
+            </div>
+            <p class="source" data-editable>重點不是「失敗變成成功」，而是每一步都讓團隊更看懂問題與解答。</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-13">← 上一頁</a><a href="#slide-15">下一頁 →</a></nav>
+        </div>
+      </section>
+
+      <!-- ===========================================
+           SLIDE 15: EXIT TICKET
+           =========================================== -->
+      <section class="slide" id="slide-15" data-section="總結" data-note="請學生寫一個自己看過的生活情境，不能先寫 App、AI 或產品名稱。收回時只看情境是否具體、是否有下一步可檢查的事。">
+        <div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="content">
+            <div class="topline"><div class="case-label">CASE 03 · 3M POST-IT</div><div class="stage-label"><span class="stage-dot"></span>總結</div><div class="page-no">15</div></div><div class="rule"></div>
+            <h2 class="slide-title reveal" data-editable>今天先留下一個可以測的問題</h2>
+            <div class="ticket-layout reveal">
+              <article class="ticket"><h3 data-editable>離開教室前，請寫四件事</h3><ol><li data-editable>我看到的具體情境是什麼？</li><li data-editable>當事人是誰，原來怎麼做？</li><li data-editable>哪一種材料、工具或方法的特性，可能用得上？</li><li data-editable>下一步要觀察、詢問或測試什麼？</li></ol></article>
+              <div class="closing-note"><div class="note-square" data-editable>先不要寫產品名稱。<br><br>先把情境、特性與要驗證的問題說清楚。</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-14">← 上一頁</a></nav>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       SCREEN CONTROLS AND OVERLAYS
+       =========================================== -->
+  <div class="edit-hotzone" aria-label="開啟編輯模式"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式 (E)" aria-label="編輯模式">✎</button>
+  <button class="save-button" id="saveButton">儲存修訂版</button>
+  <button class="teacher-button" id="teacherBtn" title="教師提示 (T)" aria-label="教師提示">T</button>
+  <button class="help-button" id="helpBtn" title="操作說明" aria-label="操作說明">?</button>
+  <nav class="deck-controls" aria-label="簡報導覽">
+    <button id="menuBtn" title="頁面選單 (M)" aria-label="頁面選單">≡</button>
+    <button id="prevBtn" title="上一頁" aria-label="上一頁">←</button>
+    <span class="counter" id="counter">1 / 15</span>
+    <button id="nextBtn" title="下一頁" aria-label="下一頁">→</button>
+  </nav>
+
+  <div class="overlay" id="helpOverlay" aria-hidden="true">
+    <div class="overlay-panel"><h2>操作說明</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：前後翻頁</li><li>Home／End：到第一頁／最後一頁</li><li>M：開啟頁面選單；T：顯示教師提示；E：切換編輯模式</li><li>編輯模式會自動儲存在這台電腦的瀏覽器；按 ⌘S／Ctrl+S 也可儲存</li></ul><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div>
+  </div>
+  <div class="overlay" id="teacherOverlay" aria-hidden="true">
+    <div class="overlay-panel"><h2>教師提示</h2><p id="teacherNote"></p><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div>
+  </div>
+  <div class="overlay" id="menuOverlay" aria-hidden="true">
+    <div class="overlay-panel"><h2>選擇頁面</h2><div class="menu-grid" id="menuGrid"></div><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div>
+  </div>
+
+  <script>
+  /* ===========================================
+     CONSERVATIVE ES5 CONTROLLER
+     Keeps the file usable in older classroom browsers.
+     =========================================== */
+  (function () {
+    'use strict';
+    var stage = document.getElementById('deckStage');
+    var slides = stage.getElementsByClassName('slide');
+    var current = 0;
+    var touchStart = null;
+    var wheelLocked = false;
+    var editing = false;
+    var editTimer = null;
+    var hideTimer = null;
+    var storageKey = 'capstone-postit-html-v1';
+
+    function byId(id) { return document.getElementById(id); }
+    function addClass(el,name) { if (el && (' ' + el.className + ' ').indexOf(' ' + name + ' ') < 0) el.className += (el.className ? ' ' : '') + name; }
+    function removeClass(el,name) { if (el) el.className = (' ' + el.className + ' ').replace(' ' + name + ' ',' ').replace(/^\s+|\s+$/g,''); }
+    function hasClass(el,name) { return el && (' ' + el.className + ' ').indexOf(' ' + name + ' ') >= 0; }
+    function storageSet(value) { try { window.localStorage.setItem(storageKey,value); } catch (error) {} }
+    function storageGet() { try { return window.localStorage.getItem(storageKey); } catch (error) { return null; } }
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920,window.innerHeight / 1080);
+      var x = (window.innerWidth - 1920 * factor) / 2;
+      var y = (window.innerHeight - 1080 * factor) / 2;
+      stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + factor + ')';
+    }
+
+    function clamp(value,min,max) { return Math.max(min,Math.min(value,max)); }
+    function indexFromHash() {
+      var match = String(window.location.hash || '').match(/slide-(\d+)/);
+      return match ? clamp(parseInt(match[1],10) - 1,0,slides.length - 1) : 0;
+    }
+    function show(index,updateHash) {
+      var i;
+      current = clamp(index,0,slides.length - 1);
+      for (i = 0;i < slides.length;i += 1) {
+        if (i === current) { addClass(slides[i],'active');addClass(slides[i],'visible');slides[i].setAttribute('aria-hidden','false'); }
+        else { removeClass(slides[i],'active');removeClass(slides[i],'visible');slides[i].setAttribute('aria-hidden','true'); }
+      }
+      byId('counter').innerHTML = (current + 1) + ' / ' + slides.length;
+      byId('prevBtn').disabled = current === 0;
+      byId('nextBtn').disabled = current === slides.length - 1;
+      if (updateHash !== false) {
+        if (window.history && window.history.replaceState) window.history.replaceState(null,'','#slide-' + (current + 1));
+        else window.location.hash = 'slide-' + (current + 1);
+      }
+    }
+
+    function closeOverlays() {
+      var overlays = document.getElementsByClassName('overlay');var i;
+      for (i = 0;i < overlays.length;i += 1) { removeClass(overlays[i],'open');overlays[i].setAttribute('aria-hidden','true'); }
+    }
+    function openOverlay(id) { closeOverlays();addClass(byId(id),'open');byId(id).setAttribute('aria-hidden','false'); }
+    function openTeacherNote() { byId('teacherNote').innerHTML = slides[current].getAttribute('data-note') || '這一頁沒有額外提示。';openOverlay('teacherOverlay'); }
+    function toggleEditing() {
+      var items = stage.querySelectorAll('[data-editable]');var i;
+      editing = !editing;
+      if (editing) { addClass(document.body,'editing');addClass(byId('editToggle'),'active'); }
+      else { removeClass(document.body,'editing');removeClass(byId('editToggle'),'active');storageSet(stage.innerHTML); }
+      for (i = 0;i < items.length;i += 1) items[i].setAttribute('contenteditable',editing ? 'true' : 'false');
+    }
+    function buildMenu() {
+      var grid = byId('menuGrid');var i,button,title;
+      grid.innerHTML = '';
+      for (i = 0;i < slides.length;i += 1) {
+        title = slides[i].querySelector('.slide-title,.deck-title');
+        button = document.createElement('button');
+        button.setAttribute('data-menu-go',String(i));
+        button.innerHTML = String(i + 1).replace(/^(\d)$/,'0$1') + ' · ' + (title ? title.textContent : slides[i].getAttribute('data-section'));
+        grid.appendChild(button);
+      }
+    }
+    function closestWithAttr(node,attr) {
+      while (node && node !== document) { if (node.getAttribute && node.getAttribute(attr) !== null) return node;node = node.parentNode; }
+      return null;
+    }
+
+    var saved = storageGet();
+    if (saved) stage.innerHTML = saved;
+    slides = stage.getElementsByClassName('slide');
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { openOverlay('menuOverlay'); };
+    byId('helpBtn').onclick = function () { openOverlay('helpOverlay'); };
+    byId('teacherBtn').onclick = openTeacherNote;
+    byId('editToggle').onclick = toggleEditing;
+
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      var menuButton;
+      if (target.getAttribute && target.getAttribute('data-close-overlay') !== null) { closeOverlays();return; }
+      if (target && hasClass(target,'overlay')) { closeOverlays();return; }
+      menuButton = closestWithAttr(target,'data-menu-go');
+      if (menuButton) { show(parseInt(menuButton.getAttribute('data-menu-go'),10));closeOverlays(); }
+    };
+
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      var key = event.key || event.keyCode;
+      if ((event.ctrlKey || event.metaKey) && (key === 's' || key === 'S' || key === 83)) { if (event.preventDefault) event.preventDefault();storageSet(stage.innerHTML);return; }
+      if (target && (target.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(target.tagName))) return;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) { if (event.preventDefault) event.preventDefault();show(current + 1); }
+      else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) { if (event.preventDefault) event.preventDefault();show(current - 1); }
+      else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) openOverlay('menuOverlay');
+      else if (key === 't' || key === 'T' || key === 84) openTeacherNote();
+      else if (key === 'e' || key === 'E' || key === 69) toggleEditing();
+      else if (key === 'Escape' || key === 27) closeOverlays();
+    };
+
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(),false); };
+    if (window.addEventListener) {
+      window.addEventListener('wheel',function (event) {
+        if (wheelLocked || Math.abs(event.deltaY) < 18) return;
+        wheelLocked = true;show(current + (event.deltaY > 0 ? 1 : -1));
+        window.setTimeout(function () { wheelLocked = false; },550);
+      },false);
+      window.addEventListener('touchstart',function (event) { touchStart = event.changedTouches[0].clientX; },false);
+      window.addEventListener('touchend',function (event) {
+        var distance;
+        if (touchStart === null) return;
+        distance = event.changedTouches[0].clientX - touchStart;
+        if (Math.abs(distance) > 50) show(current + (distance < 0 ? 1 : -1));
+        touchStart = null;
+      },false);
+    }
+
+    var hotzone = document.querySelector('.edit-hotzone');
+    hotzone.onclick = toggleEditing;
+    hotzone.onmouseenter = function () { window.clearTimeout(hideTimer);addClass(byId('editToggle'),'show'); };
+    hotzone.onmouseleave = function () { hideTimer = window.setTimeout(function () { if (!editing) removeClass(byId('editToggle'),'show'); },400); };
+    byId('editToggle').onmouseenter = function () { window.clearTimeout(hideTimer); };
+    byId('editToggle').onmouseleave = function () { hideTimer = window.setTimeout(function () { if (!editing) removeClass(byId('editToggle'),'show'); },400); };
+
+    stage.oninput = function () { window.clearTimeout(editTimer);editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); },350); };
+    byId('saveButton').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html],{ type:'text/html;charset=utf-8' });
+      var urlApi = window.URL || window.webkitURL;
+      var anchor = document.createElement('a');
+      anchor.href = urlApi.createObjectURL(blob);
+      anchor.download = '專題研究第二回_案例03_3M_Post-it_HTML_V1_修訂版.html';
+      document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);
+      window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); },1200);
+    };
+
+    buildMenu();scaleStage();show(indexFromHash(),false);addClass(document.body,'js-ready');
+  }());
+  </script>
+</body>
+</html>

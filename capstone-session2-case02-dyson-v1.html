@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="access-gate-config.js?v=14b"></script>
+<script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>問題藏在哪裡？｜Dyson 案例 V1</title>
+  <meta name="description" content="專題研究第二回：以 Dyson 無集塵袋吸塵器案例練習發掘、理解、重新界定問題並發展解答">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&amp;family=Shippori+Mincho:wght@700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME: 課堂筆記本 A
+       =========================================== */
+    :root {
+      --stage-bg:#262724;
+      --slide-bg:#262724;
+      --paper:#f8f4e9;
+      --paper-deep:#eee7d8;
+      --ink:#17251f;
+      --muted:#65716b;
+      --line:#d9d1c3;
+      --green:#72b59b;
+      --green-deep:#2f725d;
+      --gold:#e5ba50;
+      --coral:#ed907d;
+      --blue:#78a9c7;
+      --lavender:#a998d0;
+      --shadow:rgba(0,0,0,.34);
+      --ease:cubic-bezier(.16,1,.3,1);
+      --font-display:"Shippori Mincho","Noto Sans TC",sans-serif;
+      --font-body:"Noto Sans TC",sans-serif;
+    }
+
+    /* ===========================================
+       RESET
+       =========================================== */
+    * { box-sizing:border-box; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; }
+    a { color:inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Included in full from viewport-base.css.
+       =========================================== */
+    html,
+    body {
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      background:var(--stage-bg,#000);
+    }
+
+    .deck-viewport {
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      background:var(--stage-bg,#000);
+    }
+
+    .deck-stage {
+      position:absolute;
+      left:0;
+      top:0;
+      width:1920px;
+      height:1080px;
+      overflow:hidden;
+      transform-origin:0 0;
+      background:var(--slide-bg,#fff);
+    }
+
+    .slide {
+      position:absolute;
+      inset:0;
+      width:1920px;
+      height:1080px;
+      overflow:hidden;
+      display:block;
+      visibility:hidden;
+      opacity:0;
+      pointer-events:none;
+      background:var(--slide-bg,#fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+      visibility:visible;
+      opacity:1;
+      pointer-events:auto;
+      z-index:1;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+      max-width:100%;
+      max-height:100%;
+    }
+
+    .deck-controls {
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      z-index:1000;
+    }
+
+    @media print {
+      html,
+      body {
+        width:1920px;
+        height:auto;
+        overflow:visible;
+        background:#fff;
+      }
+
+      .deck-viewport {
+        position:static;
+        overflow:visible;
+        background:#fff;
+      }
+
+      .deck-stage {
+        position:static;
+        width:auto;
+        height:auto;
+        transform:none !important;
+        background:none;
+      }
+
+      .slide {
+        position:relative;
+        display:block !important;
+        visibility:visible !important;
+        opacity:1 !important;
+        pointer-events:auto !important;
+        width:1920px;
+        height:1080px;
+        break-after:page;
+        page-break-after:always;
+      }
+
+      .slide:last-child {
+        break-after:auto;
+        page-break-after:auto;
+      }
+
+      .deck-controls { display:none !important; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after {
+        animation-duration:.01ms !important;
+        transition-duration:.2s !important;
+      }
+    }
+
+    /* ===========================================
+       NO-JAVASCRIPT FALLBACK
+       =========================================== */
+    .slide:target {
+      visibility:visible;
+      opacity:1;
+      pointer-events:auto;
+      z-index:2;
+    }
+
+    /* ===========================================
+       NOTEBOOK PAPER
+       =========================================== */
+    .paper {
+      position:absolute;
+      inset:58px 108px 58px 90px;
+      overflow:hidden;
+      border-radius:28px;
+      background:
+        linear-gradient(90deg,transparent 0 116px,rgba(178,83,70,.18) 117px,rgba(178,83,70,.18) 119px,transparent 120px),
+        repeating-linear-gradient(0deg,transparent 0 53px,rgba(132,124,109,.14) 54px,transparent 55px),
+        var(--paper);
+      box-shadow:0 30px 90px var(--shadow);
+    }
+
+    .paper::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 14% 8%,rgba(255,255,255,.72),transparent 24%),
+        linear-gradient(110deg,rgba(255,255,255,.14),transparent 38%,rgba(120,100,74,.03));
+      mix-blend-mode:screen;
+    }
+
+    .holes {
+      position:absolute;
+      left:38px;
+      top:78px;
+      z-index:3;
+      display:grid;
+      gap:73px;
+    }
+
+    .hole {
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:var(--stage-bg);
+      box-shadow:inset 0 0 0 6px #d7d0c5;
+    }
+
+    .page-head {
+      position:absolute;
+      left:168px;
+      right:150px;
+      top:48px;
+      z-index:4;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color:#52635c;
+      font:700 22px/1 var(--font-body);
+      letter-spacing:.08em;
+    }
+
+    .chapter { display:flex;align-items:center;gap:14px; }
+    .chapter::before { content:"";width:44px;height:9px;border-radius:999px;background:var(--section-color,var(--green)); }
+    .page-no { color:#7a847f;font-size:18px;letter-spacing:.14em; }
+
+    .content {
+      position:absolute;
+      left:168px;
+      right:144px;
+      top:116px;
+      bottom:82px;
+      z-index:4;
+    }
+
+    .slide-title {
+      margin:0 0 28px;
+      color:var(--ink);
+      font:900 72px/1.18 var(--font-body);
+      letter-spacing:-.035em;
+    }
+
+    .deck-title {
+      margin:0;
+      color:var(--ink);
+      font:900 108px/1.08 var(--font-body);
+      letter-spacing:-.05em;
+    }
+
+    .kicker {
+      margin-bottom:24px;
+      color:var(--green-deep);
+      font:800 24px/1.25 var(--font-body);
+      letter-spacing:.12em;
+    }
+
+    .lead { margin:0;max-width:1320px;color:#43534d;font:500 34px/1.55 var(--font-body); }
+    .small-note { color:var(--muted);font:500 22px/1.45 var(--font-body); }
+    .marker { box-shadow:inset 0 -.42em 0 rgba(229,186,80,.58); }
+
+    /* ===========================================
+       REVEAL MOTION
+       =========================================== */
+    .reveal {
+      opacity:0;
+      transform:translateY(26px);
+      transition:opacity .58s var(--ease),transform .58s var(--ease);
+    }
+    .slide.visible .reveal,.slide:target .reveal { opacity:1;transform:none; }
+    .slide.visible .reveal:nth-child(2) { transition-delay:.08s; }
+    .slide.visible .reveal:nth-child(3) { transition-delay:.16s; }
+    .slide.visible .reveal:nth-child(4) { transition-delay:.24s; }
+    .slide.visible .reveal:nth-child(5) { transition-delay:.32s; }
+
+    /* ===========================================
+       CHAPTER TABS
+       =========================================== */
+    .tabs { position:absolute;z-index:8;right:0;top:105px;display:grid;gap:9px; }
+    .tab {
+      width:84px;height:150px;border:0;border-radius:18px 0 0 18px;
+      display:grid;place-items:center;color:#24322d;opacity:.56;cursor:pointer;
+      writing-mode:vertical-rl;font:800 19px/1 var(--font-body);letter-spacing:.1em;
+      transition:width .25s var(--ease),opacity .25s ease;
+    }
+    .tab:hover,.tab.current { width:106px;opacity:1; }
+    .tab[data-go="observe"] { background:#ead99d; }
+    .tab[data-go="understand"] { background:var(--coral); }
+    .tab[data-go="solve"] { background:var(--green); }
+    .tab[data-go="reflect"] { background:var(--blue); }
+
+    /* ===========================================
+       COMMON CARDS
+       =========================================== */
+    .two-col { display:grid;grid-template-columns:1fr 1fr;gap:40px; }
+    .three-col { display:grid;grid-template-columns:repeat(3,1fr);gap:30px; }
+    .card {
+      position:relative;
+      border:3px solid var(--line);
+      border-radius:24px;
+      background:rgba(255,255,255,.68);
+      box-shadow:10px 12px 0 rgba(22,34,30,.08);
+    }
+    .card h3 { margin:0 0 18px;color:var(--ink);font:900 36px/1.3 var(--font-body); }
+    .card p { margin:0;color:#506059;font:500 27px/1.55 var(--font-body); }
+    .tape { position:absolute;top:-16px;left:50%;width:72px;height:24px;transform:translateX(-50%) rotate(-3deg);background:rgba(229,186,80,.72); }
+    .big-question { display:grid;place-items:center;height:600px;text-align:center; }
+    .big-question strong { max-width:1420px;color:var(--ink);font:900 100px/1.24 var(--font-body);letter-spacing:-.045em; }
+    .big-question span { display:block;margin-top:42px;color:#59665f;font:700 31px/1.4 var(--font-body); }
+
+    /* ===========================================
+       TITLE AND VIDEO
+       =========================================== */
+    .title-layout { display:grid;grid-template-columns:1.13fr .87fr;gap:58px;align-items:center;height:720px; }
+    .title-copy { display:grid;gap:30px;align-content:center; }
+    .view-task { display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px; }
+    .view-task span { padding:18px 20px;border:3px solid var(--line);border-radius:18px;background:rgba(255,255,255,.7);color:var(--ink);font:800 26px/1.25 var(--font-body);text-align:center; }
+
+    .vacuum-poster {
+      position:relative;height:650px;overflow:hidden;border:4px solid var(--ink);border-radius:34px;
+      background:linear-gradient(148deg,#17251f 0 60%,#304d40 100%);
+      box-shadow:18px 20px 0 rgba(22,34,30,.15);
+    }
+    .vacuum-poster::before { content:"";position:absolute;left:80px;right:80px;bottom:90px;height:4px;background:rgba(255,255,255,.25); }
+    .vacuum-body { position:absolute;left:245px;bottom:105px;width:240px;height:335px;border:16px solid #e8eee9;border-radius:42px 42px 80px 80px;background:rgba(114,181,155,.22); }
+    .vacuum-body::before { content:"";position:absolute;left:44px;top:48px;width:120px;height:120px;border:12px solid var(--gold);border-radius:50%;box-shadow:inset 0 0 0 18px rgba(229,186,80,.22); }
+    .vacuum-body::after { content:"";position:absolute;left:76px;bottom:54px;width:60px;height:60px;border:10px dotted var(--coral);border-radius:50%;animation:spin 5s linear infinite; }
+    .vacuum-handle { position:absolute;left:365px;bottom:425px;width:22px;height:180px;border-radius:999px;background:#e8eee9;transform:rotate(12deg);transform-origin:bottom; }
+    .vacuum-head { position:absolute;left:150px;bottom:74px;width:390px;height:62px;border-radius:50%;background:#e8eee9;transform:rotate(-4deg); }
+    .air-line { position:absolute;border:5px solid rgba(120,169,199,.72);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%; }
+    .air-line.a { width:220px;height:220px;right:85px;top:80px;transform:rotate(25deg); }
+    .air-line.b { width:155px;height:155px;right:123px;top:112px;transform:rotate(25deg); }
+    .poster-label { position:absolute;right:62px;bottom:56px;color:#fff;font:800 26px/1.35 var(--font-body);text-align:right; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .video-layout { display:grid;grid-template-columns:1.25fr .75fr;gap:46px;height:630px; }
+    .video-card {
+      position:relative;overflow:hidden;border:4px solid var(--ink);border-radius:28px;
+      background:linear-gradient(145deg,#14211d,#07100d 72%);box-shadow:16px 18px 0 rgba(22,34,30,.12);
+    }
+    .video-visual { position:absolute;inset:0;display:grid;place-items:center; }
+    .cyclone-ring { position:relative;width:310px;height:310px;border:18px solid var(--green);border-left-color:transparent;border-radius:50%;animation:spin 7s linear infinite; }
+    .cyclone-ring::before { content:"";position:absolute;inset:45px;border:13px solid var(--gold);border-right-color:transparent;border-radius:50%; }
+    .cyclone-ring::after { content:"";position:absolute;left:122px;top:100px;width:44px;height:100px;border-radius:8px 8px 30px 30px;background:var(--coral); }
+    .play-button {
+      position:absolute;left:50%;top:50%;width:124px;height:124px;transform:translate(-50%,-50%);
+      border:4px solid white;border-radius:50%;background:rgba(10,20,17,.76);color:white;cursor:pointer;
+      display:grid;place-items:center;text-decoration:none;font-size:48px;box-shadow:0 16px 40px rgba(0,0,0,.32);transition:transform .25s var(--ease),background .25s ease;
+    }
+    .play-button:hover { transform:translate(-50%,-50%) scale(1.07);background:var(--green-deep); }
+    .video-meta { position:absolute;left:28px;right:28px;bottom:23px;display:flex;justify-content:space-between;color:#fff;font:700 21px/1.3 var(--font-body); }
+    .video-meta a { text-underline-offset:5px; }
+    .prompt-panel { display:grid;align-content:center;gap:25px;padding:44px;border:3px solid var(--line);border-radius:26px;background:rgba(255,255,255,.65); }
+    .prompt-panel strong { color:var(--ink);font:900 46px/1.28 var(--font-body); }
+    .prompt-panel p { margin:0;color:#4b5a54;font:500 28px/1.55 var(--font-body); }
+    .prompt-chip { width:max-content;padding:10px 18px;border-radius:999px;background:var(--gold);color:var(--ink);font:800 21px/1 var(--font-body); }
+
+    /* ===========================================
+       OBSERVATION AND HYPOTHESES
+       =========================================== */
+    .observe-grid { display:grid;grid-template-columns:1.08fr .92fr;gap:40px;margin-top:38px; }
+    .note-card { min-height:500px;padding:42px; }
+    .writing-lines { height:330px;margin-top:28px;background:repeating-linear-gradient(0deg,transparent 0 61px,#cfc8ba 62px,transparent 63px); }
+    .comment-cloud { display:grid;place-items:center;min-height:500px;padding:48px;background:rgba(120,169,199,.16); }
+    .comment-cloud strong { color:var(--ink);font:900 54px/1.35 var(--font-body);text-align:center; }
+    .comment-cloud p { margin-top:28px;color:#52615a;font:600 27px/1.5 var(--font-body);text-align:center; }
+
+    .symptom-layout { display:grid;grid-template-columns:.78fr 1.22fr;gap:52px;align-items:center;height:620px; }
+    .bag-meter { position:relative;height:560px;border:4px solid var(--ink);border-radius:34px;background:rgba(255,255,255,.65);overflow:hidden; }
+    .bag-meter::before { content:"集塵袋";position:absolute;left:50%;top:44px;transform:translateX(-50%);color:var(--ink);font:900 34px/1 var(--font-body); }
+    .bag-fill { position:absolute;left:90px;right:90px;bottom:70px;height:310px;border:8px solid var(--ink);border-radius:34px 34px 80px 80px;background:linear-gradient(0deg,#796f61 0 72%,transparent 73%); }
+    .bag-fill::after { content:"灰塵增加";position:absolute;left:50%;bottom:60px;transform:translateX(-50%);color:white;font:800 26px/1 var(--font-body);white-space:nowrap; }
+    .meter-copy strong { display:block;color:var(--ink);font:900 78px/1.24 var(--font-body); }
+    .meter-copy p { margin:30px 0 0;color:#4d5c55;font:500 31px/1.6 var(--font-body); }
+    .hypothesis-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:58px; }
+    .hypothesis { min-height:340px;padding:34px 26px;display:grid;align-content:center;text-align:center;border:4px solid var(--ink);border-radius:28px;background:rgba(255,255,255,.64);box-shadow:10px 12px 0 rgba(22,34,30,.09); }
+    .hypothesis b { display:grid;place-items:center;width:76px;height:76px;margin:0 auto 26px;border-radius:24px;background:var(--accent);color:var(--ink);font:900 35px/1 var(--font-body);transform:rotate(-3deg); }
+    .hypothesis span { color:var(--ink);font:900 32px/1.35 var(--font-body); }
+
+    /* ===========================================
+       CAUSE AND REFRAMING
+       =========================================== */
+    .airflow-layout { display:grid;grid-template-columns:1.08fr .92fr;gap:48px;height:610px; }
+    .airflow-box { position:relative;border:4px solid var(--ink);border-radius:30px;background:rgba(255,255,255,.62);overflow:hidden; }
+    .bag-wall { position:absolute;left:50%;top:70px;bottom:70px;width:18px;transform:translateX(-50%);background:repeating-linear-gradient(0deg,var(--ink) 0 11px,transparent 12px 23px); }
+    .dust { position:absolute;width:22px;height:22px;border-radius:50%;background:#7a6c5b;box-shadow:28px 35px 0 #7a6c5b,60px 8px 0 #9a836b,84px 62px 0 #665b4e,38px 110px 0 #8c7964,96px 142px 0 #6c6052,16px 178px 0 #8c7964; }
+    .dust.one { left:180px;top:130px; }
+    .dust.two { left:285px;top:340px;transform:scale(.8); }
+    .blocked-label { position:absolute;right:72px;top:105px;padding:14px 20px;border-radius:16px;background:var(--coral);color:var(--ink);font:900 27px/1 var(--font-body); }
+    .air-arrows { position:absolute;left:70px;right:70px;bottom:90px;display:flex;gap:25px;align-items:center;color:var(--blue);font:900 46px/1 var(--font-body); }
+    .air-arrows i { flex:1;height:9px;border-radius:999px;background:var(--blue); }
+    .cause-copy { display:grid;align-content:center;gap:26px; }
+    .cause-copy strong { color:var(--ink);font:900 57px/1.35 var(--font-body); }
+    .cause-copy p { margin:0;color:#4b5a54;font:500 29px/1.58 var(--font-body); }
+    .evidence-note { padding:20px 24px;border-left:12px solid var(--gold);border-radius:0 18px 18px 0;background:rgba(255,255,255,.75);color:var(--ink);font:800 27px/1.4 var(--font-body); }
+
+    .reframe-grid { display:grid;grid-template-columns:.85fr 100px 1.15fr;gap:28px;align-items:stretch;margin-top:48px; }
+    .question-card { min-height:420px;padding:44px;display:grid;align-content:center;border:3px solid var(--line);border-radius:26px;background:rgba(255,255,255,.66); }
+    .question-card.old { opacity:.72;border-style:dashed; }
+    .question-card.new { border-color:var(--green-deep);background:rgba(114,181,155,.18);box-shadow:16px 18px 0 rgba(47,114,93,.18); }
+    .question-card .label { width:max-content;margin-bottom:24px;padding:9px 17px;border-radius:999px;background:var(--accent);color:var(--ink);font:800 22px/1 var(--font-body); }
+    .question-card p { margin:0;color:var(--ink);font:900 37px/1.5 var(--font-body); }
+    .question-card small { display:block;margin-top:28px;color:#5a6761;font:600 23px/1.45 var(--font-body); }
+    .arrow { display:grid;place-items:center;color:var(--green-deep);font:900 72px/1 var(--font-body); }
+
+    /* ===========================================
+       ANALOGY AND PROTOTYPE
+       =========================================== */
+    .analogy-grid { display:grid;grid-template-columns:1fr 150px 1fr;gap:28px;align-items:center;margin-top:34px; }
+    .analogy-card { min-height:500px;padding:34px;border:4px solid var(--ink);border-radius:30px;background:rgba(255,255,255,.65); }
+    .analogy-card h3 { margin:0;color:var(--ink);font:900 38px/1.3 var(--font-body); }
+    .analogy-card p { margin:20px 0 0;color:#506059;font:500 26px/1.5 var(--font-body); }
+    .factory-icon { position:relative;height:285px;margin-top:16px; }
+    .factory-icon .building { position:absolute;left:34px;bottom:28px;width:300px;height:155px;background:#d8c9ad;border:8px solid var(--ink); }
+    .factory-icon .chimney { position:absolute;right:38px;bottom:28px;width:78px;height:255px;border:8px solid var(--ink);border-radius:22px 22px 0 0;background:var(--coral); }
+    .factory-icon .cone { position:absolute;right:102px;bottom:28px;width:150px;height:235px;background:var(--green);clip-path:polygon(8% 0,92% 0,62% 100%,38% 100%);border-radius:18px; }
+    .mini-vacuum { position:relative;height:285px;margin-top:16px; }
+    .mini-vacuum .canister { position:absolute;left:165px;bottom:38px;width:175px;height:215px;border:11px solid var(--ink);border-radius:28px 28px 65px 65px;background:rgba(120,169,199,.28); }
+    .mini-vacuum .canister::before { content:"";position:absolute;left:38px;top:36px;width:78px;height:78px;border:9px dotted var(--green-deep);border-radius:50%; }
+    .mini-vacuum .stick { position:absolute;left:292px;bottom:234px;width:18px;height:90px;border-radius:999px;background:var(--ink);transform:rotate(12deg); }
+    .mini-vacuum .head { position:absolute;left:88px;bottom:20px;width:310px;height:45px;border-radius:50%;background:var(--ink); }
+    .bridge { display:grid;place-items:center;gap:16px;color:var(--green-deep);font:900 29px/1.35 var(--font-body);text-align:center; }
+    .bridge b { font-size:78px; }
+
+    .prototype-layout { display:grid;grid-template-columns:1.15fr .85fr;gap:44px;height:620px; }
+    .prototype-sketch { position:relative;border:4px dashed #98958c;border-radius:30px;background:rgba(255,255,255,.55); }
+    .prototype-cone { position:absolute;left:305px;top:115px;width:230px;height:340px;background:rgba(114,181,155,.52);clip-path:polygon(8% 0,92% 0,62% 100%,38% 100%); }
+    .prototype-cone::before { content:"紙板";position:absolute;left:58px;top:90px;color:var(--ink);font:900 31px/1 var(--font-body);transform:rotate(-3deg); }
+    .prototype-hose { position:absolute;left:500px;top:145px;width:220px;height:170px;border:18px solid var(--ink);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;transform:rotate(18deg); }
+    .sketch-line { position:absolute;height:4px;background:#777269;transform-origin:left; }
+    .sketch-line.one { left:170px;top:220px;width:130px;transform:rotate(-12deg); }
+    .sketch-line.two { left:520px;top:430px;width:150px;transform:rotate(12deg); }
+    .sketch-word { position:absolute;color:#777269;font:700 24px/1 var(--font-body); }
+    .sketch-word.one { left:70px;top:178px; }
+    .sketch-word.two { right:60px;bottom:115px; }
+    .prototype-copy { display:grid;align-content:center;gap:26px; }
+    .prototype-copy strong { color:var(--ink);font:900 52px/1.35 var(--font-body); }
+    .prototype-copy p { margin:0;color:#4d5d56;font:500 28px/1.58 var(--font-body); }
+    .prototype-question { padding:22px 26px;border-radius:20px;background:var(--gold);color:var(--ink);font:900 29px/1.45 var(--font-body); }
+
+    /* ===========================================
+       TESTING AND 5,127
+       =========================================== */
+    .process { display:flex;align-items:center;gap:18px;margin-top:68px; }
+    .step-card { flex:1;min-height:260px;padding:32px 22px;display:grid;align-content:center;justify-items:center;text-align:center;border:3px solid var(--line);border-radius:24px;background:rgba(114,181,155,.24);box-shadow:9px 11px 0 rgba(22,34,30,.08); }
+    .step-card b { display:grid;place-items:center;width:58px;height:58px;margin-bottom:22px;border-radius:50%;background:var(--ink);color:white;font:800 25px/1 var(--font-body); }
+    .step-card span { color:var(--ink);font:900 29px/1.35 var(--font-body); }
+    .process-arrow { color:#819087;font:900 42px/1 var(--font-body); }
+    .loop-note { margin-top:50px;color:#4b5a54;text-align:center;font:700 30px/1.5 var(--font-body); }
+
+    .number-layout { display:grid;grid-template-columns:.9fr 1.1fr;gap:54px;align-items:center;height:620px; }
+    .big-number { display:grid;place-items:center;height:500px;border:5px solid var(--ink);border-radius:36px;background:var(--green);box-shadow:18px 20px 0 rgba(22,34,30,.15);transform:rotate(-1.4deg); }
+    .big-number strong { color:var(--ink);font:900 176px/.9 var(--font-body);letter-spacing:-.08em; }
+    .big-number span { color:#28483c;font:900 36px/1 var(--font-body); }
+    .evidence-stack { display:grid;gap:23px; }
+    .evidence-item { padding:25px 30px;border:3px solid var(--line);border-radius:22px;background:rgba(255,255,255,.72);color:var(--ink);font:800 30px/1.4 var(--font-body); }
+    .evidence-item b { display:inline-grid;place-items:center;width:46px;height:46px;margin-right:18px;border-radius:50%;background:var(--gold); }
+
+    /* ===========================================
+       COMMERCIALIZATION AND CHAIN
+       =========================================== */
+    .lane-grid { display:grid;grid-template-columns:1fr 1fr;gap:42px;margin-top:42px; }
+    .lane { min-height:490px;padding:42px;border:4px solid var(--ink);border-radius:30px;background:rgba(255,255,255,.66); }
+    .lane.tech { box-shadow:14px 16px 0 rgba(114,181,155,.32); }
+    .lane.market { box-shadow:14px 16px 0 rgba(237,144,125,.30); }
+    .lane h3 { margin:0 0 30px;color:var(--ink);font:900 45px/1.25 var(--font-body); }
+    .lane ul { margin:0;padding-left:1.15em;color:#46574f;font:600 29px/1.75 var(--font-body); }
+    .lane-note { display:inline-block;margin-top:26px;padding:12px 20px;border-radius:999px;background:var(--accent);color:var(--ink);font:800 23px/1 var(--font-body); }
+
+    .chain-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:35px; }
+    .chain-item { position:relative;min-height:235px;padding:27px 25px;border:3px solid var(--line);border-radius:22px;background:rgba(255,255,255,.7); }
+    .chain-item b { display:block;margin-bottom:16px;color:var(--green-deep);font:900 22px/1 var(--font-body); }
+    .chain-item h3 { margin:0 0 12px;color:var(--ink);font:900 29px/1.3 var(--font-body); }
+    .chain-item p { margin:0;color:#506059;font:500 22px/1.45 var(--font-body); }
+    .chain-item.accent { background:rgba(114,181,155,.22);border-color:var(--green-deep); }
+
+    /* ===========================================
+       QUESTION COMPARISON AND CAMPUS OBSERVATION
+       =========================================== */
+    .question-trio { display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:42px; }
+    .question-choice { min-height:440px;padding:38px 34px;border:4px solid var(--ink);border-radius:30px;background:rgba(255,255,255,.68);box-shadow:12px 14px 0 rgba(22,34,30,.09); }
+    .question-choice b { display:grid;place-items:center;width:64px;height:64px;margin-bottom:27px;border-radius:22px;background:var(--accent);color:var(--ink);font:900 30px/1 var(--font-body);transform:rotate(-3deg); }
+    .question-choice p { margin:0;color:var(--ink);font:900 34px/1.5 var(--font-body); }
+    .question-choice small { display:block;margin-top:26px;color:#5b6862;font:600 23px/1.45 var(--font-body); }
+    .question-choice.best { background:rgba(114,181,155,.2);border-color:var(--green-deep); }
+
+    .campus-layout { display:grid;grid-template-columns:.74fr 1.26fr;gap:46px;height:620px; }
+    .campus-prompt { display:grid;align-content:center;gap:30px; }
+    .campus-prompt strong { color:var(--ink);font:900 58px/1.35 var(--font-body); }
+    .campus-prompt p { margin:0;color:#4c5b55;font:500 29px/1.58 var(--font-body); }
+    .campus-grid { display:grid;grid-template-columns:1fr 1fr;gap:22px; }
+    .campus-card { display:grid;place-items:center;padding:28px;border:3px solid var(--line);border-radius:24px;background:rgba(255,255,255,.68);color:var(--ink);font:900 32px/1.3 var(--font-body);text-align:center;box-shadow:8px 10px 0 rgba(22,34,30,.07); }
+    .campus-card:nth-child(1) { transform:rotate(-1deg); }
+    .campus-card:nth-child(2) { transform:rotate(1deg); }
+    .campus-card:nth-child(3) { transform:rotate(.8deg); }
+    .campus-card:nth-child(4) { transform:rotate(-.8deg); }
+    .no-app { grid-column:1/-1;padding:18px 24px;border-radius:18px;background:var(--coral);color:#4a2c26;font:900 26px/1.35 var(--font-body);text-align:center; }
+
+    .exit-layout { display:grid;grid-template-columns:.76fr 1.24fr;gap:48px;height:630px; }
+    .exit-message { display:grid;align-content:center; }
+    .exit-message strong { color:var(--ink);font:900 67px/1.3 var(--font-body); }
+    .exit-message p { margin:34px 0 0;color:#4a5a53;font:500 28px/1.55 var(--font-body); }
+    .ticket { position:relative;padding:42px 48px;border:4px solid var(--ink);border-radius:28px;background:#fffdf5;box-shadow:16px 18px 0 rgba(22,34,30,.12); }
+    .ticket::before { content:"離堂小卡";position:absolute;right:34px;top:28px;padding:10px 18px;border-radius:999px;background:var(--gold);color:var(--ink);font:800 22px/1 var(--font-body); }
+    .ticket ol { margin:32px 0 0;padding-left:1.42em;color:var(--ink);font:800 31px/1.72 var(--font-body); }
+    .ticket-footer { margin-top:18px;padding-top:18px;border-top:3px dashed var(--line);color:#9b4d3d;font:800 25px/1.4 var(--font-body); }
+
+    /* ===========================================
+       FALLBACK CONTROLS INSIDE EVERY SLIDE
+       =========================================== */
+    .fallback-controls {
+      position:absolute;left:168px;right:150px;bottom:26px;z-index:7;
+      display:flex;justify-content:space-between;align-items:center;
+      color:#69756f;font:800 20px/1 var(--font-body);
+    }
+    .fallback-controls a { text-decoration:none;padding:11px 18px;border:2px solid #8b9791;border-radius:999px;background:rgba(255,255,255,.92); }
+    .fallback-controls a:hover,.fallback-controls a:focus { border-color:var(--green-deep);background:var(--green);color:var(--ink); }
+
+    /* ===========================================
+       OUTSIDE-STAGE CONTROLS AND OVERLAYS
+       =========================================== */
+    .deck-controls {
+      display:none;align-items:center;gap:8px;padding:7px 9px;border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;background:rgba(15,17,15,.84);box-shadow:0 12px 34px rgba(0,0,0,.3);backdrop-filter:blur(10px);
+    }
+    body.js-ready .deck-controls { display:flex; }
+    .deck-controls button { width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:white;cursor:pointer; }
+    .deck-controls button:hover { background:var(--green);color:var(--ink); }
+    #counter { min-width:72px;color:white;text-align:center;font:700 15px/1 var(--font-body); }
+    .progress { position:fixed;left:0;right:0;bottom:0;z-index:1001;height:5px;background:rgba(255,255,255,.08);display:none; }
+    #progressBar { width:6.67%;height:100%;background:var(--green);transition:width .35s var(--ease); }
+
+    .overlay { position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:48px;background:rgba(7,10,8,.78);opacity:0;visibility:hidden;pointer-events:none;transition:.25s ease; }
+    .overlay.open { opacity:1;visibility:visible;pointer-events:auto; }
+    .overlay-card { position:relative;width:min(1120px,90vw);max-height:86vh;overflow:auto;padding:46px;border-radius:28px;background:var(--paper);color:var(--ink);box-shadow:0 30px 90px rgba(0,0,0,.48);font:500 23px/1.65 var(--font-body); }
+    .overlay-card h2 { margin:0 0 24px;font:900 42px/1.25 var(--font-body); }
+    .overlay-card li { margin:.5em 0; }
+    .overlay-card a { text-underline-offset:4px; }
+    .overlay-close { position:absolute;right:20px;top:18px;width:44px;height:44px;border:0;border-radius:50%;background:#e7ded0;color:var(--ink);cursor:pointer;font-size:25px; }
+    .video-overlay-card { width:min(1280px,92vw);padding:18px;background:#0b100e; }
+    .video-frame-wrap { position:relative;padding-top:56.25%; }
+    .video-frame-wrap iframe { position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:14px; }
+    .chapter-menu { display:grid;grid-template-columns:repeat(2,1fr);gap:16px; }
+    .chapter-menu button { padding:22px;border:3px solid var(--line);border-left:14px solid var(--menu-color);border-radius:18px;background:white;color:var(--ink);cursor:pointer;text-align:left;font:800 26px/1.3 var(--font-body); }
+
+    /* ===========================================
+       INLINE EDITOR
+       =========================================== */
+    .edit-hotzone { position:fixed;left:0;top:0;z-index:10000;width:80px;height:80px;cursor:pointer; }
+    .edit-toggle { position:fixed;left:16px;top:16px;z-index:10001;width:48px;height:48px;border:0;border-radius:50%;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.26);opacity:0;pointer-events:none;cursor:pointer;transition:opacity .3s ease; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1;pointer-events:auto; }
+    .editing [contenteditable="true"] { outline:3px dashed var(--coral);outline-offset:5px;cursor:text; }
+    .save-button { display:none;position:fixed;right:18px;top:18px;z-index:10001;padding:12px 18px;border:0;border-radius:999px;background:var(--gold);color:var(--ink);cursor:pointer;font:800 16px/1 var(--font-body); }
+    .editing .save-button { display:block; }
+
+    /* ===========================================
+       LOCAL-FILE COMPATIBILITY LAYER
+       Conservative fixed-stage pattern verified in case 01 V3.
+       =========================================== */
+    .deck-stage {
+      left:50%;top:50%;transform-origin:50% 50%;-ms-transform-origin:50% 50%;-webkit-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);-ms-transform:translate(-50%,-50%) scale(.5);-webkit-transform:translate(-50%,-50%) scale(.5);
+    }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+  </style>
+<style id="site-home-link-style">
+.site-home-link{position:fixed;left:18px;bottom:18px;z-index:2147483646;display:grid;place-items:center;width:48px;height:48px;border:2px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(22,30,30,.9);color:#fff;text-decoration:none;font:900 24px/1 system-ui,-apple-system,"Noto Sans TC",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.site-home-link:hover,.site-home-link:focus{background:#2a8b87;outline:3px solid rgba(255,255,255,.82);outline-offset:2px}body.editing .site-home-link{display:none}@media print{.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+<a class="site-home-link" href="index.html" title="返回教材首頁" aria-label="返回教材首頁">⌂</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="Dyson 問題發掘案例投影片">
+
+      <!-- 01｜案例開場 -->
+      <section class="slide active visible" id="slide-1" data-section="observe" data-note="<h2>教師提示｜先留下疑問</h2><p>不要先介紹 5,127 個原型。請學生帶著問題看影片：他先看到什麼、後來發現什麼、又做了什麼？</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">案例 02｜問題藏在哪裡？</span><span class="page-no">01</span></div>
+          <div class="content">
+            <div class="title-layout">
+              <div class="title-copy">
+                <div class="kicker reveal" data-editable>專題研究第二回｜Dyson 無集塵袋吸塵器</div>
+                <h1 class="deck-title reveal" data-editable>吸塵器變弱，<br><span class="marker">真的是馬達沒力嗎？</span></h1>
+                <p class="lead reveal" data-editable>今天不急著找產品點子，先練習把一個大家習慣的現象問清楚。</p>
+                <div class="view-task reveal"><span data-editable>他先看到什麼？</span><span data-editable>後來發現什麼？</span><span data-editable>又做了什麼？</span></div>
+              </div>
+              <div class="vacuum-poster reveal" aria-hidden="true">
+                <div class="vacuum-handle"></div><div class="vacuum-body"></div><div class="vacuum-head"></div>
+                <div class="air-line a"></div><div class="air-line b"></div>
+                <div class="poster-label">OBSERVE<br>BEFORE SOLVING</div>
+              </div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><span></span><span>1 / 15</span><a href="#slide-2">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab current" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 02｜主片 -->
+      <section class="slide" id="slide-2" data-section="observe" data-note="<h2>教師提示｜完整播放主片</h2><p>片長 10 分 8 秒。影片有繁體中文內嵌字幕，但 YouTube 沒有可切換字幕。觀看時只提醒學生記錄現象、發現與行動，不先講解。</p><p><a href='https://www.youtube.com/watch?v=Ekn8c2LBDSY' target='_blank'>直接開啟 YouTube ↗</a></p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">先看故事｜10 分 8 秒</span><span class="page-no">02</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>先看故事，不急著找標準答案</h2>
+            <div class="video-layout reveal">
+              <div class="video-card">
+                <div class="video-visual"><div class="cyclone-ring"></div></div>
+                <a class="play-button" href="https://www.youtube.com/watch?v=Ekn8c2LBDSY" target="_blank" rel="noopener" aria-label="在 YouTube 播放 Dyson 影片">▶</a>
+                <div class="video-meta"><span>10:08｜繁體中文內嵌字幕</span><a href="https://www.youtube.com/watch?v=Ekn8c2LBDSY" target="_blank" rel="noopener">YouTube 備援 ↗</a></div>
+              </div>
+              <div class="prompt-panel">
+                <span class="prompt-chip">觀看任務</span>
+                <strong data-editable>請把故事記成三格</strong>
+                <p data-editable>① 他先看到的現象<br>② 後來找到的原因<br>③ 為了驗證想法所做的事</p>
+                <p class="small-note" data-editable>先不要寫「很有毅力」或「很有創意」。那是評論，不是事件。</p>
+              </div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-1">← 上一頁</a><span>2 / 15</span><a href="#slide-3">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab current" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 03｜事實與評論 -->
+      <section class="slide" id="slide-3" data-section="observe" data-note="<h2>教師提示｜安靜寫 45 秒</h2><p>請學生先寫三個畫面或事件。若有人只說「他不放棄」，追問：你在哪一段看到他做了什麼？</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">觀察｜看到和想到要分開</span><span class="page-no">03</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>先把評論拿掉</h2>
+            <div class="observe-grid reveal">
+              <article class="card note-card"><span class="tape"></span><h3 data-editable>我確實看到的畫面或事件</h3><div class="writing-lines" aria-hidden="true"></div></article>
+              <article class="card comment-cloud"><div><strong data-editable>「很有毅力」<br>是你的解釋，<br>不是你看到的事件。</strong><p data-editable>把評論換成動作：拆開、比較、製作、測試、修改。</p></div></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-2">← 上一頁</a><span>3 / 15</span><a href="#slide-4">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab current" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 04｜表面現象 -->
+      <section class="slide" id="slide-4" data-section="observe" data-note="<h2>教師提示｜先讓學生猜</h2><p>情境是集塵袋逐漸裝入灰塵後，吸力也逐漸減弱。先蒐集學生的可能原因，不急著判斷。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">觀察｜大家早已習慣的現象</span><span class="page-no">04</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>集塵袋愈滿，吸力愈弱</h2>
+            <div class="symptom-layout reveal">
+              <div class="bag-meter"><div class="bag-fill"></div></div>
+              <div class="meter-copy"><strong data-editable>如果是你，<br>第一個會懷疑哪裡？</strong><p data-editable>先提出可能原因。這時候，我們只有現象，還沒有答案。</p></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-3">← 上一頁</a><span>4 / 15</span><a href="#slide-5">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab current" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 05｜可能原因 -->
+      <section class="slide" id="slide-5" data-section="understand" data-note="<h2>教師提示｜假設不是答案</h2><p>四張卡都可能是合理起點。請學生說明要看什麼、拆什麼或量什麼，才知道自己的猜測是否成立。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">理解｜先提出可能原因</span><span class="page-no">05</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>你會先檢查哪一個地方？</h2>
+            <p class="lead reveal" data-editable>猜測沒有關係；重要的是，下一步要怎麼查。</p>
+            <div class="hypothesis-grid reveal">
+              <article class="hypothesis" style="--accent:var(--gold)"><b>01</b><span data-editable>馬達不夠有力？</span></article>
+              <article class="hypothesis" style="--accent:var(--coral)"><b>02</b><span data-editable>管路被堵住？</span></article>
+              <article class="hypothesis" style="--accent:var(--blue)"><b>03</b><span data-editable>灰塵實在太多？</span></article>
+              <article class="hypothesis" style="--accent:var(--green)"><b>04</b><span data-editable>集塵袋阻礙空氣？</span></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-4">← 上一頁</a><span>5 / 15</span><a href="#slide-6">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab current" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 06｜找到原因 -->
+      <section class="slide" id="slide-6" data-section="understand" data-note="<h2>教師提示｜從現象走向原因</h2><p>傳統集塵袋需要讓空氣通過、把灰塵留下；細小灰塵堵住袋子孔隙後，空氣變得不容易通過，吸力因而減弱。這一頁只需建立直覺，不教授完整流體力學。</p><p><a href='https://www.dyson.com/james-dyson' target='_blank'>Dyson 官方故事 ↗</a></p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">理解｜把機器拆開看</span><span class="page-no">06</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>真正卡住的，不一定是馬達</h2>
+            <div class="airflow-layout reveal">
+              <div class="airflow-box"><div class="bag-wall"></div><div class="dust one"></div><div class="dust two"></div><div class="blocked-label">孔隙被灰塵堵住</div><div class="air-arrows"><span>空氣</span><i></i><b>×</b></div></div>
+              <div class="cause-copy"><strong data-editable>灰塵堵住集塵袋的孔隙，空氣變得不容易通過。</strong><p data-editable>看見現象後，還要找到一個可以檢查、比較或測試的原因。</p><div class="evidence-note" data-editable>現象：吸力減弱<br>證據：空氣通道被堵住</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-5">← 上一頁</a><span>6 / 15</span><a href="#slide-7">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab current" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 07｜重新界定 -->
+      <section class="slide" id="slide-7" data-section="understand" data-note="<h2>教師提示｜問法帶出不同方向</h2><p>左邊的問法容易把團隊帶向更大的馬達；右邊的問法把注意力放在灰塵與空氣如何分開。請學生說明兩種問法會先查什麼。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">理解｜重新界定問題</span><span class="page-no">07</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>問題換一種問法，方向就變了</h2>
+            <div class="reframe-grid reveal">
+              <article class="question-card old" style="--accent:var(--coral)"><span class="label">原先的問法</span><p data-editable>怎麼讓吸塵器<br>更有力？</p><small data-editable>可能先想到：換更強的馬達。</small></article>
+              <div class="arrow">→</div>
+              <article class="question-card new" style="--accent:var(--green)"><span class="label">重新問一次</span><p data-editable>怎麼把灰塵從空氣中分開，又不讓集塵袋堵住空氣？</p><small data-editable>開始追問：一定要靠集塵袋嗎？</small></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-6">← 上一頁</a><span>7 / 15</span><a href="#slide-8">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab current" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 08｜跨領域借用原理 -->
+      <section class="slide" id="slide-8" data-section="solve" data-note="<h2>教師提示｜不是照抄產品</h2><p>Dyson 看見木材工廠的大型旋風分離設備，想到能否把相同原理用在家用吸塵器。較準確的說法是轉用並改造原理，不是發明旋風分離。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">解答｜到別的地方找原理</span><span class="page-no">08</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>解答的原理，可能在別的地方</h2>
+            <div class="analogy-grid reveal">
+              <article class="analogy-card"><h3 data-editable>木材工廠</h3><div class="factory-icon" aria-hidden="true"><div class="building"></div><div class="chimney"></div><div class="cone"></div></div><p data-editable>大型旋風設備把粉塵從空氣中分離。</p></article>
+              <div class="bridge"><b>→</b><span data-editable>借用原理<br>重新改造</span></div>
+              <article class="analogy-card"><h3 data-editable>家用吸塵器</h3><div class="mini-vacuum" aria-hidden="true"><div class="canister"></div><div class="stick"></div><div class="head"></div></div><p data-editable>不是把工廠機器搬回家，而是把原理縮小並重新設計。</p></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-7">← 上一頁</a><span>8 / 15</span><a href="#slide-9">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab current" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 09｜第一個原型 -->
+      <section class="slide" id="slide-9" data-section="solve" data-note="<h2>教師提示｜原型先回答問題</h2><p>官方資料記載，Dyson 用紙板做出簡單旋風裝置，接到家中吸塵器上。此時不是在做可上市產品，而是在測試：不用集塵袋，旋轉氣流能否分離灰塵。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">解答｜第一個原型</span><span class="page-no">09</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>先做一個能回答問題的東西</h2>
+            <div class="prototype-layout reveal">
+              <div class="prototype-sketch"><div class="prototype-cone"></div><div class="prototype-hose"></div><div class="sketch-line one"></div><div class="sketch-line two"></div><span class="sketch-word one">接到吸塵器</span><span class="sketch-word two">先看能不能分離灰塵</span></div>
+              <div class="prototype-copy"><strong data-editable>原型先求能學到東西，<br>不必先求漂亮。</strong><p data-editable>紙板、膠帶和現有吸塵器，已足以做第一次關鍵測試。</p><div class="prototype-question" data-editable>不用集塵袋，旋轉的氣流能不能把灰塵分開？</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-8">← 上一頁</a><span>9 / 15</span><a href="#slide-10">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab current" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 10｜試作循環 -->
+      <section class="slide" id="slide-10" data-section="solve" data-note="<h2>教師提示｜先排流程</h2><p>請學生先用紙卡排列五個動作。強調：測試不是證明自己原本就對，而是讓下一個要改的地方更清楚。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">解答｜做、看、改</span><span class="page-no">10</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>原型不是作品展示</h2>
+            <div class="process reveal">
+              <div class="step-card"><b>1</b><span data-editable>提出<br>假設</span></div><div class="process-arrow">→</div>
+              <div class="step-card"><b>2</b><span data-editable>做一個<br>原型</span></div><div class="process-arrow">→</div>
+              <div class="step-card"><b>3</b><span data-editable>實際<br>測試</span></div><div class="process-arrow">→</div>
+              <div class="step-card"><b>4</b><span data-editable>記下<br>結果</span></div><div class="process-arrow">→</div>
+              <div class="step-card"><b>5</b><span data-editable>修改<br>再測</span></div>
+            </div>
+            <p class="loop-note reveal" data-editable>每一次都要知道：改了什麼、結果如何、下一步要測什麼。</p>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-9">← 上一頁</a><span>10 / 15</span><a href="#slide-11">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab current" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 11｜5127 個原型 -->
+      <section class="slide" id="slide-11" data-section="solve" data-note="<h2>教師提示｜修正勵志口號</h2><p>Dyson 官方以 5,127 個原型說明研發歷程。不要問學生能否承受 5,126 次失敗；改問每一次試作如何留下下一步所需的證據。</p><p><a href='https://www.dyson.com/james-dyson' target='_blank'>Dyson 官方資料 ↗</a></p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">解答｜原型留下證據</span><span class="page-no">11</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>5,127 個原型，不是 5,126 次白做</h2>
+            <div class="number-layout reveal">
+              <div class="big-number"><div><strong>5,127</strong><span data-editable>個原型</span></div></div>
+              <div class="evidence-stack"><div class="evidence-item" data-editable><b>1</b>這一次改了什麼？</div><div class="evidence-item" data-editable><b>2</b>結果有什麼不同？</div><div class="evidence-item" data-editable><b>3</b>下一次要測什麼？</div><p class="lead" data-editable>沒有留下證據的重做，才容易只是在原地打轉。</p></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-10">← 上一頁</a><span>11 / 15</span><a href="#slide-12">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab current" data-go="solve">解答</button><button class="tab" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 12｜商品化 -->
+      <section class="slide" id="slide-12" data-section="reflect" data-note="<h2>教師提示｜技術完成不是故事終點</h2><p>早期授權並不順利，產品先以 G-Force 名稱在日本銷售，之後才發展成 Dyson 自有品牌。這一頁只讓學生看見問題會從技術延伸到製造與市場，不展開完整商業模式課程。</p><p><a href='https://careers.dyson.com/en-gb/who-we-are/' target='_blank'>Dyson Careers 公司歷史 ↗</a></p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">反思｜能運作，還不等於能上市</span><span class="page-no">12</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>做得出來之後，問題還沒有結束</h2>
+            <div class="lane-grid reveal">
+              <article class="lane tech" style="--accent:var(--green)"><h3 data-editable>技術問題</h3><ul><li data-editable>能不能穩定分離灰塵？</li><li data-editable>設備能不能縮小？</li><li data-editable>吸力能不能維持？</li></ul><span class="lane-note">做得出來</span></article>
+              <article class="lane market" style="--accent:var(--coral)"><h3 data-editable>商品化問題</h3><ul><li data-editable>能不能大量製造？</li><li data-editable>廠商願不願意採用？</li><li data-editable>消費者看不看得懂價值？</li></ul><span class="lane-note">有人願意採用</span></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-11">← 上一頁</a><span>12 / 15</span><a href="#slide-13">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab current" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 13｜問題鏈 -->
+      <section class="slide" id="slide-13" data-section="reflect" data-note="<h2>教師提示｜讓學生說出箭頭</h2><p>不要只念卡片。請學生說明：為什麼上一格會帶到下一格？若說不出來，表示中間還缺少證據或推理。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">反思｜把故事倒回去</span><span class="page-no">13</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>一個解答，是怎麼一步一步長出來的？</h2>
+            <div class="chain-grid reveal">
+              <article class="chain-item"><b>01｜現象</b><h3 data-editable>吸力減弱</h3><p data-editable>集塵袋愈滿，機器愈無力。</p></article>
+              <article class="chain-item"><b>02｜證據</b><h3 data-editable>孔隙堵塞</h3><p data-editable>灰塵阻礙空氣通過。</p></article>
+              <article class="chain-item accent"><b>03｜重新界定</b><h3 data-editable>不用易堵的袋子</h3><p data-editable>還能分離灰塵嗎？</p></article>
+              <article class="chain-item"><b>04｜借用原理</b><h3 data-editable>旋風分離</h3><p data-editable>從工業設備找到線索。</p></article>
+              <article class="chain-item"><b>05｜試作</b><h3 data-editable>紙板原型</h3><p data-editable>先回答一個關鍵問題。</p></article>
+              <article class="chain-item"><b>06｜累積證據</b><h3 data-editable>反覆測試</h3><p data-editable>記錄、比較，再修改。</p></article>
+              <article class="chain-item accent"><b>07｜解答</b><h3 data-editable>無集塵袋吸塵器</h3><p data-editable>以旋風氣流分離灰塵。</p></article>
+              <article class="chain-item"><b>08｜新問題</b><h3 data-editable>如何上市？</h3><p data-editable>製造、授權與市場接受。</p></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-12">← 上一頁</a><span>13 / 15</span><a href="#slide-14">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab current" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 14｜三種問法 -->
+      <section class="slide" id="slide-14" data-section="reflect" data-note="<h2>教師提示｜問法決定先查什麼</h2><p>請學生選一句，但不能只說第三句比較具體；還要說明這句話會讓團隊先觀察、查資料或測試什麼。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">反思｜問對問題</span><span class="page-no">14</span></div>
+          <div class="content">
+            <h2 class="slide-title reveal" data-editable>三句話，會走向三條不同的路</h2>
+            <div class="question-trio reveal">
+              <article class="question-choice" style="--accent:var(--coral)"><b>A</b><p data-editable>怎麼做一台很厲害的吸塵器？</p><small data-editable>「厲害」是什麼？團隊很難知道先查什麼。</small></article>
+              <article class="question-choice" style="--accent:var(--gold)"><b>B</b><p data-editable>怎麼讓馬達吸得更有力？</p><small data-editable>已經先假定問題出在馬達。</small></article>
+              <article class="question-choice best" style="--accent:var(--green)"><b>C</b><p data-editable>怎麼在灰塵增加時，仍讓空氣順利流動？</p><small data-editable>可以開始觀察、測量並比較不同做法。</small></article>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-13">← 上一頁</a><span>14 / 15</span><a href="#slide-15">下一頁 →</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab current" data-go="reflect">反思</button></div>
+      </section>
+
+      <!-- 15｜離堂小卡 -->
+      <section class="slide" id="slide-15" data-section="reflect" data-note="<h2>教師提示｜回到自己的生活</h2><p>請學生找一件大家已經習慣、但其實一直帶來麻煩的事。先寫現象、對象與證據，不准先寫 App、AI 或產品名稱。</p>">
+        <div class="paper">
+          <div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div>
+          <div class="page-head"><span class="chapter">反思｜回到你的生活</span><span class="page-no">15</span></div>
+          <div class="content">
+            <div class="exit-layout">
+              <div class="exit-message reveal"><strong data-editable>今天先留下一個<br><span class="marker">可以查的問題</span></strong><p data-editable>找一件大家常說「本來就這樣」，但你覺得其實值得再看一次的事。</p></div>
+              <div class="ticket reveal"><ol><li data-editable>我看到的現象是什麼？</li><li data-editable>誰在什麼時候遇到？</li><li data-editable>我目前有什麼證據？</li><li data-editable>下一步要觀察、詢問或測試什麼？</li></ol><div class="ticket-footer" data-editable>先不要寫產品名稱，也不要急著決定解答。</div></div>
+            </div>
+          </div>
+          <nav class="fallback-controls"><a href="#slide-14">← 上一頁</a><span>15 / 15</span><a href="#slide-1">回到第一頁 ↺</a></nav>
+        </div>
+        <div class="tabs"><button class="tab" data-go="observe">觀察</button><button class="tab" data-go="understand">理解</button><button class="tab" data-go="solve">解答</button><button class="tab current" data-go="reflect">反思</button></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===========================================
+       OUTSIDE-STAGE CONTROLS
+       =========================================== -->
+  <div class="deck-controls" aria-label="投影片控制列">
+    <button id="prevBtn" type="button" title="上一頁">←</button>
+    <button id="menuBtn" type="button" title="段落選單">☰</button>
+    <span id="counter">1 / 15</span>
+    <button id="teacherBtn" type="button" title="教師提示（T）">T</button>
+    <button id="helpBtn" type="button" title="操作說明">?</button>
+    <button id="nextBtn" type="button" title="下一頁">→</button>
+  </div>
+  <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+
+  <!-- ===========================================
+       OVERLAYS
+       =========================================== -->
+  <div class="overlay" id="videoOverlay" role="dialog" aria-modal="true" aria-label="影片播放器">
+    <div class="overlay-card video-overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉影片">×</button><div class="video-frame-wrap"><iframe id="videoFrame" title="YouTube 影片" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div></div>
+  </div>
+  <div class="overlay" id="teacherOverlay" role="dialog" aria-modal="true" aria-label="教師提示">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉教師提示">×</button><div id="teacherNote"></div></div>
+  </div>
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="段落選單">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉選單">×</button><h2>課程段落</h2><div class="chapter-menu" id="chapterMenu"></div></div>
+  </div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉操作說明">×</button><h2>操作方式</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：前後翻頁</li><li>Home／End：第一張／最後一張</li><li>滑鼠滾輪、觸控左右滑動：前後翻頁</li><li>T：開啟目前頁面的教師提示</li><li>M：開啟段落選單</li><li>E：進入文字編輯模式；⌘S 或 Ctrl+S 儲存到瀏覽器</li><li>沒有網路時，投影片文字仍可閱讀；影片需使用網路播放。</li></ul></div>
+  </div>
+
+  <!-- ===========================================
+       INLINE EDITOR CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <button class="save-button" id="saveButton" type="button">下載修訂版</button>
+
+  <script>
+  /* ===========================================
+     VERIFIED COMPATIBILITY CONTROLLER
+     ES5-style code for local files and teaching computers.
+     =========================================== */
+  (function () {
+    'use strict';
+
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el,name) { return new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className); }
+    function addClass(el,name) { if (!hasClass(el,name)) el.className += ' ' + name; }
+    function removeClass(el,name) { el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(?=\\s|$)','g'),' ').replace(/^\\s+|\\s+$/g,''); }
+    function closestWithAttr(el,attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr) !== null) return el; el = el.parentNode; } return null; }
+
+    var stage = byId('deckStage');
+    var slides = stage.getElementsByTagName('section');
+    var current = 0;
+    var wheelLocked = false;
+    var touchStart = null;
+    var storageKey = 'capstone-session2-dyson-html-v1-edits';
+    var editing = false;
+    var editTimer = null;
+    var hideTimer = null;
+
+    function storageGet() { try { return window.localStorage.getItem(storageKey); } catch (ignore) { return null; } }
+    function storageSet(value) { try { window.localStorage.setItem(storageKey,value);return true; } catch (ignore) { return false; } }
+
+    var saved = storageGet();
+    if (saved && saved.indexOf('fallback-controls') !== -1) { stage.innerHTML = saved;slides = stage.getElementsByTagName('section'); }
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920,window.innerHeight / 1080);
+      var value = 'translate(-50%,-50%) scale(' + factor + ')';
+      stage.style.transform = value;stage.style.msTransform = value;stage.style.webkitTransform = value;
+    }
+
+    function indexFromHash() {
+      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match ? Math.max(0,Math.min(parseInt(match[1],10) - 1,slides.length - 1)) : 0;
+    }
+
+    function updateTabs(section) {
+      var tabs = stage.getElementsByClassName('tab');
+      for (var i = 0;i < tabs.length;i += 1) {
+        if (tabs[i].getAttribute('data-go') === section) addClass(tabs[i],'current');
+        else removeClass(tabs[i],'current');
+      }
+    }
+
+    function show(index,updateHash) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      current = index;
+      for (var i = 0;i < slides.length;i += 1) {
+        if (i === current) { addClass(slides[i],'active');addClass(slides[i],'visible'); }
+        else { removeClass(slides[i],'active');removeClass(slides[i],'visible'); }
+      }
+      byId('counter').innerHTML = (current + 1) + ' / ' + slides.length;
+      byId('progressBar').style.width = ((current + 1) / slides.length * 100) + '%';
+      updateTabs(slides[current].getAttribute('data-section'));
+      if (updateHash !== false) {
+        try { window.history.replaceState(null,'','#slide-' + (current + 1)); }
+        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
+      }
+    }
+
+    function closeOverlays() {
+      var overlays = document.getElementsByClassName('overlay');
+      for (var i = 0;i < overlays.length;i += 1) removeClass(overlays[i],'open');
+      byId('videoFrame').src = '';
+    }
+
+    function openTeacherNote() {
+      var note = slides[current].getAttribute('data-note');
+      byId('teacherNote').innerHTML = note || '<h2>教師提示</h2><p>本頁沒有額外提示。</p>';
+      addClass(byId('teacherOverlay'),'open');
+    }
+
+    function goToSection(section) {
+      for (var i = 0;i < slides.length;i += 1) {
+        if (slides[i].getAttribute('data-section') === section) { show(i);return; }
+      }
+    }
+
+    function buildChapterMenu() {
+      var items = [
+        ['observe','觀察｜先看見發生了什麼','#ead99d'],
+        ['understand','理解｜找出真正原因','#ed907d'],
+        ['solve','解答｜借用原理並測試','#72b59b'],
+        ['reflect','反思｜把問題問得更好','#78a9c7']
+      ];
+      var menu = byId('chapterMenu');
+      var html = '';
+      for (var i = 0;i < items.length;i += 1) html += '<button type="button" data-menu-go="' + items[i][0] + '" style="--menu-color:' + items[i][2] + '">' + items[i][1] + '</button>';
+      menu.innerHTML = html;
+    }
+
+    function openVideo(id) {
+      byId('videoFrame').src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      addClass(byId('videoOverlay'),'open');
+    }
+
+    function toggleEditing() {
+      editing = !editing;
+      var editable = document.querySelectorAll('[data-editable]');
+      for (var i = 0;i < editable.length;i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
+      if (editing) { addClass(document.body,'editing');addClass(byId('editToggle'),'active'); }
+      else { removeClass(document.body,'editing');removeClass(byId('editToggle'),'active');storageSet(stage.innerHTML); }
+    }
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { addClass(byId('menuOverlay'),'open'); };
+    byId('helpBtn').onclick = function () { addClass(byId('helpOverlay'),'open'); };
+    byId('teacherBtn').onclick = openTeacherNote;
+    byId('editToggle').onclick = toggleEditing;
+
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      if (target.getAttribute && target.getAttribute('data-close-overlay') !== null) { closeOverlays();return; }
+      if (target && hasClass(target,'overlay')) { closeOverlays();return; }
+      var videoButton = closestWithAttr(target,'data-video');
+      if (videoButton) { openVideo(videoButton.getAttribute('data-video'));return; }
+      var tab = closestWithAttr(target,'data-go');
+      if (tab) { goToSection(tab.getAttribute('data-go'));return; }
+      var menuButton = closestWithAttr(target,'data-menu-go');
+      if (menuButton) { goToSection(menuButton.getAttribute('data-menu-go'));closeOverlays(); }
+    };
+
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      var key = event.key || event.keyCode;
+      if ((event.ctrlKey || event.metaKey) && (key === 's' || key === 'S' || key === 83)) {
+        if (event.preventDefault) event.preventDefault();
+        storageSet('capstone-dyson-html-v1',stage.innerHTML);
+        return;
+      }
+      if (target && (target.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(target.tagName))) return;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) { if (event.preventDefault) event.preventDefault();show(current + 1); }
+      else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) { if (event.preventDefault) event.preventDefault();show(current - 1); }
+      else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) addClass(byId('menuOverlay'),'open');
+      else if (key === 't' || key === 'T' || key === 84) openTeacherNote();
+      else if (key === 'e' || key === 'E' || key === 69) toggleEditing();
+      else if (key === 'Escape' || key === 27) closeOverlays();
+    };
+
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(),false); };
+
+    if (window.addEventListener) {
+      window.addEventListener('wheel',function (event) {
+        if (wheelLocked || Math.abs(event.deltaY) < 18 || hasClass(byId('videoOverlay'),'open')) return;
+        wheelLocked = true;show(current + (event.deltaY > 0 ? 1 : -1));
+        window.setTimeout(function () { wheelLocked = false; },550);
+      },false);
+      window.addEventListener('touchstart',function (event) { touchStart = event.changedTouches[0].clientX; },false);
+      window.addEventListener('touchend',function (event) {
+        if (touchStart === null) return;
+        var distance = event.changedTouches[0].clientX - touchStart;
+        if (Math.abs(distance) > 50) show(current + (distance < 0 ? 1 : -1));
+        touchStart = null;
+      },false);
+    }
+
+    var hotzone = document.querySelector('.edit-hotzone');
+    hotzone.onclick = toggleEditing;
+    hotzone.onmouseenter = function () { window.clearTimeout(hideTimer);addClass(byId('editToggle'),'show'); };
+    hotzone.onmouseleave = function () { hideTimer = window.setTimeout(function () { if (!editing) removeClass(byId('editToggle'),'show'); },400); };
+    byId('editToggle').onmouseenter = function () { window.clearTimeout(hideTimer); };
+    byId('editToggle').onmouseleave = function () { hideTimer = window.setTimeout(function () { if (!editing) removeClass(byId('editToggle'),'show'); },400); };
+
+    stage.oninput = function () {
+      window.clearTimeout(editTimer);
+      editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); },350);
+    };
+
+    byId('saveButton').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html],{ type:'text/html;charset=utf-8' });
+      var urlApi = window.URL || window.webkitURL;
+      var anchor = document.createElement('a');
+      anchor.href = urlApi.createObjectURL(blob);
+      anchor.download = '專題研究第二回_案例02_Dyson_HTML_V1_修訂版.html';
+      document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);
+      window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); },1200);
+    };
+
+    buildChapterMenu();
+    scaleStage();
+    show(indexFromHash(),false);
+    addClass(document.body,'js-ready');
+  }());
+  </script>
+</body>
+</html>
