@@ -1,0 +1,812 @@
+<!doctype html><html lang="zh-Hant"><head>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="access-gate-config.js?v=14b"></script>
+<script src="access-gate.js?v=14b"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>專題研究第三回｜單元 2：為什麼有些決定很難改？</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&amp;family=Shippori+Mincho:wght@700;800&amp;display=swap" rel="stylesheet"><style>
+    /* ===========================================
+       THEME: 課堂筆記本 A × 城市換電網路
+       =========================================== */
+    :root{--stage-bg:#202724;--slide-bg:#202724;--paper:#faf7ed;--ink:#14251f;--muted:#62716b;--line:#d8d2c4;--green:#73c84f;--green-deep:#347d2d;--green-soft:#dff2d5;--black:#17241f;--orange:#f2a15c;--yellow:#f1d565;--blue:#9dcde0;--coral:#ef9a87;--ease:cubic-bezier(.16,1,.3,1);--font-display:"Shippori Mincho","Noto Sans TC",sans-serif;--font-body:"Noto Sans TC",sans-serif}
+    *{box-sizing:border-box}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit}a{color:inherit}
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       =========================================== */
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000)}
+    .deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff)}
+    .slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff)}
+    .slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}img,video,canvas,svg{max-width:100%;max-height:100%}
+    .deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+    @media print{html,body{width:1920px;height:auto;overflow:visible;background:#fff}.deck-viewport{position:static;overflow:visible;background:#fff}.deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}.slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}.slide:last-child{break-after:auto;page-break-after:auto}.deck-controls{display:none!important}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+    /* ===========================================
+       NOTEBOOK CHROME
+       =========================================== */
+    body{font-family:var(--font-body);color:var(--ink)}
+    .paper{position:absolute;inset:28px 34px;overflow:hidden;border:3px solid var(--ink);border-radius:34px;background:linear-gradient(rgba(31,55,46,.045) 1px,transparent 1px),var(--paper);background-size:100% 42px;box-shadow:0 18px 0 rgba(0,0,0,.16)}
+    .paper::before{content:"";position:absolute;top:0;bottom:0;left:126px;width:2px;background:rgba(239,154,135,.55)}
+    .holes{position:absolute;z-index:3;left:43px;top:104px;display:grid;gap:78px}.holes i{width:24px;height:24px;border-radius:50%;display:block;background:#4c504b;border:5px solid #ded8ca;box-shadow:inset 0 0 0 2px #181d1a}
+    .content{position:absolute;inset:48px 54px 54px 162px;overflow:hidden;display:flex;flex-direction:column;min-width:0}.topline{display:flex;align-items:center;justify-content:space-between;height:45px;gap:26px;flex:0 0 auto}.case-label{font-size:22px;font-weight:900;letter-spacing:.08em;color:var(--green-deep)}.stage-label{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:800;color:var(--muted);white-space:nowrap}.stage-dot{width:14px;height:14px;border-radius:50%;background:var(--green);border:2px solid var(--ink)}.page-no{font-size:19px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+    .rule{height:3px;background:var(--line);margin:12px 0 24px;flex:0 0 auto;position:relative}.rule::before{content:"";position:absolute;left:0;top:0;width:115px;height:3px;background:var(--green-deep)}
+    .slide-title{margin:0 0 18px;font-family:var(--font-display);font-size:63px;line-height:1.16;letter-spacing:-.04em;flex:0 0 auto}.slide-kicker{margin:0 0 10px;font-size:23px;font-weight:900;letter-spacing:.08em;color:var(--green-deep)}.lead{margin:0;font-size:35px;line-height:1.55;font-weight:700;color:#31423b}.source{margin-top:auto;padding-top:12px;font-size:18px;line-height:1.45;color:#7a817c}.source a{text-decoration-thickness:1px;text-underline-offset:4px}.highlight{background:linear-gradient(transparent 58%,rgba(115,200,79,.45) 58%);padding:0 .08em}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .56s var(--ease),transform .56s var(--ease)}.slide.visible .reveal{opacity:1;transform:translateY(0)}.slide.visible .reveal:nth-child(2){transition-delay:.07s}.slide.visible .reveal:nth-child(3){transition-delay:.14s}.slide.visible .reveal:nth-child(4){transition-delay:.21s}.slide.visible .reveal:nth-child(5){transition-delay:.28s}
+    .tag{display:inline-flex;align-items:center;gap:9px;border:2px solid var(--ink);border-radius:999px;padding:8px 16px;background:#fff;font-size:19px;font-weight:900}.tag.green{background:var(--green-soft)}.tag.yellow{background:#fff0a6}.tag.blue{background:#cae8f3}.tag.coral{background:#f8c8bc}
+    .card{border:3px solid var(--ink);border-radius:24px;background:rgba(255,255,255,.84);box-shadow:8px 9px 0 rgba(23,37,31,.11);padding:28px 30px}.card h3{margin:0 0 10px;font-size:29px;line-height:1.25}.card p,.card li{margin:0;font-size:25px;line-height:1.5;color:#405149}.card ul{margin:8px 0 0;padding-left:30px;display:grid;gap:8px}.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:34px;flex:1;align-items:stretch;min-height:0}.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1;align-items:stretch;min-height:0}.cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;flex:1;align-items:center;min-height:0}.center{display:flex;align-items:center;justify-content:center}.number{font-family:var(--font-display);font-size:76px;line-height:1;color:var(--green-deep)}
+
+    /* ===========================================
+       TITLE: SCOOTER + EMPTY ENERGY MAP
+       =========================================== */
+    .title-layout{flex:1;display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:68px;min-height:0}.deck-title{margin:0;font-family:var(--font-display);font-size:88px;line-height:1.11;letter-spacing:-.055em}.deck-subtitle{margin:28px 0 0;font-size:32px;font-weight:800;color:var(--green-deep)}.watch-task{display:flex;gap:14px;margin-top:42px;flex-wrap:wrap}
+    .city-board{height:570px;border:4px solid var(--ink);border-radius:30px;background:linear-gradient(#d8edf4 0 47%,#7f9188 47% 56%,#3d4844 56%);box-shadow:15px 17px 0 rgba(20,37,31,.14);position:relative;overflow:hidden;transform:rotate(1deg)}.city-board::before{content:"";position:absolute;left:0;right:0;top:59%;height:5px;background:repeating-linear-gradient(90deg,var(--yellow) 0 45px,transparent 45px 80px)}.skyline{position:absolute;left:28px;right:28px;bottom:44%;display:flex;gap:13px;align-items:end}.building{width:70px;height:150px;background:#809993;border:3px solid var(--ink)}.building:nth-child(2){height:210px}.building:nth-child(3){height:125px}.building:nth-child(4){height:250px}.building:nth-child(5){height:175px}.building:nth-child(6){height:225px}.building::after{content:"";display:block;width:38px;height:100%;margin:auto;background:repeating-linear-gradient(#d6ece5 0 12px,transparent 12px 28px)}.scooter{position:absolute;left:250px;bottom:58px;font-size:132px;filter:grayscale(1)}.empty-pin{position:absolute;right:55px;bottom:90px;width:125px;height:125px;border:4px solid var(--ink);border-radius:50% 50% 50% 0;background:#fff1b0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center}.empty-pin span{transform:rotate(45deg);font-size:52px;font-weight:900}.empty-caption{position:absolute;right:30px;bottom:18px;border:3px solid var(--ink);border-radius:14px;background:#fff;padding:10px 16px;font-size:21px;font-weight:900}
+
+    /* ===========================================
+       VIDEO
+       =========================================== */
+    .video-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;flex:1;min-height:0}.video-card{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border:4px solid var(--ink);border-radius:26px;background:linear-gradient(135deg,#0f1d18,#2c6532 55%,#83ca5d);box-shadow:12px 14px 0 rgba(21,40,37,.14);text-decoration:none}.video-card::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 105px,rgba(255,255,255,.08) 105px 108px),linear-gradient(160deg,transparent 45%,rgba(255,255,255,.13) 45% 50%,transparent 50%)}.station-slots{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);display:grid;grid-template-columns:repeat(5,70px);gap:16px}.station-slots i{height:125px;border:4px solid rgba(255,255,255,.8);border-radius:16px;background:rgba(20,37,31,.65);box-shadow:inset 0 -42px var(--green)}.play{position:relative;z-index:2;width:122px;height:122px;border:4px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(10,26,23,.76);color:#fff;font-size:55px;padding-left:9px}.video-meta{position:absolute;left:28px;right:28px;bottom:24px;z-index:2;display:flex;justify-content:space-between;align-items:end;color:#fff;font-weight:900}.video-title{font-size:27px;max-width:650px}.video-time{font-size:21px}.watch-grid{display:grid;grid-template-rows:repeat(3,1fr);gap:18px}.watch-card{border:3px solid var(--ink);border-radius:20px;background:#fff;padding:22px 25px;box-shadow:7px 8px 0 rgba(21,40,37,.1)}.watch-card strong{display:block;font-size:28px;margin-bottom:6px}.watch-card span{font-size:23px;line-height:1.45;color:#475852}
+
+    /* ===========================================
+       ANALYSIS LAYOUTS
+       =========================================== */
+    .fact-layout{display:grid;grid-template-columns:1fr 90px 1fr;gap:28px;flex:1;align-items:center}.fact-box{height:480px;padding:36px;border:4px solid var(--ink);border-radius:28px;background:#fff;box-shadow:10px 12px 0 rgba(21,40,37,.12)}.fact-box h3{margin:0 0 24px;font-size:38px}.fact-box ul{margin:0;padding-left:33px;display:grid;gap:17px;font-size:27px;line-height:1.45}.fact-box.interpret{background:#fff3c2}.bridge-arrow{font-size:65px;text-align:center;color:var(--green-deep);font-weight:900}
+    .day-road{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:34px;flex:1;align-items:center}.day-road::before{content:"";position:absolute;left:8%;right:8%;top:50%;height:8px;background:var(--line);transform:translateY(-50%)}.day-step{position:relative;z-index:2;min-height:270px;border:4px solid var(--ink);border-radius:28px;background:#fff;padding:28px 26px;box-shadow:9px 11px 0 rgba(21,40,37,.12)}.day-step:nth-child(2){background:var(--green-soft)}.day-step:nth-child(3){background:#fff1b4}.day-step:nth-child(4){background:#f7d2c8}.day-step b{display:block;font-size:19px;color:var(--green-deep);letter-spacing:.08em;margin-bottom:10px}.day-step strong{display:block;font-size:31px;line-height:1.3}.day-step span{display:block;margin-top:14px;font-size:22px;line-height:1.45;color:#43544f}
+    .friction-map{display:grid;grid-template-columns:.84fr 1.05fr .86fr;gap:30px;flex:1;align-items:center}.home{height:470px;border:4px solid var(--ink);border-radius:34px;background:var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:11px 13px 0 rgba(21,40,37,.12)}.home-icon{font-size:122px;line-height:1}.home strong{font-size:36px;margin-top:15px}.barriers{display:grid;gap:18px}.barrier{border:3px solid var(--ink);border-radius:18px;background:#fff;padding:18px 24px;font-size:26px;font-weight:900}.barrier::before{content:"×";display:inline-flex;width:38px;height:38px;border-radius:50%;align-items:center;justify-content:center;background:var(--coral);margin-right:14px}.result{border:4px solid var(--ink);border-radius:28px;background:#fff1b4;padding:36px;box-shadow:11px 13px 0 rgba(21,40,37,.12)}.result b{font-size:22px;color:var(--green-deep)}.result strong{display:block;margin-top:13px;font-family:var(--font-display);font-size:47px;line-height:1.3}
+    .compare{display:grid;grid-template-columns:1fr 110px 1fr;gap:26px;flex:1;align-items:center}.question-card{min-height:430px;border:4px solid var(--ink);border-radius:30px;padding:40px;background:#fff;box-shadow:11px 13px 0 rgba(21,40,37,.12)}.question-card.old{background:#f0ede5}.question-card.new{background:var(--green-soft)}.question-card b{font-size:22px;letter-spacing:.08em;color:var(--green-deep)}.question-card strong{display:block;margin-top:28px;font-family:var(--font-display);font-size:47px;line-height:1.38}.question-card span{display:block;margin-top:28px;font-size:25px;line-height:1.5;color:#465852}.switch{font-size:58px;text-align:center;color:var(--green-deep);font-weight:900}
+    .wait-shift{display:grid;grid-template-columns:1fr 120px 1fr;gap:28px;flex:1;align-items:center}.clock-box,.swap-box{height:470px;border:4px solid var(--ink);border-radius:30px;padding:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:11px 13px 0 rgba(21,40,37,.12)}.clock-box{background:#f0ede5}.swap-box{background:var(--green-soft)}.big-icon{font-size:120px;line-height:1}.clock-box strong,.swap-box strong{font-family:var(--font-display);font-size:42px;line-height:1.35;text-align:center;margin-top:25px}.wait-shift .switch{font-size:75px}.shift-note{font-size:25px;line-height:1.5;text-align:center;color:#475852;margin-top:16px}
+    .system-orbit{position:relative;flex:1;min-height:0}.system-links{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}.system-links line{stroke:var(--green-deep);stroke-width:5;stroke-linecap:round;vector-effect:non-scaling-stroke}.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:280px;height:280px;border:5px solid var(--ink);border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--font-display);font-size:42px;line-height:1.25;box-shadow:10px 12px 0 rgba(21,40,37,.13);z-index:3}.orbit{position:absolute;width:330px;min-height:135px;border:4px solid var(--ink);border-radius:25px;background:#fff;padding:22px 26px;box-shadow:8px 9px 0 rgba(21,40,37,.1);z-index:2}.orbit strong{font-size:30px}.orbit span{display:block;font-size:21px;color:#51605b;margin-top:7px}.o1{left:70px;top:55px;background:var(--blue)}.o2{right:70px;top:55px;background:#fff1b4}.o3{left:70px;bottom:45px;background:#f7d2c8}.o4{right:70px;bottom:45px;background:var(--green-soft)}
+    .feature-flow{display:grid;grid-template-columns:1fr 90px 1fr;gap:25px;flex:1;align-items:center}.pain-list,.solution-list{display:grid;gap:16px}.pair{border:3px solid var(--ink);border-radius:19px;background:#fff;padding:18px 24px;font-size:26px;font-weight:900}.solution-list .pair{background:var(--green-soft)}.pair small{display:block;font-size:19px;color:var(--muted);margin-top:4px;font-weight:700}.arrow-col{display:grid;gap:28px;font-size:36px;color:var(--green-deep);font-weight:900;text-align:center}
+    .proof-board{display:grid;grid-template-columns:.94fr 1.06fr;gap:40px;flex:1;align-items:center}.prototype{height:520px;border:4px solid var(--ink);border-radius:30px;background:linear-gradient(145deg,#f5f2e8,#dcebd6);box-shadow:12px 14px 0 rgba(21,40,37,.12);position:relative;display:flex;align-items:center;justify-content:center}.prototype .scoot{font-size:180px;filter:grayscale(.6)}.mini-station{position:absolute;right:48px;bottom:45px;display:grid;grid-template-columns:repeat(2,45px);gap:10px;border:4px solid var(--ink);border-radius:18px;background:#263a31;padding:17px}.mini-station i{height:75px;border-radius:9px;background:var(--green)}.proof-list{display:grid;gap:17px}.proof-item{border:3px solid var(--ink);border-radius:20px;background:#fff;padding:22px 26px;box-shadow:7px 8px 0 rgba(21,40,37,.1)}.proof-item b{font-size:20px;color:var(--green-deep)}.proof-item strong{display:block;font-size:28px;margin-top:5px}
+    .network-map{position:relative;flex:1;min-height:0;border:4px solid var(--ink);border-radius:30px;background:linear-gradient(90deg,rgba(20,37,31,.07) 1px,transparent 1px),linear-gradient(rgba(20,37,31,.07) 1px,transparent 1px),#e8f2ed;background-size:70px 70px;box-shadow:12px 14px 0 rgba(21,40,37,.12);overflow:hidden}.road{position:absolute;height:32px;background:#77867f}.r-a{left:-40px;right:-40px;top:49%;transform:rotate(-8deg)}.r-b{left:48%;top:-100px;bottom:-100px;width:32px;height:auto;transform:rotate(12deg)}.station{position:absolute;width:80px;height:80px;border:4px solid var(--ink);border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:5px 6px 0 rgba(21,40,37,.15)}.s1{left:15%;top:22%}.s2{left:38%;top:62%}.s3{right:24%;top:23%}.s4{right:10%;bottom:14%}.route-user{position:absolute;left:48%;top:40%;font-size:70px}.network-callout{position:absolute;left:35px;bottom:30px;border:3px solid var(--ink);border-radius:16px;background:#fff;padding:14px 20px;font-size:23px;font-weight:900}
+    .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;flex:1;align-items:center}.loop-card{position:relative;min-height:320px;border:4px solid var(--ink);border-radius:28px;background:#fff;padding:30px;box-shadow:9px 11px 0 rgba(21,40,37,.12)}.loop-card:nth-child(2){background:var(--green-soft)}.loop-card:nth-child(3){background:#fff1b4}.loop-card:nth-child(4){background:var(--blue)}.loop-card:not(:last-child)::after{content:"→";position:absolute;right:-29px;top:50%;transform:translateY(-50%);font-size:38px;font-weight:900;color:var(--green-deep);z-index:2}.loop-card b{font-size:19px;color:var(--green-deep)}.loop-card strong{display:block;font-size:32px;line-height:1.35;margin-top:13px}.loop-card span{display:block;font-size:22px;line-height:1.45;margin-top:14px;color:#465852}
+    .risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;flex:1;align-items:center}.risk{min-height:215px;border:3px solid var(--ink);border-radius:23px;background:#fff;padding:25px 28px;box-shadow:7px 8px 0 rgba(21,40,37,.1)}.risk:nth-child(2),.risk:nth-child(5){background:var(--green-soft)}.risk:nth-child(3),.risk:nth-child(6){background:#fff1b4}.risk b{font-size:21px;color:var(--green-deep)}.risk strong{display:block;font-size:29px;margin-top:10px}.risk p{font-size:21px;line-height:1.45;color:#50605a;margin:10px 0 0}
+    .chain{display:grid;grid-template-columns:repeat(6,1fr);gap:24px;flex:1;align-items:center}.chain-item{position:relative;min-height:290px;border:3px solid var(--ink);border-radius:22px;background:#fff;padding:25px 21px;display:flex;flex-direction:column;justify-content:center;box-shadow:7px 8px 0 rgba(21,40,37,.1)}.chain-item:not(:last-child)::after{content:"→";position:absolute;right:-25px;top:50%;transform:translateY(-50%);z-index:2;font-size:30px;font-weight:900;color:var(--green-deep)}.chain-item b{font-size:18px;color:var(--green-deep)}.chain-item strong{font-size:25px;line-height:1.35;margin-top:10px}.chain-item:nth-child(1),.chain-item:nth-child(4){background:#fff1ad}.chain-item:nth-child(2),.chain-item:nth-child(5){background:#def0d6}.chain-item:nth-child(3),.chain-item:nth-child(6){background:#f8d6ce}
+    .ticket-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;flex:1;align-items:center;min-height:0}.ticket{border:4px solid var(--ink);border-radius:26px;background:#fff8ca;padding:30px 36px;box-shadow:12px 14px 0 rgba(23,37,31,.13)}.ticket h3{margin:0 0 22px;font-size:34px}.ticket ol{margin:0;padding-left:34px;display:grid;gap:13px;font-size:25px;line-height:1.42;font-weight:700}.closing-note{height:390px;border:4px solid var(--ink);background:var(--green-soft);box-shadow:10px 12px 0 rgba(23,37,31,.14);padding:45px 38px;display:flex;align-items:center;font-family:var(--font-display);font-size:40px;line-height:1.45}
+
+    /* ===========================================
+       CONTROLS, FALLBACK AND OVERLAYS
+       =========================================== */
+    .fallback-controls{position:absolute;right:34px;bottom:26px;display:flex;gap:12px;z-index:8}.fallback-controls a{border:2px solid var(--ink);border-radius:999px;background:#fff;padding:8px 15px;text-decoration:none;font-size:18px;font-weight:900}.js-ready .fallback-controls{display:none}
+    .deck-controls{left:auto;right:18px;bottom:17px;transform:none;display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:999px;background:rgba(22,30,26,.88);box-shadow:0 7px 22px rgba(0,0,0,.25)}.deck-controls button{width:42px;height:42px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:21px;font-weight:900}.deck-controls button:hover{background:var(--green-deep)}.counter{min-width:72px;text-align:center;color:#fff;font-size:16px;font-weight:900}.help-button,.teacher-button{position:fixed;z-index:1002;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(22,30,26,.88);color:#fff;font-weight:900;cursor:pointer}.help-button{right:18px;top:18px}.teacher-button{right:70px;top:18px}.edit-hotzone{position:fixed;z-index:10000;left:0;top:0;width:80px;height:80px;cursor:pointer}.edit-toggle{position:fixed;z-index:10001;left:18px;top:18px;width:46px;height:46px;border-radius:50%;border:2px solid #fff;background:#223129;color:#fff;opacity:0;pointer-events:none;transition:opacity .25s ease;cursor:pointer}.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}.save-button{position:fixed;z-index:1001;left:18px;bottom:18px;border:2px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(22,30,26,.88);color:#fff;padding:10px 18px;font-size:15px;font-weight:900;cursor:pointer;display:none}body.editing .save-button{display:block}body.editing [data-editable]{outline:3px dashed rgba(52,125,45,.52);outline-offset:5px;cursor:text}
+    .overlay{position:fixed;z-index:2000;inset:0;background:rgba(12,17,14,.78);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease}.overlay.open{opacity:1;visibility:visible;pointer-events:auto}.overlay-panel{width:min(860px,88vw);max-height:82vh;overflow:auto;border:3px solid var(--ink);border-radius:24px;background:var(--paper);padding:34px;box-shadow:0 24px 80px rgba(0,0,0,.38)}.overlay-panel h2{margin:0 0 18px;font-family:var(--font-display);font-size:39px}.overlay-panel p,.overlay-panel li{font-size:20px;line-height:1.65}.overlay-actions{display:flex;justify-content:flex-end;margin-top:22px}.overlay-actions button{border:2px solid var(--ink);border-radius:999px;background:var(--yellow);padding:10px 18px;font-weight:900;cursor:pointer}.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.menu-grid button{text-align:left;border:2px solid var(--line);border-radius:15px;background:#fff;padding:15px 17px;font-weight:800;cursor:pointer}.menu-grid button:hover{border-color:var(--green-deep);background:#e8f4e2}
+  /* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* === 第三回：提問與判斷的課堂筆記 === */
+:root{--green-deep:#326b61;--green:#83b9a9;--green-soft:#dceee5;--stage-bg:#202b29;--slide-bg:#202b29}
+.content{inset:48px 66px 90px 162px}.slide-title{font-size:64px;margin-bottom:30px;line-height:1.3}
+.body-area{flex:1;min-height:0;display:flex;flex-direction:column;gap:30px}.body-area p{margin:0}.body-area strong,.body-area h3,.body-area p{overflow-wrap:break-word}
+.opening{display:grid;grid-template-columns:1.15fr .85fr;gap:66px;align-items:center;flex:1}.opening h1{font-size:96px;line-height:1.35;margin:20px 0 35px;font-family:var(--font-display)}.opening p{font-size:35px;line-height:1.7}.opening svg{width:100%;height:520px}
+.eyebrow{font-size:25px;color:var(--green-deep);font-weight:800;letter-spacing:3px}.footer-line{margin-top:auto!important;border-top:2px solid var(--line);padding-top:22px;font-size:25px!important;color:var(--muted)}
+.statement{font-size:48px;line-height:1.65;padding:36px 44px;border-left:10px solid var(--green-deep);background:#e4eee6;border-radius:0 20px 20px 0}.statement.large{font-size:57px}
+.flow-line{display:flex;align-items:center;gap:25px;justify-content:center;flex:1}.flow-line .step{flex:1;border:3px solid var(--ink);padding:36px 20px;border-radius:24px;background:#fff;text-align:center}.step b{display:block;font-size:44px}.step span{display:block;font-size:28px;margin-top:20px;color:var(--muted)}.arrow{font-size:54px;color:var(--green-deep)}
+.result-row{display:flex;gap:65px;align-items:center;flex:1}.people{display:grid;grid-template-columns:repeat(5,95px);gap:16px 25px}.person{width:85px;height:120px;color:var(--green-deep)}.person.no{color:#c4c3ba}.score{font-size:110px;font-family:var(--font-display);line-height:1.15}.score small{font-size:43px}.result-caption{font-size:33px;margin-top:24px!important;line-height:1.7}
+.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;flex:1;align-items:center}.choice{border:3px solid var(--ink);border-radius:24px;padding:38px 30px;min-height:300px;background:#fff;box-shadow:8px 8px 0 #14251f18;text-align:left;color:var(--ink);cursor:pointer}.choice:nth-child(2){background:#fff1be}.choice:nth-child(3){background:#dbeaf0}.choice[aria-pressed=true]{outline:9px solid var(--green-deep);outline-offset:6px}.choice b{display:block;font-size:28px;color:var(--muted);margin-bottom:32px}.choice strong{font-size:43px;line-height:1.6}.prompt{font-size:36px;font-weight:700;line-height:1.6}
+.quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;flex:1}.quote-grid.three{grid-template-columns:repeat(3,1fr)}.quote{border-top:10px solid var(--green-deep);background:#fff;padding:38px;border-radius:14px;box-shadow:7px 8px 0 #14251f15}.quote:nth-child(2){border-color:#bf8554}.quote:nth-child(3){border-color:#769eaf}.quote .who{font-size:26px;color:var(--muted);margin-bottom:32px}.quote p{font-size:38px;line-height:1.7}.quote-grid.three .quote p{font-size:35px}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:42px;flex:1}.compare-item{border:3px solid var(--ink);border-radius:25px;padding:40px;background:#f6ded4}.compare-item:nth-child(2){background:#dceee5}.compare-item b{font-size:28px}.compare-item p{font-size:40px;line-height:1.65;margin-top:30px}.next-step{font-size:32px;line-height:1.7;padding:25px 30px;background:#fff;border-radius:18px}
+.concept-name{font-family:var(--font-display);font-size:94px;color:var(--green-deep);margin:0}.concept-definition{font-size:43px;line-height:1.8;max-width:1440px}.three-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}.check{background:#fff;border:2px solid var(--line);border-radius:22px;padding:32px}.check b{font-size:27px;color:var(--green-deep)}.check h3{font-size:37px;line-height:1.6;margin:25px 0}.check p{font-size:29px;line-height:1.65;color:#51605b}
+.exercise{font-size:46px;line-height:1.65;border:3px solid var(--ink);border-radius:22px;padding:35px;background:#fff1be}.reveal-btn{align-self:flex-start;border:2px solid var(--ink);background:#dceee5;border-radius:30px;padding:15px 26px;font-size:28px;cursor:pointer}.answer-box{visibility:hidden;opacity:0;background:#fff;padding:25px 35px;border-radius:20px;font-size:31px;line-height:1.8;transition:opacity .2s}.answer-box.shown{visibility:visible;opacity:1}.question-list{display:grid;gap:25px;flex:1}.question-row{display:flex;align-items:center;gap:35px;border-bottom:2px solid var(--line);font-size:47px;line-height:1.55}.question-row b{font-family:var(--font-display);font-size:62px;color:var(--green-deep)}
+.tiny-source{font-size:20px!important;color:var(--muted)}.fallback-controls{position:absolute;bottom:24px;left:165px;right:75px;display:flex;justify-content:space-between;font-size:22px;z-index:4}.fallback-controls a{padding:5px 12px;text-decoration:none}.js-ready .fallback-controls{display:none}.slide:target{visibility:visible;opacity:1;pointer-events:auto;z-index:3}body:not(.js-ready):has(.slide:target) .slide.active:not(:target){visibility:hidden;opacity:0}body:not(.js-ready) .reveal{opacity:1;transform:none}body:not(.js-ready) .deck-stage{transform:scale(min(calc(100vw / 1920px),calc(100vh / 1080px)))}
+#teacherNote{white-space:pre-line}.overlay-panel h2{font-size:30px}.overlay-panel p{font-size:19px}.overlay.open{z-index:11000}.deck-controls button:disabled{opacity:.3}.reveal{transition-duration:.3s}.menu-grid button{font-family:var(--font-body)}
+/* JavaScript navigation owns visibility; hash fallback applies only before initialization. */
+.js-ready .slide:not(.active){visibility:hidden;opacity:0;pointer-events:none;z-index:0}
+.js-ready .slide.active{visibility:visible;opacity:1;pointer-events:auto;z-index:2}
+.deck-controls{left:auto;right:18px;bottom:12px;transform:none;width:max-content}
+@media print{.teacher-button,.help-button,.edit-hotzone,.edit-toggle,.save-button,.overlay,.fallback-controls{display:none!important}.reveal{opacity:1!important;transform:none!important}.answer-box{visibility:visible;opacity:1}}
+.effect-5{--green-deep:#326b61;--green:#83b9a9;--green-soft:#dceee5;--stage-bg:#202b29;--slide-bg:#202b29}
+.effect-5 .content{inset:48px 66px 90px 162px}
+.effect-5-title{font-size:64px;margin-bottom:30px;line-height:1.3}
+.effect-5 .opening{display:grid;grid-template-columns:1.15fr .85fr;gap:66px;align-items:center;flex:1}
+.effect-5 .opening h1{font-size:96px;line-height:1.35;margin:20px 0 35px;font-family:var(--font-display)}
+.effect-5 .opening p{font-size:35px;line-height:1.7}
+.effect-5 .opening svg{width:100%;height:520px}
+.effect-5 .eyebrow{font-size:25px;color:var(--green-deep);font-weight:800;letter-spacing:3px}
+.effect-5 .footer-line{margin-top:auto!important;border-top:2px solid var(--line);padding-top:22px;font-size:25px!important;color:var(--muted)}
+.effect-5 .statement{font-size:48px;line-height:1.65;padding:36px 44px;border-left:10px solid var(--green-deep);background:#e4eee6;border-radius:0 20px 20px 0}
+.effect-5 .statement.large{font-size:57px}
+.effect-5 .flow-line{display:flex;align-items:center;gap:25px;justify-content:center;flex:1}
+.effect-5 .flow-line .step{flex:1;border:3px solid var(--ink);padding:36px 20px;border-radius:24px;background:#fff;text-align:center}
+.effect-5 .step b{display:block;font-size:44px}
+.effect-5 .step span{display:block;font-size:28px;margin-top:20px;color:var(--muted)}
+.effect-5 .arrow{font-size:54px;color:var(--green-deep)}
+.effect-5 .result-row{display:flex;gap:65px;align-items:center;flex:1}
+.effect-5 .people{display:grid;grid-template-columns:repeat(5,95px);gap:16px 25px}
+.effect-5 .person{width:85px;height:120px;color:var(--green-deep)}
+.effect-5 .person.no{color:#c4c3ba}
+.effect-5 .score{font-size:110px;font-family:var(--font-display);line-height:1.15}
+.effect-5 .score small{font-size:43px}
+.effect-5 .result-caption{font-size:33px;margin-top:24px!important;line-height:1.7}
+.effect-5 .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;flex:1;align-items:center}
+.effect-5 .choice{border:3px solid var(--ink);border-radius:24px;padding:38px 30px;min-height:300px;background:#fff;box-shadow:8px 8px 0 #14251f18;text-align:left;color:var(--ink);cursor:pointer}
+.effect-5 .choice:nth-child(2){background:#fff1be}
+.effect-5 .choice:nth-child(3){background:#dbeaf0}
+.effect-5 .choice[aria-pressed=true]{outline:9px solid var(--green-deep);outline-offset:6px}
+.effect-5 .choice b{display:block;font-size:28px;color:var(--muted);margin-bottom:32px}
+.effect-5 .choice strong{font-size:43px;line-height:1.6}
+.effect-5 .prompt{font-size:36px;font-weight:700;line-height:1.6}
+.effect-5 .quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;flex:1}
+.effect-5 .quote-grid.three{grid-template-columns:repeat(3,1fr)}
+.effect-5 .quote{border-top:10px solid var(--green-deep);background:#fff;padding:38px;border-radius:14px;box-shadow:7px 8px 0 #14251f15}
+.effect-5 .quote:nth-child(2){border-color:#bf8554}
+.effect-5 .quote:nth-child(3){border-color:#769eaf}
+.effect-5 .quote .who{font-size:26px;color:var(--muted);margin-bottom:32px}
+.effect-5 .quote p{font-size:38px;line-height:1.7}
+.effect-5 .quote-grid.three .quote p{font-size:35px}
+.effect-5 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:42px;flex:1}
+.effect-5 .compare-item{border:3px solid var(--ink);border-radius:25px;padding:40px;background:#f6ded4}
+.effect-5 .compare-item:nth-child(2){background:#dceee5}
+.effect-5 .compare-item b{font-size:28px}
+.effect-5 .compare-item p{font-size:40px;line-height:1.65;margin-top:30px}
+.effect-5 .next-step{font-size:32px;line-height:1.7;padding:25px 30px;background:#fff;border-radius:18px}
+.effect-5 .concept-name{font-family:var(--font-display);font-size:94px;color:var(--green-deep);margin:0}
+.effect-5 .concept-definition{font-size:43px;line-height:1.8;max-width:1440px}
+.effect-5 .three-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}
+.effect-5 .check{background:#fff;border:2px solid var(--line);border-radius:22px;padding:32px}
+.effect-5 .check b{font-size:27px;color:var(--green-deep)}
+.effect-5 .check h3{font-size:37px;line-height:1.6;margin:25px 0}
+.effect-5 .check p{font-size:29px;line-height:1.65;color:#51605b}
+.effect-5 .exercise{font-size:46px;line-height:1.65;border:3px solid var(--ink);border-radius:22px;padding:35px;background:#fff1be}
+.effect-5 .reveal-btn{align-self:flex-start;border:2px solid var(--ink);background:#dceee5;border-radius:30px;padding:15px 26px;font-size:28px;cursor:pointer}
+.effect-5 .answer-box{visibility:hidden;opacity:0;background:#fff;padding:25px 35px;border-radius:20px;font-size:31px;line-height:1.8;transition:opacity .2s}
+.effect-5 .answer-box.shown{visibility:visible;opacity:1}
+.effect-5 .question-list{display:grid;gap:25px;flex:1}
+.effect-5 .question-row{display:flex;align-items:center;gap:35px;border-bottom:2px solid var(--line);font-size:47px;line-height:1.55}
+.effect-5 .question-row b{font-family:var(--font-display);font-size:62px;color:var(--green-deep)}
+.effect-5 .tiny-source{font-size:20px!important;color:var(--muted)}
+.effect-5 .reveal{transition-duration:.3s}
+.effect-5 .reveal{opacity:1!important;transform:none!important}
+.effect-5 .answer-box{visibility:visible;opacity:1}
+.effect-5 .mini-poll{display:flex;gap:16px;align-items:center}
+.effect-5 .poll-person{width:105px;padding:25px 4px;border-radius:22px;background:#dceee5;text-align:center}
+.effect-5 .poll-person span{font-size:64px;color:#326b61;display:block}
+.effect-5 .poll-person b{font-size:22px;display:block;margin-top:14px}
+.effect-5 .poll-person.neutral{background:#e7e3d9}
+.effect-5 .population{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center;flex:1}
+.effect-5 .sample-dots{display:grid;grid-template-columns:repeat(5,90px);gap:8px 15px}
+.effect-5 .sample-dot{font-size:85px;line-height:1;color:#326b61;text-align:center}
+.effect-5 .sample-dot.left{color:#9b7762}
+.effect-5 .dot-key{font-size:24px!important;color:var(--muted);margin-top:28px!important}
+.effect-5 .population-summary{display:grid;gap:24px}
+.effect-5 .population-summary>div{display:flex;align-items:center;gap:35px;padding-bottom:18px;border-bottom:2px solid var(--line)}
+.effect-5 .population-summary b{font-size:57px;color:var(--green-deep);min-width:160px}
+.effect-5 .population-summary span{font-size:31px;line-height:1.5}
+.effect-5 .concept-definition{font-size:42px;line-height:1.6}
+.effect-5 .choice strong{font-size:36px}
+.effect-5 .opening h1{font-size:98px}
+.effect-5 .frame-label{font-size:27px;font-weight:700;color:var(--muted)}
+.effect-5 .frame-report{display:flex;gap:55px;align-items:center;background:#e2ece4;border:3px solid var(--ink);border-radius:24px;padding:24px 45px}
+.effect-5 .frame-number{font-family:var(--font-display);font-size:125px;line-height:1.2;color:var(--green-deep);min-width:300px}
+.effect-5 .frame-report p{font-size:46px;line-height:1.6}
+.effect-5 .compact{align-items:stretch}
+.effect-5 .compact .choice{min-height:0;padding:24px 30px}
+.effect-5 .compact .choice b{margin-bottom:14px}
+.effect-5 .compact .choice strong{font-size:36px;line-height:1.45}
+.effect-5 .neutral-frame,.effect-5 .neutral-frame:nth-child(2){background:#e2ece4}
+.effect-5 .result-visual{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;flex:1}
+.effect-5 .twenty-dots{display:grid;grid-template-columns:repeat(5,85px);gap:5px 15px}
+.effect-5 .twenty-dots span{font-size:79px;line-height:1;color:var(--green-deep);text-align:center}
+.effect-5 .twenty-dots .unfinished{color:#866851}
+.effect-5 .result-numbers{display:grid;gap:36px}
+.effect-5 .result-numbers b{font-size:44px;display:block}
+.effect-5 .result-numbers span{font-size:30px;display:block;margin-top:12px;color:var(--muted)}
+.effect-5 .report-paper{font-size:47px;line-height:1.7;background:#fff;padding:35px 40px;border-left:10px solid var(--green-deep)}
+.effect-5 .opening h1{font-size:94px}
+.effect-5 .intro{font-size:35px!important;line-height:1.7}
+#slide-8 .statement{font-size:40px;padding:20px 34px}
+#slide-8 .concept-definition{font-size:39px}
+#slide-10 .compare-item{padding:28px 36px}
+#slide-10 .compare-item p{font-size:36px;line-height:1.6;margin-top:18px}
+#slide-12 .exercise{font-size:40px;line-height:1.55;padding:24px 35px}
+#slide-12 .prompt{font-size:34px}
+#slide-12 .answer-box{font-size:29px;padding:22px 30px}
+.effect-5 .tiny-source{margin-top:auto!important}
+#slide-13 .slide-title{font-size:59px}
+#slide-13 .question-row{font-size:43px}
+.effect-6{--green-deep:#326b61;--green:#83b9a9;--green-soft:#dceee5;--stage-bg:#202b29;--slide-bg:#202b29}
+.effect-6 .content{inset:48px 66px 90px 162px}
+.effect-6-title{font-size:64px;margin-bottom:30px;line-height:1.3}
+.effect-6 .opening{display:grid;grid-template-columns:1.15fr .85fr;gap:66px;align-items:center;flex:1}
+.effect-6 .opening h1{font-size:96px;line-height:1.35;margin:20px 0 35px;font-family:var(--font-display)}
+.effect-6 .opening p{font-size:35px;line-height:1.7}
+.effect-6 .opening svg{width:100%;height:520px}
+.effect-6 .eyebrow{font-size:25px;color:var(--green-deep);font-weight:800;letter-spacing:3px}
+.effect-6 .footer-line{margin-top:auto!important;border-top:2px solid var(--line);padding-top:22px;font-size:25px!important;color:var(--muted)}
+.effect-6 .statement{font-size:48px;line-height:1.65;padding:36px 44px;border-left:10px solid var(--green-deep);background:#e4eee6;border-radius:0 20px 20px 0}
+.effect-6 .statement.large{font-size:57px}
+.effect-6 .flow-line{display:flex;align-items:center;gap:25px;justify-content:center;flex:1}
+.effect-6 .flow-line .step{flex:1;border:3px solid var(--ink);padding:36px 20px;border-radius:24px;background:#fff;text-align:center}
+.effect-6 .step b{display:block;font-size:44px}
+.effect-6 .step span{display:block;font-size:28px;margin-top:20px;color:var(--muted)}
+.effect-6 .arrow{font-size:54px;color:var(--green-deep)}
+.effect-6 .result-row{display:flex;gap:65px;align-items:center;flex:1}
+.effect-6 .people{display:grid;grid-template-columns:repeat(5,95px);gap:16px 25px}
+.effect-6 .person{width:85px;height:120px;color:var(--green-deep)}
+.effect-6 .person.no{color:#c4c3ba}
+.effect-6 .score{font-size:110px;font-family:var(--font-display);line-height:1.15}
+.effect-6 .score small{font-size:43px}
+.effect-6 .result-caption{font-size:33px;margin-top:24px!important;line-height:1.7}
+.effect-6 .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;flex:1;align-items:center}
+.effect-6 .choice{border:3px solid var(--ink);border-radius:24px;padding:38px 30px;min-height:300px;background:#fff;box-shadow:8px 8px 0 #14251f18;text-align:left;color:var(--ink);cursor:pointer}
+.effect-6 .choice:nth-child(2){background:#fff1be}
+.effect-6 .choice:nth-child(3){background:#dbeaf0}
+.effect-6 .choice[aria-pressed=true]{outline:9px solid var(--green-deep);outline-offset:6px}
+.effect-6 .choice b{display:block;font-size:28px;color:var(--muted);margin-bottom:32px}
+.effect-6 .choice strong{font-size:43px;line-height:1.6}
+.effect-6 .prompt{font-size:36px;font-weight:700;line-height:1.6}
+.effect-6 .quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;flex:1}
+.effect-6 .quote-grid.three{grid-template-columns:repeat(3,1fr)}
+.effect-6 .quote{border-top:10px solid var(--green-deep);background:#fff;padding:38px;border-radius:14px;box-shadow:7px 8px 0 #14251f15}
+.effect-6 .quote:nth-child(2){border-color:#bf8554}
+.effect-6 .quote:nth-child(3){border-color:#769eaf}
+.effect-6 .quote .who{font-size:26px;color:var(--muted);margin-bottom:32px}
+.effect-6 .quote p{font-size:38px;line-height:1.7}
+.effect-6 .quote-grid.three .quote p{font-size:35px}
+.effect-6 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:42px;flex:1}
+.effect-6 .compare-item{border:3px solid var(--ink);border-radius:25px;padding:40px;background:#f6ded4}
+.effect-6 .compare-item:nth-child(2){background:#dceee5}
+.effect-6 .compare-item b{font-size:28px}
+.effect-6 .compare-item p{font-size:40px;line-height:1.65;margin-top:30px}
+.effect-6 .next-step{font-size:32px;line-height:1.7;padding:25px 30px;background:#fff;border-radius:18px}
+.effect-6 .concept-name{font-family:var(--font-display);font-size:94px;color:var(--green-deep);margin:0}
+.effect-6 .concept-definition{font-size:43px;line-height:1.8;max-width:1440px}
+.effect-6 .three-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}
+.effect-6 .check{background:#fff;border:2px solid var(--line);border-radius:22px;padding:32px}
+.effect-6 .check b{font-size:27px;color:var(--green-deep)}
+.effect-6 .check h3{font-size:37px;line-height:1.6;margin:25px 0}
+.effect-6 .check p{font-size:29px;line-height:1.65;color:#51605b}
+.effect-6 .exercise{font-size:46px;line-height:1.65;border:3px solid var(--ink);border-radius:22px;padding:35px;background:#fff1be}
+.effect-6 .reveal-btn{align-self:flex-start;border:2px solid var(--ink);background:#dceee5;border-radius:30px;padding:15px 26px;font-size:28px;cursor:pointer}
+.effect-6 .answer-box{visibility:hidden;opacity:0;background:#fff;padding:25px 35px;border-radius:20px;font-size:31px;line-height:1.8;transition:opacity .2s}
+.effect-6 .answer-box.shown{visibility:visible;opacity:1}
+.effect-6 .question-list{display:grid;gap:25px;flex:1}
+.effect-6 .question-row{display:flex;align-items:center;gap:35px;border-bottom:2px solid var(--line);font-size:47px;line-height:1.55}
+.effect-6 .question-row b{font-family:var(--font-display);font-size:62px;color:var(--green-deep)}
+.effect-6 .tiny-source{font-size:20px!important;color:var(--muted)}
+.effect-6 .reveal{transition-duration:.3s}
+.effect-6 .reveal{opacity:1!important;transform:none!important}
+.effect-6 .answer-box{visibility:visible;opacity:1}
+.effect-6 .mini-poll{display:flex;gap:16px;align-items:center}
+.effect-6 .poll-person{width:105px;padding:25px 4px;border-radius:22px;background:#dceee5;text-align:center}
+.effect-6 .poll-person span{font-size:64px;color:#326b61;display:block}
+.effect-6 .poll-person b{font-size:22px;display:block;margin-top:14px}
+.effect-6 .poll-person.neutral{background:#e7e3d9}
+.effect-6 .population{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center;flex:1}
+.effect-6 .sample-dots{display:grid;grid-template-columns:repeat(5,90px);gap:8px 15px}
+.effect-6 .sample-dot{font-size:85px;line-height:1;color:#326b61;text-align:center}
+.effect-6 .sample-dot.left{color:#9b7762}
+.effect-6 .dot-key{font-size:24px!important;color:var(--muted);margin-top:28px!important}
+.effect-6 .population-summary{display:grid;gap:24px}
+.effect-6 .population-summary>div{display:flex;align-items:center;gap:35px;padding-bottom:18px;border-bottom:2px solid var(--line)}
+.effect-6 .population-summary b{font-size:57px;color:var(--green-deep);min-width:160px}
+.effect-6 .population-summary span{font-size:31px;line-height:1.5}
+.effect-6 .concept-definition{font-size:42px;line-height:1.6}
+.effect-6 .choice strong{font-size:36px}
+.effect-6 .opening h1{font-size:98px}
+.effect-6 .frame-label{font-size:27px;font-weight:700;color:var(--muted)}
+.effect-6 .frame-report{display:flex;gap:55px;align-items:center;background:#e2ece4;border:3px solid var(--ink);border-radius:24px;padding:24px 45px}
+.effect-6 .frame-number{font-family:var(--font-display);font-size:125px;line-height:1.2;color:var(--green-deep);min-width:300px}
+.effect-6 .frame-report p{font-size:46px;line-height:1.6}
+.effect-6 .compact{align-items:stretch}
+.effect-6 .compact .choice{min-height:0;padding:24px 30px}
+.effect-6 .compact .choice b{margin-bottom:14px}
+.effect-6 .compact .choice strong{font-size:36px;line-height:1.45}
+.effect-6 .neutral-frame,.effect-6 .neutral-frame:nth-child(2){background:#e2ece4}
+.effect-6 .result-visual{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;flex:1}
+.effect-6 .twenty-dots{display:grid;grid-template-columns:repeat(5,85px);gap:5px 15px}
+.effect-6 .twenty-dots span{font-size:79px;line-height:1;color:var(--green-deep);text-align:center}
+.effect-6 .twenty-dots .unfinished{color:#866851}
+.effect-6 .result-numbers{display:grid;gap:36px}
+.effect-6 .result-numbers b{font-size:44px;display:block}
+.effect-6 .result-numbers span{font-size:30px;display:block;margin-top:12px;color:var(--muted)}
+.effect-6 .report-paper{font-size:47px;line-height:1.7;background:#fff;padding:35px 40px;border-left:10px solid var(--green-deep)}
+.effect-6 .opening h1{font-size:94px}
+.effect-6 .intro{font-size:35px!important;line-height:1.7}
+#slide-20 .concept-name{font-size:76px}
+#slide-20 .concept-definition{font-size:39px;line-height:1.65}
+.effect-6 .caution{font-size:35px;line-height:1.5;background:#fff1be;border-left:8px solid #866851;padding:24px 32px}
+#slide-22 .compare-item{padding:28px 36px}
+#slide-22 .compare-item p{font-size:36px;line-height:1.6;margin-top:18px}
+#slide-24 .exercise{font-size:40px;line-height:1.55;padding:24px 35px}
+#slide-24 .prompt{font-size:34px}
+#slide-24 .answer-box{font-size:29px;padding:22px 30px}
+.effect-6 .tiny-source{margin-top:auto!important;line-height:1.7}
+#slide-25 .slide-title{font-size:59px}
+#slide-25 .question-row{font-size:43px}
+.effect-6 .test-results{display:grid;gap:24px;flex:1}
+.effect-6 .test-results>div{display:flex;align-items:center;gap:35px;background:#fff;border:2px solid var(--line);border-radius:20px;padding:25px 35px}
+.effect-6 .test-results b{font-size:32px;min-width:145px;color:#866851}
+.effect-6 .test-results>div:first-child b{color:var(--green-deep)}
+.effect-6 .test-results span{font-size:39px;line-height:1.55}
+#slide-23 .report-paper{font-size:43px}
+.effect-7{--green-deep:#326b61;--green:#83b9a9;--green-soft:#dceee5;--stage-bg:#202b29;--slide-bg:#202b29}
+.effect-7 .content{inset:48px 66px 90px 162px}
+.effect-7-title{font-size:64px;margin-bottom:30px;line-height:1.3}
+.effect-7 .opening{display:grid;grid-template-columns:1.15fr .85fr;gap:66px;align-items:center;flex:1}
+.effect-7 .opening h1{font-size:96px;line-height:1.35;margin:20px 0 35px;font-family:var(--font-display)}
+.effect-7 .opening p{font-size:35px;line-height:1.7}
+.effect-7 .opening svg{width:100%;height:520px}
+.effect-7 .eyebrow{font-size:25px;color:var(--green-deep);font-weight:800;letter-spacing:3px}
+.effect-7 .footer-line{margin-top:auto!important;border-top:2px solid var(--line);padding-top:22px;font-size:25px!important;color:var(--muted)}
+.effect-7 .statement{font-size:48px;line-height:1.65;padding:36px 44px;border-left:10px solid var(--green-deep);background:#e4eee6;border-radius:0 20px 20px 0}
+.effect-7 .statement.large{font-size:57px}
+.effect-7 .flow-line{display:flex;align-items:center;gap:25px;justify-content:center;flex:1}
+.effect-7 .flow-line .step{flex:1;border:3px solid var(--ink);padding:36px 20px;border-radius:24px;background:#fff;text-align:center}
+.effect-7 .step b{display:block;font-size:44px}
+.effect-7 .step span{display:block;font-size:28px;margin-top:20px;color:var(--muted)}
+.effect-7 .arrow{font-size:54px;color:var(--green-deep)}
+.effect-7 .result-row{display:flex;gap:65px;align-items:center;flex:1}
+.effect-7 .people{display:grid;grid-template-columns:repeat(5,95px);gap:16px 25px}
+.effect-7 .person{width:85px;height:120px;color:var(--green-deep)}
+.effect-7 .person.no{color:#c4c3ba}
+.effect-7 .score{font-size:110px;font-family:var(--font-display);line-height:1.15}
+.effect-7 .score small{font-size:43px}
+.effect-7 .result-caption{font-size:33px;margin-top:24px!important;line-height:1.7}
+.effect-7 .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;flex:1;align-items:center}
+.effect-7 .choice{border:3px solid var(--ink);border-radius:24px;padding:38px 30px;min-height:300px;background:#fff;box-shadow:8px 8px 0 #14251f18;text-align:left;color:var(--ink);cursor:pointer}
+.effect-7 .choice:nth-child(2){background:#fff1be}
+.effect-7 .choice:nth-child(3){background:#dbeaf0}
+.effect-7 .choice[aria-pressed=true]{outline:9px solid var(--green-deep);outline-offset:6px}
+.effect-7 .choice b{display:block;font-size:28px;color:var(--muted);margin-bottom:32px}
+.effect-7 .choice strong{font-size:43px;line-height:1.6}
+.effect-7 .prompt{font-size:36px;font-weight:700;line-height:1.6}
+.effect-7 .quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;flex:1}
+.effect-7 .quote-grid.three{grid-template-columns:repeat(3,1fr)}
+.effect-7 .quote{border-top:10px solid var(--green-deep);background:#fff;padding:38px;border-radius:14px;box-shadow:7px 8px 0 #14251f15}
+.effect-7 .quote:nth-child(2){border-color:#bf8554}
+.effect-7 .quote:nth-child(3){border-color:#769eaf}
+.effect-7 .quote .who{font-size:26px;color:var(--muted);margin-bottom:32px}
+.effect-7 .quote p{font-size:38px;line-height:1.7}
+.effect-7 .quote-grid.three .quote p{font-size:35px}
+.effect-7 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:42px;flex:1}
+.effect-7 .compare-item{border:3px solid var(--ink);border-radius:25px;padding:40px;background:#f6ded4}
+.effect-7 .compare-item:nth-child(2){background:#dceee5}
+.effect-7 .compare-item b{font-size:28px}
+.effect-7 .compare-item p{font-size:40px;line-height:1.65;margin-top:30px}
+.effect-7 .next-step{font-size:32px;line-height:1.7;padding:25px 30px;background:#fff;border-radius:18px}
+.effect-7 .concept-name{font-family:var(--font-display);font-size:94px;color:var(--green-deep);margin:0}
+.effect-7 .concept-definition{font-size:43px;line-height:1.8;max-width:1440px}
+.effect-7 .three-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}
+.effect-7 .check{background:#fff;border:2px solid var(--line);border-radius:22px;padding:32px}
+.effect-7 .check b{font-size:27px;color:var(--green-deep)}
+.effect-7 .check h3{font-size:37px;line-height:1.6;margin:25px 0}
+.effect-7 .check p{font-size:29px;line-height:1.65;color:#51605b}
+.effect-7 .exercise{font-size:46px;line-height:1.65;border:3px solid var(--ink);border-radius:22px;padding:35px;background:#fff1be}
+.effect-7 .reveal-btn{align-self:flex-start;border:2px solid var(--ink);background:#dceee5;border-radius:30px;padding:15px 26px;font-size:28px;cursor:pointer}
+.effect-7 .answer-box{visibility:hidden;opacity:0;background:#fff;padding:25px 35px;border-radius:20px;font-size:31px;line-height:1.8;transition:opacity .2s}
+.effect-7 .answer-box.shown{visibility:visible;opacity:1}
+.effect-7 .question-list{display:grid;gap:25px;flex:1}
+.effect-7 .question-row{display:flex;align-items:center;gap:35px;border-bottom:2px solid var(--line);font-size:47px;line-height:1.55}
+.effect-7 .question-row b{font-family:var(--font-display);font-size:62px;color:var(--green-deep)}
+.effect-7 .tiny-source{font-size:20px!important;color:var(--muted)}
+.effect-7 .reveal{transition-duration:.3s}
+.effect-7 .reveal{opacity:1!important;transform:none!important}
+.effect-7 .answer-box{visibility:visible;opacity:1}
+.effect-7 .mini-poll{display:flex;gap:16px;align-items:center}
+.effect-7 .poll-person{width:105px;padding:25px 4px;border-radius:22px;background:#dceee5;text-align:center}
+.effect-7 .poll-person span{font-size:64px;color:#326b61;display:block}
+.effect-7 .poll-person b{font-size:22px;display:block;margin-top:14px}
+.effect-7 .poll-person.neutral{background:#e7e3d9}
+.effect-7 .population{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center;flex:1}
+.effect-7 .sample-dots{display:grid;grid-template-columns:repeat(5,90px);gap:8px 15px}
+.effect-7 .sample-dot{font-size:85px;line-height:1;color:#326b61;text-align:center}
+.effect-7 .sample-dot.left{color:#9b7762}
+.effect-7 .dot-key{font-size:24px!important;color:var(--muted);margin-top:28px!important}
+.effect-7 .population-summary{display:grid;gap:24px}
+.effect-7 .population-summary>div{display:flex;align-items:center;gap:35px;padding-bottom:18px;border-bottom:2px solid var(--line)}
+.effect-7 .population-summary b{font-size:57px;color:var(--green-deep);min-width:160px}
+.effect-7 .population-summary span{font-size:31px;line-height:1.5}
+.effect-7 .concept-definition{font-size:42px;line-height:1.6}
+.effect-7 .choice strong{font-size:36px}
+.effect-7 .opening h1{font-size:98px}
+.effect-7 .frame-label{font-size:27px;font-weight:700;color:var(--muted)}
+.effect-7 .frame-report{display:flex;gap:55px;align-items:center;background:#e2ece4;border:3px solid var(--ink);border-radius:24px;padding:24px 45px}
+.effect-7 .frame-number{font-family:var(--font-display);font-size:125px;line-height:1.2;color:var(--green-deep);min-width:300px}
+.effect-7 .frame-report p{font-size:46px;line-height:1.6}
+.effect-7 .compact{align-items:stretch}
+.effect-7 .compact .choice{min-height:0;padding:24px 30px}
+.effect-7 .compact .choice b{margin-bottom:14px}
+.effect-7 .compact .choice strong{font-size:36px;line-height:1.45}
+.effect-7 .neutral-frame,.effect-7 .neutral-frame:nth-child(2){background:#e2ece4}
+.effect-7 .result-visual{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;flex:1}
+.effect-7 .twenty-dots{display:grid;grid-template-columns:repeat(5,85px);gap:5px 15px}
+.effect-7 .twenty-dots span{font-size:79px;line-height:1;color:var(--green-deep);text-align:center}
+.effect-7 .twenty-dots .unfinished{color:#866851}
+.effect-7 .result-numbers{display:grid;gap:36px}
+.effect-7 .result-numbers b{font-size:44px;display:block}
+.effect-7 .result-numbers span{font-size:30px;display:block;margin-top:12px;color:var(--muted)}
+.effect-7 .report-paper{font-size:47px;line-height:1.7;background:#fff;padding:35px 40px;border-left:10px solid var(--green-deep)}
+.effect-7 .opening h1{font-size:87px}
+.effect-7 .intro{font-size:35px!important;line-height:1.7}
+#slide-32 .concept-name{font-size:86px}
+#slide-32 .concept-definition{font-size:39px;line-height:1.65}
+#slide-32 .statement{font-size:40px;padding:20px 34px}
+#slide-34 .compare-item{padding:28px 36px}
+#slide-34 .compare-item p{font-size:36px;line-height:1.6;margin-top:18px}
+#slide-36 .exercise{font-size:40px;line-height:1.55;padding:24px 35px}
+#slide-36 .prompt{font-size:34px}
+#slide-36 .answer-box{font-size:29px;padding:22px 30px}
+.effect-7 .tiny-source{margin-top:auto!important;line-height:1.7}
+#slide-37 .slide-title{font-size:58px}
+#slide-37 .question-row{font-size:43px}
+#slide-35 .report-paper{font-size:40px}
+.effect-8{--green-deep:#326b61;--green:#83b9a9;--green-soft:#dceee5;--stage-bg:#202b29;--slide-bg:#202b29}
+.effect-8 .content{inset:48px 66px 90px 162px}
+.effect-8-title{font-size:64px;margin-bottom:30px;line-height:1.3}
+.effect-8 .opening{display:grid;grid-template-columns:1.15fr .85fr;gap:66px;align-items:center;flex:1}
+.effect-8 .opening h1{font-size:96px;line-height:1.35;margin:20px 0 35px;font-family:var(--font-display)}
+.effect-8 .opening p{font-size:35px;line-height:1.7}
+.effect-8 .opening svg{width:100%;height:520px}
+.effect-8 .eyebrow{font-size:25px;color:var(--green-deep);font-weight:800;letter-spacing:3px}
+.effect-8 .footer-line{margin-top:auto!important;border-top:2px solid var(--line);padding-top:22px;font-size:25px!important;color:var(--muted)}
+.effect-8 .statement{font-size:48px;line-height:1.65;padding:36px 44px;border-left:10px solid var(--green-deep);background:#e4eee6;border-radius:0 20px 20px 0}
+.effect-8 .statement.large{font-size:57px}
+.effect-8 .flow-line{display:flex;align-items:center;gap:25px;justify-content:center;flex:1}
+.effect-8 .flow-line .step{flex:1;border:3px solid var(--ink);padding:36px 20px;border-radius:24px;background:#fff;text-align:center}
+.effect-8 .step b{display:block;font-size:44px}
+.effect-8 .step span{display:block;font-size:28px;margin-top:20px;color:var(--muted)}
+.effect-8 .arrow{font-size:54px;color:var(--green-deep)}
+.effect-8 .result-row{display:flex;gap:65px;align-items:center;flex:1}
+.effect-8 .people{display:grid;grid-template-columns:repeat(5,95px);gap:16px 25px}
+.effect-8 .person{width:85px;height:120px;color:var(--green-deep)}
+.effect-8 .person.no{color:#c4c3ba}
+.effect-8 .score{font-size:110px;font-family:var(--font-display);line-height:1.15}
+.effect-8 .score small{font-size:43px}
+.effect-8 .result-caption{font-size:33px;margin-top:24px!important;line-height:1.7}
+.effect-8 .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;flex:1;align-items:center}
+.effect-8 .choice{border:3px solid var(--ink);border-radius:24px;padding:38px 30px;min-height:300px;background:#fff;box-shadow:8px 8px 0 #14251f18;text-align:left;color:var(--ink);cursor:pointer}
+.effect-8 .choice:nth-child(2){background:#fff1be}
+.effect-8 .choice:nth-child(3){background:#dbeaf0}
+.effect-8 .choice[aria-pressed=true]{outline:9px solid var(--green-deep);outline-offset:6px}
+.effect-8 .choice b{display:block;font-size:28px;color:var(--muted);margin-bottom:32px}
+.effect-8 .choice strong{font-size:43px;line-height:1.6}
+.effect-8 .prompt{font-size:36px;font-weight:700;line-height:1.6}
+.effect-8 .quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;flex:1}
+.effect-8 .quote-grid.three{grid-template-columns:repeat(3,1fr)}
+.effect-8 .quote{border-top:10px solid var(--green-deep);background:#fff;padding:38px;border-radius:14px;box-shadow:7px 8px 0 #14251f15}
+.effect-8 .quote:nth-child(2){border-color:#bf8554}
+.effect-8 .quote:nth-child(3){border-color:#769eaf}
+.effect-8 .quote .who{font-size:26px;color:var(--muted);margin-bottom:32px}
+.effect-8 .quote p{font-size:38px;line-height:1.7}
+.effect-8 .quote-grid.three .quote p{font-size:35px}
+.effect-8 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:42px;flex:1}
+.effect-8 .compare-item{border:3px solid var(--ink);border-radius:25px;padding:40px;background:#f6ded4}
+.effect-8 .compare-item:nth-child(2){background:#dceee5}
+.effect-8 .compare-item b{font-size:28px}
+.effect-8 .compare-item p{font-size:40px;line-height:1.65;margin-top:30px}
+.effect-8 .next-step{font-size:32px;line-height:1.7;padding:25px 30px;background:#fff;border-radius:18px}
+.effect-8 .concept-name{font-family:var(--font-display);font-size:94px;color:var(--green-deep);margin:0}
+.effect-8 .concept-definition{font-size:43px;line-height:1.8;max-width:1440px}
+.effect-8 .three-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}
+.effect-8 .check{background:#fff;border:2px solid var(--line);border-radius:22px;padding:32px}
+.effect-8 .check b{font-size:27px;color:var(--green-deep)}
+.effect-8 .check h3{font-size:37px;line-height:1.6;margin:25px 0}
+.effect-8 .check p{font-size:29px;line-height:1.65;color:#51605b}
+.effect-8 .exercise{font-size:46px;line-height:1.65;border:3px solid var(--ink);border-radius:22px;padding:35px;background:#fff1be}
+.effect-8 .reveal-btn{align-self:flex-start;border:2px solid var(--ink);background:#dceee5;border-radius:30px;padding:15px 26px;font-size:28px;cursor:pointer}
+.effect-8 .answer-box{visibility:hidden;opacity:0;background:#fff;padding:25px 35px;border-radius:20px;font-size:31px;line-height:1.8;transition:opacity .2s}
+.effect-8 .answer-box.shown{visibility:visible;opacity:1}
+.effect-8 .question-list{display:grid;gap:25px;flex:1}
+.effect-8 .question-row{display:flex;align-items:center;gap:35px;border-bottom:2px solid var(--line);font-size:47px;line-height:1.55}
+.effect-8 .question-row b{font-family:var(--font-display);font-size:62px;color:var(--green-deep)}
+.effect-8 .tiny-source{font-size:20px!important;color:var(--muted)}
+.effect-8 .reveal{transition-duration:.3s}
+.effect-8 .reveal{opacity:1!important;transform:none!important}
+.effect-8 .answer-box{visibility:visible;opacity:1}
+.effect-8 .mini-poll{display:flex;gap:16px;align-items:center}
+.effect-8 .poll-person{width:105px;padding:25px 4px;border-radius:22px;background:#dceee5;text-align:center}
+.effect-8 .poll-person span{font-size:64px;color:#326b61;display:block}
+.effect-8 .poll-person b{font-size:22px;display:block;margin-top:14px}
+.effect-8 .poll-person.neutral{background:#e7e3d9}
+.effect-8 .population{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center;flex:1}
+.effect-8 .sample-dots{display:grid;grid-template-columns:repeat(5,90px);gap:8px 15px}
+.effect-8 .sample-dot{font-size:85px;line-height:1;color:#326b61;text-align:center}
+.effect-8 .sample-dot.left{color:#9b7762}
+.effect-8 .dot-key{font-size:24px!important;color:var(--muted);margin-top:28px!important}
+.effect-8 .population-summary{display:grid;gap:24px}
+.effect-8 .population-summary>div{display:flex;align-items:center;gap:35px;padding-bottom:18px;border-bottom:2px solid var(--line)}
+.effect-8 .population-summary b{font-size:57px;color:var(--green-deep);min-width:160px}
+.effect-8 .population-summary span{font-size:31px;line-height:1.5}
+.effect-8 .concept-definition{font-size:42px;line-height:1.6}
+.effect-8 .choice strong{font-size:36px}
+.effect-8 .opening h1{font-size:98px}
+.effect-8 .frame-label{font-size:27px;font-weight:700;color:var(--muted)}
+.effect-8 .frame-report{display:flex;gap:55px;align-items:center;background:#e2ece4;border:3px solid var(--ink);border-radius:24px;padding:24px 45px}
+.effect-8 .frame-number{font-family:var(--font-display);font-size:125px;line-height:1.2;color:var(--green-deep);min-width:300px}
+.effect-8 .frame-report p{font-size:46px;line-height:1.6}
+.effect-8 .compact{align-items:stretch}
+.effect-8 .compact .choice{min-height:0;padding:24px 30px}
+.effect-8 .compact .choice b{margin-bottom:14px}
+.effect-8 .compact .choice strong{font-size:36px;line-height:1.45}
+.effect-8 .neutral-frame,.effect-8 .neutral-frame:nth-child(2){background:#e2ece4}
+.effect-8 .result-visual{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;flex:1}
+.effect-8 .twenty-dots{display:grid;grid-template-columns:repeat(5,85px);gap:5px 15px}
+.effect-8 .twenty-dots span{font-size:79px;line-height:1;color:var(--green-deep);text-align:center}
+.effect-8 .twenty-dots .unfinished{color:#866851}
+.effect-8 .result-numbers{display:grid;gap:36px}
+.effect-8 .result-numbers b{font-size:44px;display:block}
+.effect-8 .result-numbers span{font-size:30px;display:block;margin-top:12px;color:var(--muted)}
+.effect-8 .report-paper{font-size:47px;line-height:1.7;background:#fff;padding:35px 40px;border-left:10px solid var(--green-deep)}
+.effect-8 .opening h1{font-size:92px}
+.effect-8 .intro{font-size:35px!important;line-height:1.7}
+#slide-44 .concept-name{font-size:86px}
+#slide-44 .concept-definition{font-size:39px;line-height:1.65}
+#slide-44 .statement{font-size:40px;padding:20px 34px}
+#slide-46 .compare-item{padding:28px 36px}
+#slide-46 .compare-item p{font-size:36px;line-height:1.6;margin-top:18px}
+#slide-48 .exercise{font-size:40px;line-height:1.55;padding:24px 35px}
+#slide-48 .prompt{font-size:34px}
+#slide-48 .answer-box{font-size:29px;padding:22px 30px}
+.effect-8 .tiny-source{margin-top:auto!important;line-height:1.7}
+#slide-49 .slide-title{font-size:58px}
+#slide-49 .question-row{font-size:43px}
+#slide-47 .report-paper{font-size:40px}
+.effect-8 .criteria{width:100%;border-collapse:collapse;font-size:32px;line-height:1.6;background:#fff}
+.effect-8 .criteria th,.effect-8 .criteria td{border:2px solid var(--line);padding:19px 26px;text-align:left}
+.effect-8 .criteria th{background:#e2ece4}
+.effect-8 .criteria td:first-child{font-weight:700;width:28%}
+.effect-8 .caution{font-size:34px;line-height:1.6;background:#fff1be;padding:22px 30px;border-left:8px solid #866851}
+#slide-42 .report-paper{font-size:38px;line-height:1.55;padding:22px 32px}
+#slide-42 .compare-item{padding:28px 35px}
+#slide-42 .compare-item p{font-size:35px;line-height:1.5;margin-top:16px}
+
+/* === 四單元整合：首頁與導言結論 === */
+.slide.effect-cover .opening{grid-template-columns:1.25fr .75fr;gap:42px}
+.slide.effect-cover .opening h1{font-size:76px;line-height:1.3;margin:14px 0 18px}
+.slide.effect-cover .opening .eyebrow{font-size:24px;margin:0 0 8px}
+.slide.effect-cover .effect-name{font-family:var(--font-display);font-size:47px;line-height:1.35;color:var(--green-deep);margin:0}
+.slide.effect-cover .opening .effect-definition{font-size:30px!important;line-height:1.6;margin:0 0 20px;border-left:7px solid var(--green-deep);padding-left:22px}
+.slide.effect-cover .opening p:not(.eyebrow):not(.effect-definition){font-size:29px!important;line-height:1.6}
+.extra-slide .statement{font-size:39px;padding:24px 34px;line-height:1.6}
+.extra-slide .slide-title{font-size:58px}.extra-slide .body-area{gap:26px}
+.extra-slide .check h3{font-size:36px;margin:22px 0}.extra-slide .check p{font-size:28px}
+.recap-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,1fr);gap:18px 28px;flex:1;min-height:0}
+.recap-grid article{border:2px solid var(--line);border-radius:18px;background:#fff;padding:20px 26px;display:flex;flex-direction:column;justify-content:center}
+.recap-grid b{font-size:29px;color:var(--green-deep)}.recap-grid p{font-size:27px;line-height:1.5;margin-top:10px}
+.chapter-link{grid-column:1/-1;background:#dceee5!important;font-size:18px;font-weight:900}
+#teacherNote{white-space:pre-line}.overlay.open{z-index:11000}
+.menu-grid button{font-family:var(--font-body)}
+body:not(.js-ready) .deck-controls,body:not(.js-ready) .teacher-button,body:not(.js-ready) .help-button,body:not(.js-ready) .edit-hotzone,body:not(.js-ready) .edit-toggle,body:not(.js-ready) .reveal-btn{display:none}
+body:not(.js-ready) .answer-box{visibility:visible;opacity:1}
+
+/* === 四單元封面：沿用筆記本版型 === */
+.unit-cover .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;position:relative;padding-right:20px}
+.unit-cover .cover-kicker{font-size:28px;letter-spacing:.16em;color:var(--green-deep);font-weight:900}
+.unit-cover h1.deck-title{font-family:var(--font-display);font-size:108px;line-height:1.3;margin:0;font-weight:900;padding-bottom:12px}
+.unit-cover .cover-mark{background:linear-gradient(transparent 68%,#bde2a6 68%,#bde2a6 92%,transparent 92%);padding-right:12px}
+.unit-cover .cover-subtitle{font-size:43px;line-height:1.5;font-weight:800;margin:0}
+.unit-cover .cover-topics{display:flex;flex-wrap:wrap;gap:18px 32px;border-top:2px solid var(--line);padding-top:26px;margin-top:12px}
+.unit-cover .cover-topic{font-size:28px;white-space:nowrap;display:flex;align-items:center;gap:12px}
+.unit-cover .cover-topic b{font-size:23px;color:var(--green-deep);font-weight:900}
+</style><style id="site-home-style">.site-home-link{position:fixed;top:18px;left:92px;z-index:1000;padding:8px 14px;border:1px solid #80928a;border-radius:20px;background:#22312b;color:#fff;font:14px sans-serif;text-decoration:none}@media print{.site-home-link{display:none}}</style></head><body><a class="site-home-link" href="./" aria-label="返回教材首頁">← 教材首頁</a><div class="deck-viewport"><main class="deck-stage" id="deckStage" aria-live="polite"><section id="slide-1" class="slide active unit-cover" data-first="true" data-section="單元封面" data-chapter="單元封面" data-note="用封面介紹本單元的四個效應，先讓學生知道今天的主題，不必先解釋所有名詞。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回</div><div class="stage-label"><span class="stage-dot"></span>16 個心理效應 · 單元 02</div><div class="page-no">01 / 49</div></div><div class="rule"></div><div class="cover-body reveal"><p class="cover-kicker" data-editable>第二單元</p><h1 class="deck-title" data-editable>做判斷之前，<br><span class="cover-mark">多想一步</span></h1><p class="cover-subtitle" data-editable>為什麼有些決定很難改？</p><div class="cover-topics"><span class="cover-topic"><b>05</b><span data-editable>從眾效應</span></span><span class="cover-topic"><b>06</b><span data-editable>鄧寧克魯格效應</span></span><span class="cover-topic"><b>07</b><span data-editable>沉沒成本效應</span></span><span class="cover-topic"><b>08</b><span data-editable>稟賦效應</span></span></div></div></div><nav class="fallback-controls"><span></span><a href="#slide-2">下一頁 →</a></nav></div></section><section data-effect="5" data-local="1" data-chapter="05 從眾效應" class="slide effect-5 effect-cover" id="slide-2" data-section="故事開場" data-note="約 1 分鐘。先不揭露效應名稱。問：小組討論時，如果其他人都贊成，你還有疑問，會怎麼做？不要求學生公開指認真實組員，也不把沉默的人貼上標籤。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>故事開場</div><div class="page-no">02 / 49</div></div><div class="rule"></div><div class="body-area reveal"><div class="opening"><div><p class="eyebrow" data-editable>效應 05</p><h2 class="effect-name" data-editable>從眾效應</h2><h1 class="deck-title" data-editable>大家都同意，<br>我也要<br><span class="highlight">同意嗎？</span></h1><p class="effect-definition" data-editable>面對他人的意見或群體壓力，<br>我們可能跟著多數人選擇。</p><p class="intro" data-editable>先聽小組怎麼選，<br>再想想自己的理由。</p></div><svg viewBox="0 0 600 520" role="img" aria-label="三位組員表示贊成，一位組員仍有疑問"><rect x="24" y="35" width="552" height="450" rx="26" fill="#e2ece4" stroke="#14251f" stroke-width="4"/><text x="300" y="104" text-anchor="middle" font-size="31">小組討論中</text><circle cx="115" cy="200" r="61" fill="#faf7ed" stroke="#326b61" stroke-width="3"/><text x="115" y="213" text-anchor="middle" font-size="37">贊成</text><circle cx="300" cy="200" r="61" fill="#faf7ed" stroke="#326b61" stroke-width="3"/><text x="300" y="213" text-anchor="middle" font-size="37">贊成</text><circle cx="485" cy="200" r="61" fill="#faf7ed" stroke="#326b61" stroke-width="3"/><text x="485" y="213" text-anchor="middle" font-size="37">贊成</text><rect x="154" y="316" width="292" height="111" rx="25" fill="#fff1be" stroke="#14251f" stroke-width="3"/><text x="300" y="384" text-anchor="middle" font-size="38">我還有疑問……</text></svg></div><p class="footer-line" data-editable>教學情境｜故事與人物皆為自編，供課堂討論。</p></div></div><nav class="fallback-controls"><a href="#slide-1">← 上一頁</a><a href="#slide-3">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="2" data-chapter="05 從眾效應" class="slide effect-5" id="slide-3" data-section="先看情境" data-note="約 1～2 分鐘。三位組員偏好校園 AI 問答，小安想到器材借用；兩者都只是初步方向。不要把熱門技術當成壞事，也不要因為少數人提出就認定比較有創意。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>先看情境</div><div class="page-no">03 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>四位組員，正在討論專題題目</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>方向一：校園 AI 問答</b><p data-editable>三位組員都說想做。<br>但還沒確認：<br>學生最需要問什麼？</p></article><article class="compare-item neutral-frame"><b>方向二：器材借用系統</b><p data-editable>小安想到借用的困難。<br>但還沒確認：<br>其他人也有這個問題嗎？</p></article></div><p class="footer-line" data-editable>兩個方向都還需要查資料，現在還不能判定誰比較好。</p></div></div><nav class="fallback-controls"><a href="#slide-2">← 上一頁</a><a href="#slide-4">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="3" data-chapter="05 從眾效應" class="slide effect-5" id="slide-4" data-section="先做選擇" data-note="約 2 分鐘。先個別思考，再自願分享，避免用全班公開舉手再製壓力。三個選項不是心理測驗，按鈕僅供教師標記正在討論的回答。沉默可能是需要時間、語言不熟或其他原因，不能直接判定為從眾。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>先做選擇</div><div class="page-no">04 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>其他三人都贊成，你會怎麼做？</h2><div class="body-area reveal"><p class="exercise" data-editable>小安其實還不確定。<br>如果你是小安，會先怎麼回應？</p><div class="choices compact"><button class="choice" data-choice="A" aria-pressed="false"><b>A</b><strong data-editable>大家都選了，<br>我也贊成</strong></button><button class="choice" data-choice="B" aria-pressed="false"><b>B</b><strong data-editable>先不說話，<br>看看再說</strong></button><button class="choice" data-choice="C" aria-pressed="false"><b>C</b><strong data-editable>先說出疑問，<br>一起找理由</strong></button></div><p class="footer-line" data-editable>先自己想，再分享。也可以提出其他回應。</p></div></div><nav class="fallback-controls"><a href="#slide-3">← 上一頁</a><a href="#slide-5">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="4" data-chapter="05 從眾效應" class="slide effect-5" id="slide-5" data-section="看看結果" data-note="約 1～2 分鐘。此處用故事明確提供小安的內心想法，才知道他是因為群體壓力表態。不能只憑現實學生點頭、沉默或改變選擇就推定相同動機。全體表態一致，不等於所有疑問都已得到回答。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>看看結果</div><div class="page-no">05 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>沒有人反對，就算想清楚了嗎？</h2><div class="body-area reveal"><p class="report-paper" data-editable>小安最後說：「那就跟大家一樣吧。」</p><div class="comparison"><article class="compare-item neutral-frame"><b>小組聽到的是</b><p data-editable>「四個人都同意，<br>那我們就決定了！」</p></article><article class="compare-item neutral-frame"><b>小安心裡想的是</b><p data-editable>「我還是不太確定，<br>但不想只有我反對。」</p></article></div></div></div><nav class="fallback-controls"><a href="#slide-4">← 上一頁</a><a href="#slide-6">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="5" data-chapter="05 從眾效應" class="slide effect-5" id="slide-6" data-section="再問理由" data-note="約 2 分鐘。這是自編故事中新增的對話。興趣可以是起點，但還要了解使用者與問題；不能由此推出 AI 問答不適合作專題，也不能認定器材借用必定較好。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>再問理由</div><div class="page-no">06 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>老師問：「為什麼選這個題目？」</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>三位組員說</b><p data-editable>「最近很多人都在做 AI，<br>我們也想試試看。」</p></article><article class="compare-item neutral-frame"><b>小安說</b><p data-editable>「我還不知道學生<br>最需要問什麼，<br>但剛才沒有說出來。」</p></article></div><p class="prompt" data-editable>題目可能值得做，<br>但「很多人都做」還不能說明要解決什麼問題。</p></div></div><nav class="fallback-controls"><a href="#slide-5">← 上一頁</a><a href="#slide-7">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="6" data-chapter="05 從眾效應" class="slide effect-5" id="slide-7" data-section="回看自己" data-note="約 2 分鐘。以生活語言提出兩種可能的想法，不用學生背分類，也不把它們當成小安以外每個人的真實動機。參考別人的經驗有時合理，重點在於是否有機會說明、追問與查核。不要以國籍或語言能力推斷誰比較容易從眾。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>回看自己</div><div class="page-no">07 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>我為什麼會跟著大家？</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>怕自己格格不入</b><p data-editable>「只有我不一樣，<br>會不會讓大家覺得<br>我很難合作？」</p></article><article class="compare-item neutral-frame"><b>以為別人更清楚</b><p data-editable>「他們都說好，<br>也許知道一些<br>我還不知道的事。」</p></article></div><p class="footer-line" data-editable>可以聽別人的想法，也可以問：你的理由是什麼？</p></div></div><nav class="fallback-controls"><a href="#slide-6">← 上一頁</a><a href="#slide-8">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="7" data-chapter="05 從眾效應" class="slide effect-5" id="slide-8" data-section="認識效應" data-note="約 1～2 分鐘。Asch（1956）研究群體壓力下的獨立判斷與從眾，原作是線段判斷情境，不是專題選題。本輪核對 APA 書目與摘要的存檔副本；未以此宣稱實讀整篇論文。不要套用特定從眾比例到本班。廣義社會影響不一定有害；本單元聚焦在理由尚未充分討論就跟隨群體的風險。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>認識效應</div><div class="page-no">08 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>群體的想法，可能影響我的選擇</h2><div class="body-area reveal"><p class="concept-name" data-editable>從眾效應</p><p class="concept-definition" data-editable>受到群體的意見或壓力影響，<br>我們可能改變自己的判斷或做法，<br>讓自己和大家一致。</p><p class="statement" data-editable>「我認同的是理由，<br>還是只是想和大家一樣？」</p><p class="tiny-source">研究背景：<a href="https://doi.org/10.1037/h0093718" target="_blank" rel="noopener">Asch（1956）↗</a>。本單元為自編專題情境，並非原研究實驗。</p></div></div><nav class="fallback-controls"><a href="#slide-7">← 上一頁</a><a href="#slide-9">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="8" data-chapter="05 從眾效應" class="slide effect-5" id="slide-9" data-section="回到專題" data-note="約 2 分鐘。三項是本課的選題討論建議，不是心理研究提供的固定解方。各方向都要接受相同檢查。多數決可以是最後的決策方式，但不宜取代前面的理由與資料討論。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>回到專題</div><div class="page-no">09 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>先比較理由，再比較贊成人數</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>01　使用者</b><h3 data-editable>到底是誰<br>需要這個專題？</h3><p data-editable>不是只有組員<br>覺得有趣。</p></article><article class="check"><b>02　問題</b><h3 data-editable>對方現在<br>遇到什麼困難？</h3><p data-editable>找人訪談或觀察，<br>不要只靠猜測。</p></article><article class="check"><b>03　可行性</b><h3 data-editable>以我們的條件，<br>能做到什麼？</h3><p data-editable>考慮資料、技術、<br>時間與分工。</p></article></div><p class="footer-line" data-editable>先把兩個方向放在相同標準下討論，再一起決定。</p></div></div><nav class="fallback-controls"><a href="#slide-8">← 上一頁</a><a href="#slide-10">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="9" data-chapter="05 從眾效應" class="slide effect-5" id="slide-10" data-section="辨認差異" data-note="約 2 分鐘。兩段自述用來比較主要理由，不是用一句話診斷真實個人的心理狀態。兩人最後都同意，但第一人仍有未說出的疑問，第二人提出資料和比較過程；現實中動機也可能混合。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>辨認差異</div><div class="page-no">10 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>同樣是同意，理由可能不同</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>小安說</b><p data-editable>「我仍有疑問，<br>但大家都選了，<br>我不好意思再說。」</p></article><article class="compare-item neutral-frame"><b>另一位同學說</b><p data-editable>「我看過訪談紀錄，<br>也比較過兩個方向，<br>所以改變原本的想法。」</p></article></div><button class="reveal-btn" data-reveal="e5-reasons" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e5-reasons" aria-hidden="true" data-editable>不能只看有沒有改變想法，要聽改變的理由。<br>根據新資料調整判斷，不等於沒有主見。</div></div></div><nav class="fallback-controls"><a href="#slide-9">← 上一頁</a><a href="#slide-11">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="10" data-chapter="05 從眾效應" class="slide effect-5" id="slide-11" data-section="改善討論" data-note="約 1～2 分鐘。先寫再討論、輪流說理由是課堂流程建議，不保證完全消除群體影響。允許短句、紙條或先整理再發言，避免強迫中文較弱學生當場辯論。領導討論的人要回應疑問，不要求大家為了不同而不同。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>改善討論</div><div class="page-no">11 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>讓每個人的理由，都有機會被聽見</h2><div class="body-area reveal"><div class="flow-line"><div class="step"><b data-editable>先各自寫</b><span data-editable>我的選擇與疑問</span></div><span class="arrow">→</span><div class="step"><b data-editable>輪流說理由</b><span data-editable>先聽完，再回應</span></div><span class="arrow">→</span><div class="step"><b data-editable>查清楚再選</b><span data-editable>哪些資料還不夠？</span></div></div><p class="statement" data-editable>「我不是反對大家，<br>我想先確認：誰需要這個功能？」</p><p class="footer-line" data-editable>不同意見不是找麻煩；提出疑問，也是一種合作。</p></div></div><nav class="fallback-controls"><a href="#slide-10">← 上一頁</a><a href="#slide-12">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="11" data-chapter="05 從眾效應" class="slide effect-5" id="slide-12" data-section="換你試試" data-note="約 2～3 分鐘。自編操作情境。兩次觀察值得追問，但不足以認定所有使用者都會遇到困難，也不能直接說是動畫造成的。參考回答先尊重偏好，再說觀察，最後邀請查核；可接受不同措辭。避免把贊成動畫的人當成錯誤的一方。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>換你試試</div><div class="page-no">12 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「大家都喜歡，就用這個畫面吧！」</h2><div class="body-area reveal"><p class="exercise" data-editable>三位組員喜歡有動畫的首頁。<br>但你看到兩位試用同學，<br>都花了很久才找到「借用」按鈕。</p><p class="prompt" data-editable>你會怎麼說，<br>才能提出疑問，又讓大家願意一起討論？</p><button class="reveal-btn" data-reveal="e5-practice" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e5-practice" aria-hidden="true" data-editable>「動畫很吸引人，但剛才兩位同學找按鈕花了不少時間。<br>我們一起看看卡在哪裡，再調整畫面、重新測試，好嗎？」</div></div></div><nav class="fallback-controls"><a href="#slide-11">← 上一頁</a><a href="#slide-13">下一頁 →</a></nav></div></section>
+<section data-effect="5" data-local="12" data-chapter="05 從眾效應" class="slide effect-5" id="slide-13" data-section="帶回專題" data-note="約 1 分鐘。大三國際學生教材，維持短句、具體故事與討論，約 15～20 分鐘，可依理解速度調整。學生不必選少數意見才算有思考。全單元故事、對話、圖示與練習皆為自編；研究背景與故事情境分開標示。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 05</div><div class="stage-label"><span class="stage-dot"></span>帶回專題</div><div class="page-no">13 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>可以和大家一樣，也要有自己的理由</h2><div class="body-area reveal"><div class="question-list"><div class="question-row"><b>01</b><span data-editable>我同意，是因為理由，<br>還是因為大家都同意？</span></div><div class="question-row"><b>02</b><span data-editable>還有哪些疑問，<br>大家沒有機會說出來？</span></div><div class="question-row"><b>03</b><span data-editable>我們需要查什麼，<br>才能一起做出決定？</span></div></div><p class="footer-line" data-editable>不盲目跟隨，也不為了不同而反對。</p></div></div><nav class="fallback-controls"><a href="#slide-12">← 上一頁</a><a href="#slide-14">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="1" data-chapter="06 鄧寧克魯格效應" class="slide effect-6 effect-cover" id="slide-14" data-section="故事開場" data-note="約 1 分鐘。問：有沒有看別人操作很簡單，自己動手才遇到困難的經驗？本故事用來討論自我評估，不是原研究的實驗，也不能拿來判定某位學生具有特定偏誤。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>故事開場</div><div class="page-no">14 / 49</div></div><div class="rule"></div><div class="body-area reveal"><div class="opening"><div><p class="eyebrow" data-editable>效應 06</p><h2 class="effect-name" data-editable>鄧寧克魯格效應</h2><h1 class="deck-title" data-editable>看懂了，<br>就真的<br><span class="highlight">會做了嗎？</span></h1><p class="effect-definition" data-editable>對某項工作不熟悉時，<br>也可能不容易看出自己的不足。</p><p class="intro" data-editable>先看看自己的把握，<br>再用實作結果來確認。</p></div><svg viewBox="0 0 600 520" role="img" aria-label="從看懂教學，到自己完成與檢查，中間還需要驗證"><rect x="28" y="38" width="544" height="438" rx="24" fill="#e2ece4" stroke="#14251f" stroke-width="4"/><rect x="76" y="86" width="448" height="132" rx="20" fill="#faf7ed" stroke="#326b61" stroke-width="3"/><text x="300" y="167" text-anchor="middle" font-size="48">我看懂了！</text><path d="M300 240 V288 M285 273 L300 288 L315 273" fill="none" stroke="#326b61" stroke-width="5"/><rect x="76" y="314" width="448" height="112" rx="20" fill="#fff1be" stroke="#14251f" stroke-width="3"/><text x="300" y="382" text-anchor="middle" font-size="39">我能自己完成嗎？</text></svg></div><p class="footer-line" data-editable>教學情境｜故事、人物與測試結果皆為自編。</p></div></div><nav class="fallback-controls"><a href="#slide-13">← 上一頁</a><a href="#slide-15">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="2" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-15" data-section="先看情境" data-note="約 1～2 分鐘。小宇已經做出部分成果，不是完全不會。教學內容與完整專題需求可能不同；不要把缺漏歸咎於教學品質。故事後續會訂出清楚的測試標準。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>先看情境</div><div class="page-no">15 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>小宇要做「器材借用表單」</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>他看過</b><h3 data-editable>一段表單<br>製作教學</h3><p data-editable>覺得每個步驟<br>都看得懂。</p></article><article class="check"><b>他做過</b><h3 data-editable>照著範例<br>做出畫面</h3><p data-editable>輸入範例資料後，<br>畫面出現成功訊息。</p></article><article class="check"><b>他現在說</b><h3 data-editable>「借用功能，<br>我已經會了！」</h3><p data-editable>準備向組員報告<br>這部分已完成。</p></article></div><p class="footer-line" data-editable>看過、跟著做過，和能夠自己檢查，是同一件事嗎？</p></div></div><nav class="fallback-controls"><a href="#slide-14">← 上一頁</a><a href="#slide-16">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="3" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-16" data-section="先做判斷" data-note="約 2 分鐘。不是人格或能力測驗，按鈕只標記正在討論的選項。重看教學可能有幫助，但單靠熟悉感不能證明功能符合需求。鼓勵學生說出具體要檢查的結果。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>先做判斷</div><div class="page-no">16 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>現在，怎麼確認比較好？</h2><div class="body-area reveal"><p class="exercise" data-editable>小宇很有把握。<br>如果你是組員，下一步會怎麼做？</p><div class="choices compact"><button class="choice" data-choice="A" aria-pressed="false"><b>A</b><strong data-editable>已經跑成功，<br>先算完成</strong></button><button class="choice" data-choice="B" aria-pressed="false"><b>B</b><strong data-editable>再看一遍，<br>確認都懂</strong></button><button class="choice" data-choice="C" aria-pressed="false"><b>C</b><strong data-editable>列出標準，<br>實際測看看</strong></button></div><p class="footer-line" data-editable>先選，再說理由。你想確認的是什麼？</p></div></div><nav class="fallback-controls"><a href="#slide-15">← 上一頁</a><a href="#slide-17">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="4" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-17" data-section="準備測試" data-note="約 1～2 分鐘。先定標準再測試，預估與結果才有相同比較基礎。三項只是本故事選定的基本檢查，不是完整功能、安全或正式上線驗收。只使用虛構測試資料，不放入真實個資。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>準備測試</div><div class="page-no">17 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>小組先約好三個檢查項目</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>01　正常輸入</b><h3 data-editable>填好資料後，<br>能看到成功訊息</h3><p data-editable>用一筆新的<br>測試借用資料。</p></article><article class="check"><b>02　漏填資料</b><h3 data-editable>器材名稱空白，<br>要提醒補填</h3><p data-editable>不能仍然顯示<br>借用成功。</p></article><article class="check"><b>03　資料保留</b><h3 data-editable>重新開啟頁面，<br>仍能查到紀錄</h3><p data-editable>不只是剛才的<br>畫面看起來成功。</p></article></div><p class="footer-line" data-editable>測試前，小宇預估：「這三項應該都可以通過。」</p></div></div><nav class="fallback-controls"><a href="#slide-16">← 上一頁</a><a href="#slide-18">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="5" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-18" data-section="看看結果" data-note="約 2 分鐘。三項標準與前頁相同，結果為自編，不是實測資料。一次測試只指出這個版本的問題，不足以判斷小宇的一般能力，更不能單憑此故事確認鄧寧—克魯格效應。查不到紀錄也需要進一步查原因，不能直接認定是資料庫故障。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>看看結果</div><div class="page-no">18 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>原先的把握，和結果有落差</h2><div class="body-area reveal"><div class="test-results"><div><b>通過</b><span data-editable>正常輸入後，出現成功訊息。</span></div><div><b>未通過</b><span data-editable>器材名稱空白，卻仍顯示成功。</span></div><div><b>未通過</b><span data-editable>重新開啟頁面，查不到借用紀錄。</span></div></div><p class="prompt" data-editable>預估三項都能通過，實際只通過一項。<br>這能告訴我們什麼？</p><p class="footer-line" data-editable>知道哪裡還沒做好，比只說「我會了」更有幫助。</p></div></div><nav class="fallback-controls"><a href="#slide-17">← 上一頁</a><a href="#slide-19">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="6" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-19" data-section="回看判斷" data-note="約 2 分鐘。本頁連結操作技能與辨識錯誤的能力。看懂教學後高估自己，也可能涉及其他學習與自我評估問題，不能全部歸為同一效應。這是教學切入點，而非對單一心理原因的證明。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>回看判斷</div><div class="page-no">19 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>原來，我還不知道要檢查什麼</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>原本的判斷</b><p data-editable>「畫面有反應，<br>就表示功能完成了。」</p></article><article class="compare-item neutral-frame"><b>測試後的發現</b><p data-editable>「我還沒確認漏填時怎麼辦，<br>也沒確認資料有沒有留下來。」</p></article></div><p class="prompt" data-editable>除了學會做，也要學會判斷：<br>什麼才算做對、做完整？</p></div></div><nav class="fallback-controls"><a href="#slide-18">← 上一頁</a><a href="#slide-20">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="7" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-20" data-section="認識效應" data-note="約 2 分鐘。原研究摘要描述幽默、文法、邏輯任務中低分組的自我評估與實際表現落差，並提出後設認知解釋。本輪核對原論文書目與摘要。Magnus 與 Peresetsky（2022）提出統計模型解釋，表示不能直接由分組圖形推論所有人都缺乏自我認識。這不是智力診斷，也不是所有初學者都過度自信。不要畫出網路流傳的「愚昧山峰」並冒稱原研究證實的學習歷程；不以此貶低同學。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>認識效應</div><div class="page-no">20 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>不熟悉時，也可能看不出自己的缺漏</h2><div class="body-area reveal"><p class="concept-name" data-editable>鄧寧—克魯格效應</p><p class="concept-definition" data-editable>原研究發現：在某些任務中，<br>表現較差的一組，高估了自己的表現；<br>研究者認為，這與辨識錯誤的能力有關。</p><p class="caution" data-editable>不是「越不會，就一定越有自信」。</p><p class="tiny-source">研究：<a href="https://pubmed.ncbi.nlm.nih.gov/10626367/" target="_blank" rel="noopener">Kruger 與 Dunning（1999）↗</a>　<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8992690/" target="_blank" rel="noopener">後續的統計解釋（2022）↗</a><br>現象的成因與測量仍有討論；本故事不是研究證據。</p></div></div><nav class="fallback-controls"><a href="#slide-19">← 上一頁</a><a href="#slide-21">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="8" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-21" data-section="回到專題" data-note="約 2 分鐘。三項是本課的練習建議，不是心理量表，也不代表通過就精通所有技術。自己做不等於背程式或禁止工具，可依課程規定使用文件、AI 與協作，但須能核對輸出與說明修改。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>回到專題</div><div class="page-no">21 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>把「我會了」換成三種證據</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>01　能自己做</b><h3 data-editable>換一筆資料，<br>還能完成嗎？</h3><p data-editable>不只是照著影片<br>重做同一個例子。</p></article><article class="check"><b>02　能查結果</b><h3 data-editable>我怎麼知道<br>結果是對的？</h3><p data-editable>依照事先列好的<br>檢查項目來確認。</p></article><article class="check"><b>03　能說明</b><h3 data-editable>哪裡還沒完成？<br>接著要學什麼？</h3><p data-editable>說明限制，<br>也說出下一步。</p></article></div><p class="footer-line" data-editable>可以查資料、用工具、請教別人；重要的是能檢查結果。</p></div></div><nav class="fallback-controls"><a href="#slide-20">← 上一頁</a><a href="#slide-22">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="9" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-22" data-section="辨認差異" data-note="約 2 分鐘。不要把高自信必然當成能力差，也不要把不自信當成專業或謙虛的證明。甲提供了可核對資料，但仍需看標準是否合適、紀錄是否完整；乙需要練習與回饋，不是被判定為能力差。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>辨認差異</div><div class="page-no">22 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>有沒有自信，能直接看出能力嗎？</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>同學甲</b><p data-editable>「我很有把握，<br>我已照標準測過，<br>這裡有測試紀錄。」</p></article><article class="compare-item neutral-frame"><b>同學乙</b><p data-editable>「我不太有把握，<br>但目前還沒試做，<br>也沒有測試紀錄。」</p></article></div><button class="reveal-btn" data-reveal="e6-confidence" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e6-confidence" aria-hidden="true" data-editable>不能只靠語氣判斷能力高低。<br>先看實作與檢查結果；一次表現，也不能代表所有能力。</div></div></div><nav class="fallback-controls"><a href="#slide-21">← 上一頁</a><a href="#slide-23">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="10" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-23" data-section="改善報告" data-note="約 1～2 分鐘。這是根據本故事結果寫出的進度報告，不是說修正已完成。鼓勵有根據地表達目前能力與限制。目標不是讓學生失去信心，而是把信心建立在練習、檢查與回饋上。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>改善報告</div><div class="page-no">23 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>不只報「完成」，也說清楚做到哪裡</h2><div class="body-area reveal"><p class="report-paper" data-editable>「目前可以輸入資料並顯示成功。<br>漏填提醒和紀錄保留還沒通過測試，<br>接下來先查原因，再修改、重測。」</p><div class="flow-line"><div class="step"><b data-editable>先預估</b><span data-editable>哪些能完成？</span></div><span class="arrow">→</span><div class="step"><b data-editable>實際檢查</b><span data-editable>結果和預估相同嗎？</span></div><span class="arrow">→</span><div class="step"><b data-editable>調整評估</b><span data-editable>哪裡需要再學？</span></div></div><p class="footer-line" data-editable>知道自己的不足，不是退步，而是下一步更清楚。</p></div></div><nav class="fallback-controls"><a href="#slide-22">← 上一頁</a><a href="#slide-24">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="11" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-24" data-section="換你試試" data-note="約 2～3 分鐘。自編 AI 使用情境，不針對特定產品。重點不是禁止 AI，而是驗證輸出與理解結論。若是複選題、有人漏答或樣本限制，需交代計算分母，不能要求比例必定加總為百分之百。一次核對成功仍不代表具備所有資料分析能力。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>換你試試</div><div class="page-no">24 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「AI 幫我畫出圖表，所以我會分析了！」</h2><div class="body-area reveal"><p class="exercise" data-editable>同學用 AI 產生了一張問卷圖表，<br>覺得這樣就能完成資料分析。<br>但還沒核對人數，也說不出百分比怎麼算。</p><p class="prompt" data-editable>先不評論他的能力。<br>你會請他做哪個小檢查？</p><button class="reveal-btn" data-reveal="e6-practice" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e6-practice" aria-hidden="true" data-editable>先挑一題，自己算出各選項的人數與百分比，和圖表核對。<br>再說明百分比的計算方式，以及這個結果能、不能告訴我們什麼。</div></div></div><nav class="fallback-controls"><a href="#slide-23">← 上一頁</a><a href="#slide-25">下一頁 →</a></nav></div></section>
+<section data-effect="6" data-local="12" data-chapter="06 鄧寧克魯格效應" class="slide effect-6" id="slide-25" data-section="帶回專題" data-note="約 1 分鐘。大三國際學生教材，短句、具體案例、教師引導，約 15～20 分鐘，可依討論速度調整。故事與活動皆為自編；用作自我評估練習，不是證明或測量心理效應。請學生選一項專題工作，說出可以如何小規模檢查。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 06</div><div class="stage-label"><span class="stage-dot"></span>帶回專題</div><div class="page-no">25 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>用做出來的結果，認識自己的能力</h2><div class="body-area reveal"><div class="question-list"><div class="question-row"><b>01</b><span data-editable>我說「會了」，根據是什麼？</span></div><div class="question-row"><b>02</b><span data-editable>我能用什麼小任務，<br>檢查自己真的會不會？</span></div><div class="question-row"><b>03</b><span data-editable>結果和預估不同時，<br>我要補學什麼、請誰協助？</span></div></div><p class="footer-line" data-editable>不急著替自己或別人下結論，先做、先查，再調整。</p></div></div><nav class="fallback-controls"><a href="#slide-24">← 上一頁</a><a href="#slide-26">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="1" data-chapter="07 沉沒成本效應" class="slide effect-7 effect-cover" id="slide-26" data-section="故事開場" data-note="約 1 分鐘。問：有沒有做了很久，才發現方向可能不合適的經驗？不要求揭露真實組員的失誤。本單元不是勸學生放棄，而是練習分清楚過去投入與未來選擇。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>故事開場</div><div class="page-no">26 / 49</div></div><div class="rule"></div><div class="body-area reveal"><div class="opening"><div><p class="eyebrow" data-editable>效應 07</p><h2 class="effect-name" data-editable>沉沒成本效應</h2><h1 class="deck-title" data-editable>都做這麼久了，<br><span class="highlight">還要改嗎？</span></h1><p class="effect-definition" data-editable>因為捨不得過去的投入，<br>而忽略接下來是否值得繼續。</p><p class="intro" data-editable>先看看捨不得的是什麼，<br>再決定接下來怎麼做。</p></div><svg viewBox="0 0 600 520" role="img" aria-label="已投入三週，接下來的四週要如何安排"><rect x="28" y="38" width="544" height="438" rx="24" fill="#e2ece4" stroke="#14251f" stroke-width="4"/><text x="300" y="113" text-anchor="middle" font-size="31">小組的專題進度</text><rect x="70" y="149" width="460" height="110" rx="18" fill="#e7e3d9" stroke="#14251f" stroke-width="3"/><text x="300" y="217" text-anchor="middle" font-size="42">已經投入三週</text><rect x="70" y="308" width="460" height="110" rx="18" fill="#fff1be" stroke="#14251f" stroke-width="3"/><text x="300" y="376" text-anchor="middle" font-size="40">剩下四週，怎麼用？</text></svg></div><p class="footer-line" data-editable>教學情境｜故事、人物、時間與費用皆為自編。</p></div></div><nav class="fallback-controls"><a href="#slide-25">← 上一頁</a><a href="#slide-27">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="2" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-27" data-section="先看情境" data-note="約 1～2 分鐘。三週是已花掉的時間，四週是從現在到展示的可用日曆時間，不是假定四人都能全時投入。已有程式可能可再利用，不能把所有成果當成毫無價值。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>先看情境</div><div class="page-no">27 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>小組做了三週「活動集點平台」</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>原本想法</b><h3 data-editable>參加活動，<br>就能累積點數</h3><p data-editable>希望鼓勵同學<br>多參加校園活動。</p></article><article class="check"><b>目前進度</b><h3 data-editable>報名畫面完成，<br>集點功能還沒好</h3><p data-editable>已經畫了畫面，<br>也寫了一部分程式。</p></article><article class="check"><b>剩餘時間</b><h3 data-editable>距離成果展示，<br>還有四週</h3><p data-editable>接下來要實作、<br>測試並準備報告。</p></article></div><p class="footer-line" data-editable>現在，他們收到了一些和原先想法不同的回應。</p></div></div><nav class="fallback-controls"><a href="#slide-26">← 上一頁</a><a href="#slide-28">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="3" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-28" data-section="先做選擇" data-note="約 2 分鐘。先聽學生直覺，再揭露具體回應。按鈕僅標記討論選項，不是測量偏誤的工具。A 與 B 都可能太快下結論；學生若提出保留部分、縮小範圍或先查證，也可以。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>先做選擇</div><div class="page-no">28 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「都做三週了，現在改太可惜！」</h2><div class="body-area reveal"><p class="exercise" data-editable>組員擔心新回應會讓專題改方向。<br>如果你在場，會先怎麼做？</p><div class="choices compact"><button class="choice" data-choice="A" aria-pressed="false"><b>A</b><strong data-editable>都做這麼久，<br>先照原案做完</strong></button><button class="choice" data-choice="B" aria-pressed="false"><b>B</b><strong data-editable>方向有疑問，<br>乾脆全部重做</strong></button><button class="choice" data-choice="C" aria-pressed="false"><b>C</b><strong data-editable>先看新回應，<br>再比較做法</strong></button></div><p class="footer-line" data-editable>先說理由。除了繼續或全部重做，還有其他選擇嗎？</p></div></div><nav class="fallback-controls"><a href="#slide-27">← 上一頁</a><a href="#slide-29">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="4" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-29" data-section="看看回應" data-note="約 2 分鐘。這是兩位自編受訪者的回應，不是完整調查結論。沒有獎品不代表所有集點設計都不可行，忘記到場也未必只靠提醒就能解決。重點是新資訊提示原先假設需要再確認。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>看看回應</div><div class="page-no">29 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>兩位社團幹部，提出了另一種需要</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>他們談到集點</b><p data-editable>「點數要換什麼？<br>我們目前沒有<br>可以提供的獎品。」</p></article><article class="compare-item neutral-frame"><b>他們談到活動管理</b><p data-editable>「我們更常遇到的是：<br>有人報名後忘記來，<br>活動前還要一個個提醒。」</p></article></div><p class="prompt" data-editable>這些回應值得追問，<br>但還不能代表所有社團的需要。</p></div></div><nav class="fallback-controls"><a href="#slide-28">← 上一頁</a><a href="#slide-30">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="5" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-30" data-section="回看理由" data-note="約 1～2 分鐘。承認不甘心、心疼投入都很正常，不責怪學生。已做的程式與學到的能力仍可能有用；不能由「時間無法收回」推論先前努力沒有價值。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>回看理由</div><div class="page-no">30 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「捨不得」和「值得」，是兩件事</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>因為捨不得</b><p data-editable>「如果不做集點，<br>前三週不就白做了？」</p></article><article class="compare-item neutral-frame"><b>因為值得</b><p data-editable>「從現在開始，<br>哪個做法更能解決問題，<br>也能在期限內完成？」</p></article></div><p class="footer-line" data-editable>繼續投入，不會讓已經花掉的三週回來。</p></div></div><nav class="fallback-controls"><a href="#slide-29">← 上一頁</a><a href="#slide-31">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="6" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-31" data-section="打開選項" data-note="約 2 分鐘。不是聲稱選項二一定最好。查證也花時間，因此要設定短期範圍與檢查點。可以和教師討論縮小範圍，不自行取消課程要求或對合作單位的安排。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>打開選項</div><div class="page-no">31 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>不一定全部重來，也不一定照原案做</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>選項一</b><h3 data-editable>繼續完成<br>原本集點功能</h3><p data-editable>先確認需求、用途，<br>以及剩餘工作量。</p></article><article class="check"><b>選項二</b><h3 data-editable>保留報名，<br>調整為活動提醒</h3><p data-editable>先確認是否有幫助，<br>以及修改要花多久。</p></article><article class="check"><b>選項三</b><h3 data-editable>暫停新增功能，<br>先做小規模查證</h3><p data-editable>了解實際流程，<br>再決定實作範圍。</p></article></div><p class="footer-line" data-editable>三個選項都要看接下來的代價與可能成果，不是只看喜不喜歡。</p></div></div><nav class="fallback-controls"><a href="#slide-30">← 上一頁</a><a href="#slide-32">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="7" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-32" data-section="認識效應" data-note="約 1～2 分鐘。沉沒成本指已發生且無法收回的成本；效應是這些投入影響後續持續投入的傾向。本輪核對原論文書目與摘要。不能把任何堅持都視為偏誤，也不能把所有先前支出一概當成沉沒成本，例如可退費、可轉售或可再利用資產仍有現在的價值。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>認識效應</div><div class="page-no">32 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>過去的投入，可能綁住現在的選擇</h2><div class="body-area reveal"><p class="concept-name" data-editable>沉沒成本效應</p><p class="concept-definition" data-editable>因為已經投入、又無法收回的<br>時間、金錢或心力，<br>而更傾向繼續原本的做法。</p><p class="statement" data-editable>「我是在爭取未來的成果，<br>還是只是不甘心過去的投入？」</p><p class="tiny-source">研究背景：<a href="https://www.sciencedirect.com/science/article/abs/pii/0749597885900494" target="_blank" rel="noopener">Arkes 與 Blumer（1985）↗</a>。專題故事為自編，並非原研究實驗。</p></div></div><nav class="fallback-controls"><a href="#slide-31">← 上一頁</a><a href="#slide-33">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="8" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-33" data-section="分清楚" data-note="約 2 分鐘。區分歷史成本與現有成果的未來用途；可運用的程式或技能值得納入比較。改方向的時間、協調、課程期限和後續義務都是未來相關條件，不能用沉沒成本口號忽略。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>分清楚</div><div class="page-no">33 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>哪些已經花掉，哪些仍要考慮？</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>回不來的投入</b><h3 data-editable>已經花掉的<br>三週時間</h3><p data-editable>不管接下來怎麼選，<br>都不能把時間拿回來。</p></article><article class="check"><b>仍可運用的成果</b><h3 data-editable>可用的畫面、<br>程式與經驗</h3><p data-editable>保留下來的部分，<br>可能減少後續工作。</p></article><article class="check"><b>接下來的代價</b><h3 data-editable>修改、學習、<br>測試所需時間</h3><p data-editable>改方向也有成本，<br>不能當作不用花力氣。</p></article></div><p class="footer-line" data-editable>不讓過去的成本主導，不代表把既有成果全部丟掉。</p></div></div><nav class="fallback-controls"><a href="#slide-32">← 上一頁</a><a href="#slide-34">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="9" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-34" data-section="辨認差異" data-note="約 2 分鐘。理由乙所說的需求、工作量與替代方案比較仍需證據，不是說出口就成立。這是兩種理由的對照，不是故事裡已經完成第二次調查。若課程有其他學習目標，也應明確納入，而不是假定只有被使用才有價值。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>辨認差異</div><div class="page-no">34 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>同樣是繼續做，理由可能不同</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>理由甲</b><p data-editable>「我們都做三週了，<br>就算沒人需要，<br>也一定要做完。」</p></article><article class="compare-item neutral-frame"><b>理由乙</b><p data-editable>「需求已再次確認，<br>剩餘工作能在期限內完成，<br>也比換做法更能達到目標。」</p></article></div><button class="reveal-btn" data-reveal="e7-continue" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e7-continue" aria-hidden="true" data-editable>甲只用過去投入作理由；乙提出了未來的用途與可行性。<br>繼續或調整都可能合理，關鍵是有沒有根據。</div></div></div><nav class="fallback-controls"><a href="#slide-33">← 上一頁</a><a href="#slide-35">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="10" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-35" data-section="改善決策" data-note="約 2 分鐘。故事在此選擇有限度查證，不是直接全面改題。四週先用一週，之後還剩三週。教師可追問一週後要交什麼證據，例如受訪者實際遇到的問題、提醒流程是否可操作、剩餘工作清單。先約好判斷條件，避免查完仍只說再試一下。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>改善決策</div><div class="page-no">35 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>先做一小步，再決定下一步</h2><div class="body-area reveal"><p class="report-paper" data-editable>小組決定：先用一週確認活動提醒的需要，<br>並試做最小流程；再看結果，<br>和老師討論要保留、調整或刪減哪些功能。</p><div class="flow-line"><div class="step"><b data-editable>先定範圍</b><span data-editable>只查最重要的疑問</span></div><span class="arrow">→</span><div class="step"><b data-editable>約好檢查點</b><span data-editable>一週後看證據</span></div><span class="arrow">→</span><div class="step"><b data-editable>再做選擇</b><span data-editable>評估剩下的三週</span></div></div><p class="footer-line" data-editable>這是待驗證的安排，不代表新方向一定成功。</p></div></div><nav class="fallback-controls"><a href="#slide-34">← 上一頁</a><a href="#slide-36">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="11" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-36" data-section="換你試試" data-note="約 2～3 分鐘。自編情境，非採購或財務建議。題目假設已支付費用無法退款，也沒有轉售或轉用回收金額的途徑；兩千元不是未來選擇能改變的成本。免費不等於整體成本低，已購模板也不必然較差；題目資料不足以決定選哪一個。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>換你試試</div><div class="page-no">36 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「模板買了，不用就浪費了！」</h2><div class="body-area reveal"><p class="exercise" data-editable>小組已花兩千元買網站模板，不能退費。<br>但模板不適合目前需求，還要花時間修改。<br>另一個免費模板，也需要重新熟悉。</p><p class="prompt" data-editable>除了「兩千元已經花了」，<br>你還會比較哪些事情？</p><button class="reveal-btn" data-reveal="e7-template" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e7-template" aria-hidden="true" data-editable>比較兩個模板符合需求的程度、後續修改與學習時間。<br>也確認既有內容能否沿用，再看哪個做法更適合剩餘期限。</div></div></div><nav class="fallback-controls"><a href="#slide-35">← 上一頁</a><a href="#slide-37">下一頁 →</a></nav></div></section>
+<section data-effect="7" data-local="12" data-chapter="07 沉沒成本效應" class="slide effect-7" id="slide-37" data-section="帶回專題" data-note="約 1 分鐘。大三國際學生教材，短句、具體情境與口頭討論，約 15～20 分鐘，可依理解速度調整。情境與活動皆自編。請學生用自己的專題說明哪些是既有投入、哪些是後續可比較的條件；不需要在課堂當場宣布換題。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 07</div><div class="stage-label"><span class="stage-dot"></span>帶回專題</div><div class="page-no">37 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>珍惜已做的努力，也保留調整的空間</h2><div class="body-area reveal"><div class="question-list"><div class="question-row"><b>01</b><span data-editable>我想繼續，是因為未來值得，<br>還是因為過去花了很多？</span></div><div class="question-row"><b>02</b><span data-editable>哪些成果可以留下？<br>改方向又要付出什麼？</span></div><div class="question-row"><b>03</b><span data-editable>從現在的條件出發，<br>下一步怎麼做比較合適？</span></div></div><p class="footer-line" data-editable>不因捨不得而硬做，也不因遇到困難就全部放棄。</p></div></div><nav class="fallback-controls"><a href="#slide-36">← 上一頁</a><a href="#slide-38">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="1" data-chapter="08 稟賦效應" class="slide effect-8 effect-cover" id="slide-38" data-section="故事開場" data-note="約 1 分鐘。問：當自己的想法被建議修改時，第一個反應是什麼？不要求學生指認某位組員。本課從擁有感帶入，對專題構想的應用是教學延伸，不是直接重現經典實驗。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>故事開場</div><div class="page-no">38 / 49</div></div><div class="rule"></div><div class="body-area reveal"><div class="opening"><div><p class="eyebrow" data-editable>效應 08</p><h2 class="effect-name" data-editable>稟賦效應</h2><h1 class="deck-title" data-editable>因為是我的，<br>就<span class="highlight">比較好嗎？</span></h1><p class="effect-definition" data-editable>只是因為已經擁有，<br>就可能覺得它比原先更有價值。</p><p class="intro" data-editable>先把「誰的」放一邊，<br>再看看好在哪裡。</p></div><svg viewBox="0 0 600 520" role="img" aria-label="兩件不同的事：這是我們的設計、這個設計適合使用者"><rect x="28" y="38" width="544" height="438" rx="24" fill="#e2ece4" stroke="#14251f" stroke-width="4"/><text x="300" y="113" text-anchor="middle" font-size="31">兩件不同的事</text><rect x="65" y="155" width="470" height="106" rx="18" fill="#faf7ed" stroke="#326b61" stroke-width="3"/><text x="300" y="222" text-anchor="middle" font-size="39">這是我們的設計</text><rect x="65" y="311" width="470" height="106" rx="18" fill="#fff1be" stroke="#14251f" stroke-width="3"/><text x="300" y="378" text-anchor="middle" font-size="39">這個設計適合使用者</text></svg></div><p class="footer-line" data-editable>教學情境｜故事、人物、數字與活動皆為自編。</p></div></div><nav class="fallback-controls"><a href="#slide-37">← 上一頁</a><a href="#slide-39">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="2" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-39" data-section="先看情境" data-note="約 1～2 分鐘。本故事使用外部提供的草圖，排除自己投入大量製作時間的設定，避免只是在談沉沒成本或親手製作的偏愛。A 與 B 有不同版型，尚無證據誰較好，不能由描述直接判定優劣。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>先看情境</div><div class="page-no">39 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>兩張草圖，哪一張適合借用器材？</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>草圖 A：圖示首頁</b><p data-editable>用幾個大圖示，<br>帶使用者找到<br>器材分類。</p></article><article class="compare-item neutral-frame"><b>草圖 B：清單首頁</b><p data-editable>直接列出器材名稱，<br>讓使用者點選<br>想借的器材。</p></article></div><p class="footer-line" data-editable>兩張都是老師提供的草圖，功能相同；小組還沒修改，也還沒測試。</p></div></div><nav class="fallback-controls"><a href="#slide-38">← 上一頁</a><a href="#slide-40">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="3" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-40" data-section="先做選擇" data-note="約 2 分鐘。小組是隨機拿到 A，不是因為能力或事先測試而挑選。這是文字故事，不要真的對學生進行未告知的心理操弄。按鈕供教師標記討論，不是投票或心理測量。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>先做選擇</div><div class="page-no">40 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>抽到 A 之後，「我們這張應該比較好」</h2><div class="body-area reveal"><p class="exercise" data-editable>小組抽籤取得 A，老師允許改選。<br>組員說：「A 是我們的，就留 A 吧！」</p><div class="choices compact"><button class="choice" data-choice="A" aria-pressed="false"><b>A</b><strong data-editable>既然抽到 A，<br>就繼續用 A</strong></button><button class="choice" data-choice="B" aria-pressed="false"><b>B</b><strong data-editable>那就改成 B，<br>避免偏心</strong></button><button class="choice" data-choice="C" aria-pressed="false"><b>C</b><strong data-editable>先比較使用情況，<br>再決定留哪張</strong></button></div><p class="footer-line" data-editable>你的理由是什麼？也可以提出其他做法。</p></div></div><nav class="fallback-controls"><a href="#slide-39">← 上一頁</a><a href="#slide-41">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="4" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-41" data-section="看看變化" data-note="約 2 分鐘。兩段自述是自編故事，不是實測結果。熟悉感、個人偏好也可能影響評價，不能僅憑這段話就確診效應。可以喜歡 A，重點是追問支持評價的依據。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>看看變化</div><div class="page-no">41 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>草圖沒變，變的是「這是我們的」</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>抽籤之前</b><p data-editable>「兩張看起來都可以，<br>還不知道哪張比較適合。」</p></article><article class="compare-item neutral-frame"><b>抽到 A 之後</b><p data-editable>「A 比較有特色，<br>我不太想換掉我們這張。」</p></article></div><p class="prompt" data-editable>如果沒有新增資料，<br>更喜歡 A 的理由，可能是什麼？</p></div></div><nav class="fallback-controls"><a href="#slide-40">← 上一頁</a><a href="#slide-42">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="5" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-42" data-section="看看回應" data-note="約 2 分鐘。兩位試用者是故事設定，不代表所有使用者。B 還沒接受同樣測試，因此不能說 B 已勝出。重點是不因為覺得 A 屬於自己，就直接排除不利回應。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>看看回應</div><div class="page-no">42 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>別人試用時，看到的不一定一樣</h2><div class="body-area reveal"><p class="report-paper" data-editable>兩位同學試著找「投影機」。<br>他們都停在 A 的首頁，<br>不確定應該點哪個圖示。</p><div class="comparison"><article class="compare-item neutral-frame"><b>先保護自己的設計</b><p data-editable>「A 明明很清楚，<br>應該是他們不熟悉。」</p></article><article class="compare-item neutral-frame"><b>先了解使用情況</b><p data-editable>「是哪個圖示讓人不懂？<br>改標示或試試 B，<br>會不會比較清楚？」</p></article></div></div></div><nav class="fallback-controls"><a href="#slide-41">← 上一頁</a><a href="#slide-43">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="6" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-43" data-section="回看理由" data-note="約 1～2 分鐘。不要把投入感、責任感與喜歡作品當成錯誤。此頁以專題作品作延伸，評價可能受到擁有感、熟悉與投入等多種因素影響；不能簡化成單一心理原因。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>回看理由</div><div class="page-no">43 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>喜歡它，和它適合誰，是兩個問題</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>可以保留的感受</b><p data-editable>「這是我們的版本，<br>我很喜歡，<br>也希望把它做好。」</p></article><article class="compare-item neutral-frame"><b>仍要回答的問題</b><p data-editable>「使用者找得到器材嗎？<br>如果改一下，<br>會不會更容易操作？」</p></article></div><p class="footer-line" data-editable>珍惜自己的成果，不必等於拒絕修改。</p></div></div><nav class="fallback-controls"><a href="#slide-42">← 上一頁</a><a href="#slide-44">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="7" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-44" data-section="認識效應" data-note="約 1～2 分鐘。原論文摘要指出，物品隨機分配後，持有人願意接受的售價與非持有人願付價格有差距，使用物品如馬克杯。本輪核對期刊書目與摘要，沒有把具體價格或比率搬入教材。將想法視為「自己的」是教學類比，不代表偏愛自己的構想都由稟賦效應造成，也可能涉及沉沒成本、熟悉或創作投入。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>認識效應</div><div class="page-no">44 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>擁有感，可能影響我們的評價</h2><div class="body-area reveal"><p class="concept-name" data-editable>稟賦效應</p><p class="concept-definition" data-editable>同一樣東西，因為已經屬於自己，<br>我們可能給它更高的價值，<br>也更不願意交換或放手。</p><p class="statement" data-editable>「如果不是我的，<br>我還會給它一樣的評價嗎？」</p><p class="tiny-source">研究背景：<a href="https://www.journals.uchicago.edu/doi/10.1086/261737" target="_blank" rel="noopener">Kahneman、Knetsch 與 Thaler（1990） ↗</a>。原研究涉及物品交易；專題情境為教學延伸。</p></div></div><nav class="fallback-controls"><a href="#slide-43">← 上一頁</a><a href="#slide-45">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="8" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-45" data-section="回到專題" data-note="約 2 分鐘。這些是課堂評估建議。正式比較還要留意受測者、任務與呈現順序；同一人先看 A 再看 B 可能產生學習影響。小規模測試用於發現問題，不代表可估計整體族群偏好。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>回到專題</div><div class="page-no">45 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>先訂標準，再看誰提出來</h2><div class="body-area reveal"><div class="three-checks"><article class="check"><b>01　使用者</b><h3 data-editable>第一次看到，<br>能找到入口嗎？</h3><p data-editable>讓兩個版本做<br>相同的找器材任務。</p></article><article class="check"><b>02　操作過程</b><h3 data-editable>哪一步卡住？<br>需要多少提示？</h3><p data-editable>記下實際情況，<br>不只問喜不喜歡。</p></article><article class="check"><b>03　修改條件</b><h3 data-editable>改善問題，<br>要花多少力氣？</h3><p data-editable>比較可保留的部分，<br>以及還要改什麼。</p></article></div><p class="footer-line" data-editable>評估同一件事時，用同一套標準。</p></div></div><nav class="fallback-controls"><a href="#slide-44">← 上一頁</a><a href="#slide-46">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="9" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-46" data-section="辨認差異" data-note="約 2 分鐘。乙是另一種假設理由，不是前面兩人測試就得到的結論。應要求看紀錄與比較條件。因為熟悉而能減少後續操作或維護負擔，也可能是實際價值，不必一律視為偏誤。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>辨認差異</div><div class="page-no">46 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>留下原案，一定是在偏愛自己嗎？</h2><div class="body-area reveal"><div class="comparison"><article class="compare-item neutral-frame"><b>理由甲</b><p data-editable>「這是我的想法，<br>所以應該比別人的好。」</p></article><article class="compare-item neutral-frame"><b>理由乙</b><p data-editable>「同樣任務的測試中，<br>這版較容易找到入口，<br>而且能在期限內修好。」</p></article></div><button class="reveal-btn" data-reveal="e8-evidence" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e8-evidence" aria-hidden="true" data-editable>甲把「是我的」當成優點；乙提出可以核對的依據。<br>可以保留自己的方案，但也要接受相同標準的檢查。</div></div></div><nav class="fallback-controls"><a href="#slide-45">← 上一頁</a><a href="#slide-47">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="10" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-47" data-section="改善討論" data-note="約 1～2 分鐘。拿掉提案者名字是減少身分影響的課堂做法，不保證消除擁有感，也不要假裝學生完全不知道來源。保留圖示、加文字是待驗證的提案，並非已證明有效。肯定提出構想的貢獻，同時讓它可被改進。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>改善討論</div><div class="page-no">47 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>把「誰的好」改成「哪裡好」</h2><div class="body-area reveal"><div class="flow-line"><div class="step"><b data-editable>先列標準</b><span data-editable>使用者要完成什麼？</span></div><span class="arrow">→</span><div class="step"><b data-editable>暫時拿掉名字</b><span data-editable>用 A、B 討論</span></div><span class="arrow">→</span><div class="step"><b data-editable>留下可用優點</b><span data-editable>依據紀錄來修改</span></div></div><p class="statement" data-editable>「我希望保留 A 的圖示，<br>但可以補上器材名稱，再試一次。」</p><p class="footer-line" data-editable>被修改的是方案，不是誰的價值。</p></div></div><nav class="fallback-controls"><a href="#slide-46">← 上一頁</a><a href="#slide-48">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="11" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-48" data-section="換你試試" data-note="約 2～3 分鐘。這個案例也可能含有創作投入與自我認同，不單靠反應就判定稟賦效應。參考回答不是唯一解，可以保留名稱加副標，也可以比較替代名稱。不能把一位同學聽不懂當成普遍結論。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>換你試試</div><div class="page-no">48 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>「專題名稱是我取的，不要改！」</h2><div class="body-area reveal"><p class="exercise" data-editable>小組原本取了一個很有創意的名稱。<br>但試聽的同學不知道專題在做什麼。<br>提出名稱的人，仍然不願意修改。</p><p class="prompt" data-editable>你會怎麼回應，<br>才能尊重他的投入，也一起檢查名稱？</p><button class="reveal-btn" data-reveal="e8-name" aria-expanded="false">先討論，再看參考想法 ↓</button><div class="answer-box" id="e8-name" aria-hidden="true" data-editable>「這個名稱很有特色。我們加一句用途說明，<br>再請同學看看能不能理解，好嗎？」</div></div></div><nav class="fallback-controls"><a href="#slide-47">← 上一頁</a><a href="#slide-49">下一頁 →</a></nav></div></section>
+<section data-effect="8" data-local="12" data-chapter="08 稟賦效應" class="slide effect-8" id="slide-49" data-section="帶回專題" data-note="約 1 分鐘。大三國際學生，短句、具體情境，約 15～20 分鐘，依理解速度調整。故事、對話與活動為自編，不當作實驗資料。請學生說出一個願意拿來檢查的方案，而非要求放棄原案。"><div class="paper"><div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="content"><div class="topline"><div class="case-label">專題研究第三回 · 思考練習 08</div><div class="stage-label"><span class="stage-dot"></span>帶回專題</div><div class="page-no">49 / 49</div></div><div class="rule"></div><h2 class="slide-title reveal" data-editable>讓想法被檢查，不是讓自己被否定</h2><div class="body-area reveal"><div class="question-list"><div class="question-row"><b>01</b><span data-editable>如果這不是我的方案，<br>我還會給一樣的評價嗎？</span></div><div class="question-row"><b>02</b><span data-editable>我說它比較好，<br>用的是什麼標準與資料？</span></div><div class="question-row"><b>03</b><span data-editable>哪些優點可以留下，<br>哪些地方值得改？</span></div></div><p class="footer-line" data-editable>可以喜歡自己的構想，也讓它有機會變得更好。</p></div></div><nav class="fallback-controls"><a href="#slide-48">← 上一頁</a></nav></div></section></main></div><!-- SCREEN CONTROLS -->
+<div class="deck-controls" aria-label="投影片控制"><button id="prevBtn" aria-label="上一頁">←</button><span class="counter" id="counter">1 / 48</span><button id="nextBtn" aria-label="下一頁">→</button><button id="menuBtn" aria-label="目錄">☰</button></div>
+<button class="teacher-button" id="teacherBtn" aria-label="教師提示">T</button><button class="help-button" id="helpBtn" aria-label="操作說明">?</button><div class="edit-hotzone" title="點一下開啟編輯"></div><button class="edit-toggle" id="editToggle" aria-label="切換編輯">E</button><button class="save-button" id="saveButton">下載修訂版 HTML</button>
+
+<!-- OVERLAYS -->
+<div class="overlay" id="menuOverlay" aria-hidden="true"><div class="overlay-panel"><h2>投影片目錄</h2><div class="menu-grid" id="menuGrid"></div><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div></div>
+<div class="overlay" id="teacherOverlay" aria-hidden="true"><div class="overlay-panel"><h2>教師提示</h2><p id="teacherNote"></p><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div></div>
+<div class="overlay" id="helpOverlay" aria-hidden="true"><div class="overlay-panel"><h2>操作說明</h2><ul><li>方向鍵、Page Up／Page Down 或滑鼠滾輪：換頁。</li><li>M：開啟目錄；T：教師提示；Esc：關閉視窗。</li><li>E：切換文字編輯；Ctrl／Command + S：儲存本機修改。</li><li>左上角隱藏區也可切換編輯模式；編輯後可下載修訂版 HTML。</li></ul><div class="overlay-actions"><button data-close-overlay>關閉</button></div></div></div>
+
+<!-- CONSERVATIVE ES5 CONTROLLER -->
+<script>
+(function(){
+  'use strict';
+  var stage=document.getElementById('deckStage');var slides=stage.getElementsByClassName('slide');var current=0;var touchStart=null;var wheelLocked=false;var editing=false;var editTimer=null;var hideTimer=null;var storageKey='capstone-session3-unit2-v2';
+  function byId(id){return document.getElementById(id)}
+  function addClass(el,name){if(el&&(' '+el.className+' ').indexOf(' '+name+' ')<0)el.className+=(el.className?' ':'')+name}
+  function removeClass(el,name){if(el)el.className=(' '+el.className+' ').replace(' '+name+' ',' ').replace(/^\s+|\s+$/g,'')}
+  function hasClass(el,name){return el&&(' '+el.className+' ').indexOf(' '+name+' ')>=0}
+  function storageSet(value){try{window.localStorage.setItem(storageKey,value)}catch(error){}}
+  function storageGet(){try{return window.localStorage.getItem(storageKey)}catch(error){return null}}
+  function scaleStage(){var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080);var x=(window.innerWidth-1920*factor)/2;var y=(window.innerHeight-1080*factor)/2;stage.style.transform='translate('+x+'px,'+y+'px) scale('+factor+')'}
+  function clamp(value,min,max){return Math.max(min,Math.min(value,max))}
+  function indexFromHash(){var match=String(window.location.hash||'').match(/slide-(\d+)/);return match?clamp(parseInt(match[1],10)-1,0,slides.length-1):0}
+  function show(index,updateHash){var i;current=clamp(index,0,slides.length-1);for(i=0;i<slides.length;i+=1){if(i===current){addClass(slides[i],'active');addClass(slides[i],'visible');slides[i].setAttribute('aria-hidden','false')}else{removeClass(slides[i],'active');removeClass(slides[i],'visible');slides[i].setAttribute('aria-hidden','true')}}byId('counter').innerHTML=(current+1)+' / '+slides.length;byId('prevBtn').disabled=current===0;byId('nextBtn').disabled=current===slides.length-1;if(updateHash!==false){if(window.history&&window.history.replaceState)window.history.replaceState(null,'','#slide-'+(current+1));else window.location.hash='slide-'+(current+1)}}
+  function closeOverlays(){var overlays=document.getElementsByClassName('overlay');var i;for(i=0;i<overlays.length;i+=1){removeClass(overlays[i],'open');overlays[i].setAttribute('aria-hidden','true')}}
+  function openOverlay(id){closeOverlays();addClass(byId(id),'open');byId(id).setAttribute('aria-hidden','false')}
+  function openTeacherNote(){byId('teacherNote').textContent=slides[current].getAttribute('data-note')||'這一頁沒有額外提示。';openOverlay('teacherOverlay')}
+  function toggleEditing(){var items=stage.querySelectorAll('[data-editable]');var i;editing=!editing;if(editing){addClass(document.body,'editing');addClass(byId('editToggle'),'active')}else{removeClass(document.body,'editing');removeClass(byId('editToggle'),'active');storageSet(stage.innerHTML)}for(i=0;i<items.length;i+=1)items[i].setAttribute('contenteditable',editing?'true':'false')}
+  function buildMenu(){var grid=byId('menuGrid');var i,button,title,chapter,last='';grid.innerHTML='';for(i=0;i<slides.length;i+=1){chapter=slides[i].getAttribute('data-chapter')||'';if(chapter!==last){button=document.createElement('button');button.className='chapter-link';button.setAttribute('data-menu-go',String(i));button.textContent=chapter+' · 從第 '+(i+1)+' 頁開始';grid.appendChild(button);last=chapter;}title=slides[i].querySelector('.slide-title,.deck-title');button=document.createElement('button');button.setAttribute('data-menu-go',String(i));button.textContent=(i+1)+' · '+(title?title.textContent:slides[i].getAttribute('data-section'));grid.appendChild(button)}}
+  function closestWithAttr(node,attr){while(node&&node!==document){if(node.getAttribute&&node.getAttribute(attr)!==null)return node;node=node.parentNode}return null}
+  var saved=storageGet();if(saved)stage.innerHTML=saved;slides=stage.getElementsByClassName('slide');
+  byId('prevBtn').onclick=function(){show(current-1)};byId('nextBtn').onclick=function(){show(current+1)};byId('menuBtn').onclick=function(){openOverlay('menuOverlay')};byId('helpBtn').onclick=function(){openOverlay('helpOverlay')};byId('teacherBtn').onclick=openTeacherNote;byId('editToggle').onclick=toggleEditing;
+  document.onclick=function(event){event=event||window.event;var target=event.target||event.srcElement;var menuButton;
+  var choice=closestWithAttr(target,'data-choice');if(choice&&!editing){var choices=slides[current].querySelectorAll('[data-choice]');for(var c=0;c<choices.length;c++)choices[c].setAttribute('aria-pressed',choices[c]===choice?'true':'false');return}
+  var reveal=closestWithAttr(target,'data-reveal');if(reveal){var box=byId(reveal.getAttribute('data-reveal'));var expanded=reveal.getAttribute('aria-expanded')==='true';reveal.setAttribute('aria-expanded',expanded?'false':'true');box.setAttribute('aria-hidden',expanded?'true':'false');if(expanded)removeClass(box,'shown');else addClass(box,'shown');return}
+if(target.getAttribute&&target.getAttribute('data-close-overlay')!==null){closeOverlays();return}if(target&&hasClass(target,'overlay')){closeOverlays();return}menuButton=closestWithAttr(target,'data-menu-go');if(menuButton){show(parseInt(menuButton.getAttribute('data-menu-go'),10));closeOverlays()}};
+  document.onkeydown=function(event){event=event||window.event;var target=event.target||event.srcElement;var key=event.key||event.keyCode;if((event.ctrlKey||event.metaKey)&&(key==='s'||key==='S'||key===83)){if(event.preventDefault)event.preventDefault();storageSet(stage.innerHTML);return}if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA)$/i.test(target.tagName)))return;if(target&&/^(BUTTON|A)$/i.test(target.tagName)&&(key===' '||key==='Enter'))return;if(document.querySelector('.overlay.open')&&key!=='Escape'&&key!==27)return;if(editing){if(key==="e"||key==="E"||key===69)toggleEditing();return;}if(key==='ArrowRight'||key==='ArrowDown'||key==='PageDown'||key===39||key===40||key===34||key===' '||key===32){if(event.preventDefault)event.preventDefault();show(current+1)}else if(key==='ArrowLeft'||key==='ArrowUp'||key==='PageUp'||key===37||key===38||key===33){if(event.preventDefault)event.preventDefault();show(current-1)}else if(key==='Home'||key===36)show(0);else if(key==='End'||key===35)show(slides.length-1);else if(key==='m'||key==='M'||key===77)openOverlay('menuOverlay');else if(key==='t'||key==='T'||key===84)openTeacherNote();else if(key==='e'||key==='E'||key===69)toggleEditing();else if(key==='Escape'||key===27)closeOverlays()};
+  window.onresize=scaleStage;window.onhashchange=function(){show(indexFromHash(),false)};
+  if(window.addEventListener){window.addEventListener('wheel',function(event){if(editing||document.querySelector('.overlay.open')||wheelLocked||Math.abs(event.deltaY)<18)return;wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false},550)},false);window.addEventListener('touchstart',function(event){if(editing||document.querySelector('.overlay.open'))return;touchStart=event.changedTouches[0].clientX},false);window.addEventListener('touchend',function(event){var distance;if(touchStart===null)return;distance=event.changedTouches[0].clientX-touchStart;if(Math.abs(distance)>50)show(current+(distance<0?1:-1));touchStart=null},false)}
+  var hotzone=document.querySelector('.edit-hotzone');hotzone.onclick=toggleEditing;hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);addClass(byId('editToggle'),'show')};hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(byId('editToggle'),'show')},400)};byId('editToggle').onmouseenter=function(){window.clearTimeout(hideTimer)};byId('editToggle').onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(byId('editToggle'),'show')},400)};
+  stage.oninput=function(){window.clearTimeout(editTimer);editTimer=window.setTimeout(function(){storageSet(stage.innerHTML)},350)};
+  byId('saveButton').onclick=function(){storageSet(stage.innerHTML);var clone=document.documentElement.cloneNode(true);clone.querySelector('body').classList.remove('editing','js-ready');clone.querySelectorAll('[contenteditable]').forEach(function(el){el.removeAttribute('contenteditable')});clone.querySelectorAll('.overlay.open').forEach(function(el){el.classList.remove('open');el.setAttribute('aria-hidden','true')});clone.querySelectorAll('.answer-box').forEach(function(el){el.classList.remove('shown');el.setAttribute('aria-hidden','true')});clone.querySelectorAll('[data-reveal]').forEach(function(el){el.setAttribute('aria-expanded','false')});var html='<!doctype html>\n'+clone.outerHTML;var blob=new Blob([html],{type:'text/html;charset=utf-8'});var urlApi=window.URL||window.webkitURL;var anchor=document.createElement('a');anchor.href=urlApi.createObjectURL(blob);anchor.download='專題研究第三回_單元02_16個效應_HTML_V2_修訂版.html';document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href)},1200)};
+  buildMenu();scaleStage();show(indexFromHash(),false);addClass(document.body,'js-ready');
+}());
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
