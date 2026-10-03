@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <!-- 整合V2：71頁單層；兩案採核定新版，其餘四案保留原影片並整理內容。製作狀態：尚未完成本版瀏覽器視覺與實際授課驗證。 -->
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <script src="access-gate-config.js?v=14b"></script>
+  <script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>問題的發掘、理解與解答｜六案整合・單層 V2</title>
+  <meta name="description" content="專題研究第二回：六案例單層整合教材，從生活觀察理解問題，再發展解答">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&amp;family=Shippori+Mincho:wght@700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME: 課堂筆記本 A
+       修改下列變數，即可調整整份教材的顏色與字體。
+       =========================================== */
+    :root {
+      --stage-bg: #262724;
+      --slide-bg: #262724;
+      --paper: #f8f4e9;
+      --paper-deep: #eee7d8;
+      --ink: #17251f;
+      --muted: #65716b;
+      --line: #d9d1c3;
+      --green: #72b59b;
+      --green-deep: #2f725d;
+      --gold: #e5ba50;
+      --coral: #ed907d;
+      --blue: #78a9c7;
+      --lavender: #a998d0;
+      --sage: #9bc49e;
+      --shadow: rgba(0, 0, 0, .34);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --font-display: "Shippori Mincho", "Noto Sans TC", sans-serif;
+      --font-body: "Noto Sans TC", sans-serif;
+    }
+
+    /* ===========================================
+       RESET
+       =========================================== */
+    * { box-sizing: border-box; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Included in full from viewport-base.css.
+       =========================================== */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       NO-JAVASCRIPT FALLBACK
+       內容直接存在 HTML；錨點可在停用 JavaScript 時翻頁。
+       =========================================== */
+    .slide:target {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    /* ===========================================
+       NOTEBOOK PAPER
+       =========================================== */
+    .paper {
+      position: absolute;
+      inset: 58px 108px 58px 90px;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        linear-gradient(90deg, transparent 0 116px, rgba(178, 83, 70, .18) 117px, rgba(178, 83, 70, .18) 119px, transparent 120px),
+        repeating-linear-gradient(0deg, transparent 0 53px, rgba(132, 124, 109, .14) 54px, transparent 55px),
+        var(--paper);
+      box-shadow: 0 30px 90px var(--shadow);
+    }
+
+    .paper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 8%, rgba(255,255,255,.72), transparent 24%),
+        linear-gradient(110deg, rgba(255,255,255,.14), transparent 38%, rgba(120,100,74,.03));
+      mix-blend-mode: screen;
+    }
+
+    .holes {
+      position: absolute;
+      left: 38px;
+      top: 78px;
+      display: grid;
+      gap: 73px;
+      z-index: 3;
+    }
+
+    .hole {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--stage-bg);
+      box-shadow: inset 0 0 0 6px #d7d0c5;
+    }
+
+    .page-head {
+      position: absolute;
+      left: 168px;
+      right: 150px;
+      top: 48px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #52635c;
+      font: 700 22px/1 var(--font-body);
+      letter-spacing: .08em;
+    }
+
+    .chapter {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .chapter::before {
+      content: "";
+      width: 44px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--section-color, var(--green));
+    }
+
+    .page-no { color: #7a847f; font-size: 18px; letter-spacing: .14em; }
+
+    .content {
+      position: absolute;
+      left: 168px;
+      right: 144px;
+      top: 116px;
+      bottom: 82px;
+      z-index: 4;
+    }
+
+    .slide-title {
+      margin: 0 0 28px;
+      color: var(--ink);
+      font: 900 72px/1.18 var(--font-body);
+      letter-spacing: -.035em;
+    }
+
+    .deck-title {
+      margin: 0;
+      color: var(--ink);
+      font: 900 112px/1.08 var(--font-body);
+      letter-spacing: -.05em;
+    }
+
+    .kicker {
+      margin-bottom: 24px;
+      color: var(--green-deep);
+      font: 800 24px/1.25 var(--font-body);
+      letter-spacing: .12em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 1280px;
+      color: #43534d;
+      font: 500 34px/1.55 var(--font-body);
+    }
+
+    .small-note { color: var(--muted); font: 500 22px/1.45 var(--font-body); }
+    .marker { box-shadow: inset 0 -.42em 0 color-mix(in srgb, var(--section-color, var(--gold)) 58%, transparent); }
+
+    /* ===========================================
+       REVEAL MOTION
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .58s var(--ease), transform .58s var(--ease);
+    }
+
+    .slide.visible .reveal,
+    .slide:target .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .slide.visible .reveal:nth-child(2) { transition-delay: .08s; }
+    .slide.visible .reveal:nth-child(3) { transition-delay: .16s; }
+    .slide.visible .reveal:nth-child(4) { transition-delay: .24s; }
+    .slide.visible .reveal:nth-child(5) { transition-delay: .32s; }
+
+    /* ===========================================
+       CHAPTER TABS
+       =========================================== */
+    .tabs {
+      position: absolute;
+      z-index: 8;
+      right: 0;
+      top: 105px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .tab {
+      width: 84px;
+      height: 150px;
+      border: 0;
+      border-radius: 18px 0 0 18px;
+      display: grid;
+      place-items: center;
+      color: #24322d;
+      opacity: .56;
+      cursor: pointer;
+      writing-mode: vertical-rl;
+      font: 800 19px/1 var(--font-body);
+      letter-spacing: .1em;
+      transition: width .25s var(--ease), opacity .25s ease;
+    }
+
+    .tab:hover, .tab.current { width: 106px; opacity: 1; }
+    .tab[data-go="observe"] { background: #ead99d; }
+    .tab[data-go="understand"] { background: var(--coral); }
+    .tab[data-go="solve"] { background: var(--green); }
+    .tab[data-go="reflect"] { background: var(--blue); }
+
+    /* ===========================================
+       VIDEO PANELS
+       =========================================== */
+    .video-layout {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 46px;
+      align-items: stretch;
+      height: 640px;
+    }
+
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      border: 4px solid #183028;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(119,184,159,.32), transparent 24%),
+        linear-gradient(145deg, #14211d, #07100d 72%);
+      box-shadow: 16px 18px 0 rgba(22,34,30,.12);
+    }
+
+    .video-illustration {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .bucket {
+      position: relative;
+      width: 270px;
+      height: 240px;
+      border: 18px solid #e9eee9;
+      border-top-width: 24px;
+      border-radius: 30px 30px 72px 72px;
+      transform: translateY(50px);
+      opacity: .94;
+    }
+
+    .bucket::before {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 88px;
+      left: 72px;
+      top: 42px;
+      border: 10px dotted var(--gold);
+      border-radius: 50%;
+      animation: spin 5s linear infinite;
+    }
+
+    .mop-stick {
+      position: absolute;
+      width: 22px;
+      height: 330px;
+      left: 50%;
+      top: 40px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #b7c2bc, #fff, #9da8a2);
+      transform: rotate(11deg);
+      transform-origin: 50% 100%;
+    }
+
+    .mop-stick::after {
+      content: "";
+      position: absolute;
+      left: -93px;
+      bottom: -26px;
+      width: 210px;
+      height: 44px;
+      border-radius: 50%;
+      background: repeating-linear-gradient(90deg, #dfe7e2 0 8px, #9ab6a9 9px 14px);
+      box-shadow: 0 18px 28px rgba(0,0,0,.32);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .play-button {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 124px;
+      height: 124px;
+      transform: translate(-50%, -50%);
+      border: 4px solid white;
+      border-radius: 50%;
+      background: rgba(10,20,17,.74);
+      color: white;
+      cursor: pointer;
+      font-size: 48px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.32);
+      transition: transform .25s var(--ease), background .25s ease;
+    }
+
+    .play-button { display:flex; align-items:center; justify-content:center; text-decoration:none; }
+    .play-button:hover { transform: translate(-50%, -50%) scale(1.07); background: var(--green-deep); }
+
+    .video-meta {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      font: 700 22px/1.3 var(--font-body);
+    }
+
+    .video-meta a { text-underline-offset: 5px; }
+
+    .prompt-panel {
+      display: grid;
+      align-content: center;
+      gap: 24px;
+      padding: 46px;
+      border: 3px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255,255,255,.62);
+    }
+
+    .prompt-panel strong { color: var(--ink); font: 900 46px/1.25 var(--font-body); }
+    .prompt-panel p { margin: 0; color: #4b5a54; font: 500 29px/1.55 var(--font-body); }
+
+    /* ===========================================
+       CARDS, NOTES, AND COMPARISONS
+       =========================================== */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+
+    .note-card, .scene-card, .person-card, .step-card, .question-card {
+      position: relative;
+      border: 3px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.64);
+      box-shadow: 10px 12px 0 rgba(22,34,30,.08);
+    }
+
+    .note-card { min-height: 470px; padding: 42px 44px; }
+    .note-card h3, .scene-card h3, .person-card h3, .question-card h3 {
+      margin: 0 0 20px;
+      color: var(--ink);
+      font: 900 38px/1.3 var(--font-body);
+    }
+
+    .writing-lines {
+      height: 290px;
+      margin-top: 28px;
+      background: repeating-linear-gradient(0deg, transparent 0 60px, #cfc8ba 61px, transparent 62px);
+    }
+
+    .pin {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      width: 56px;
+      height: 22px;
+      transform: translateX(-50%) rotate(-4deg);
+      background: color-mix(in srgb, var(--accent, var(--gold)) 55%, white);
+      opacity: .85;
+    }
+
+    .scene-card { height: 450px; padding: 34px 34px 28px; text-align: center; }
+    .scene-card p { margin: 16px 0 0; color: #53625c; font: 500 27px/1.45 var(--font-body); }
+    .scene-icon { height: 245px; display: grid; place-items: center; }
+
+    .line-icon { position: relative; width: 245px; height: 210px; }
+    .table-icon::before { content:""; position:absolute; left:30px; top:35px; width:185px; height:34px; border:8px solid var(--ink); border-radius:8px; }
+    .table-icon::after { content:""; position:absolute; left:52px; top:74px; width:145px; height:130px; border-left:10px solid var(--ink); border-right:10px solid var(--ink); }
+    .mop-dot { position:absolute; width:96px; height:28px; left:75px; top:145px; border-radius:50%; background:var(--green); transform:rotate(-12deg); box-shadow:0 10px 0 rgba(47,114,93,.25); }
+    .sofa-icon::before { content:""; position:absolute; left:24px; top:70px; width:196px; height:100px; border:9px solid var(--ink); border-radius:32px 32px 15px 15px; background:#ead99d; }
+    .sofa-icon::after { content:""; position:absolute; left:52px; top:176px; width:145px; height:14px; border-radius:99px; background:var(--ink); box-shadow:0 28px 0 -3px var(--green); }
+    .water-icon::before { content:""; position:absolute; left:42px; top:25px; width:160px; height:150px; border:10px solid var(--ink); border-radius:20px 20px 65px 65px; background:linear-gradient(0deg, rgba(120,169,199,.72) 0 58%, transparent 59%); }
+    .water-icon::after { content:""; position:absolute; left:83px; top:88px; width:78px; height:35px; border:8px solid var(--coral); border-radius:50%; transform:rotate(-12deg); }
+
+    .night-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 55px; align-items: center; height: 650px; }
+    .night-card { height: 610px; border-radius: 30px; background: linear-gradient(155deg, #17211f, #31483f); position: relative; overflow: hidden; box-shadow: 16px 18px 0 rgba(22,34,30,.12); }
+    .moon { position:absolute; right:70px; top:55px; width:125px; height:125px; border-radius:50%; background:#f6e9b0; box-shadow:0 0 60px rgba(246,233,176,.38); }
+    .restaurant { position:absolute; left:65px; right:65px; bottom:74px; height:280px; border-radius:20px 20px 0 0; background:#efe5cf; }
+    .restaurant::before { content:"打烊"; position:absolute; left:50%; top:42px; transform:translateX(-50%); padding:12px 32px; border:6px solid var(--ink); color:var(--ink); font:900 34px/1 var(--font-body); }
+    .restaurant::after { content:""; position:absolute; left:45px; right:45px; bottom:0; height:115px; background:repeating-linear-gradient(90deg,#27372f 0 18px,#85ae9e 19px 42px); opacity:.82; }
+
+    .story-copy { display:grid; gap:26px; }
+    .story-copy blockquote { margin:0; color:var(--ink); font:900 55px/1.45 var(--font-body); }
+    .story-copy p { margin:0; color:#4b5a54; font:500 29px/1.6 var(--font-body); }
+
+    /* ===========================================
+       SKETCH AND PRODUCT CONCEPTS
+       =========================================== */
+    .sketch-layout { display:grid; grid-template-columns:1.25fr .75fr; gap:42px; height:620px; }
+    .sketch-pad { position:relative; border:4px dashed #9f9a8e; border-radius:28px; background:rgba(255,255,255,.48); }
+    .sketch-pad::before { content:"在這裡畫一張草圖"; position:absolute; inset:0; display:grid; place-items:center; color:#9a9b92; font:700 34px/1 var(--font-body); }
+    .constraints { display:grid; align-content:center; gap:24px; }
+    .constraint { display:flex; align-items:center; gap:22px; padding:24px 28px; border-radius:20px; background:#fff9; color:var(--ink); font:800 30px/1.2 var(--font-body); border:3px solid var(--line); }
+    .no { width:58px; height:58px; display:grid; place-items:center; border:5px solid var(--coral); border-radius:50%; color:#a84939; font-weight:900; }
+
+    .word-trio { display:grid; grid-template-columns:repeat(3,1fr); gap:38px; margin-top:55px; }
+    .big-word { min-height:360px; display:grid; align-content:center; justify-items:center; gap:24px; border:4px solid var(--ink); border-radius:32px; background:color-mix(in srgb, var(--accent) 42%, white); box-shadow:14px 16px 0 rgba(22,34,30,.12); transform:rotate(var(--turn,0deg)); }
+    .big-word strong { font:900 90px/1 var(--font-body); color:var(--ink); }
+    .big-word span { max-width:310px; text-align:center; color:#44534d; font:600 26px/1.45 var(--font-body); }
+
+    .tension { height:650px; display:grid; place-items:center; text-align:center; }
+    .tension strong { display:block; color:var(--ink); font:900 116px/1.2 var(--font-body); letter-spacing:-.05em; }
+    .tension span { display:inline-block; margin-top:48px; padding:15px 30px; border-radius:999px; background:var(--coral); color:#46241d; font:800 28px/1.2 var(--font-body); transform:rotate(-1.5deg); }
+
+    .reframe-grid { display:grid; grid-template-columns:.82fr 100px 1.18fr; gap:28px; align-items:stretch; margin-top:55px; }
+    .question-card { min-height:390px; padding:44px; display:grid; align-content:center; }
+    .question-card.old { opacity:.72; border-style:dashed; }
+    .question-card.new { border-color:var(--green-deep); background:color-mix(in srgb,var(--green) 18%,white); box-shadow:16px 18px 0 rgba(47,114,93,.18); }
+    .question-card p { margin:0; color:var(--ink); font:800 37px/1.5 var(--font-body); }
+    .arrow { display:grid; place-items:center; color:var(--green-deep); font:900 72px/1 var(--font-body); }
+
+    /* ===========================================
+       PEOPLE AND PROCESS
+       =========================================== */
+    .people-grid { display:grid; grid-template-columns:1fr 160px 1fr; gap:28px; align-items:center; margin-top:34px; }
+    .person-card { min-height:440px; padding:42px; }
+    .person-mark { width:96px; height:96px; display:grid; place-items:center; margin-bottom:24px; border-radius:26px; background:var(--accent); color:var(--ink); font:900 46px/1 var(--font-body); transform:rotate(-3deg); }
+    .person-card ul { margin:20px 0 0; padding-left:1.2em; color:#475750; font:500 27px/1.7 var(--font-body); }
+    .bridge { display:grid; place-items:center; gap:14px; color:var(--green-deep); font:900 34px/1.2 var(--font-body); text-align:center; }
+    .bridge b { font-size:78px; }
+
+    .process { display:flex; align-items:center; gap:18px; margin-top:72px; }
+    .step-card { flex:1; min-height:245px; padding:32px 24px; display:grid; align-content:center; justify-items:center; text-align:center; background:color-mix(in srgb,var(--accent) 28%,white); }
+    .step-card b { display:grid; place-items:center; width:58px; height:58px; margin-bottom:22px; border-radius:50%; background:var(--ink); color:white; font:800 25px/1 var(--font-body); }
+    .step-card span { color:var(--ink); font:900 31px/1.3 var(--font-body); }
+    .process-arrow { color:#819087; font:900 42px/1 var(--font-body); }
+    .loop-note { margin-top:52px; color:#4b5a54; text-align:center; font:700 30px/1.5 var(--font-body); }
+
+    /* ===========================================
+       PROBLEM CHAIN AND QUESTION COMPARISON
+       =========================================== */
+    .chain { display:grid; grid-template-columns:repeat(5,1fr); gap:19px; align-items:stretch; margin-top:50px; }
+    .chain-item { position:relative; min-height:370px; padding:30px 24px; border:3px solid var(--line); border-radius:24px; background:color-mix(in srgb,var(--accent) 26%,white); }
+    .chain-item:not(:last-child)::after { content:"→"; position:absolute; right:-25px; top:46%; z-index:2; color:var(--ink); font:900 36px/1 var(--font-body); }
+    .chain-item b { display:block; margin-bottom:24px; color:var(--green-deep); font:900 24px/1 var(--font-body); }
+    .chain-item h3 { margin:0 0 16px; color:var(--ink); font:900 31px/1.35 var(--font-body); }
+    .chain-item p { margin:0; color:#506059; font:500 24px/1.55 var(--font-body); }
+
+    .compare { display:grid; grid-template-columns:1fr 1fr; gap:42px; margin-top:42px; }
+    .compare .question-card { min-height:420px; }
+    .label { display:inline-flex; width:max-content; margin-bottom:25px; padding:9px 18px; border-radius:999px; background:var(--accent); color:var(--ink); font:800 23px/1 var(--font-body); }
+    .compare small { display:block; margin-top:32px; color:#5c6863; font:600 24px/1.45 var(--font-body); }
+
+    /* ===========================================
+       FOUR ACTIONS AND EXIT TICKET
+       =========================================== */
+    .actions { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; margin-top:48px; }
+    .action { min-height:400px; padding:34px 28px; border:4px solid var(--ink); border-radius:28px; background:color-mix(in srgb,var(--accent) 34%,white); box-shadow:11px 13px 0 rgba(22,34,30,.11); }
+    .action b { display:block; margin-bottom:22px; color:var(--ink); font:900 54px/1 var(--font-body); }
+    .action p { margin:0; color:#45554e; font:600 27px/1.55 var(--font-body); }
+    .formal-route { display:flex; align-items:center; justify-content:center; gap:18px; margin-top:40px; color:#4e5d57; font:700 24px/1 var(--font-body); }
+    .formal-route span { padding:10px 18px; border:2px solid #8e9993; border-radius:999px; background:#fff8; }
+
+    .exit-layout { display:grid; grid-template-columns:.78fr 1.22fr; gap:48px; height:630px; }
+    .exit-message { display:grid; align-content:center; }
+    .exit-message strong { color:var(--ink); font:900 70px/1.3 var(--font-body); }
+    .exit-message p { margin:35px 0 0; color:#4a5a53; font:500 29px/1.55 var(--font-body); }
+    .ticket { position:relative; padding:42px 48px; border:4px solid var(--ink); border-radius:28px; background:#fffdf5; box-shadow:16px 18px 0 rgba(22,34,30,.12); transform:rotate(1deg); }
+    .ticket::before { content:"離堂小卡"; position:absolute; right:34px; top:28px; padding:10px 18px; border-radius:999px; background:var(--gold); color:var(--ink); font:800 22px/1 var(--font-body); }
+    .ticket ol { margin:30px 0 0; padding-left:1.45em; color:var(--ink); font:800 34px/1.75 var(--font-body); }
+    .ticket-footer { margin-top:20px; padding-top:20px; border-top:3px dashed var(--line); color:#9b4d3d; font:800 26px/1.4 var(--font-body); }
+
+    /* ===========================================
+       OPTIONAL EXTENSION
+       =========================================== */
+    .extension-layout { display:grid; grid-template-columns:1.02fr .98fr; gap:42px; height:640px; }
+    .extension-list { display:grid; align-content:center; gap:22px; }
+    .extension-list h2 { margin:0 0 12px; color:var(--ink); font:900 58px/1.25 var(--font-body); }
+    .extension-item { display:flex; gap:20px; align-items:center; padding:22px 26px; border:3px solid var(--line); border-radius:20px; background:#fff9; color:var(--ink); font:700 28px/1.35 var(--font-body); }
+    .extension-item b { display:grid; place-items:center; flex:0 0 48px; width:48px; height:48px; border-radius:50%; background:var(--green); }
+
+    /* ===========================================
+       FALLBACK CONTROLS INSIDE EVERY SLIDE
+       =========================================== */
+    .fallback-controls {
+      position:absolute;
+      left:168px;
+      right:150px;
+      bottom:26px;
+      z-index:7;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#69756f;
+      font:800 20px/1 var(--font-body);
+    }
+    .fallback-controls a { text-decoration:none; padding:11px 18px; border:2px solid #8b9791; border-radius:999px; background:rgba(255,255,255,.92); }
+    .fallback-controls a:hover, .fallback-controls a:focus { border-color:var(--green-deep); background:var(--green); color:var(--ink); }
+
+    /* ===========================================
+       OUTSIDE-STAGE CONTROLS AND OVERLAYS
+       =========================================== */
+    .deck-controls {
+      display:none;
+      align-items:center;
+      gap:8px;
+      padding:7px 9px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      background:rgba(15,17,15,.84);
+      box-shadow:0 12px 34px rgba(0,0,0,.3);
+      backdrop-filter:blur(10px);
+    }
+    .js-ready .deck-controls { display:flex; }
+    .deck-controls button { width:42px; height:42px; border:0; border-radius:50%; background:transparent; color:white; cursor:pointer; }
+    .deck-controls button:hover { background:var(--green); color:var(--ink); }
+    #counter { min-width:72px; color:white; text-align:center; font:700 15px/1 var(--font-body); }
+    .progress { position:fixed; left:0; right:0; bottom:0; z-index:1001; height:5px; background:rgba(255,255,255,.08); }
+    #progressBar { width:6.25%; height:100%; background:var(--green); transition:width .35s var(--ease); }
+
+    .overlay { position:fixed; inset:0; z-index:2000; display:grid; place-items:center; padding:48px; background:rgba(7,10,8,.78); opacity:0; visibility:hidden; pointer-events:none; transition:.25s ease; }
+    .overlay.open { opacity:1; visibility:visible; pointer-events:auto; }
+    .overlay-card { position:relative; width:min(1120px,90vw); max-height:86vh; overflow:auto; padding:46px; border-radius:28px; background:var(--paper); color:var(--ink); box-shadow:0 30px 90px rgba(0,0,0,.48); font:500 23px/1.65 var(--font-body); }
+    .overlay-card h2 { margin:0 0 24px; font:900 42px/1.25 var(--font-body); }
+    .overlay-card li { margin:.5em 0; }
+    .overlay-close { position:absolute; right:20px; top:18px; width:44px; height:44px; border:0; border-radius:50%; background:#e7ded0; color:var(--ink); cursor:pointer; font-size:25px; }
+    .video-overlay-card { width:min(1280px,92vw); padding:18px; background:#0b100e; }
+    .video-frame-wrap { position:relative; padding-top:56.25%; }
+    .video-frame-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:14px; }
+
+    .chapter-menu { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    .chapter-menu button { padding:22px; border:3px solid var(--line); border-left:14px solid var(--menu-color); border-radius:18px; background:white; color:var(--ink); cursor:pointer; text-align:left; font:800 26px/1.3 var(--font-body); }
+
+    /* ===========================================
+       INLINE EDITOR
+       =========================================== */
+    .edit-hotzone { position:fixed; left:0; top:0; z-index:10000; width:80px; height:80px; cursor:pointer; }
+    .edit-toggle { position:fixed; left:16px; top:16px; z-index:10001; width:48px; height:48px; border:0; border-radius:50%; background:var(--paper); color:var(--ink); box-shadow:0 8px 24px rgba(0,0,0,.26); opacity:0; pointer-events:none; cursor:pointer; transition:opacity .3s ease; }
+    .edit-toggle.show, .edit-toggle.active { opacity:1; pointer-events:auto; }
+    .editing [contenteditable="true"] { outline:3px dashed var(--coral); outline-offset:5px; cursor:text; }
+    .save-button { display:none; position:fixed; right:18px; top:18px; z-index:10001; padding:12px 18px; border:0; border-radius:999px; background:var(--gold); color:var(--ink); cursor:pointer; font:800 16px/1 var(--font-body); }
+    .editing .save-button { display:block; }
+
+    /* ===========================================
+       V3 LOCAL-FILE COMPATIBILITY LAYER
+       Uses the same conservative fixed-stage pattern as the verified MIS V4 deck.
+       =========================================== */
+    .deck-stage {
+      left:50%;
+      top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      -webkit-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+      -webkit-transform:translate(-50%,-50%) scale(.5);
+    }
+    .deck-controls, .progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .legacy-note {
+      position:fixed;
+      right:10px;
+      top:10px;
+      z-index:20000;
+      padding:8px 12px;
+      color:#fff;
+      background:#17251f;
+      border:1px solid #fff;
+      font:700 15px/1.4 Arial,sans-serif;
+    }
+  /* === JOY SINGLE-LAYER CASE === */
+.joy-process{display:grid;grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:center;gap:20px;margin-top:42px;color:var(--ink)}.joy-process article{padding:30px;border:3px solid var(--line);border-radius:24px;background:#fff9}.joy-process span{font:800 25px var(--font-body);color:var(--green-deep)}.joy-process h3{font:900 48px var(--font-body);margin:18px 0}.joy-process p{font:500 30px var(--font-body);margin:0}.joy-process b{font-size:54px;text-align:center}.joy-test{min-height:350px;padding:38px 30px}.joy-test p{font:500 30px/1.7 var(--font-body);color:var(--ink)}.joy-ending{font:900 49px/1.5 var(--font-body);color:var(--ink);margin:40px 0 24px}
+/* === INTEGRATED SINGLE-LAYER LAYOUT === */
+.integration-cards{margin-top:32px}.integration-card{min-height:300px;padding:32px}
+.integration-card p{font:500 30px/1.65 var(--font-body);color:var(--ink);margin:0}
+.integration-panel{padding:28px 34px;gap:14px;margin-top:32px}.integration-panel strong{font-size:40px}.integration-panel p{font-size:30px;line-height:1.6}
+.integration-steps{display:grid;gap:18px;margin-top:30px}.integration-steps article{display:flex;align-items:center;gap:24px;background:#fff9;border:3px solid var(--line);border-radius:18px;padding:20px 26px}.integration-steps span{font:900 29px var(--font-body);color:var(--green-deep)}.integration-steps p{margin:0;font:600 30px/1.45 var(--font-body);color:var(--ink)}
+.integration-table{width:100%;border-collapse:collapse;margin-top:30px;font:500 28px/1.45 var(--font-body);color:var(--ink);background:#fff9}.integration-table th,.integration-table td{padding:20px 22px;border:2px solid var(--line);text-align:left}.integration-table th{background:#dce9df;font-weight:800}
+.integration-video{height:520px;margin-top:30px}.integration-video .video-card{min-height:520px}.integration-video .prompt-panel{padding:30px;gap:18px}.integration-video .prompt-panel strong{font-size:40px}.integration-film{position:absolute;inset:48px 36px;text-align:center;color:var(--paper)}.integration-film p{font:800 38px/1.4 var(--font-body)}.integration-film span{display:block;font:800 26px var(--font-body);margin-top:34px}
+.chapter-menu{grid-template-columns:repeat(2,1fr)}.chapter-menu button{font-size:23px;padding:16px}
+.dyson-local-4 .joy-test{min-height:220px;padding:28px 30px}.dyson-local-4 .prompt-panel{gap:14px}
+.dyson-local-8 .prompt-panel,.joy-local-8 .prompt-panel{padding:30px;gap:16px}
+.dyson-local-8 .joy-ending,.joy-local-8 .joy-ending{font-size:44px;margin:28px 0 16px}
+</style>
+<style id="site-home-link-style">
+.site-home-link{position:fixed;left:18px;bottom:18px;z-index:2147483646;display:grid;place-items:center;width:48px;height:48px;border:2px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(22,30,30,.9);color:#fff;text-decoration:none;font:900 24px/1 system-ui,-apple-system,"Noto Sans TC",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.site-home-link:hover,.site-home-link:focus{background:#2a8b87;outline:3px solid rgba(255,255,255,.82);outline-offset:2px}body.editing .site-home-link{display:none}@media print{.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+<a class="site-home-link" href="index.html" title="返回教材首頁" aria-label="返回教材首頁">⌂</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="專題研究第二回六個案例單層整合投影片">
+
+      <!-- =========================================
+           01｜先看結果
+           ========================================= -->
+<!-- === intro PAGE 1 === -->
+<section class="slide active visible" id="slide-1" data-section="intro" data-note="<h2>教師提示</h2><p>本回由產品與創業故事練習思考，不要求學生從別人的專題模仿題目。翻轉幸福採電影改編，其他案例也須區分影片呈現、來源資料與課堂推測。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">01</span></header><div class="content"><div class="kicker">專題研究第二回｜問題的發掘、理解與解答</div><h1 class="deck-title reveal" data-editable>問對問題，<br>比急著回答更重要</h1><div class="prompt-panel reveal integration-panel"><strong data-editable>從六個故事，練習思考問題</strong><p data-editable>先看事情怎麼發生，再討論：問題在哪裡？為什麼會發生？可以怎麼改善？</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-1">← 上一張</a><a href="#slide-2">下一張 →</a></nav></div></section>
+<!-- === intro PAGE 2 === -->
+<section class="slide" id="slide-2" data-section="intro" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">02</span></header><div class="content"><h2 class="slide-title reveal" data-editable>先說清楚問題，再想解決方法</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>誰遇到問題？</h3><p data-editable>不是只說「大家」。<br>說清楚受到影響的人。</p></article><article class="note-card integration-card"><h3 data-editable>什麼事情不方便？</h3><p data-editable>在哪種情況下，<br>哪個步驟遇到困難？</p></article><article class="note-card integration-card"><h3 data-editable>根據什麼判斷？</h3><p data-editable>有沒有觀察、<br>訪談或測試的結果？</p></article></div><p class="lead reveal" data-editable>想到功能以前，先確認它要改善什麼。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-1">← 上一張</a><a href="#slide-3">下一張 →</a></nav></div></section>
+<!-- === intro PAGE 3 === -->
+<section class="slide" id="slide-3" data-section="intro" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">03</span></header><div class="content"><h2 class="slide-title reveal" data-editable>今天要練習四件事</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>發掘問題：注意反覆出現的不方便。</p></article><article><span>02</span><p data-editable>理解問題：了解人物、情況與原因。</p></article><article><span>03</span><p data-editable>重新提問：看看不同問法會帶來什麼方向。</p></article><article><span>04</span><p data-editable>發展解答：提出改善方法，並安排測試。</p></article></div><p class="small-note reveal" data-editable>問題可以逐步釐清，不必第一次就問得完整。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-2">← 上一張</a><a href="#slide-4">下一張 →</a></nav></div></section>
+<!-- === intro PAGE 4 === -->
+<section class="slide" id="slide-4" data-section="intro" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">04</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事時，先注意這四件事</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>看事情</h3><p data-editable>發生了什麼？</p></article><article class="note-card integration-card"><h3 data-editable>看行動</h3><p data-editable>他們做了什麼？</p></article><article class="note-card integration-card"><h3 data-editable>看結果</h3><p data-editable>有哪些改變？</p></article></div><div class="prompt-panel reveal integration-panel"><strong data-editable>再問：問題究竟在哪裡？</strong><p data-editable>先說出看到的事情，再討論可能的原因。</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-3">← 上一張</a><a href="#slide-5">下一張 →</a></nav></div></section>
+<!-- === intro PAGE 5 === -->
+<section class="slide" id="slide-5" data-section="intro" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">05</span></header><div class="content"><h2 class="slide-title reveal" data-editable>六個故事，六種思考方向</h2><table class="integration-table reveal"><thead><tr><th>案例</th><th>值得討論的問題</th></tr></thead><tbody><tr><td data-editable>《翻轉幸福》</td><td data-editable>如何把生活中的不方便說清楚？</td></tr><tr><td data-editable>Dyson</td><td data-editable>看到現象後，如何找出原因？</td></tr><tr><td data-editable>3M 便利貼</td><td data-editable>原先目標沒達成，結果就沒有價值嗎？</td></tr><tr><td data-editable>Canva</td><td data-editable>使用者不會操作，是人的問題，還是工具太難？</td></tr><tr><td data-editable>Gogoro</td><td data-editable>一項產品，是否足以解決整個問題？</td></tr><tr><td data-editable>可調式液體鏡片眼鏡</td><td data-editable>有產品，為什麼還有人得不到服務？</td></tr></tbody></table></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-4">← 上一張</a><a href="#slide-6">下一張 →</a></nav></div></section>
+<!-- === intro PAGE 6 === -->
+<section class="slide" id="slide-6" data-section="intro" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">共同開場</span><span class="page-no">06</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看到的事情，與自己的解釋要分開</h2><div class="two-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>影片呈現的事情</h3><p data-editable>人物做了什麼？<br>產品如何操作？<br>前後有哪些變化？</p></article><article class="note-card integration-card"><h3 data-editable>我們對事情的解釋</h3><p data-editable>為什麼這樣做？<br>哪個原因比較重要？<br>換個地方還適用嗎？</p></article></div><p class="lead reveal" data-editable>解釋可以討論，但要說出判斷的根據。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-5">← 上一張</a><a href="#slide-7">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-7" data-section="case1" data-note="<h2>教師提示</h2><p>先請兩人交換日常經驗，約 2 分鐘。本案只播放一次影片。本頁先請學生說出經驗，不急著說明解決方法。對中文較不熟悉的學生，可用動作或簡單詞語描述。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">07</span></header><div class="content"><div class="kicker">專題研究第二回・案例 01｜《翻轉幸福》</div><h1 class="deck-title reveal" style="font-size:100px" data-editable>每天做的事，<br>有什麼不方便？</h1><div class="prompt-panel reveal" style="margin-top:50px"><strong data-editable>打掃時，最麻煩的是哪個步驟？</strong><p data-editable>先想一件自己遇過的事。先說出不方便的地方，不急著想解決方法。</p></div><p class="small-note reveal" data-editable>把「不好用」說清楚，才知道要改善什麼。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-6">← 上一張</a><a href="#slide-8">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-8" data-section="case1" data-note="<h2>教師提示</h2><p>本影片由「安小闫说电影」製作，說明欄標示電影 Joy（2015），台灣片名《翻轉幸福》。YouTube 未提供可切換字幕，不代表畫面沒有內嵌字幕；授課前須確認可讀性。本案討論《翻轉幸福》的故事，不是台灣好神拖的創業故事。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">08</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：一支拖把的改變</h2><div class="video-layout reveal" style="height:560px"><article class="video-card" style="min-height:560px"><div style="position:absolute;inset:75px 45px;color:#f8f4e9;text-align:center"><p style="font-size:38px">《翻轉幸福》</p><p style="font-size:84px;font-weight:900;margin:15px">JOY</p><p style="font-size:26px">從生活中的不方便，思考改善方法</p></div><a class="play-button" href="https://www.youtube.com/watch?v=JiusGQ7eEac" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 分頁播放翻轉幸福電影解說">▶</a><div class="video-meta"><span>電影解說｜11 分 28 秒</span><a href="https://www.youtube.com/watch?v=JiusGQ7eEac" target="_blank" rel="noopener">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著三個問題看</strong><p data-editable>她遇到了什麼困難？</p><p data-editable>她如何理解這個困難？</p><p data-editable>產品做出來後，還有哪些問題？</p></aside></div><p class="small-note" data-editable>這是電影解說，不是紀錄片。電影情節不等於完整史實；影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-7">← 上一張</a><a href="#slide-9">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-9" data-section="case1" data-note="<h2>教師提示</h2><p>先請學生描述影片中的動作，再說明自己的看法。追問：影片中哪個畫面，讓你有這個想法？不要先替學生回答。影片中的受傷或家庭衝突是電影情節，不能直接當成真實的發明起因。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">09</span></header><div class="content"><h2 class="slide-title reveal" data-editable>她遇到了什麼困難？</h2><div class="two-col reveal"><article class="note-card"><i class="pin"></i><h3 data-editable>影片呈現的事情</h3><p class="lead" data-editable>她正在做什麼？<br>哪個動作讓她覺得不方便？</p><div class="writing-lines" style="height:180px"></div></article><article class="note-card"><i class="pin" style="--accent:var(--green)"></i><h3 data-editable>你對原因的看法</h3><p class="lead" data-editable>為什麼不方便？<br>影片提供了哪些線索？</p><div class="writing-lines" style="height:180px"></div></article></div><p class="lead reveal" style="margin-top:35px" data-editable>先說出看到的事情，再討論可能的原因。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-8">← 上一張</a><a href="#slide-10">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-10" data-section="case1" data-note="<h2>教師提示</h2><p>史密森尼 Lemelson Center 整理的真實背景指出，Mangano 注意到吸水不足、不耐用與難以擰乾等問題。本頁把清潔工作分成三個步驟，方便學生討論；這不是她當年的完整研發紀錄。提醒學生：個人經驗是線索，仍需訪談或觀察其他使用者。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">10</span></header><div class="content"><h2 class="slide-title reveal" data-editable>「拖把不好用」還不夠清楚</h2><p class="lead reveal" data-editable>把清潔工作分成幾個步驟，看看哪個步驟不方便。</p><div class="joy-process reveal"><article><span>01</span><h3 data-editable>吸水</h3><p data-editable>吸得夠不夠？</p></article><b>→</b><article><span>02</span><h3 data-editable>清洗</h3><p data-editable>髒污洗得掉嗎？</p></article><b>→</b><article><span>03</span><h3 data-editable>擰乾</h3><p data-editable>需要多大力氣？</p></article></div><div class="prompt-panel reveal" style="margin-top:40px;padding:30px"><strong data-editable>哪個步驟最不方便？為什麼？</strong><p data-editable>這是她個人的經驗，還是別人也遇過？</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-9">← 上一張</a><a href="#slide-11">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-11" data-section="case1" data-note="<h2>教師提示</h2><p>讓學生比較兩種問法：哪一句更容易安排觀察或測試？先不限定產品的設計；改變工具、操作方式或工作步驟，都可以討論。請用學生聽得懂的話說明「重新界定問題」，不必要求學生先記住專有名詞。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">11</span></header><div class="content"><h2 class="slide-title reveal" data-editable>問題問得不同，解決方法也會不同</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>先想到產品</h3><p data-editable>怎麼做一支<br>新的拖把？</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>先說清楚困難</h3><p data-editable>怎麼讓使用者<br>更容易把拖把擰乾？</p></article></div><p class="lead reveal" style="margin-top:42px" data-editable>第二種問法，讓我們知道要改善哪個步驟。</p><p class="small-note" data-editable>這是課堂練習的問法，不是創辦人的原話。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-10">← 上一張</a><a href="#slide-12">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-12" data-section="case1" data-note="<h2>教師提示</h2><p>本頁測試設計為教學建議，不是 Joy Mangano 的實際實驗紀錄。不要以玻璃碎片或受傷情節安排實作。使用清水與安全材料，若出現安全疑慮，立即停止測試。專題（一）說明預計如何測試；專題（二）完成實作，並說明測試結果。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">12</span></header><div class="content"><h2 class="slide-title reveal" data-editable>有了構想，怎麼知道有沒有改善？</h2><p class="lead reveal" data-editable>如果是我們的專題，要用什麼方法確認改善效果？</p><div class="three-col reveal" style="margin-top:38px"><article class="note-card joy-test"><h3 data-editable>做一個樣品</h3><p data-editable>先做出擰乾的部分。<br>試過之後，再修改設計。</p></article><article class="note-card joy-test"><h3 data-editable>跟原本做法比較</h3><p data-editable>在相同條件下，<br>比較操作時間與擰乾效果。</p></article><article class="note-card joy-test"><h3 data-editable>請別人操作</h3><p data-editable>請別人試用。<br>記下操作上的困難，再修改。</p></article></div><p class="small-note reveal" data-editable>以上是課堂提出的測試方法，不是她當年的實驗紀錄。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-11">← 上一張</a><a href="#slide-13">下一張 →</a></nav></div></section>
+<section class="slide" id="slide-13" data-section="case1" data-note="<h2>教師提示</h2><p>影片的銷售故事可用來提出問題，但不把「20 分鐘賣出 2 萬件」當成產品有效性的驗證。避免將某次銷售成功歸因於單一因素。本頁三個問題用來帶領課堂討論，不表示這項產品已通過相關測試。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">13</span></header><div class="content"><h2 class="slide-title reveal" data-editable>產品做出來，問題就解決了嗎？</h2><div class="three-col reveal" style="margin-top:45px"><article class="note-card joy-test" style="border-top:14px solid var(--gold)"><h3 data-editable>能理解嗎？</h3><p data-editable>別人看得懂<br>它改善了什麼嗎？</p></article><article class="note-card joy-test" style="border-top:14px solid var(--green)"><h3 data-editable>能使用嗎？</h3><p data-editable>沒有發明人在旁邊，<br>也能順利操作嗎？</p></article><article class="note-card joy-test" style="border-top:14px solid var(--coral)"><h3 data-editable>能負擔嗎？</h3><p data-editable>價格、清洗與維修，<br>會不會成為新的困難？</p></article></div><p class="lead reveal" style="margin-top:46px" data-editable>有人購買，不代表使用上的問題都已經解決。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-12">← 上一張</a><a href="#slide-14">下一張 →</a></nav></div></section>
+<section class="joy-local-8 slide" id="slide-14" data-section="case1" data-note="<h2>教師提示</h2><p>課堂小練習約 3 分鐘。請學生寫自己生活中的事，不仿照別人的專題或把拖把換成另一個產品。檢查學生是否說清楚：誰在什麼情況下，做什麼事、遇到什麼困難，以及根據什麼做出判斷。真實背景參考：<a href='https://invention.si.edu/invention-stories/joys-process-inventing' target='_blank' rel='noopener'>史密森尼 Lemelson Center：Joy 的發明過程</a>。電影有戲劇化改編，不能將全部情節當成史實。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 01・翻轉幸福</span><span class="page-no">14</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到自己的生活，找一個問題</h2><div class="prompt-panel reveal"><strong data-editable>找一件你重複遇到的不方便</strong><p data-editable>在＿＿情況下，＿＿想完成＿＿，<br>但是在＿＿步驟遇到＿＿困難。</p><p data-editable>我目前看見的證據是＿＿；還需要查清楚＿＿。</p></div><p class="joy-ending reveal" data-editable>不方便，是觀察的起點；<br>把問題說清楚，才是研究的開始。</p><p class="small-note" data-editable>先寫自己的觀察，不急著寫產品名稱。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-13">← 上一張</a><a href="#slide-15">下一張 →</a></nav></div></section>
+<section class="dyson-local-1 slide" id="slide-15" data-section="case2" data-note="<h2>教師提示</h2><p>先請學生提出可能原因，不先說明集塵袋或旋風分離。這一案要討論問題的發掘、理解與解答，不是要求學生模仿吸塵器產品。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">15</span></header><div class="content"><div class="kicker">專題研究第二回・案例 02｜Dyson 吸塵器</div><h1 class="deck-title reveal" style="font-size:100px" data-editable>吸力減弱，<br>是馬達的問題嗎？</h1><div class="prompt-panel reveal" style="margin-top:50px"><strong data-editable>看到問題，不代表已經知道原因。</strong><p data-editable>如果吸塵器愈用愈吸不乾淨，你會先檢查哪裡？</p></div><p class="small-note reveal" data-editable>先說出可能原因，不急著決定要換什麼零件。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-14">← 上一張</a><a href="#slide-16">下一張 →</a></nav></div></section>
+<section class="dyson-local-2 slide" id="slide-16" data-section="case2" data-note="<h2>教師提示</h2><p>本案使用教師指定的新影片，頻道為「狼爸爸的工作室」。請學生先記錄故事中的問題、原因與行動，不先以「成功」「有毅力」代替描述。影片只看一次，課堂討論與影片合計建議預留約 30 分鐘。YouTube 未提供可切換字幕；授課前須確認畫面字幕是否足夠清楚。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">16</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：Dyson 如何改良吸塵器？</h2><div class="video-layout reveal" style="height:520px"><article class="video-card" style="min-height:520px"><div style="position:absolute;inset:75px 45px;color:#f8f4e9;text-align:center"><p style="font-size:38px">一位工程師的創業故事</p><p style="font-size:84px;font-weight:900;margin:15px">DYSON</p><p style="font-size:26px">觀察問題・尋找原因・試作與修改</p></div><a class="play-button" href="https://www.youtube.com/watch?v=f7yiLmeeYfI" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 分頁播放 Dyson 創業故事">▶</a><div class="video-meta"><span>創業故事｜15 分 24 秒</span><a href="https://www.youtube.com/watch?v=f7yiLmeeYfI" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著三個問題看</strong><p data-editable>他遇到了什麼問題？</p><p data-editable>他如何找出原因？</p><p data-editable>他如何確認構想可行？</p></aside></div><p class="small-note" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。故事中的歷史背景另以官方資料核對。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-15">← 上一張</a><a href="#slide-17">下一張 →</a></nav></div></section>
+<section class="dyson-local-3 slide" id="slide-17" data-section="case2" data-note="<h2>教師提示</h2><p>先讓學生整理影片，不立即顯示下一頁的解釋。如果只說「他很有毅力」，追問：你看到他做了什麼？如果影片沒有呈現某個檢查步驟，不把課堂推測當成史實。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">17</span></header><div class="content"><h2 class="slide-title reveal" data-editable>他遇到了什麼問題？</h2><div class="two-col reveal"><article class="note-card"><i class="pin"></i><h3 data-editable>影片呈現的事情</h3><p class="lead" data-editable>吸塵器出現什麼變化？<br>他做了哪些檢查或嘗試？</p><div class="writing-lines" style="height:180px"></div></article><article class="note-card"><i class="pin" style="--accent:var(--green)"></i><h3 data-editable>你對原因的看法</h3><p class="lead" data-editable>你認為問題出在哪裡？<br>影片提供了哪些線索？</p><div class="writing-lines" style="height:180px"></div></article></div><p class="lead reveal" style="margin-top:35px" data-editable>先說出看到的事情，再討論可能的原因。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-16">← 上一張</a><a href="#slide-18">下一張 →</a></nav></div></section>
+<section class="dyson-local-4 slide" id="slide-18" data-section="case2" data-note="<h2>教師提示</h2><p>官方資料記載，家中吸塵器的集塵袋頻繁被灰塵堵塞。馬達與管路是課堂提出的檢查方向，不宣稱是當年逐一排除的紀錄。先區分現象與原因，再說明問法如何從加強馬達改成灰塵與空氣的分離。重新改寫的問題是課堂用語，不是創辦人的原話。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">18</span></header><div class="content"><h2 class="slide-title reveal" data-editable>吸力減弱，原因可能在哪裡？</h2><div class="three-col reveal" style="margin-top:35px"><article class="note-card joy-test"><h3 data-editable>馬達</h3><p data-editable>運轉是否正常？</p></article><article class="note-card joy-test"><h3 data-editable>管路</h3><p data-editable>有沒有東西堵住？</p></article><article class="note-card joy-test"><h3 data-editable>集塵袋</h3><p data-editable>灰塵是否阻礙<br>空氣通過？</p></article></div><div class="prompt-panel reveal" style="margin-top:32px;padding:28px"><strong data-editable>Dyson 注意到：集塵袋容易被灰塵堵住。</strong><p data-editable>換個問法：如何收集灰塵，又讓空氣順利通過？</p></div><p class="small-note" data-editable>馬達與管路是課堂提出的可能原因；不能只憑吸力減弱，就確定原因。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-17">← 上一張</a><a href="#slide-19">下一張 →</a></nav></div></section>
+<section class="dyson-local-5 slide" id="slide-19" data-section="case2" data-note="<h2>教師提示</h2><p>官方故事的順序是：他在木材工廠看過工業旋風設備，先用於自己的工廠，再思考家用吸塵器是否也能使用相同原理。不要簡化成他發明了旋風分離。請學生想一想：縮小設備之後，哪些條件還需要測試？</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">19</span></header><div class="content"><h2 class="slide-title reveal" data-editable>別的產業，是否已有類似方法？</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>木材工廠</h3><p data-editable>用旋轉的氣流，<br>把粉塵從空氣中分離。</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>家用吸塵器</h3><p data-editable>能不能把同樣的原理，<br>用在較小的機器上？</p></article></div><p class="lead reveal" style="margin-top:42px" data-editable>不是照搬整台機器，而是理解原理，再重新設計。</p><p class="small-note" data-editable>旋風分離原理早已存在；Dyson 將它用於新的產品設計。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-18">← 上一張</a><a href="#slide-20">下一張 →</a></nav></div></section>
+<section class="dyson-local-6 slide" id="slide-20" data-section="case2" data-note="<h2>教師提示</h2><p>官方資料記載紙板旋風裝置接上現有吸塵器的試作。樣品也可稱為原型，但先讓學生理解用途，不要求記住名詞。此處討論歷史案例，不要求學生自行拆解帶電吸塵器，也不安排粉塵吸入實驗。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">20</span></header><div class="content"><h2 class="slide-title reveal" data-editable>先做一個樣品，確認構想是否可行</h2><div class="two-col reveal" style="margin-top:38px"><article class="note-card"><h3 data-editable>先確認一件事</h3><p class="lead" data-editable>不用集塵袋，<br>能不能把灰塵<br>從空氣中分離？</p></article><article class="note-card"><h3 data-editable>從簡單試作開始</h3><p class="lead" data-editable>Dyson 用紙板做出裝置，<br>接到現有吸塵器上，<br>先試試構想能不能使用。</p></article></div><p class="lead reveal" style="margin-top:35px" data-editable>第一個樣品，不必是完整的上市產品。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-19">← 上一張</a><a href="#slide-21">下一張 →</a></nav></div></section>
+<section class="dyson-local-7 slide" id="slide-21" data-section="case2" data-note="<h2>教師提示</h2><p>官方記載 5,127 個原型；教材不把每一次試作都說成完全相同的失敗，也不要求學生用次數證明毅力。本頁三問是課堂建議，不是完整歷史實驗紀錄。團隊可先說明預計比較哪些條件，再記錄結果與修改理由。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">21</span></header><div class="content"><h2 class="slide-title reveal" data-editable>每次測試，都要知道下一步改什麼</h2><div class="three-col reveal" style="margin-top:38px"><article class="note-card joy-test"><h3 data-editable>這次改了什麼？</h3><p data-editable>一次先選定<br>要測試的項目。</p></article><article class="note-card joy-test"><h3 data-editable>結果有什麼不同？</h3><p data-editable>記錄測試條件<br>與觀察結果。</p></article><article class="note-card joy-test"><h3 data-editable>下一次要怎麼改？</h3><p data-editable>根據結果，<br>說明修改的理由。</p></article></div><p class="lead reveal" style="margin-top:42px" data-editable>反覆嘗試很重要，但每次嘗試都需要留下紀錄。</p><p class="small-note" data-editable>官方記載 5,127 個原型。上方三個問題是課堂提出的測試紀錄方式。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-20">← 上一張</a><a href="#slide-22">下一張 →</a></nav></div></section>
+<section class="dyson-local-8 slide" id="slide-22" data-section="case2" data-note="<h2>教師提示</h2><p>請學生從自己的生活出發，不套用別人的專題。先寫現象與可能原因，再提出一項可行的查證方法。提醒：個人的一次經驗仍需要更多觀察。產品樣品可行之後，製造、成本與使用方式也可能帶來新問題。歷史背景參考：<a href='https://www.dyson.com/james-dyson' target='_blank' rel='noopener'>Dyson 官方：James Dyson 的研發歷程</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">案例 02・Dyson</span><span class="page-no">22</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到專題：先找原因，再發展解答</h2><div class="prompt-panel reveal"><strong data-editable>選一件自己經常遇到的問題</strong><p data-editable>我看到的現象是＿＿。<br>可能的原因有＿＿，我準備用＿＿方法確認。</p><p data-editable>知道原因後，我才決定先嘗試哪一種改善方法。</p></div><p class="joy-ending reveal" data-editable>問對問題，不是只換一句話；<br>而是更清楚地理解問題。</p><p class="small-note" data-editable>專題（一）提出問題與計畫；專題（二）完成實作，說明測試結果。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-21">← 上一張</a><a href="#slide-23">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 23 === -->
+<section class="slide" id="slide-23" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">23</span></header><div class="content"><h2 class="slide-title reveal" data-editable>黏不牢，也可以有價值嗎？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>先別急著說它失敗</strong><p data-editable>如果原本想做很牢的膠，卻做出容易撕下的膠，你會怎麼判斷？</p></div><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>先看目標</h3><p data-editable>原本要達成什麼？</p></article><article class="note-card integration-card"><h3 data-editable>再看特性</h3><p data-editable>實際做出什麼？</p></article><article class="note-card integration-card"><h3 data-editable>最後看用途</h3><p data-editable>誰可能需要？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-22">← 上一張</a><a href="#slide-24">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 24 === -->
+<section class="slide" id="slide-24" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">24</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：3M 便利貼</h2><div class="video-layout reveal integration-video"><article class="video-card"><div class="integration-film"><p>3M 便利貼的發明故事</p><span>觀看影片</span></div><a class="play-button" href="https://www.youtube.com/watch?v=Mbz46Rz677w" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 播放3M 便利貼的發明故事">▶</a><div class="video-meta"><span>7 分 46 秒</span><a href="https://www.youtube.com/watch?v=Mbz46Rz677w" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著問題看</strong><p data-editable>黏著劑有什麼特性？</p><p data-editable>它在什麼情況下變得有用？</p><p data-editable>使用者實際怎麼使用？</p></aside></div><p class="small-note reveal" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-23">← 上一張</a><a href="#slide-25">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 25 === -->
+<section class="slide" id="slide-25" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">25</span></header><div class="content"><h2 class="slide-title reveal" data-editable>同一個結果，可以有不同判斷</h2><div class="two-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>回到原先目標</h3><p data-editable>想做更強的黏著劑，<br>結果卻黏不牢。</p></article><article class="note-card integration-card"><h3 data-editable>重新看結果</h3><p data-editable>能輕輕黏住、撕下，<br>還可以再次黏貼。</p></article></div><p class="lead reveal" data-editable>沒達成原先目標，不等於完全沒有用途。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-24">← 上一張</a><a href="#slide-26">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 26 === -->
+<section class="slide" id="slide-26" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">26</span></header><div class="content"><h2 class="slide-title reveal" data-editable>什麼情況，正好需要這種特性？</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>Art Fry 在使用詩歌本時，紙片書籤容易掉出來。</p></article><article><span>02</span><p data-editable>書籤需要固定位置，但又不能傷害書頁。</p></article><article><span>03</span><p data-editable>可重複黏貼的黏著劑，提供了一種改善方法。</p></article></div><div class="prompt-panel reveal integration-panel"><strong data-editable>特性與需要，必須一起看</strong><p data-editable>只有技術，還不足以說明誰需要這項產品。</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-25">← 上一張</a><a href="#slide-27">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 27 === -->
+<section class="slide" id="slide-27" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">27</span></header><div class="content"><h2 class="slide-title reveal" data-editable>用途會在使用過程中改變</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>原先的問法</h3><p data-editable>怎麼讓書籤<br>不容易掉下來？</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>換個方式問</h3><p data-editable>怎麼留下可以撕下、<br>移動的留言？</p></article></div><p class="lead reveal" data-editable>觀察別人怎麼使用，可能發現原先沒想到的需要。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-26">← 上一張</a><a href="#slide-28">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 28 === -->
+<section class="slide" id="slide-28" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">28</span></header><div class="content"><h2 class="slide-title reveal" data-editable>做得出來，別人就會理解嗎？</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>介紹產品</h3><p data-editable>只看說明，<br>是否理解它的用途？</p></article><article class="note-card integration-card"><h3 data-editable>親手試用</h3><p data-editable>實際使用後，<br>是否覺得方便？</p></article><article class="note-card integration-card"><h3 data-editable>觀察反應</h3><p data-editable>用在什麼地方？<br>是否願意繼續使用？</p></article></div><p class="small-note reveal" data-editable>市場試用讓團隊了解需求；不能只看研發者自己的判斷。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-27">← 上一張</a><a href="#slide-29">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 29 === -->
+<section class="slide" id="slide-29" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">29</span></header><div class="content"><h2 class="slide-title reveal" data-editable>從實驗結果，走向可用的產品</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>原先目標沒有達成，但保留了特殊的黏著特性。</p></article><article><span>02</span><p data-editable>特性遇到書籤容易掉落的需要。</p></article><article><span>03</span><p data-editable>製作與使用之後，發現留言等其他用途。</p></article><article><span>04</span><p data-editable>透過試用，繼續了解使用者的反應。</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-28">← 上一張</a><a href="#slide-30">下一張 →</a></nav></div></section>
+<!-- === case3 PAGE 30 === -->
+<section class="slide" id="slide-30" data-section="case3" data-note="<h2>教師提示</h2><p>延續原案例資料；本次不更換影片、不新增史實。書籤、留言與市場試用等內容依既有教材；課堂提問與測試建議不是創辦人的原話。備援影片：<a href='https://www.youtube.com/watch?v=bvalMbOdseU' target='_blank' rel='noopener'>NBC News Learn</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">03 3M 便利貼</span><span class="page-no">30</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到專題：用途需要實際確認</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>選一種你熟悉的材料、工具或方法</strong><p data-editable>它有什麼特性？<br>誰在什麼情況下可能需要？<br>你準備怎麼確認？</p></div><p class="lead reveal" data-editable>不要只說「有創意」，要說清楚它改善了什麼。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-29">← 上一張</a><a href="#slide-31">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 31 === -->
+<section class="slide" id="slide-31" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">31</span></header><div class="content"><h2 class="slide-title reveal" data-editable>學不會，是學生的問題嗎？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>先不要急著教得更快</strong><p data-editable>如果學生花很多時間學工具，卻遲遲無法做出作品，困難究竟在哪裡？</p></div><p class="lead reveal" data-editable>先了解使用者真正想完成什麼。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-30">← 上一張</a><a href="#slide-32">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 32 === -->
+<section class="slide" id="slide-32" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">32</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：Canva 如何降低設計門檻？</h2><div class="video-layout reveal integration-video"><article class="video-card"><div class="integration-film"><p>Canva 創業故事</p><span>觀看影片</span></div><a class="play-button" href="https://www.youtube.com/watch?v=0wmfKaNyVlU" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 播放Canva 創業故事">▶</a><div class="video-meta"><span>13 分 44 秒</span><a href="https://www.youtube.com/watch?v=0wmfKaNyVlU" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著問題看</strong><p data-editable>使用者真正想完成什麼？</p><p data-editable>時間主要花在哪裡？</p><p data-editable>團隊為什麼先從學校年刊開始？</p></aside></div><p class="small-note reveal" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-31">← 上一張</a><a href="#slide-33">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 33 === -->
+<section class="slide" id="slide-33" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">33</span></header><div class="content"><h2 class="slide-title reveal" data-editable>把設計工作分成幾個步驟</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>使用者有內容，想做出一份作品。</p></article><article><span>02</span><p data-editable>開始以前，要先學會複雜的軟體操作。</p></article><article><span>03</span><p data-editable>找按鈕、學指令，花掉許多時間。</p></article><article><span>04</span><p data-editable>真正處理內容與版面的時間，反而變少。</p></article></div><p class="lead reveal" data-editable>困難不一定只在使用者，也可能出在工具與流程。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-32">← 上一張</a><a href="#slide-34">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 34 === -->
+<section class="slide" id="slide-34" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">34</span></header><div class="content"><h2 class="slide-title reveal" data-editable>工具要幫助工作，還是增加負擔？</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>原先的問法</h3><p data-editable>怎麼更快教會學生<br>使用設計軟體？</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>換個方式問</h3><p data-editable>怎麼讓使用者<br>更容易開始製作作品？</p></article></div><p class="small-note reveal" data-editable>這是課堂比較的問法，不是創辦人的原話。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-33">← 上一張</a><a href="#slide-35">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 35 === -->
+<section class="slide" id="slide-35" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">35</span></header><div class="content"><h2 class="slide-title reveal" data-editable>先從一個範圍清楚的工作開始</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>使用者明確</h3><p data-editable>學校有製作年刊的需要。</p></article><article class="note-card integration-card"><h3 data-editable>成果明確</h3><p data-editable>最後要完成並印出一本書。</p></article><article class="note-card integration-card"><h3 data-editable>可以觀察</h3><p data-editable>看編排、合作與交付<br>是否更容易完成。</p></article></div><div class="prompt-panel reveal integration-panel"><strong data-editable>Fusion Books：先處理學校年刊</strong><p data-editable>不是一開始就滿足所有設計需要，而是先把一項工作做好。</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-34">← 上一張</a><a href="#slide-36">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 36 === -->
+<section class="slide" id="slide-36" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">36</span></header><div class="content"><h2 class="slide-title reveal" data-editable>每個設計，都要對應一項困難</h2><table class="integration-table reveal"><thead><tr><th>原本的困難</th><th>改善的方法</th></tr></thead><tbody><tr><td data-editable>安裝與學習很費時</td><td data-editable>在瀏覽器中開始工作</td></tr><tr><td data-editable>從空白頁開始，不知道如何排版</td><td data-editable>提供可修改的範本</td></tr><tr><td data-editable>檔案來回傳送，版本容易混淆</td><td data-editable>多人在同一份作品中合作</td></tr><tr><td data-editable>設計與印刷分開</td><td data-editable>連接製作與印刷流程</td></tr></tbody></table><p class="small-note reveal" data-editable>不只列功能，也要說明功能為什麼需要。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-35">← 上一張</a><a href="#slide-37">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 37 === -->
+<section class="slide" id="slide-37" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">37</span></header><div class="content"><h2 class="slide-title reveal" data-editable>怎麼知道，真的比較方便？</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>開始</h3><p data-editable>能否更容易開始製作？</p></article><article class="note-card integration-card"><h3 data-editable>合作</h3><p data-editable>多人是否能順利完成？</p></article><article class="note-card integration-card"><h3 data-editable>交付</h3><p data-editable>作品是否真的完成<br>並能印出來？</p></article></div><p class="lead reveal" data-editable>使用者後來拿工具做其他作品，也提供了新的線索。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-36">← 上一張</a><a href="#slide-38">下一張 →</a></nav></div></section>
+<!-- === case4 PAGE 38 === -->
+<section class="slide" id="slide-38" data-section="case4" data-note="<h2>教師提示</h2><p>延續既有 Canva 與 Fusion Books 創辦歷程。原教材以「校刊」介紹 school yearbook，本版以「學校年刊」表達，避免與定期校刊混淆。課堂流程是教學整理，不是逐字引用影片。備援：<a href='https://www.youtube.com/watch?v=Ep21f3ncvBk' target='_blank' rel='noopener'>CNBC</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">04 Canva</span><span class="page-no">38</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到專題：先看工作，再看工具</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>選一件需要使用工具的工作</strong><p data-editable>使用者真正想完成＿＿。<br>現在卻花很多時間在＿＿。<br>我想先觀察或測試＿＿。</p></div><p class="lead reveal" data-editable>不要急著做新工具，先確認現有工具造成什麼困難。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-37">← 上一張</a><a href="#slide-39">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 39 === -->
+<section class="slide" id="slide-39" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">39</span></header><div class="content"><h2 class="slide-title reveal" data-editable>車子做好了，問題就解決了嗎？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>電動機車，也需要方便取得能源</strong><p data-editable>如果住處不能充電，又不想等待很久，一台好車是否已經足夠？</p></div><p class="lead reveal" data-editable>先看使用者一天的行程，不只看車子的性能。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-38">← 上一張</a><a href="#slide-40">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 40 === -->
+<section class="slide" id="slide-40" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">40</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：Gogoro 的換電系統</h2><div class="video-layout reveal integration-video"><article class="video-card"><div class="integration-film"><p>Gogoro 換電網路</p><span>觀看影片</span></div><a class="play-button" href="https://www.youtube.com/watch?v=xZigLuaijsI" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 播放Gogoro 換電網路">▶</a><div class="video-meta"><span>11 分 58 秒</span><a href="https://www.youtube.com/watch?v=xZigLuaijsI" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著問題看</strong><p data-editable>騎士在哪裡補充能源？</p><p data-editable>換電改變了哪些等待？</p><p data-editable>除了車，還有哪些部分要配合？</p></aside></div><p class="small-note reveal" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-39">← 上一張</a><a href="#slide-41">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 41 === -->
+<section class="slide" id="slide-41" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">41</span></header><div class="content"><h2 class="slide-title reveal" data-editable>先了解騎士的生活</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>時間</h3><p data-editable>上班、上課或接送時，<br>不一定能停下來等充電。</p></article><article class="note-card integration-card"><h3 data-editable>地點</h3><p data-editable>停車位不一定有插座，<br>也未必能裝充電器。</p></article><article class="note-card integration-card"><h3 data-editable>行程</h3><p data-editable>路線可能臨時改變，<br>需要確認能源夠不夠。</p></article></div><p class="lead reveal" data-editable>使用者要完成行程，不只是把電池充飽。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-40">← 上一張</a><a href="#slide-42">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 42 === -->
+<section class="slide" id="slide-42" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">42</span></header><div class="content"><h2 class="slide-title reveal" data-editable>問題不只在車子，也在能源取得</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>原先的問法</h3><p data-editable>怎麼做一台<br>性能更好的電動機車？</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>換個方式問</h3><p data-editable>怎麼讓騎士需要時，<br>快速取得可用的電池？</p></article></div><p class="small-note reveal" data-editable>問法改變後，需要處理的範圍也不同。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-41">← 上一張</a><a href="#slide-43">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 43 === -->
+<section class="slide" id="slide-43" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">43</span></header><div class="content"><h2 class="slide-title reveal" data-editable>換電改變了什麼？</h2><div class="two-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>等充電</h3><p data-editable>人與車留在原地，<br>等同一顆電池充飽。</p></article><article class="note-card integration-card"><h3 data-editable>交換電池</h3><p data-editable>放回電量不足的電池，<br>帶走已充電的電池。</p></article></div><p class="lead reveal" data-editable>充電沒有消失，但騎士不必留在原地等待。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-42">← 上一張</a><a href="#slide-44">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 44 === -->
+<section class="slide" id="slide-44" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">44</span></header><div class="content"><h2 class="slide-title reveal" data-editable>一套服務，需要哪些部分配合？</h2><table class="integration-table reveal"><thead><tr><th>部分</th><th>需要完成的工作</th></tr></thead><tbody><tr><td data-editable>機車</td><td data-editable>安全行駛，並能交換電池</td></tr><tr><td data-editable>電池</td><td data-editable>規格能配合，狀態可以掌握</td></tr><tr><td data-editable>換電站</td><td data-editable>在合適地點提供可用電池</td></tr><tr><td data-editable>軟體與維護人員</td><td data-editable>管理充電、供應、設備與服務</td></tr></tbody></table><div class="prompt-panel reveal integration-panel"><strong data-editable>重點是整體配合</strong><p data-editable>少了其中一部分，使用者仍可能無法完成行程。</p></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-43">← 上一張</a><a href="#slide-45">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 45 === -->
+<section class="slide" id="slide-45" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">45</span></header><div class="content"><h2 class="slide-title reveal" data-editable>能換一次，不代表每天都方便</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>站點</h3><p data-editable>日常路線上<br>是否找得到？</p></article><article class="note-card integration-card"><h3 data-editable>供應</h3><p data-editable>需要時，是否有<br>可用的電池？</p></article><article class="note-card integration-card"><h3 data-editable>維護</h3><p data-editable>設備故障時，<br>如何取得協助？</p></article></div><p class="lead reveal" data-editable>還要考慮共用規格、合作安排與電池回收。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-44">← 上一張</a><a href="#slide-46">下一張 →</a></nav></div></section>
+<!-- === case5 PAGE 46 === -->
+<section class="slide" id="slide-46" data-section="case5" data-note="<h2>教師提示</h2><p>延續原案例，不更換影片。生活時間與行程是課堂示例，不是創辦人的逐日紀錄。換電是一種安排，並非所有情況都比充電更適合。備援：<a href='https://www.youtube.com/watch?v=HpOQpwKeSnI' target='_blank' rel='noopener'>實地使用影片</a>；<a href='https://www.youtube.com/watch?v=Rf8zN-9C2rQ' target='_blank' rel='noopener'>官方短片</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">05 Gogoro</span><span class="page-no">46</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到專題：哪些部分需要一起完成？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>找一個不能只靠單一產品解決的問題</strong><p data-editable>誰要完成什麼事情？<br>至少需要哪三個部分配合？<br>你會先確認哪一項配合是否可行？</p></div><p class="lead reveal" data-editable>先畫出各部分的關係，再決定要製作什麼。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-45">← 上一張</a><a href="#slide-47">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 47 === -->
+<section class="slide" id="slide-47" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">47</span></header><div class="content"><h2 class="slide-title reveal" data-editable>有眼鏡，就一定能看清楚嗎？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>買到產品，與得到服務，不是一回事</strong><p data-editable>配鏡還需要檢查、調整與後續協助。<br>如果當地缺少人員或設備，問題會出在哪裡？</p></div><p class="lead reveal" data-editable>先看完整的服務過程，不只看一副眼鏡。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-46">← 上一張</a><a href="#slide-48">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 48 === -->
+<section class="slide" id="slide-48" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">48</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看故事：可調式眼鏡的使用情況</h2><div class="video-layout reveal integration-video"><article class="video-card"><div class="integration-film"><p>可調式液體鏡片眼鏡</p><span>觀看影片</span></div><a class="play-button" href="https://www.youtube.com/watch?v=D9FpEWQkg-w" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 播放可調式液體鏡片眼鏡">▶</a><div class="video-meta"><span>2 分 47 秒</span><a href="https://www.youtube.com/watch?v=D9FpEWQkg-w" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著問題看</strong><p data-editable>誰在提供協助？</p><p data-editable>使用者做了哪些動作？</p><p data-editable>現場與一般眼鏡行有何不同？</p></aside></div><p class="small-note reveal" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-47">← 上一張</a><a href="#slide-49">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 49 === -->
+<section class="slide" id="slide-49" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">49</span></header><div class="content"><h2 class="slide-title reveal" data-editable>配鏡需要哪些步驟？</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>發現看不清楚，接受適當檢查。</p></article><article><span>02</span><p data-editable>確認合適度數，取得鏡片。</p></article><article><span>03</span><p data-editable>配戴、調整，了解如何使用。</p></article><article><span>04</span><p data-editable>有問題時，取得協助與後續追蹤。</p></article></div><p class="small-note reveal" data-editable>人員、設備、製作地點與交通，都可能影響服務能否完成。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-48">← 上一張</a><a href="#slide-50">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 50 === -->
+<section class="slide" id="slide-50" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">50</span></header><div class="content"><h2 class="slide-title reveal" data-editable>問題是否只有價格？</h2><div class="reframe-grid reveal"><article class="question-card old"><h3 data-editable>原先的問法</h3><p data-editable>怎麼把眼鏡<br>做得更便宜？</p></article><div class="arrow" aria-hidden="true">→</div><article class="question-card new"><h3 data-editable>換個方式問</h3><p data-editable>怎麼讓有需要的人<br>在當地完成適當的視力調整？</p></article></div><p class="lead reveal" data-editable>價格要考慮，人員、設備與安全支援也要考慮。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-49">← 上一張</a><a href="#slide-51">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 51 === -->
+<section class="slide" id="slide-51" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">51</span></header><div class="content"><h2 class="slide-title reveal" data-editable>看技術：液體如何改變鏡片？</h2><div class="video-layout reveal integration-video"><article class="video-card"><div class="integration-film"><p>液體鏡片技術示範</p><span>觀看影片</span></div><a class="play-button" href="https://www.youtube.com/watch?v=SAUJYv5pOxQ" target="_blank" rel="noopener noreferrer" aria-label="另開 YouTube 播放液體鏡片技術示範">▶</a><div class="video-meta"><span>1 分 24 秒</span><a href="https://www.youtube.com/watch?v=SAUJYv5pOxQ" target="_blank" rel="noopener noreferrer">另開 YouTube ↗</a></div></article><aside class="prompt-panel"><strong data-editable>帶著問題看</strong><p data-editable>液體量如何改變？</p><p data-editable>薄膜形狀有什麼變化？</p><p data-editable>左右眼如何分別調整？</p></aside></div><p class="small-note reveal" data-editable>影片另開 YouTube 分頁播放，看完請回到簡報。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-50">← 上一張</a><a href="#slide-52">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 52 === -->
+<section class="slide" id="slide-52" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">52</span></header><div class="content"><h2 class="slide-title reveal" data-editable>設計改變了哪些工作？</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>鏡片</h3><p data-editable>改變液體量，<br>調整鏡片形狀與度數。</p></article><article class="note-card integration-card"><h3 data-editable>現場</h3><p data-editable>在協助與說明下，<br>完成調整與配戴。</p></article><article class="note-card integration-card"><h3 data-editable>支援</h3><p data-editable>保留檢查、轉介<br>與後續追蹤。</p></article></div><p class="lead reveal" data-editable>減少設備與製作的限制，不等於不再需要專業協助。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-51">← 上一張</a><a href="#slide-53">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 53 === -->
+<section class="slide" id="slide-53" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">53</span></header><div class="content"><h2 class="slide-title reveal" data-editable>有用，也要知道限制</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>視力問題</h3><p data-editable>不是所有問題<br>都能靠這種鏡片改善。</p></article><article class="note-card integration-card"><h3 data-editable>使用方式</h3><p data-editable>理解、操作與指導，<br>都會影響使用結果。</p></article><article class="note-card integration-card"><h3 data-editable>日常使用</h3><p data-editable>耐用、維修與外觀，<br>也要實際確認。</p></article></div><p class="small-note reveal" data-editable>本案例不是醫療或自行配鏡的操作指引。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-52">← 上一張</a><a href="#slide-54">下一張 →</a></nav></div></section>
+<!-- === case6 PAGE 54 === -->
+<section class="slide" id="slide-54" data-section="case6" data-note="<h2>教師提示</h2><p>延續原液體鏡片案例與兩段不同影片。僅討論產品設計與服務流程，不提供驗光處方，不安排學生自行配鏡。產品不能代替眼病檢查，也不能處理所有視力問題；仍須保留篩檢、專業轉介與追蹤。備援：<a href='https://www.youtube.com/watch?v=tpKWHSsBpnE' target='_blank' rel='noopener'>TED 示範</a>。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">06 可調式眼鏡</span><span class="page-no">54</span></header><div class="content"><h2 class="slide-title reveal" data-editable>回到專題：服務在哪一步無法完成？</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>選一個有產品，卻不容易得到服務的情況</strong><p data-editable>誰需要這項服務？<br>哪個步驟無法在當地完成？<br>改變做法後，哪些安全與品質仍要保留？</p></div><p class="lead reveal" data-editable>想改善服務，也要說明哪些工作不能省略。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-53">← 上一張</a><a href="#slide-55">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 55 === -->
+<section class="slide" id="slide-55" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">55</span></header><div class="content"><h2 class="slide-title reveal" data-editable>現在，把六個故事一起看</h2><table class="integration-table reveal"><thead><tr><th>案例</th><th>共同值得注意的事</th></tr></thead><tbody><tr><td data-editable>翻轉幸福、Dyson</td><td data-editable>從日常使用找到需要改善的地方</td></tr><tr><td data-editable>3M 便利貼、Canva</td><td data-editable>從特性與使用情況理解新的需要</td></tr><tr><td data-editable>Gogoro、可調式眼鏡</td><td data-editable>把產品放回整套系統與服務流程</td></tr></tbody></table><p class="lead reveal" data-editable>問題是在觀察、提問與查證之中，逐步變得清楚。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-54">← 上一張</a><a href="#slide-56">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 56 === -->
+<section class="slide" id="slide-56" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">56</span></header><div class="content"><h2 class="slide-title reveal" data-editable>前三案：從現象與結果理解問題</h2><table class="integration-table reveal"><thead><tr><th>案例</th><th>最早的線索</th><th>進一步理解</th><th>解答方向</th></tr></thead><tbody><tr><td data-editable>翻轉幸福</td><td data-editable>拖把使用不方便</td><td data-editable>吸水、擰乾與耐用的困難</td><td data-editable>改善設計，確認實際使用</td></tr><tr><td data-editable>Dyson</td><td data-editable>吸力減弱</td><td data-editable>集塵袋堵塞，影響氣流</td><td data-editable>旋風分離與反覆試作</td></tr><tr><td data-editable>3M 便利貼</td><td data-editable>沒有達到黏牢的目標</td><td data-editable>特殊特性可能有其他用途</td><td data-editable>找到情況，透過試用確認</td></tr></tbody></table></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-55">← 上一張</a><a href="#slide-57">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 57 === -->
+<section class="slide" id="slide-57" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">57</span></header><div class="content"><h2 class="slide-title reveal" data-editable>後三案：從工作與服務理解問題</h2><table class="integration-table reveal"><thead><tr><th>案例</th><th>最早的線索</th><th>進一步理解</th><th>解答方向</th></tr></thead><tbody><tr><td data-editable>Canva</td><td data-editable>學工具花很多時間</td><td data-editable>操作難度影響作品完成</td><td data-editable>先做學校年刊，觀察使用</td></tr><tr><td data-editable>Gogoro</td><td data-editable>充電不一定方便</td><td data-editable>需要的時間與地點不同</td><td data-editable>車輛、電池與站點配合</td></tr><tr><td data-editable>可調式眼鏡</td><td data-editable>有產品仍難以配鏡</td><td data-editable>當地難以完成服務</td><td data-editable>現場調整，保留安全支援</td></tr></tbody></table></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-56">← 上一張</a><a href="#slide-58">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 58 === -->
+<section class="slide" id="slide-58" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">58</span></header><div class="content"><h2 class="slide-title reveal" data-editable>問法改變，要查的事情也會改變</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>只問產品：做什麼？加什麼功能？</p></article><article><span>02</span><p data-editable>改問工作：誰想完成什麼？</p></article><article><span>03</span><p data-editable>改問困難：哪個步驟不方便？為什麼？</p></article><article><span>04</span><p data-editable>改問條件：哪些事不能省略？如何確認？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-57">← 上一張</a><a href="#slide-59">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 59 === -->
+<section class="slide" id="slide-59" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">59</span></header><div class="content"><h2 class="slide-title reveal" data-editable>六種發現問題的起點</h2><table class="integration-table reveal"><thead><tr><th>起點</th><th>案例</th></tr></thead><tbody><tr><td data-editable>生活中反覆出現的不方便</td><td data-editable>翻轉幸福</td></tr><tr><td data-editable>常見現象背後的原因</td><td data-editable>Dyson</td></tr><tr><td data-editable>未達原目標，卻有其他用途的特性</td><td data-editable>3M 便利貼</td></tr><tr><td data-editable>工具增加的學習與操作困難</td><td data-editable>Canva</td></tr><tr><td data-editable>產品以外，仍需要配合的事情</td><td data-editable>Gogoro</td></tr><tr><td data-editable>產品有了，服務卻無法完成</td><td data-editable>可調式眼鏡</td></tr></tbody></table></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-58">← 上一張</a><a href="#slide-60">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 60 === -->
+<section class="slide" id="slide-60" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">60</span></header><div class="content"><h2 class="slide-title reveal" data-editable>有抱怨，還要進一步問清楚</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>對象清楚：誰受到影響？</p></article><article><span>02</span><p data-editable>情況清楚：何時、何地發生？</p></article><article><span>03</span><p data-editable>有判斷根據：能否觀察、訪談或測試？</p></article><article><span>04</span><p data-editable>範圍可行：一學期內能完成哪些工作？</p></article><article><span>05</span><p data-editable>限制清楚：安全、隱私與責任如何處理？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-59">← 上一張</a><a href="#slide-61">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 61 === -->
+<section class="slide" id="slide-61" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">61</span></header><div class="content"><h2 class="slide-title reveal" data-editable>把問題寫成可以討論的句子</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>先描述事情，再說明要查什麼</strong><p data-editable>在＿＿情況下，＿＿想完成＿＿，<br>但是在＿＿步驟遇到＿＿困難。<br>我目前的判斷根據是＿＿；還需要查清楚＿＿。</p></div><p class="lead reveal" data-editable>不是先寫功能，而是先說明為什麼需要改善。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-60">← 上一張</a><a href="#slide-62">下一張 →</a></nav></div></section>
+<!-- === compare PAGE 62 === -->
+<section class="slide" id="slide-62" data-section="compare" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">六案比較</span><span class="page-no">62</span></header><div class="content"><h2 class="slide-title reveal" data-editable>兩門課，接續完成同一個專題</h2><div class="two-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>專題研究（一）</h3><p data-editable>提出研究問題。<br>說明觀察與判斷的根據。<br>提出構想、計畫書與簡報。</p></article><article class="note-card integration-card"><h3 data-editable>專題研究（二）</h3><p data-editable>依據原有構想進行實作。<br>完成測試與修正。<br>說明成果、限制與後續方向。</p></article></div><p class="lead reveal" data-editable>上學期提出計畫，下學期把構想做出來。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-61">← 上一張</a><a href="#slide-63">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 63 === -->
+<section class="slide" id="slide-63" data-section="practice" data-note="<h2>教師提示</h2><p>讓學生從自己的生活發掘問題，不從其他組專題找題目。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">63</span></header><div class="content"><h2 class="slide-title reveal" data-editable>現在，回到你自己的生活</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>先找一件自己真的遇過的事</strong><p data-editable>今天或這一週，<br>哪件事情讓你不方便，而且會反覆發生？</p></div><p class="lead reveal" data-editable>先不要想 App、AI 或功能。先說清楚問題。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-62">← 上一張</a><a href="#slide-64">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 64 === -->
+<section class="slide" id="slide-64" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">64</span></header><div class="content"><h2 class="slide-title reveal" data-editable>可以從哪些情況開始觀察？</h2><table class="integration-table reveal"><thead><tr><th>情況</th><th>可以注意的事情</th></tr></thead><tbody><tr><td data-editable>等待</td><td data-editable>為什麼需要一直等？</td></tr><tr><td data-editable>重做</td><td data-editable>哪些資料或動作反覆處理？</td></tr><tr><td data-editable>繞路</td><td data-editable>為什麼必須多做一些步驟？</td></tr><tr><td data-editable>放棄</td><td data-editable>在哪一步決定不再繼續？</td></tr><tr><td data-editable>誤會</td><td data-editable>說明是否讓人不知道如何進行？</td></tr><tr><td data-editable>得不到服務</td><td data-editable>人員、地點或設備有什麼限制？</td></tr></tbody></table></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-63">← 上一張</a><a href="#slide-65">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 65 === -->
+<section class="slide" id="slide-65" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">65</span></header><div class="content"><h2 class="slide-title reveal" data-editable>先完成五項觀察紀錄</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>誰：受到影響的是哪一種人？</p></article><article><span>02</span><p data-editable>在哪裡：什麼時間、地點或使用情況？</p></article><article><span>03</span><p data-editable>想做什麼：原本要完成什麼事情？</p></article><article><span>04</span><p data-editable>遇到什麼困難：在哪個步驟發生？</p></article><article><span>05</span><p data-editable>根據什麼判斷：看到了哪些行為或結果？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-64">← 上一張</a><a href="#slide-66">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 66 === -->
+<section class="slide" id="slide-66" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">66</span></header><div class="content"><h2 class="slide-title reveal" data-editable>同一件事，試著寫出三種問法</h2><div class="three-col reveal integration-cards"><article class="note-card integration-card"><h3 data-editable>先問產品</h3><p data-editable>我們要做什麼？<br>是否太早決定功能？</p></article><article class="note-card integration-card"><h3 data-editable>再問工作</h3><p data-editable>使用者想完成什麼？<br>目的是否說清楚？</p></article><article class="note-card integration-card"><h3 data-editable>再問步驟</h3><p data-editable>困難發生在哪一步？<br>可以怎麼查證原因？</p></article></div><p class="small-note reveal" data-editable>比較不同問法，選擇有助於進一步研究的方向。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-65">← 上一張</a><a href="#slide-67">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 67 === -->
+<section class="slide" id="slide-67" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">67</span></header><div class="content"><h2 class="slide-title reveal" data-editable>選一個可以繼續查證的問題</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>找得到真正的使用者。</p></article><article><span>02</span><p data-editable>能再次觀察事情發生的情況。</p></article><article><span>03</span><p data-editable>能訪談或蒐集相關資料。</p></article><article><span>04</span><p data-editable>能安排一項簡單、安全的測試。</p></article><article><span>05</span><p data-editable>願意根據結果修改原本的想法。</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-66">← 上一張</a><a href="#slide-68">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 68 === -->
+<section class="slide" id="slide-68" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">68</span></header><div class="content"><h2 class="slide-title reveal" data-editable>改善之前，先想不能忽略的條件</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>安全：會不會造成身體或環境上的風險？</p></article><article><span>02</span><p data-editable>隱私：是否蒐集不必要的個人資料？</p></article><article><span>03</span><p data-editable>公平：誰可能無法使用，或因此增加負擔？</p></article><article><span>04</span><p data-editable>時間：是否反而增加操作步驟？</p></article><article><span>05</span><p data-editable>成本：誰負擔金錢、時間與維護工作？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-67">← 上一張</a><a href="#slide-69">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 69 === -->
+<section class="slide" id="slide-69" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">69</span></header><div class="content"><h2 class="slide-title reveal" data-editable>小組互問：先幫對方把問題說清楚</h2><div class="integration-steps reveal"><article><span>01</span><p data-editable>你親眼看到什麼？</p></article><article><span>02</span><p data-editable>誰最常遇到？什麼時候發生？</p></article><article><span>03</span><p data-editable>你說的是現象、原因，還是解決方法？</p></article><article><span>04</span><p data-editable>還需要哪些資料，才能確認？</p></article><article><span>05</span><p data-editable>如果換個問法，你會先查什麼？</p></article></div></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-68">← 上一張</a><a href="#slide-70">下一張 →</a></nav></div></section>
+<!-- === practice PAGE 70 === -->
+<section class="slide" id="slide-70" data-section="practice" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">學生練習</span><span class="page-no">70</span></header><div class="content"><h2 class="slide-title reveal" data-editable>課堂小練習：帶著一個問題離開</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>請完成三段話</strong><p data-editable>我想研究的問題是＿＿。<br>我目前的判斷根據是＿＿。<br>我還不知道＿＿，所以下一步要＿＿。</p></div><p class="lead reveal" data-editable>知道還缺什麼，比急著宣布答案更重要。</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-69">← 上一張</a><a href="#slide-71">下一張 →</a></nav></div></section>
+<!-- === close PAGE 71 === -->
+<section class="slide" id="slide-71" data-section="close" data-note="<h2>教師提示</h2><p>請學生先說出觀察，再說明看法與判斷的根據。課堂問題沒有預設唯一答案。</p>"><div class="paper"><div class="holes" aria-hidden="true"><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i><i class="hole"></i></div><header class="page-head"><span class="chapter">課程總結</span><span class="page-no">71</span></header><div class="content"><h2 class="slide-title reveal" data-editable>下一步：從生活觀察走向專題問題</h2><div class="prompt-panel reveal integration-panel"><strong data-editable>今天，不必把答案全部想完</strong><p data-editable>但要知道：問題是什麼？<br>目前了解多少？接下來要確認什麼？</p></div><p class="joy-ending reveal" data-editable>問對問題，<br>才能更有方向地尋找答案。</p><p class="small-note reveal" data-editable>觀察 → 提問 → 查證 → 修正問法 → 試作</p></div><nav class="fallback-controls" aria-label="本頁換頁"><a href="#slide-70">← 上一張</a><a href="#slide-71">下一張 →</a></nav></div></section>
+      <!-- Decorative chapter tabs are repeated at stage level. -->
+    </main>
+  </div>
+
+  <!-- ===========================================
+       PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button type="button" id="prevBtn" title="上一張">←</button>
+    <button type="button" id="menuBtn" title="段落選單">☰</button>
+    <span id="counter" aria-live="polite">1 / 71</span>
+    <button type="button" id="teacherBtn" title="教師提示（T）">T</button>
+    <button type="button" id="helpBtn" title="操作說明">?</button>
+    <button type="button" id="nextBtn" title="下一張">→</button>
+  </nav>
+  <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+
+  <!-- ===========================================
+       OVERLAYS: VIDEO, NOTES, MENU, HELP
+       =========================================== -->
+  <div class="overlay" id="teacherOverlay" role="dialog" aria-modal="true" aria-label="教師提示">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉教師提示">×</button><div id="teacherNote"></div></div>
+  </div>
+  <div class="overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="段落選單">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉選單">×</button><h2>課程段落</h2><div class="chapter-menu" id="chapterMenu"></div></div>
+  </div>
+  <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="操作說明">
+    <div class="overlay-card"><button class="overlay-close" type="button" data-close-overlay aria-label="關閉操作說明">×</button><h2>操作方式</h2><ul><li>方向鍵、空白鍵、Page Up／Page Down：前後翻頁</li><li>Home／End：第一張／最後一張</li><li>滑鼠滾輪、觸控左右滑動：前後翻頁</li><li>T：開啟目前頁面的教師提示</li><li>M：開啟段落選單</li><li>E：進入文字編輯模式；⌘S 或 Ctrl+S 儲存到瀏覽器</li><li>沒有網路時，投影片文字仍可閱讀；影片需使用網路播放。</li></ul></div>
+  </div>
+
+  <!-- Inline editing controls. -->
+  <div class="edit-hotzone" title="編輯模式"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <button class="save-button" id="saveButton" type="button">下載修訂版 HTML</button>
+
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的「上一張／下一張」翻頁</div></noscript>
+
+  <script>
+  /* ===========================================
+     V3 VERIFIED COMPATIBILITY CONTROLLER
+     ES5-style code for local files, older browsers, and teaching computers.
+     =========================================== */
+  (function () {
+    'use strict';
+
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el, name) { return el.classList.contains(name); }
+    function addClass(el, name) { el.classList.add(name); }
+    function removeClass(el, name) { el.classList.remove(name); }
+    function closestWithAttr(el, attr) {
+      while (el && el !== document) {
+        if (el.getAttribute && el.getAttribute(attr) !== null) return el;
+        el = el.parentNode;
+      }
+      return null;
+    }
+    function pad2(number) { return number < 10 ? '0' + number : String(number); }
+
+    var stage = byId('deckStage');
+    var slides = stage.getElementsByTagName('section');
+    var current = 0;
+    var wheelLocked = false;
+    var touchStart = null;
+    var storageKey = 'capstone-session2-integrated-single-v2-edits';
+
+    function storageGet() {
+      try { return window.localStorage.getItem(storageKey); }
+      catch (ignore) { return null; }
+    }
+    function storageSet(value) {
+      try { window.localStorage.setItem(storageKey, value); return true; }
+      catch (ignore) { return false; }
+    }
+
+    var saved = storageGet();
+    if (saved && saved.indexOf('fallback-controls') !== -1) {
+      stage.innerHTML = saved;
+      slides = stage.getElementsByTagName('section');
+    }
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      var value = 'translate(-50%,-50%) scale(' + factor + ')';
+      stage.style.transform = value;
+      stage.style.msTransform = value;
+      stage.style.webkitTransform = value;
+    }
+
+    function indexFromHash() {
+      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, slides.length - 1)) : 0;
+    }
+
+    function updateTabs(section) {
+      var tabs = stage.getElementsByClassName('tab');
+      for (var i = 0; i < tabs.length; i += 1) {
+        if (tabs[i].getAttribute('data-go') === section) addClass(tabs[i], 'current');
+        else removeClass(tabs[i], 'current');
+      }
+    }
+
+    function show(index, updateHash) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      current = index;
+      for (var i = 0; i < slides.length; i += 1) {
+        if (i === current) {
+          addClass(slides[i], 'active');
+          addClass(slides[i], 'visible');
+        } else {
+          removeClass(slides[i], 'active');
+          removeClass(slides[i], 'visible');
+        }
+      }
+      byId('counter').innerHTML = (current + 1) + ' / ' + slides.length;
+      byId('progressBar').style.width = ((current + 1) / slides.length * 100) + '%';
+      updateTabs(slides[current].getAttribute('data-section'));
+      if (updateHash !== false) {
+        try { window.history.replaceState(null, '', '#slide-' + (current + 1)); }
+        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
+      }
+    }
+
+    function closeOverlays() {
+      var overlays = document.getElementsByClassName('overlay');
+      for (var i = 0; i < overlays.length; i += 1) removeClass(overlays[i], 'open');
+    }
+
+    function openTeacherNote() {
+      var note = slides[current].getAttribute('data-note');
+      byId('teacherNote').innerHTML = note || '<h2>教師提示</h2><p>本頁沒有額外提示。</p>';
+      addClass(byId('teacherOverlay'), 'open');
+    }
+
+    function goToSection(section) {
+      for (var i = 0; i < slides.length; i += 1) {
+        if (slides[i].getAttribute('data-section') === section) {
+          show(i);
+          return;
+        }
+      }
+    }
+
+    function buildChapterMenu() {
+      var items = [["intro","共同開場","#ead99d"],["case1","01 翻轉幸福","#72b59b"],["case2","02 Dyson","#72b59b"],["case3","03 3M 便利貼","#72b59b"],["case4","04 Canva","#72b59b"],["case5","05 Gogoro","#72b59b"],["case6","06 可調式眼鏡","#72b59b"],["compare","六案比較","#78a9c7"],["practice","學生練習","#78a9c7"],["close","課程總結","#78a9c7"]];
+      var menu = byId('chapterMenu');
+      var html = '';
+      for (var i = 0; i < items.length; i += 1) {
+        html += '<button type="button" data-menu-go="' + items[i][0] + '" style="--menu-color:' + items[i][2] + '">' + items[i][1] + '</button>';
+      }
+      menu.innerHTML = html;
+    }
+
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { addClass(byId('menuOverlay'), 'open'); };
+    byId('helpBtn').onclick = function () { addClass(byId('helpOverlay'), 'open'); };
+    byId('teacherBtn').onclick = openTeacherNote;
+
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      if (target.getAttribute && target.getAttribute('data-close-overlay') !== null) {
+        closeOverlays();
+        return;
+      }
+      var overlay = target;
+      if (overlay && hasClass(overlay, 'overlay')) {
+        closeOverlays();
+        return;
+      }
+      var tab = closestWithAttr(target, 'data-go');
+      if (tab) {
+        goToSection(tab.getAttribute('data-go'));
+        return;
+      }
+      var menuButton = closestWithAttr(target, 'data-menu-go');
+      if (menuButton) {
+        goToSection(menuButton.getAttribute('data-menu-go'));
+        closeOverlays();
+      }
+    };
+
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      if (target && (target.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(target.tagName))) return;
+      var key = event.key || event.keyCode;
+      if (key === 'e' || key === 'E') { toggleEditing(); return; }
+      if ((event.metaKey || event.ctrlKey) && (key === 's' || key === 'S')) { event.preventDefault(); storageSet(stage.innerHTML); return; }
+      if (document.querySelector('.overlay.open') && key !== 'Escape' && key !== 27) return;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32) {
+        if (event.preventDefault) event.preventDefault();
+        show(current + 1);
+      } else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) {
+        if (event.preventDefault) event.preventDefault();
+        show(current - 1);
+      } else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) addClass(byId('menuOverlay'), 'open');
+      else if (key === 't' || key === 'T' || key === 84) openTeacherNote();
+      else if (key === 'Escape' || key === 27) closeOverlays();
+    };
+
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(), false); };
+
+    if (window.addEventListener) {
+      window.addEventListener('wheel', function (event) {
+        if (editing || document.querySelector('.overlay.open') || wheelLocked || Math.abs(event.deltaY) < 18) return;
+        wheelLocked = true;
+        show(current + (event.deltaY > 0 ? 1 : -1));
+        window.setTimeout(function () { wheelLocked = false; }, 550);
+      }, false);
+      window.addEventListener('touchstart', function (event) { touchStart = event.changedTouches[0].clientX; }, false);
+      window.addEventListener('touchend', function (event) {
+        if (editing || document.querySelector('.overlay.open') || touchStart === null) return;
+        var distance = event.changedTouches[0].clientX - touchStart;
+        if (Math.abs(distance) > 50) show(current + (distance < 0 ? 1 : -1));
+        touchStart = null;
+      }, false);
+    }
+
+    var editing = false;
+    var editTimer = null;
+    function toggleEditing() {
+      editing = !editing;
+      var editable = document.querySelectorAll('[data-editable]');
+      for (var i = 0; i < editable.length; i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
+      if (editing) {
+        addClass(document.body, 'editing');
+        addClass(byId('editToggle'), 'active');
+      } else {
+        removeClass(document.body, 'editing');
+        removeClass(byId('editToggle'), 'active');
+      }
+    }
+
+    byId('editToggle').onclick = toggleEditing;
+    byId('editToggle').style.opacity = '1';
+    byId('editToggle').style.pointerEvents = 'auto';
+    stage.oninput = function () {
+      window.clearTimeout(editTimer);
+      editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); }, 350);
+    };
+
+    byId('saveButton').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html], { type:'text/html;charset=utf-8' });
+      var urlApi = window.URL || window.webkitURL;
+      var anchor = document.createElement('a');
+      anchor.href = urlApi.createObjectURL(blob);
+      anchor.download = '專題研究第二回_六個案例整合教材_單層_HTML_V2_修訂版.html';
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); }, 1200);
+    };
+
+    buildChapterMenu();
+    scaleStage();
+    show(indexFromHash(), false);
+    addClass(document.body, 'js-ready');
+  }());
+  </script>
+</body>
+</html>
+
