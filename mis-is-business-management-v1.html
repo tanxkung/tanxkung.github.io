@@ -1,0 +1,728 @@
+<!doctype html>
+<!-- V1 / 2026-10-04 / MacBook Air
+Layout source (read-only): /Users/gonghongyu/Documents/教學與教材工作室/01_115-1本學期課程/管理資訊系統/管理資訊系統_行動通訊手機與AI演進教材_V2.html
+Source SHA-256: 7915151354c39a19660c6a6bc389456d1b9f4819910f284362ec0c2aeabe3c12
+Status: local teaching draft; no website deployment, PDF, or USB-device verification.
+QA: structure and mock-controller checks only. Browser file URL policy prevents rendered QA.
+Content: user-approved 24-slide outline; vendor case claims distinguished from teaching hypotheses.
+-->
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <script src="access-gate-config.js?v=14b"></script>
+  <script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從全家與記銘案例，理解資訊系統如何支援企業作業、協作與管理">
+  <title>管理資訊系統｜資訊系統如何改變企業運作與管理 V1</title>
+  <style>
+    /* ===========================================
+       THEME TOKENS
+       Main slides use cobalt-on-paper; chapter beats use the dark signal system.
+       =========================================== */
+    :root {
+      --paper:#f0ebde;
+      --paper-2:#e6e0ce;
+      --ink:#1f2be0;
+      --ink-soft:#5560e5;
+      --grid:rgba(31,43,224,.10);
+      --ink-faint:rgba(31,43,224,.18);
+      --dark:#08111f;
+      --dark-grid:rgba(111,151,181,.13);
+      --light:#f4f0e8;
+      --cyan:#35d9cf;
+      --amber:#ffb547;
+      --stage-bg:#080d17;
+      --slide-bg:var(--paper);
+      --font-display:'Newsreader','Noto Serif TC',serif;
+      --font-cjk-display:'Noto Serif TC','Newsreader',serif;
+      --font-body:'Hanken Grotesk','Noto Sans TC',sans-serif;
+      --font-mono:'DM Mono',monospace;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide canvas */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Controls remain outside the scaled stage */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print each authored slide as one page */
+    @media print {
+        html,
+        body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+        .deck-viewport { position: static; overflow: visible; background: #fff; }
+        .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+        .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+        .slide:last-child { break-after: auto; page-break-after: auto; }
+        .deck-controls,
+        .chapter-menu,
+        .edit-hotzone,
+        .edit-toggle,
+        .edit-toolbar { display: none !important; }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       RESET AND TYPOGRAPHY
+       =========================================== */
+    * { box-sizing:border-box; }
+    button,a { font:inherit; }
+    a { color:inherit; }
+    .slide { transition:opacity .28s ease; }
+    .slide.light { color:var(--ink); background:var(--paper); }
+    .slide.light::before {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    .slide.dark { color:var(--light); background:var(--dark); }
+    .slide.dark::before {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:linear-gradient(var(--dark-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dark-grid) 1px,transparent 1px);
+      background-size:64px 64px;
+      mask-image:linear-gradient(90deg,#000,rgba(0,0,0,.4) 72%,transparent);
+    }
+    .hairlines::before,.hairlines::after { content:""; position:absolute; left:54px; right:54px; height:2px; background:currentColor; opacity:.95; z-index:3; }
+    .hairlines::before { top:30px; }.hairlines::after { bottom:24px; }
+    .frame { position:absolute; inset:92px 86px 118px; z-index:2; }
+    .page-num,.nav-hint { position:absolute; bottom:52px; z-index:4; font:500 18px/1 var(--font-mono); letter-spacing:.08em; }
+    .page-num { right:86px; }.nav-hint { left:86px; opacity:.52; }
+    .topbar { min-height:112px; border-bottom:2px solid currentColor; display:flex; justify-content:space-between; align-items:flex-start; gap:36px; padding-bottom:22px; }
+    .topbar h2 { max-width:1300px; margin:0; font:400 70px/1.04 var(--font-cjk-display); letter-spacing:-.035em; }
+    .lab { padding-top:14px; font:500 18px/1.2 var(--font-mono); letter-spacing:.08em; text-align:right; white-space:nowrap; }
+    .body { font:400 30px/1.65 var(--font-body); }
+    .micro { font:600 18px/1.2 var(--font-body); letter-spacing:.12em; }
+    .source-tag { position:absolute; right:0; bottom:-32px; max-width:900px; text-align:right; font:400 17px/1.3 var(--font-mono); opacity:.72; }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
+    .visible .reveal { opacity:1; transform:none; }
+    .visible .reveal:nth-child(2){transition-delay:.08s}.visible .reveal:nth-child(3){transition-delay:.16s}.visible .reveal:nth-child(4){transition-delay:.24s}
+
+    /* ===========================================
+       LIGHT CONTENT LAYOUTS
+       =========================================== */
+    .content-grid { height:620px; padding-top:38px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+    .concept-card { border-top:8px solid currentColor; border-bottom:1px solid var(--ink-faint); padding:28px 18px 22px 0; }
+    .concept-card .no { font:500 20px/1 var(--font-mono); margin-bottom:48px; }
+    .concept-card h3 { margin:0 0 22px; font:400 45px/1.15 var(--font-cjk-display); letter-spacing:-.02em; }
+    .concept-card p { margin:0; font:400 27px/1.65 var(--font-body); }
+    .two-col { height:630px; padding-top:42px; display:grid; grid-template-columns:1fr 1fr; gap:54px; }
+    .panel { border-top:8px solid currentColor; padding:30px 12px 0 0; }
+    .panel h3 { margin:0 0 28px; font:400 50px/1.12 var(--font-cjk-display); }
+    .panel ul { margin:0; padding-left:32px; font:400 28px/1.75 var(--font-body); }
+    .panel li { margin-bottom:16px; }
+    .statement { height:640px; display:flex; flex-direction:column; justify-content:center; max-width:1420px; }
+    .statement .quote { margin:0; font:400 92px/1.24 var(--font-cjk-display); letter-spacing:-.035em; }
+    .statement .explain { margin:48px 0 0; padding-top:24px; border-top:2px solid currentColor; font:400 29px/1.65 var(--font-body); max-width:1250px; }
+    .timeline { position:relative; height:610px; padding-top:120px; display:grid; grid-template-columns:repeat(var(--steps,4),1fr); gap:22px; }
+    .timeline::before { content:""; position:absolute; left:16px; right:16px; top:170px; height:3px; background:currentColor; }
+    .milestone { position:relative; padding:95px 18px 0 0; }
+    .milestone::before { content:""; position:absolute; left:0; top:33px; width:25px; height:55px; background:currentColor; }
+    .milestone b { display:block; margin-bottom:18px; font:500 20px/1 var(--font-mono); letter-spacing:.04em; }
+    .milestone h3 { margin:0 0 18px; font:400 38px/1.2 var(--font-cjk-display); }
+    .milestone p { margin:0; font:400 24px/1.55 var(--font-body); }
+    .flow { height:620px; padding-top:70px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .flow-node { width:290px; min-height:330px; border:3px solid currentColor; padding:28px 24px; display:flex; flex-direction:column; justify-content:space-between; }
+    .flow-node b { font:500 22px/1 var(--font-mono); }.flow-node h3 { margin:0; font:400 44px/1.12 var(--font-cjk-display); }.flow-node p { margin:0; font:400 23px/1.5 var(--font-body); }
+    .arrow { font:400 54px/1 var(--font-mono); }
+    .pyramid-wrap { height:650px; padding-top:36px; display:grid; grid-template-columns:1.18fr .82fr; gap:60px; }
+    .pyramid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+    .pyr { height:105px; border:3px solid currentColor; display:flex; align-items:center; justify-content:center; gap:18px; font:400 31px/1 var(--font-cjk-display); background:rgba(240,235,222,.82); }
+    .pyr b { font:500 22px/1 var(--font-mono); }.pyr:nth-child(1){width:38%}.pyr:nth-child(2){width:57%}.pyr:nth-child(3){width:76%}.pyr:nth-child(4){width:96%}
+    .pyramid-notes { display:flex; flex-direction:column; justify-content:center; gap:32px; font:400 27px/1.6 var(--font-body); }
+    .pyramid-notes div { border-top:2px solid currentColor; padding-top:18px; }
+
+    /* ===========================================
+       VIDEO INTRODUCTION AND PLAYER
+       =========================================== */
+    .video-intro { height:635px; padding-top:44px; display:grid; grid-template-columns:.72fr 1.28fr; gap:70px; }
+    .video-meta { border-top:8px solid currentColor; padding-top:28px; }
+    .video-meta .duration { font:400 120px/.95 var(--font-display); letter-spacing:-.04em; }
+    .video-meta .maker { margin-top:30px; font:500 22px/1.5 var(--font-mono); }
+    .watch-task { border-top:2px solid currentColor; padding-top:28px; }
+    .watch-task h3 { margin:0 0 28px; font:400 50px/1.1 var(--font-cjk-display); }
+    .watch-task ol { margin:0; padding-left:44px; font:400 31px/1.65 var(--font-body); }
+    .watch-task li { margin-bottom:18px; }
+    .video-shell { position:absolute; left:86px; right:86px; top:150px; bottom:126px; border:3px solid currentColor; background:#060a12; display:grid; place-items:center; overflow:hidden; }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video { display:flex; flex-direction:column; align-items:center; gap:22px; color:var(--paper); background:transparent; border:0; cursor:pointer; }
+    .play-icon { width:132px; height:94px; border:3px solid currentColor; display:grid; place-items:center; font:500 55px/1 var(--font-mono); transition:transform .22s ease,background .22s ease,color .22s ease; }
+    .load-video:hover .play-icon { transform:translateY(-5px); background:var(--paper); color:var(--ink); }
+    .load-video span:last-child { font:500 23px/1.4 var(--font-body); }
+    .video-caption { position:absolute; left:86px; right:86px; bottom:82px; display:flex; justify-content:space-between; align-items:center; gap:30px; z-index:6; color:currentColor; font:500 18px/1.3 var(--font-mono); }
+    .video-caption a { text-underline-offset:5px; }
+
+    /* ===========================================
+       DARK COVER AND CHAPTER SYSTEM
+       =========================================== */
+    .dark .hairlines { color:rgba(244,240,232,.82); }
+    .cover-kicker,.chapter-kicker { position:absolute; left:100px; top:82px; color:var(--cyan); font:600 21px/1 var(--font-mono); letter-spacing:.14em; }
+    .cover-serial,.chapter-serial { position:absolute; right:96px; top:80px; color:#91a4b3; font:500 20px/1 var(--font-mono); }
+    .cover h1 { position:absolute; left:94px; top:194px; width:1000px; margin:0; font:900 128px/1.14 'Noto Sans TC',sans-serif; letter-spacing:-.055em; }
+    .cover-sub { position:absolute; left:103px; top:650px; color:#aebcc5; font:400 35px/1.5 var(--font-body); }.cover-sub strong{color:var(--amber)}
+    .cover-timeline { position:absolute; left:104px; bottom:110px; width:1010px; display:flex; gap:0; border-top:2px solid var(--cyan); }
+    .cover-timeline div { width:33.333%; padding-top:22px; font:600 23px/1 var(--font-body); }
+    .signal { position:absolute; right:100px; top:172px; width:620px; height:620px; border:2px solid rgba(53,217,207,.32); }
+    .signal::before,.signal::after { content:""; position:absolute; border:1px solid rgba(255,181,71,.38); }.signal::before{inset:70px}.signal::after{inset:160px;border-color:rgba(53,217,207,.45)}
+    .signal-core { position:absolute; right:282px; top:354px; width:255px; height:255px; background:var(--cyan); color:var(--dark); display:grid; place-items:center; font:800 54px/1 var(--font-body); }
+    .chapter .frame { inset:126px 100px 128px; display:grid; grid-template-columns:1.15fr .85fr; gap:70px; align-items:center; }
+    .chapter h2 { margin:0; font:900 112px/1.18 'Noto Sans TC',sans-serif; letter-spacing:-.05em; }
+    .chapter .chapter-sub { margin-top:32px; max-width:950px; color:#bdc9cf; font:400 35px/1.6 var(--font-body); }
+    .chapter .chapter-no { font:500 170px/.9 var(--font-mono); color:var(--amber); text-align:right; }
+    .chapter .chapter-data { margin-top:54px; border-top:2px solid var(--cyan); padding-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:28px; font:500 21px/1.5 var(--font-mono); }
+    .chapter .chapter-question { margin-top:40px; color:var(--light); font:600 29px/1.55 var(--font-body); }
+
+    /* ===========================================
+       COURSE MAP AND SUMMARY
+       =========================================== */
+    .map-grid { height:640px; padding-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+    .map-item { border:3px solid currentColor; padding:34px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; }
+    .map-item .map-no { font:500 22px/1 var(--font-mono); }.map-item h3{margin:0;font:400 54px/1.12 var(--font-cjk-display)}.map-item p{margin:0;font:400 27px/1.6 var(--font-body)}
+    .map-item:hover { background:var(--ink); color:var(--paper); }
+    .protocol { height:640px; padding-top:46px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+    .protocol-step { border-top:8px solid currentColor; padding:28px 18px 0 0; }
+    .protocol-step b{font:500 24px/1 var(--font-mono)}.protocol-step h3{margin:48px 0 24px;font:400 50px/1.12 var(--font-cjk-display)}.protocol-step p{margin:0;font:400 28px/1.65 var(--font-body)}
+    .final-grid { height:620px; padding-top:54px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+    .final-item { border-top:10px solid currentColor; padding:28px 16px 0 0; }
+    .final-item .big { font:400 70px/1 var(--font-cjk-display); }.final-item p{font:400 28px/1.65 var(--font-body)}
+    .closing .frame { display:flex; flex-direction:column; justify-content:center; }
+    .closing h2 { max-width:1580px; margin:0; font:900 80px/1.3 'Noto Sans TC',sans-serif; letter-spacing:-.04em; }
+    .closing .questions { margin-top:60px; border-top:2px solid var(--cyan); padding-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px; color:#c4d0d6; font:500 25px/1.55 var(--font-body); }
+
+    /* ===========================================
+       OUTSIDE-STAGE NAVIGATION AND MENU
+       =========================================== */
+    .deck-controls { display:flex; align-items:center; gap:8px; padding:7px; background:rgba(7,12,22,.88); border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(12px); opacity:.24; transition:opacity .2s ease; }
+    .deck-controls:hover,.deck-controls:focus-within { opacity:1; }
+    .deck-controls button { width:42px; height:34px; color:#fff; background:transparent; border:1px solid rgba(255,255,255,.25); cursor:pointer; }
+    .deck-controls button:hover { background:#fff; color:#07101b; }
+    .counter { min-width:92px; text-align:center; color:#fff; font:500 13px/1 var(--font-mono); }
+    .progress { position:fixed; left:0; bottom:0; height:4px; width:0; background:var(--cyan); z-index:1200; transition:width .28s ease; }
+    .chapter-menu { position:fixed; inset:0; z-index:9000; display:grid; place-items:center; background:rgba(4,8,15,.86); backdrop-filter:blur(16px); opacity:0; visibility:hidden; pointer-events:none; transition:.22s ease; }
+    .chapter-menu.open { opacity:1; visibility:visible; pointer-events:auto; }
+    .menu-panel { width:min(980px,88vw); max-height:82vh; overflow:auto; background:var(--paper); color:var(--ink); border:3px solid var(--ink); padding:38px; }
+    .menu-head { display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid var(--ink); padding-bottom:20px; }
+    .menu-head h2 { margin:0; font:400 42px/1 var(--font-cjk-display); }.menu-head button{border:2px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
+    .menu-links { display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; padding-top:24px; }
+    .menu-links button { text-align:left; color:var(--ink); background:transparent; border:0; border-bottom:1px solid var(--ink-faint); padding:14px 8px; cursor:pointer; font:500 21px/1.35 var(--font-body); }
+    .menu-links button:hover { background:var(--ink); color:var(--paper); }
+
+    /* ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== */
+    .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+    .edit-toggle { position:fixed; top:16px; left:16px; width:46px; height:46px; z-index:10001; border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; opacity:0; pointer-events:none; transition:opacity .3s ease; cursor:pointer; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; top:16px; left:74px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { border:1px solid rgba(255,255,255,.35); background:#08111f; color:#fff; padding:10px 14px; cursor:pointer; font:500 13px/1 var(--font-body); }
+    body.editing [data-editable] { outline:2px dashed rgba(255,181,71,.8); outline-offset:5px; cursor:text; }
+
+    /* V4 compatibility layer: content is visible even when local JavaScript is blocked. */
+    .deck-viewport { top:0; right:0; bottom:0; left:0; }
+    .deck-stage {
+      left:50%; top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+    }
+    .slide { top:0; right:0; bottom:0; left:0; }
+    .frame { top:92px; right:86px; bottom:118px; left:86px; }
+    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:5; }
+    .slide:target .reveal { opacity:1; transform:none; }
+    .fallback-controls {
+      position:absolute; left:50%; bottom:34px; z-index:80;
+      display:flex; align-items:center; gap:14px;
+      transform:translateX(-50%); -ms-transform:translateX(-50%);
+      padding:8px 12px; color:#fff; background:#08111f;
+      border:1px solid rgba(255,255,255,.45);
+      font:500 18px/1 Arial,sans-serif;
+    }
+    .fallback-controls a {
+      width:42px; height:34px; display:flex; align-items:center; justify-content:center;
+      color:#fff; border:1px solid rgba(255,255,255,.5); text-decoration:none;
+    }
+    .fallback-controls span { min-width:82px; text-align:center; }
+    .deck-controls, .progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .legacy-note {
+      position:fixed; right:10px; top:10px; z-index:20000;
+      padding:7px 10px; color:#fff; background:#08111f;
+      border:1px solid #fff; font:14px/1.4 Arial,sans-serif;
+    }
+    @media (min-width:1600px) and (min-height:900px) {
+      .deck-stage {
+        transform:translate(-50%,-50%) scale(.85);
+        -ms-transform:translate(-50%,-50%) scale(.85);
+      }
+    }
+    @media (max-width:700px) {
+      .deck-stage {
+        transform:translate(-50%,-50%) scale(.25);
+        -ms-transform:translate(-50%,-50%) scale(.25);
+      }
+    }
+    /* Concrete color fallbacks for browsers without CSS custom properties. */
+    html, body, .deck-viewport { background:#080d17; }
+    .slide.light { color:#1f2be0; background:#f0ebde; }
+    .slide.dark { color:#f4f0e8; background:#08111f; }
+
+  /* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* === COURSE STYLE AND PORTABLE FALLBACK === */
+:root { --font-body:'PingFang TC','Microsoft JhengHei',sans-serif; --font-cjk-display:'Songti TC','PMingLiU',serif; --font-mono:monospace; }
+.deck-stage {left:50%;top:50%;transform-origin:50% 50%;transform:translate(-50%,-50%) scale(.5)}
+.slide.light {color:#1f2be0;background:#f0ebde}
+.slide.dark {color:#f4f0e8;background:#08111f}
+.topbar h2 {font-size:64px;max-width:1420px;line-height:1.2}
+.topbar {min-height:140px}
+.source-tag {font-family:var(--font-body);font-size:20px;max-width:1500px}
+.hero {padding-top:35px}.hero h1 {font:700 82px/1.25 var(--font-body);margin:24px 0;color:#f4f0e8}.hero p {font:30px/1.5 var(--font-body);margin:24px 0;color:#c4d0d6}
+.hero .micro {color:var(--cyan);font-size:26px}.route {display:flex;gap:32px;margin-top:40px;font-size:27px}.route a {border-bottom:2px solid var(--cyan);padding:10px 0;text-decoration:none}
+.watch-screen {height:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center}
+.watch-screen h3 {font:600 64px/1.25 var(--font-body);margin:0}.watch-screen p {font:28px/1.6 var(--font-body);margin:0;color:#c4d0d6}
+.watch-link {display:inline-block;padding:30px 48px;font:600 36px/1.2 var(--font-body);background:var(--cyan);color:#08111f;text-decoration:none}
+.flow-node {width:340px;min-height:360px}.flow-node p {font-size:27px}.flow {padding-top:45px}
+.concept-card p {font-size:32px}.concept-card h3 {font-size:48px}.concept-card .no {margin-bottom:40px}
+.panel ul {font-size:32px}.statement .quote {font-size:88px}.statement .explain {font-size:33px}
+.closing-line {font:30px/1.4 var(--font-body);margin:0;border-top:2px solid currentColor;padding-top:18px}
+.final-grid {height:540px}.final-item .big {font-size:62px}.final-item p {font-size:32px}
+.deck-controls {bottom:14px;opacity:.8}.deck-controls button {min-width:42px}
+.slide:target {visibility:visible;opacity:1;pointer-events:auto;z-index:5}
+body:not(.js-ready) .slide:first-child {visibility:visible;opacity:1;pointer-events:auto}
+body.js-ready .deck-controls {display:flex}body:not(.js-ready) .deck-controls {display:none}
+@supports (transform:scale(calc(100vw / 1920px))) {.deck-stage {transform:translate(-50%,-50%) scale(min(calc(100vw / 1920px),calc(100vh / 1080px)))}}
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+@media print {.deck-stage{transform:none!important}.fallback-controls{display:none}}
+/* === WEBSITE SHELL: existing gate and a home link; course content unchanged === */
+.site-home-link {position:fixed;top:16px;left:92px;z-index:9900;display:inline-flex;align-items:center;min-height:44px;padding:9px 14px;color:#fff;background:rgba(9,24,38,.84);border:1px solid rgba(255,255,255,.38);border-radius:999px;font:700 14px/1.2 'PingFang TC','Microsoft JhengHei',sans-serif;text-decoration:none;opacity:.78}
+.site-home-link:hover,.site-home-link:focus-visible {opacity:1;outline:3px solid rgba(255,255,255,.7);outline-offset:2px}
+@media print {.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+  <a class="site-home-link" href="./" aria-label="返回教材首頁">← 教材首頁</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+<section id="slide-1" class="slide dark active visible" data-title="資訊系統如何改變企業的運作與管理？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">01 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>資訊系統如何改變企業的運作與管理？</h2><div class="lab">管理資訊系統<br>01 / 24</div></header><div class="hero"><div class="micro">從一杯咖啡，到一張訂單</div><h1 data-editable>我們看到的是服務，<br>背後是企業的協作。</h1><p data-editable>買東西、領商品、接訂單、安排生產——<br>資訊系統如何把這些工作接起來？</p><div class="route"><a href="#slide-3">生活情境</a><a href="#slide-6">全家案例</a><a href="#slide-13">記銘工業</a><a href="#slide-21">導入與管理</a></div></div><div class="source-tag">第二份主題教材 · V1 · 2026-10-04</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">←</a><span>01 / 24</span><a href="#slide-2" aria-label="下一張">→</a></nav></section>
+<section id="slide-2" class="slide light " data-title="技術進步了，企業為什麼還需要資訊系統？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">02 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>技術進步了，企業為什麼還需要資訊系統？</h2><div class="lab">管理資訊系統<br>02 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>電腦與網路</h3><p data-editable>讓資料處理得更快，也讓不同地點可以連線。</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>資訊系統</h3><p data-editable>把科技放進工作：紀錄交易、連接作業、提供管理資訊。</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>本次的問題</h3><p data-editable>不只問「用了什麼技術」，還要問「工作因此怎麼改變」。</p></article></div><div class="source-tag">教師統整｜示意情境不代表企業實際系統架構</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">←</a><span>02 / 24</span><a href="#slide-3" aria-label="下一張">→</a></nav></section>
+<section id="slide-3" class="slide light " data-title="一杯咖啡，為什麼可以跨店領？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">03 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>一杯咖啡，為什麼可以跨店領？</h2><div class="lab">管理資訊系統<br>03 / 24</div></header><div class="statement"><p class="quote" data-editable>這家店買的咖啡，<br>為什麼另一家店認得？</p><p class="explain" data-editable>先想想你的使用經驗：付款完成後，誰記得你還有幾杯？領取一次後，其他門市怎麼知道？</p></div><div class="source-tag">課堂暖身｜以跨店領取為情境，不介紹即時優惠或現行操作規則</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-2" aria-label="上一張">←</a><span>03 / 24</span><a href="#slide-4" aria-label="下一張">→</a></nav></section>
+<section id="slide-4" class="slide light " data-title="你操作手機，企業在處理什麼？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">04 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>你操作手機，企業在處理什麼？</h2><div class="lab">管理資訊系統<br>04 / 24</div></header><div class="flow"><article class="flow-node"><b>01</b><h3 data-editable>購買</h3><p data-editable>辨識顧客、商品與購買數量。</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>02</b><h3 data-editable>付款</h3><p data-editable>確認付款結果，留下交易紀錄。</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>03</b><h3 data-editable>待領</h3><p data-editable>區分已購買與已領取的數量。</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>04</b><h3 data-editable>領取</h3><p data-editable>核對資格，更新這次領取的狀態。</p></article></div><div class="source-tag">教師統整｜示意情境不代表企業實際系統架構</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-3" aria-label="上一張">←</a><span>04 / 24</span><a href="#slide-5" aria-label="下一張">→</a></nav></section>
+<section id="slide-5" class="slide light " data-title="資訊系統不只是軟體"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">05 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>資訊系統不只是軟體</h2><div class="lab">管理資訊系統<br>05 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>看得見的工具</h3><ul><li data-editable>APP、收銀設備與電腦。</li><li data-editable>網路、資料庫與程式。</li></ul></article><article class="panel"><h3 data-editable>讓它能運作的安排</h3><ul><li data-editable>人：誰輸入、確認、處理問題？</li><li data-editable>流程：先做什麼，再做什麼？</li><li data-editable>資料：內容是否正確、及時、一致？</li></ul></article></div><div class="source-tag">概念說明｜資訊系統包含人、作業流程、資料與科技</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-4" aria-label="上一張">←</a><span>05 / 24</span><a href="#slide-6" aria-label="下一張">→</a></nav></section>
+<section id="slide-6" class="slide light " data-title="全家｜方便的服務，背後需要什麼？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">06 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>全家｜方便的服務，背後需要什麼？</h2><div class="lab">管理資訊系統<br>06 / 24</div></header><div class="video-intro"><div class="video-meta"><div class="micro">觀看前，先帶著問題</div><div class="duration">約 9:30</div><div class="maker" data-editable>IT Matters Awards／全家<br>中文分享／案例影片</div></div><div class="watch-task"><h3 data-editable>觀看時，請注意</h3><ol><li data-editable>哪些服務讓購買、取貨與分享不必發生在同一個地方？</li><li data-editable>服務跨越門市後，哪些資料必須能相互核對？</li><li data-editable>改變的只是操作畫面，還是企業做生意的方式？</li></ol></div></div><div class="source-tag"><a href="https://award.ima.org.tw/news.html" target="_blank" rel="noopener noreferrer">來源：IT Matters Awards 全家分享 ↗</a>｜問題是教師設計的觀察角度</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-5" aria-label="上一張">←</a><span>06 / 24</span><a href="#slide-7" aria-label="下一張">→</a></nav></section>
+<section id="slide-7" class="slide dark " data-title="影片播放｜全家：數位轉型與全通路零售"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">07 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>影片播放｜全家：數位轉型與全通路零售</h2><div class="lab">管理資訊系統<br>07 / 24</div></header><div class="watch-screen"><span class="micro" data-editable>IT Matters Awards · 約 9分半</span><h3 data-editable>全家：數位轉型與全通路零售</h3><a class="watch-link" href="https://www.youtube.com/watch?v=yI74DH01VWY" target="_blank" rel="noopener noreferrer">▶ 在 YouTube 播放影片</a><p data-editable>影片會在新分頁開啟；播放後回到教材繼續。<br>需要網際網路，影片未包含在這份 HTML 中。</p></div><div class="source-tag"><a href="https://award.ima.org.tw/news.html" target="_blank" rel="noopener noreferrer">來源：IT Matters Awards 全家分享 ↗</a>｜查核時未提供 YouTube 可切換字幕</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-6" aria-label="上一張">←</a><span>07 / 24</span><a href="#slide-8" aria-label="下一張">→</a></nav></section>
+<section id="slide-8" class="slide light " data-title="買東西與領東西，不必同時、同地"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">08 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>買東西與領東西，不必同時、同地</h2><div class="lab">管理資訊系統<br>08 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>原本熟悉的交易</h3><ul><li data-editable>到店選商品、付款，當場帶走。</li><li data-editable>購買與商品交付緊接在一起。</li></ul></article><article class="panel"><h3 data-editable>服務方式的改變</h3><ul><li data-editable>先購買，之後再領取。</li><li data-editable>可以由不同門市接續服務。</li><li data-editable>商品尚未領完，交易紀錄仍要持續管理。</li></ul></article></div><div class="source-tag"><a href="https://award.ima.org.tw/news.html" target="_blank" rel="noopener noreferrer">來源：IT Matters Awards 全家分享 ↗</a>｜左右比較為教師統整</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-7" aria-label="上一張">←</a><span>08 / 24</span><a href="#slide-9" aria-label="下一張">→</a></nav></section>
+<section id="slide-9" class="slide light " data-title="跨店服務，需要共同的紀錄"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">09 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>跨店服務，需要共同的紀錄</h2><div class="lab">管理資訊系統<br>09 / 24</div></header><div class="flow"><article class="flow-node"><b>01</b><h3 data-editable>顧客</h3><p data-editable>這筆購買屬於誰？還能領多少？</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>02</b><h3 data-editable>門市 A</h3><p data-editable>完成購買或領取，更新紀錄。</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>03</b><h3 data-editable>共用紀錄</h3><p data-editable>讓不同門市核對同一筆交易的狀態。</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>04</b><h3 data-editable>門市 B</h3><p data-editable>確認後接續服務，避免重複領取。</p></article></div><div class="source-tag">教師示意｜不是全家的實際資料庫或網路架構</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-8" aria-label="上一張">←</a><span>09 / 24</span><a href="#slide-10" aria-label="下一張">→</a></nav></section>
+<section id="slide-10" class="slide light " data-title="系統支援作業，也創造新的服務"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">10 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>系統支援作業，也創造新的服務</h2><div class="lab">管理資訊系統<br>10 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>把工作做好</h3><p data-editable>留下紀錄，降低漏記與重複確認。</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>把作業接起來</h3><p data-editable>讓不同門市能接續處理同一筆交易。</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>讓服務有新選擇</h3><p data-editable>購買、領取與分享可以有不同安排。</p></article></div><div class="source-tag"><a href="https://award.ima.org.tw/news.html" target="_blank" rel="noopener noreferrer">來源：IT Matters Awards 全家分享 ↗</a>｜教師統整：作業支援、協作、服務創新</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-9" aria-label="上一張">←</a><span>10 / 24</span><a href="#slide-11" aria-label="下一張">→</a></nav></section>
+<section id="slide-11" class="slide light " data-title="如果紀錄錯了，會怎麼樣？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">11 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>如果紀錄錯了，會怎麼樣？</h2><div class="lab">管理資訊系統<br>11 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>數量不對</h3><p data-editable>顧客明明還沒領，畫面卻顯示已領完。</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>狀態不一致</h3><p data-editable>兩家門市看到不同紀錄，無法確認能否領取。</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>例外沒人處理</h3><p data-editable>付款或領取發生爭議，不知道找誰查核。</p></article></div><div class="source-tag">教學假設｜不是全家已發生的事件；討論正確性、更新與責任</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-10" aria-label="上一張">←</a><span>11 / 24</span><a href="#slide-12" aria-label="下一張">→</a></nav></section>
+<section id="slide-12" class="slide light " data-title="最重要的是 APP，還是背後的協作？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">12 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>最重要的是 APP，還是背後的協作？</h2><div class="lab">管理資訊系統<br>12 / 24</div></header><div class="statement"><p class="quote" data-editable>畫面很好用，<br>服務就一定可靠嗎？</p><p class="explain" data-editable>兩人討論：如果只能改善一件事，你會先改善畫面、資料正確性，還是門市處理問題的方式？說出你的理由。</p></div><div class="source-tag">課堂討論｜不必三選一找標準答案，重點是說明彼此如何配合</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-11" aria-label="上一張">←</a><span>12 / 24</span><a href="#slide-13" aria-label="下一張">→</a></nav></section>
+<section id="slide-13" class="slide light " data-title="從買咖啡，走進工廠"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">13 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>從買咖啡，走進工廠</h2><div class="lab">管理資訊系統<br>13 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>零售服務</h3><ul><li data-editable>面對顧客，完成購買與領取。</li><li data-editable>不同門市需要接續服務。</li></ul></article><article class="panel"><h3 data-editable>製造企業</h3><ul><li data-editable>接單後，還要準備材料與安排生產。</li><li data-editable>不同部門需要接續完成訂單。</li><li data-editable>共同問題：下一個人是否拿到正確資訊？</li></ul></article></div><div class="source-tag">教師統整｜示意情境不代表企業實際系統架構</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-12" aria-label="上一張">←</a><span>13 / 24</span><a href="#slide-14" aria-label="下一張">→</a></nav></section>
+<section id="slide-14" class="slide light " data-title="一張訂單會經過哪些部門？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">14 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>一張訂單會經過哪些部門？</h2><div class="lab">管理資訊系統<br>14 / 24</div></header><div class="flow"><article class="flow-node"><b>01</b><h3 data-editable>接單</h3><p data-editable>商品、數量、交期是否清楚？</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>02</b><h3 data-editable>備料</h3><p data-editable>現有材料夠嗎？不足怎麼補？</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>03</b><h3 data-editable>生產</h3><p data-editable>什麼時候做？設備與人力夠嗎？</p></article><div class="arrow" aria-hidden="true">→</div><article class="flow-node"><b>04</b><h3 data-editable>出貨</h3><p data-editable>數量、品質與交付安排是否確認？</p></article></div><div class="source-tag">教師簡化流程｜實際流程也可能包含採購、品管、財會與退貨</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-13" aria-label="上一張">←</a><span>14 / 24</span><a href="#slide-15" aria-label="下一張">→</a></nav></section>
+<section id="slide-15" class="slide light " data-title="記銘工業｜接到訂單，為什麼交不出貨？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">15 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>記銘工業｜接到訂單，為什麼交不出貨？</h2><div class="lab">管理資訊系統<br>15 / 24</div></header><div class="video-intro"><div class="video-meta"><div class="micro">觀看前，先帶著問題</div><div class="duration">約 6:00</div><div class="maker" data-editable>鼎新／記銘工業<br>中文分享／案例影片</div></div><div class="watch-task"><h3 data-editable>觀看時，請注意</h3><ol><li data-editable>訂單增加後，原本的作業方式出現哪些困難？</li><li data-editable>材料、進度或交期不清楚，會影響哪些部門？</li><li data-editable>改善靠的是軟體，還是也包含工作方式的改變？</li></ol></div></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/626.html" target="_blank" rel="noopener noreferrer">來源：鼎新／記銘工業案例（2018） ↗</a>｜先理解接單、備料、排程與交期，不必記系統縮寫</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-14" aria-label="上一張">←</a><span>15 / 24</span><a href="#slide-16" aria-label="下一張">→</a></nav></section>
+<section id="slide-16" class="slide dark " data-title="影片播放｜記銘工業：消失的11天！"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">16 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>影片播放｜記銘工業：消失的11天！</h2><div class="lab">管理資訊系統<br>16 / 24</div></header><div class="watch-screen"><span class="micro" data-editable>鼎新案例影片 · 約 6分鐘</span><h3 data-editable>記銘工業：消失的11天！</h3><a class="watch-link" href="https://www.youtube.com/watch?v=rwq7fpvVdzY" target="_blank" rel="noopener noreferrer">▶ 在 YouTube 播放影片</a><p data-editable>影片會在新分頁開啟；播放後回到教材繼續。<br>需要網際網路，影片未包含在這份 HTML 中。</p></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/626.html" target="_blank" rel="noopener noreferrer">來源：鼎新／記銘工業案例（2018） ↗</a>｜原題：如何達到縮短交期與產能提升？</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-15" aria-label="上一張">←</a><span>16 / 24</span><a href="#slide-17" aria-label="下一張">→</a></nav></section>
+<section id="slide-17" class="slide light " data-title="每個部門都很忙，整體卻不順"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">17 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>每個部門都很忙，整體卻不順</h2><div class="lab">管理資訊系統<br>17 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>業務在等交期</h3><p data-editable>客戶要答案，但生產與材料狀況不清楚。</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>現場在等材料</h3><p data-editable>工作安排好了，材料卻不一定到位。</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>主管在追進度</h3><p data-editable>各自回報很多，仍不易掌握整筆訂單。</p></article></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/626.html" target="_blank" rel="noopener noreferrer">來源：鼎新／記銘工業案例（2018） ↗</a>｜依案例問題簡化；不是逐字引述</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-16" aria-label="上一張">←</a><span>17 / 24</span><a href="#slide-18" aria-label="下一張">→</a></nav></section>
+<section id="slide-18" class="slide light " data-title="共用資料，才能一起安排工作"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">18 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>共用資料，才能一起安排工作</h2><div class="lab">管理資訊系統<br>18 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>訂單</h3><p data-editable>大家辨識同一筆訂單與最新需求。</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>庫存</h3><p data-editable>帳上數量要能對得上實物，異動要及時記錄。</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>生產進度</h3><p data-editable>已完成、待加工與異常狀況要能查核。</p></article></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/626.html" target="_blank" rel="noopener noreferrer">來源：鼎新／記銘工業案例（2018） ↗</a>｜共用不等於人人都能修改；權限與責任仍須區分</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-17" aria-label="上一張">←</a><span>18 / 24</span><a href="#slide-19" aria-label="下一張">→</a></nav></section>
+<section id="slide-19" class="slide light " data-title="系統讓主管看見問題"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">19 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>系統讓主管看見問題</h2><div class="lab">管理資訊系統<br>19 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>作業人員需要知道</h3><ul><li data-editable>這張單下一步要做什麼？</li><li data-editable>材料是否齊全？今天完成多少？</li></ul></article><article class="panel"><h3 data-editable>主管需要知道</h3><ul><li data-editable>哪些訂單可能延誤？</li><li data-editable>瓶頸在材料、設備，還是工作安排？</li><li data-editable>哪些問題需要先協調？</li></ul></article></div><div class="source-tag">教師統整｜同一批資料，可支援不同層級的資訊需求</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-18" aria-label="上一張">←</a><span>19 / 24</span><a href="#slide-20" aria-label="下一張">→</a></nav></section>
+<section id="slide-20" class="slide light " data-title="看見問題，不等於自動解決"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">20 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>看見問題，不等於自動解決</h2><div class="lab">管理資訊系統<br>20 / 24</div></header><div class="statement"><p class="quote" data-editable>系統提出提醒，<br>主管仍要做判斷。</p><p class="explain" data-editable>可能延誤時，要加班、調整順序，還是與客戶協商？每個選擇都有成本，也可能影響其他訂單。</p></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/626.html" target="_blank" rel="noopener noreferrer">來源：鼎新／記銘工業案例（2018） ↗</a>｜成效為企業／廠商說法，不能只歸因於軟體</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-19" aria-label="上一張">←</a><span>20 / 24</span><a href="#slide-21" aria-label="下一張">→</a></nav></section>
+<section id="slide-21" class="slide light " data-title="系統上線後，員工反而覺得更麻煩？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">21 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>系統上線後，員工反而覺得更麻煩？</h2><div class="lab">管理資訊系統<br>21 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>啟順食品：作業改變</h3><ul><li data-editable>原本接單後直接銷貨。</li><li data-editable>導入時改為串接訂單、銷貨與應收帳款。</li><li data-editable>案例記載：員工反映作業變麻煩。</li></ul></article><article class="panel"><h3 data-editable>怎麼處理這個問題？</h3><ul><li data-editable>主管支持新流程，要求配合。</li><li data-editable>供應商也調整介面，改善操作便利性。</li><li data-editable>討論：只要求配合，是否就足夠？</li></ul></article></div><div class="source-tag"><a href="https://www.digiwin.com.tw/case/1485.html" target="_blank" rel="noopener noreferrer">來源：鼎新／啟順食品案例（2018） ↗</a>｜文字案例，非影片；廠商報導不是獨立成效評估</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-20" aria-label="上一張">←</a><span>21 / 24</span><a href="#slide-22" aria-label="下一張">→</a></nav></section>
+<section id="slide-22" class="slide light " data-title="系統導入，也是在改變工作方式"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">22 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>系統導入，也是在改變工作方式</h2><div class="lab">管理資訊系統<br>22 / 24</div></header><div class="content-grid"><article class="concept-card"><div class="no">01</div><h3 data-editable>流程要說清楚</h3><p data-editable>哪些紀錄不能省？怎麼避免同一件事重複輸入？</p></article><article class="concept-card"><div class="no">02</div><h3 data-editable>責任要說清楚</h3><p data-editable>誰輸入、誰確認？資料錯了由誰處理？</p></article><article class="concept-card"><div class="no">03</div><h3 data-editable>改變要有人支持</h3><p data-editable>說明目的、安排練習，聽取問題並調整不便。</p></article></div><div class="source-tag">教師延伸｜由啟順案例引出一般管理問題，不代表企業已實施全部措施</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-21" aria-label="上一張">←</a><span>22 / 24</span><a href="#slide-23" aria-label="下一張">→</a></nav></section>
+<section id="slide-23" class="slide light " data-title="如果再加入 AI，哪些事能交給它？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">23 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>如果再加入 AI，哪些事能交給它？</h2><div class="lab">管理資訊系統<br>23 / 24</div></header><div class="two-col"><article class="panel"><h3 data-editable>可以協助的任務</h3><ul><li data-editable>整理訂單與進度資料。</li><li data-editable>協助找出異常、草擬提醒與處理選項。</li><li data-editable>前提：資料、權限與結果可查核。</li></ul></article><article class="panel"><h3 data-editable>仍要安排人的確認</h3><ul><li data-editable>對外承諾交期或調整重要訂單。</li><li data-editable>確認建議是否可行，處理例外與爭議。</li><li data-editable>不能因為是 AI 建議，就省略責任。</li></ul></article></div><div class="source-tag">教師假設｜不是本教材兩家企業的已驗證 AI 功能</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-22" aria-label="上一張">←</a><span>23 / 24</span><a href="#slide-24" aria-label="下一張">→</a></nav></section>
+<section id="slide-24" class="slide light " data-title="系統提醒可能延誤，你會先做什麼？"><div class="hairlines"></div><div class="nav-hint">← → 翻頁　M 目錄　E 編輯</div><div class="page-num">24 / 24</div><div class="frame"><header class="topbar"><h2 data-editable>系統提醒可能延誤，你會先做什麼？</h2><div class="lab">管理資訊系統<br>24 / 24</div></header><div class="final-grid"><article class="final-item"><div class="big" data-editable>先查資料</div><p data-editable>訂單、材料、進度是否正確？提醒根據是什麼？</p></article><article class="final-item"><div class="big" data-editable>再看影響</div><p data-editable>影響哪些客戶與訂單？有哪些可行選項？</p></article><article class="final-item"><div class="big" data-editable>安排下一步</div><p data-editable>誰確認、誰協調、誰執行？之後怎麼追蹤？</p></article></div><p class="closing-line" data-editable>資訊系統支援作業、協作與判斷；管理讓這些支援真正發揮作用。</p><div class="source-tag">課堂收束｜用一個具體處理方案回答，不只列出系統名稱</div></div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-23" aria-label="上一張">←</a><span>24 / 24</span><a href="#slide-24" aria-label="下一張">→</a></nav></section>
+</main>
+  </div>
+
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button>
+    <button id="menuBtn" type="button" aria-label="開啟章節選單">☰</button>
+    <span class="counter" id="counter">01 / 24</span>
+    <button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress"></div>
+
+  <aside class="chapter-menu" id="chapterMenu" aria-label="章節選單">
+    <div class="menu-panel">
+      <div class="menu-head"><h2>章節與影片</h2><button id="closeMenu" type="button">關閉</button></div>
+      <div class="menu-links" id="menuLinks"></div>
+    </div>
+  </aside>
+
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <div class="edit-toolbar" id="editToolbar">
+    <button id="saveFile" type="button">下載目前版本</button>
+    <button id="resetEdits" type="button">清除本機修改</button>
+  </div>
+
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的左右箭頭翻頁</div></noscript>
+
+
+  <script>
+  (function () {
+    'use strict';
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el, name) { return new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className); }
+    function addClass(el, name) { if (!hasClass(el, name)) el.className += ' ' + name; }
+    function removeClass(el, name) { el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(?=\\s|$)', 'g'), ' ').replace(/^\\s+|\\s+$/g, ''); }
+    function closestWithClass(el, name) { while (el && el !== document) { if (hasClass(el, name)) return el; el = el.parentNode; } return null; }
+    function closestWithAttr(el, attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr) !== null) return el; el = el.parentNode; } return null; }
+    function pad2(n) { return n < 10 ? '0' + n : String(n); }
+
+    var stage = byId('deckStage');
+    var storageKey = 'mis-is-management-v1';
+    function storageGet() { try { return window.localStorage.getItem(storageKey); } catch (ignore) { return null; } }
+    function storageSet(value) { try { window.localStorage.setItem(storageKey, value); return true; } catch (ignore) { return false; } }
+    function storageRemove() { try { window.localStorage.removeItem(storageKey); return true; } catch (ignore) { return false; } }
+    var saved = storageGet();
+    if (saved && saved.indexOf('fallback-controls') !== -1) stage.innerHTML = saved;
+    var slides = stage.getElementsByTagName('section');
+    var current = 0;
+    var locked = false;
+    var touchStart = null;
+
+    function scaleStage() {
+      var factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      var value = 'translate(-50%,-50%) scale(' + factor + ')';
+      stage.style.transform = value;
+      stage.style.msTransform = value;
+      stage.style.webkitTransform = value;
+    }
+    function resetVideo(slide) {
+      var shells = slide.getElementsByClassName('video-shell');
+      if (!shells.length || !shells[0].getElementsByTagName('iframe').length) return;
+      shells[0].innerHTML = '<button class="load-video" type="button"><span class="play-icon">&#9654;</span><span>點一下以載入並播放影片</span></button>';
+    }
+    function show(index, updateHash) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      current = index;
+      for (var i = 0; i < slides.length; i += 1) {
+        if (i === current) { addClass(slides[i], 'active'); addClass(slides[i], 'visible'); }
+        else { removeClass(slides[i], 'active'); removeClass(slides[i], 'visible'); resetVideo(slides[i]); }
+      }
+      byId('counter').innerHTML = pad2(current + 1) + ' / ' + slides.length;
+      byId('progress').style.width = ((current + 1) / slides.length * 100) + '%';
+      if (updateHash !== false) {
+        try { window.history.replaceState(null, '', '#slide-' + (current + 1)); }
+        catch (ignore) { window.location.hash = 'slide-' + (current + 1); }
+      }
+    }
+    function indexFromHash() {
+      var match = window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match ? Math.max(0, Math.min(parseInt(match[1], 10) - 1, slides.length - 1)) : 0;
+    }
+    function toggleMenu(force) {
+      var menu = byId('chapterMenu');
+      var open = typeof force === 'boolean' ? force : !hasClass(menu, 'open');
+      if (open) addClass(menu, 'open'); else removeClass(menu, 'open');
+    }
+    function buildMenu() {
+      var holder = byId('menuLinks');
+      holder.innerHTML = '';
+      for (var i = 0; i < slides.length; i += 1) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('data-jump', i);
+        button.appendChild(document.createTextNode(pad2(i + 1) + '　' + (slides[i].getAttribute('data-title') || '投影片')));
+        holder.appendChild(button);
+      }
+    }
+    function loadVideo(shell) {
+      var id = shell.getAttribute('data-video-id');
+      var title = shell.getAttribute('data-video-title') || '課程影片';
+      shell.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&hl=zh-TW&cc_load_policy=1&autoplay=1" title="' + title.replace(/"/g, '&quot;') + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+    function requestFullscreen() {
+      var root = document.documentElement;
+      var exit = document.exitFullscreen || document.msExitFullscreen || document.webkitExitFullscreen;
+      if (document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement) { if (exit) exit.call(document); return; }
+      var enter = root.requestFullscreen || root.msRequestFullscreen || root.webkitRequestFullscreen;
+      if (enter) enter.call(root);
+    }
+
+    byId('prevBtn').onclick = function () { show(current - 1); };
+    byId('nextBtn').onclick = function () { show(current + 1); };
+    byId('menuBtn').onclick = function () { toggleMenu(true); };
+    byId('closeMenu').onclick = function () { toggleMenu(false); };
+    byId('fullBtn').onclick = requestFullscreen;
+    byId('chapterMenu').onclick = function (event) { event = event || window.event; if ((event.target || event.srcElement).id === 'chapterMenu') toggleMenu(false); };
+    document.onclick = function (event) {
+      event = event || window.event;
+      var target = event.target || event.srcElement;
+      var load = closestWithClass(target, 'load-video');
+      if (load) loadVideo(closestWithClass(load, 'video-shell'));
+      var jump = closestWithAttr(target, 'data-jump');
+      if (jump) { show(parseInt(jump.getAttribute('data-jump'), 10)); toggleMenu(false); }
+    };
+    document.onkeydown = function (event) {
+      event = event || window.event;
+      var eventTarget = event.target || event.srcElement;
+      if (eventTarget && (eventTarget.isContentEditable || /^(INPUT|TEXTAREA)$/i.test(eventTarget.tagName))) return;
+      var key = event.key || event.keyCode;
+      if (key === 'ArrowRight' || key === 'ArrowDown' || key === 'PageDown' || key === 39 || key === 40 || key === 34 || key === 32 || key === ' ') { if (event.preventDefault) event.preventDefault(); show(current + 1); }
+      else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp' || key === 37 || key === 38 || key === 33) { if (event.preventDefault) event.preventDefault(); show(current - 1); }
+      else if (key === 'Home' || key === 36) show(0);
+      else if (key === 'End' || key === 35) show(slides.length - 1);
+      else if (key === 'm' || key === 'M' || key === 77) toggleMenu();
+      else if (key === 'Escape' || key === 27) toggleMenu(false);
+      else if (key === 'e' || key === 'E' || key === 69) toggleEditing();
+    };
+    window.onresize = scaleStage;
+    window.onhashchange = function () { show(indexFromHash(), false); };
+    if (window.addEventListener) {
+      window.addEventListener('wheel', function (event) { if (editing || hasClass(byId('chapterMenu'), 'open') || locked || Math.abs(event.deltaY) < 18) return; locked = true; show(current + (event.deltaY > 0 ? 1 : -1)); window.setTimeout(function () { locked = false; }, 550); }, false);
+      window.addEventListener('touchstart', function (event) { touchStart = event.changedTouches[0].clientX; }, false);
+      window.addEventListener('touchend', function (event) { if (editing || hasClass(byId('chapterMenu'), 'open') || touchStart === null) return; var d = event.changedTouches[0].clientX - touchStart; if (Math.abs(d) > 50) show(current + (d < 0 ? 1 : -1)); touchStart = null; }, false);
+    }
+    var editing = false;
+    var editTimer = null;
+    function toggleEditing() {
+      editing = !editing;
+      var editable = document.querySelectorAll('[data-editable]');
+      for (var i = 0; i < editable.length; i += 1) editable[i].contentEditable = editing ? 'true' : 'false';
+      if (editing) { addClass(document.body, 'editing'); addClass(byId('editToggle'), 'active'); addClass(byId('editToolbar'), 'show'); }
+      else { removeClass(document.body, 'editing'); removeClass(byId('editToggle'), 'active'); removeClass(byId('editToolbar'), 'show'); }
+    }
+    byId('editToggle').onclick = toggleEditing;
+    byId('editToggle').style.opacity = '1';
+    byId('editToggle').style.pointerEvents = 'auto';
+    stage.oninput = function () { window.clearTimeout(editTimer); editTimer = window.setTimeout(function () { storageSet(stage.innerHTML); }, 350); };
+    byId('resetEdits').onclick = function () { if (window.confirm('要清除目前瀏覽器中儲存的文字修改嗎？')) { storageRemove(); window.location.reload(); } };
+    byId('saveFile').onclick = function () {
+      storageSet(stage.innerHTML);
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([html], { type:'text/html;charset=utf-8' });
+      if (window.navigator.msSaveOrOpenBlob) window.navigator.msSaveOrOpenBlob(blob, '管理資訊系統_資訊系統如何改變企業運作與管理_V1_編輯版.html');
+      else {
+        var urlApi = window.URL || window.webkitURL;
+        var anchor = document.createElement('a');
+        anchor.href = urlApi.createObjectURL(blob);
+        anchor.download = '管理資訊系統_資訊系統如何改變企業運作與管理_V1_編輯版.html';
+        document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor);
+        window.setTimeout(function () { urlApi.revokeObjectURL(anchor.href); }, 1200);
+      }
+    };
+    buildMenu();
+    scaleStage();
+    show(indexFromHash(), false);
+    addClass(document.body, 'js-ready');
+  }());
+  </script>
+</body>
+</html>
