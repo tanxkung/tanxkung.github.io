@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT 第三部分｜就業實作與總回顧 V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* === THEME：延續前兩部分的成人友善暖色系 === */
+    :root {
+      --stage-bg: #102f31;
+      --slide-bg: #fff9ed;
+      --cream: #fff9ed;
+      --paper: #fffdf7;
+      --ink: #173b3d;
+      --ink-soft: #456568;
+      --teal: #0f696c;
+      --teal-light: #dcefed;
+      --coral: #e96a59;
+      --coral-light: #fae3dd;
+      --amber: #f2a51a;
+      --amber-light: #fff0c9;
+      --green: #2f855a;
+      --green-light: #def1e5;
+      --yellow: #ae7400;
+      --yellow-light: #fff1c7;
+      --red: #b53c36;
+      --red-light: #f9dedd;
+      --line: rgba(23, 59, 61, 0.16);
+      --shadow: 0 28px 68px rgba(23, 59, 61, 0.14);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --font: 'Noto Sans TC', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* === SHARED SLIDE ATMOSPHERE === */
+    body { font-family: var(--font); color: var(--ink); }
+    button, input { font: inherit; }
+    .slide {
+      transition: opacity 0.34s ease;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(242, 165, 26, 0.16), transparent 28%),
+        radial-gradient(circle at 94% 16%, rgba(15, 105, 108, 0.12), transparent 30%),
+        linear-gradient(135deg, #fff9ed 0%, #f5ead4 100%);
+    }
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.42;
+      background-image:
+        linear-gradient(rgba(23,59,61,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23,59,61,0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+    .chapter-tag {
+      position: absolute; top: 74px; left: 90px; z-index: 8;
+      display: inline-flex; align-items: center; gap: 14px;
+      color: var(--teal); font-size: 28px; font-weight: 850; letter-spacing: 0.07em;
+    }
+    .chapter-tag::before { content: ''; width: 52px; height: 12px; border-radius: 99px; background: var(--coral); }
+    .slide-number {
+      position: absolute; top: 68px; right: 86px; z-index: 8;
+      min-width: 112px; height: 58px; display: grid; place-items: center;
+      border: 2px solid var(--line); border-radius: 30px;
+      color: var(--ink-soft); background: rgba(255,255,255,0.7);
+      font-size: 28px; font-weight: 800; letter-spacing: 0.08em;
+    }
+    .main-title {
+      position: absolute; top: 128px; left: 88px; right: 170px; z-index: 7;
+      margin: 0; font-size: 76px; line-height: 1.18; font-weight: 900; letter-spacing: 0.015em;
+    }
+    .main-subtitle {
+      position: absolute; top: 232px; left: 92px; right: 110px; z-index: 7;
+      margin: 0; color: var(--ink-soft); font-size: 33px; line-height: 1.45; font-weight: 600;
+    }
+    .content-zone {
+      position: absolute; z-index: 5; top: 318px; left: 88px; right: 88px; bottom: 158px;
+      height: auto !important;
+    }
+    .card {
+      border: 3px solid rgba(23,59,61,0.12); border-radius: 38px;
+      background: rgba(255,253,247,0.95); box-shadow: var(--shadow);
+    }
+    .eyebrow { color: var(--coral); font-size: 27px; font-weight: 900; letter-spacing: 0.09em; }
+    .support { margin: 0; color: var(--ink-soft); font-size: 30px; line-height: 1.52; font-weight: 650; }
+    .big-idea { margin: 0; font-size: 56px; line-height: 1.28; font-weight: 900; }
+    .pill { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 99px; font-size: 27px; font-weight: 850; }
+    .pill.teal { color: white; background: var(--teal); }
+    .pill.coral { color: white; background: var(--coral); }
+    .pill.amber { color: var(--ink); background: var(--amber-light); border: 2px solid rgba(174,116,0,.2); }
+
+    /* === MOTION：溫和、不閃爍 === */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: .08s; }
+    .delay-2 { transition-delay: .16s; }
+    .delay-3 { transition-delay: .24s; }
+    .delay-4 { transition-delay: .32s; }
+    .delay-5 { transition-delay: .40s; }
+
+    /* === COVER AND SECTION LAYOUTS === */
+    .cover-layout { position: absolute; inset: 0; display: grid; grid-template-columns: 56% 44%; }
+    .cover-copy { padding: 150px 60px 150px 110px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+    .cover-copy h1 { margin: 0; font-size: 102px; line-height: 1.08; font-weight: 900; }
+    .cover-copy p { margin: 0; max-width: 900px; color: var(--ink-soft); font-size: 38px; line-height: 1.5; font-weight: 650; }
+    .cover-visual { position: relative; display: grid; place-items: center; overflow: hidden; }
+    .work-wheel { width: 590px; height: 590px; position: relative; border-radius: 50%; background: var(--teal-light); border: 5px solid rgba(15,105,108,.18); box-shadow: var(--shadow); }
+    .work-wheel::before { content: ''; position: absolute; inset: 118px; border-radius: 50%; background: var(--paper); border: 6px solid var(--teal); }
+    .phone-core { position: absolute; left: 50%; top: 50%; width: 180px; height: 310px; transform: translate(-50%,-50%); border: 12px solid var(--ink); border-radius: 34px; background: white; }
+    .phone-core::before { content: ''; position: absolute; top: 18px; left: 50%; width: 70px; height: 10px; transform: translateX(-50%); border-radius: 99px; background: var(--ink); }
+    .phone-core::after { content: '✓'; position: absolute; left: 50%; top: 115px; transform: translateX(-50%); width: 74px; height: 74px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--teal); font-size: 46px; font-weight: 900; }
+    .orbit-label { position: absolute; min-width: 185px; padding: 16px 22px; border-radius: 24px; color: white; text-align: center; font-size: 28px; font-weight: 850; box-shadow: 0 16px 34px rgba(23,59,61,.18); }
+    .orbit-label.one { top: 70px; left: 25px; background: var(--coral); }
+    .orbit-label.two { top: 80px; right: 10px; background: var(--teal); }
+    .orbit-label.three { bottom: 70px; left: 50%; transform: translateX(-50%); color: var(--ink); background: var(--amber); }
+
+    /* === REUSABLE CARD GRIDS === */
+    .three-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 34px; }
+    .two-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 38px; }
+    .four-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 26px; }
+    .choice-card { padding: 38px; display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
+    .choice-card .icon { width: 98px; height: 98px; display: grid; place-items: center; border-radius: 30px; color: white; background: var(--teal); font-size: 46px; font-weight: 900; }
+    .choice-card:nth-child(2) .icon { background: var(--coral); }
+    .choice-card:nth-child(3) .icon { color: var(--ink); background: var(--amber); }
+    .choice-card h2 { margin: 0; font-size: 43px; line-height: 1.25; font-weight: 900; }
+    .choice-card p { margin: 0; color: var(--ink-soft); font-size: 29px; line-height: 1.5; font-weight: 650; }
+    .goal-card { padding: 46px 52px; display: grid; grid-template-columns: 125px 1fr; gap: 28px; align-items: center; }
+    .goal-mark { width: 112px; height: 112px; display: grid; place-items: center; border-radius: 34px; color: white; background: var(--teal); font-size: 58px; font-weight: 900; }
+    .goal-card:nth-child(2) .goal-mark { color: var(--ink); background: var(--amber); }
+    .goal-card h2 { margin: 0 0 12px; font-size: 48px; font-weight: 900; }
+    .goal-card p { margin: 0; color: var(--ink-soft); font-size: 31px; line-height: 1.5; font-weight: 650; }
+
+    /* === TASK SECTION SPLASH === */
+    .task-splash { position: absolute; inset: 0; display: grid; grid-template-columns: 46% 54%; }
+    .task-number { display: grid; place-items: center; background: var(--teal); color: white; }
+    .task-number span { font-size: 260px; line-height: 1; font-weight: 900; }
+    .task-copy { padding: 110px 100px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+    .task-copy h1 { margin: 0; font-size: 92px; line-height: 1.14; font-weight: 900; }
+    .task-copy p { margin: 0; color: var(--ink-soft); font-size: 37px; line-height: 1.5; font-weight: 650; }
+
+    /* === FACTS, PERSONA AND PROMPT LAYOUTS === */
+    .fact-card { padding: 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 22px; }
+    .fact-card .fact-label { color: var(--coral); font-size: 29px; font-weight: 900; }
+    .fact-card .fact-line { font-size: 48px; line-height: 1.35; font-weight: 900; }
+    .fact-card .blank { display: inline-block; min-width: 220px; border-bottom: 6px solid var(--teal); }
+    .persona-layout { display: grid; grid-template-columns: 38% 62%; gap: 40px; }
+    .persona-avatar { display: grid; place-items: center; padding: 42px; text-align: center; }
+    .avatar-circle { width: 210px; height: 210px; display: grid; place-items: center; border-radius: 50%; background: var(--teal-light); border: 6px solid var(--teal); font-size: 92px; }
+    .persona-avatar h2 { margin: 22px 0 8px; font-size: 48px; }
+    .persona-avatar p { margin: 0; color: var(--ink-soft); font-size: 29px; font-weight: 650; }
+    .persona-facts { padding: 44px 50px; display: grid; gap: 20px; }
+    .persona-line { display: grid; grid-template-columns: 140px 1fr; gap: 22px; align-items: center; padding: 18px 24px; border-radius: 24px; background: var(--paper); border: 2px solid var(--line); font-size: 31px; font-weight: 750; }
+    .persona-line strong { color: var(--teal); }
+    .prompt-layout { display: grid; grid-template-columns: 280px 1fr; gap: 38px; }
+    .prompt-step { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; color: white; background: var(--teal); border-radius: 40px; }
+    .prompt-step .step-no { font-size: 92px; line-height: 1; font-weight: 900; }
+    .prompt-step p { margin: 0; padding: 0 24px; font-size: 30px; line-height: 1.45; font-weight: 750; }
+    .prompt-sheet { position: relative; padding: 58px 72px; display: flex; align-items: center; border-left: 16px solid var(--coral); }
+    .prompt-sheet::before { content: '「'; position: absolute; top: 16px; left: 34px; color: var(--amber); font-size: 100px; font-weight: 900; opacity: .65; }
+    .prompt-text { margin: 0; font-size: 47px; line-height: 1.6; font-weight: 850; letter-spacing: .01em; }
+    .prompt-footer { position: absolute; right: 48px; bottom: 34px; padding: 12px 22px; border-radius: 99px; color: white; background: var(--ink); font-size: 25px; font-weight: 850; }
+
+    /* === CHECKING AND REVISION LAYOUTS === */
+    .check-card { padding: 38px; display: flex; flex-direction: column; gap: 24px; }
+    .check-card .check-icon { width: 94px; height: 94px; display: grid; place-items: center; border-radius: 28px; color: white; background: var(--teal); font-size: 50px; font-weight: 900; }
+    .check-card:nth-child(2) .check-icon { background: var(--coral); }
+    .check-card:nth-child(3) .check-icon { color: var(--ink); background: var(--amber); }
+    .check-card h2 { margin: 0; font-size: 42px; line-height: 1.28; font-weight: 900; }
+    .check-card p { margin: 0; color: var(--ink-soft); font-size: 29px; line-height: 1.5; font-weight: 650; }
+    .bottom-ribbon { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 8; min-width: 1080px; padding: 17px 36px; border-radius: 99px; text-align: center; color: white; background: var(--ink); font-size: 30px; font-weight: 850; box-shadow: 0 18px 42px rgba(23,59,61,.22); }
+    .revision-card { padding: 40px; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; }
+    .revision-card .quote { padding: 20px 24px; border-radius: 22px; background: var(--teal-light); font-size: 32px; line-height: 1.45; font-weight: 780; }
+    .revision-card h2 { margin: 0; font-size: 41px; font-weight: 900; }
+    .revision-card .ask { color: var(--coral); font-size: 31px; font-weight: 900; }
+
+    /* === JOB CARD AND PHOTO FLOW === */
+    .job-layout { display: grid; grid-template-columns: 42% 58%; gap: 40px; }
+    .job-poster { padding: 42px 48px; display: flex; flex-direction: column; gap: 22px; }
+    .job-poster .practice { align-self: flex-start; padding: 10px 20px; border-radius: 99px; color: var(--red); background: var(--red-light); font-size: 25px; font-weight: 900; }
+    .job-poster h2 { margin: 0; font-size: 54px; font-weight: 900; }
+    .job-list { display: grid; gap: 16px; }
+    .job-line { display: flex; gap: 18px; align-items: center; font-size: 30px; font-weight: 750; }
+    .job-line span { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 14px; color: white; background: var(--teal); font-weight: 900; }
+    .job-visual { display: grid; grid-template-columns: repeat(2,1fr); gap: 26px; }
+    .job-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; border-radius: 34px; background: var(--paper); border: 3px solid var(--line); }
+    .job-tile .tile-icon { font-size: 76px; }
+    .job-tile strong { font-size: 32px; }
+    .photo-flow { display: grid; grid-template-columns: 1fr 90px 1fr 90px 1fr; gap: 20px; align-items: stretch; }
+    .flow-card { padding: 34px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; }
+    .flow-card .flow-icon { width: 110px; height: 110px; display: grid; place-items: center; border-radius: 34px; color: white; background: var(--teal); font-size: 54px; font-weight: 900; }
+    .flow-card:nth-of-type(3) .flow-icon { background: var(--coral); }
+    .flow-card h2 { margin: 0; font-size: 39px; font-weight: 900; }
+    .flow-card p { margin: 0; color: var(--ink-soft); font-size: 27px; line-height: 1.45; font-weight: 650; }
+    .flow-arrow { display: grid; place-items: center; color: var(--coral); font-size: 68px; font-weight: 900; }
+
+    /* === ANSWER MAP AND INTERVIEW === */
+    .answer-card { padding: 40px; display: flex; flex-direction: column; gap: 24px; }
+    .answer-card .answer-no { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 20px; color: white; background: var(--teal); font-size: 31px; font-weight: 900; }
+    .answer-card:nth-child(2) .answer-no { background: var(--coral); }
+    .answer-card:nth-child(3) .answer-no { color: var(--ink); background: var(--amber); }
+    .answer-card h2 { margin: 0; font-size: 42px; font-weight: 900; }
+    .answer-card p { margin: 0; color: var(--ink-soft); font-size: 29px; line-height: 1.5; font-weight: 650; }
+    .interview-layout { display: grid; grid-template-columns: 39% 61%; gap: 42px; }
+    .interviewer { padding: 42px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; text-align: center; }
+    .bot-face { width: 190px; height: 170px; position: relative; border: 10px solid var(--teal); border-radius: 46px; background: var(--teal-light); }
+    .bot-face::before { content: '●   ●'; position: absolute; top: 50px; left: 0; right: 0; color: var(--teal); font-size: 38px; letter-spacing: 18px; }
+    .bot-face::after { content: '⌣'; position: absolute; left: 0; right: 0; bottom: 22px; color: var(--coral); font-size: 54px; font-weight: 900; }
+    .interviewer h2 { margin: 0; font-size: 42px; }
+    .interview-question { padding: 50px 58px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+    .interview-question .question { margin: 0; font-size: 53px; line-height: 1.42; font-weight: 900; }
+    .interview-question .rule { color: var(--teal); font-size: 31px; font-weight: 850; }
+    .feedback-formula { display: grid; grid-template-columns: 1fr 100px 1fr 100px 1fr; gap: 22px; align-items: center; }
+    .feedback-card { padding: 42px; min-height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+    .feedback-card .mark { font-size: 54px; }
+    .feedback-card h2 { margin: 0; font-size: 40px; font-weight: 900; }
+    .feedback-card p { margin: 0; color: var(--ink-soft); font-size: 28px; line-height: 1.48; font-weight: 650; }
+    .plus { display: grid; place-items: center; color: var(--coral); font-size: 70px; font-weight: 900; }
+
+    /* === SAFETY SIGNALS AND COMPLETION === */
+    .signal-card { padding: 36px; display: flex; flex-direction: column; gap: 22px; }
+    .signal-head { display: flex; align-items: center; gap: 20px; }
+    .signal-dot { width: 82px; height: 82px; border-radius: 50%; display: grid; place-items: center; color: white; font-size: 38px; font-weight: 900; }
+    .signal-card.green { background: var(--green-light); border-color: rgba(47,133,90,.24); }
+    .signal-card.yellow { background: var(--yellow-light); border-color: rgba(174,116,0,.24); }
+    .signal-card.red { background: var(--red-light); border-color: rgba(181,60,54,.24); }
+    .signal-card.green .signal-dot { background: var(--green); }
+    .signal-card.yellow .signal-dot { background: var(--yellow); }
+    .signal-card.red .signal-dot { background: var(--red); }
+    .signal-card h2 { margin: 0; font-size: 41px; font-weight: 900; }
+    .signal-card p { margin: 0; color: var(--ink); font-size: 27px; line-height: 1.5; font-weight: 700; }
+    .result-card { padding: 44px; display: flex; flex-direction: column; gap: 22px; }
+    .result-card .result-icon { width: 90px; height: 90px; display: grid; place-items: center; border-radius: 28px; color: white; background: var(--teal); font-size: 44px; font-weight: 900; }
+    .result-card:nth-child(2) .result-icon { background: var(--coral); }
+    .result-card:nth-child(3) .result-icon { color: var(--ink); background: var(--amber); }
+    .result-card h2 { margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900; }
+    .result-card p { margin: 0; color: var(--ink-soft); font-size: 28px; line-height: 1.48; font-weight: 650; }
+
+    /* === CLOSING MANTRAS === */
+    .mantra-stack { display: grid; gap: 20px; }
+    .mantra-line { display: grid; grid-template-columns: 90px 1fr; gap: 24px; align-items: center; padding: 26px 34px; border-radius: 30px; background: var(--paper); border: 3px solid var(--line); box-shadow: 0 14px 34px rgba(23,59,61,.08); }
+    .mantra-no { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 22px; color: white; background: var(--teal); font-size: 36px; font-weight: 900; }
+    .mantra-line:nth-child(2) .mantra-no { background: var(--coral); }
+    .mantra-line:nth-child(3) .mantra-no { color: var(--ink); background: var(--amber); }
+    .mantra-line p { margin: 0; font-size: 43px; line-height: 1.3; font-weight: 850; }
+    .safety-mantra .mantra-line:nth-child(1) { border-color: rgba(181,60,54,.3); }
+    .safety-mantra .mantra-line:nth-child(1) .mantra-no { background: var(--red); }
+    .captain-layout { display: grid; grid-template-columns: 42% 58%; gap: 42px; }
+    .captain-badge { display: grid; place-items: center; position: relative; }
+    .badge-shape { width: 390px; height: 390px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--teal); border: 20px solid var(--amber); box-shadow: var(--shadow); font-size: 176px; }
+    .captain-copy { padding: 54px 58px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+    .captain-copy h2 { margin: 0; font-size: 64px; line-height: 1.25; font-weight: 900; }
+    .captain-copy p { margin: 0; color: var(--ink-soft); font-size: 32px; line-height: 1.55; font-weight: 650; }
+    .take-home { padding: 18px 26px; border-radius: 24px; color: white; background: var(--coral); font-size: 31px; line-height: 1.45; font-weight: 850; }
+
+    /* === PLAYER CHROME：投影片外控制列 === */
+    .deck-controls { display: flex; align-items: center; gap: 10px; padding: 9px 13px; border-radius: 99px; color: white; background: rgba(16,47,49,.92); box-shadow: 0 16px 40px rgba(0,0,0,.28); backdrop-filter: blur(10px); }
+    .control-button { width: 44px; height: 44px; border: 0; border-radius: 50%; display: grid; place-items: center; color: white; background: transparent; cursor: pointer; font-size: 23px; font-weight: 900; }
+    .control-button:hover, .control-button:focus-visible { background: rgba(255,255,255,.16); outline: 3px solid rgba(242,165,26,.65); }
+    .page-readout { min-width: 76px; text-align: center; font-size: 16px; font-weight: 800; }
+    .progress-dots { display: flex; align-items: center; gap: 5px; max-width: 320px; overflow: hidden; }
+    .progress-dot { width: 8px; height: 8px; flex: 0 0 auto; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.33); cursor: pointer; }
+    .progress-dot.active { width: 20px; border-radius: 99px; background: var(--amber); }
+
+    /* === PRESENTER NOTES：N 鍵開關 === */
+    .notes-panel { position: fixed; top: 20px; right: 20px; z-index: 5000; width: 430px; max-height: calc(100vh - 40px); overflow: auto; padding: 24px 26px; border-radius: 26px; color: white; background: rgba(16,47,49,.97); box-shadow: 0 22px 60px rgba(0,0,0,.35); transform: translateX(calc(100% + 40px)); transition: transform .28s var(--ease); }
+    .notes-panel.show { transform: translateX(0); }
+    .notes-panel strong { display: block; margin-bottom: 10px; color: var(--amber); font-size: 20px; }
+    .notes-panel p { margin: 0; white-space: pre-line; font-size: 18px; line-height: 1.65; }
+
+    /* === INLINE EDITING：E 鍵與左上角熱區 === */
+    .edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+    .edit-toggle { position: fixed; top: 18px; left: 18px; z-index: 10001; width: 48px; height: 48px; border: 0; border-radius: 50%; opacity: 0; pointer-events: none; color: white; background: var(--coral); box-shadow: 0 12px 30px rgba(0,0,0,.28); cursor: pointer; transition: opacity .3s ease; }
+    .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+    body.editing [data-edit-key] { outline: 3px dashed rgba(233,106,89,.75); outline-offset: 5px; cursor: text; }
+    .edit-status { position: fixed; left: 24px; bottom: 24px; z-index: 10002; padding: 12px 18px; border-radius: 14px; opacity: 0; pointer-events: none; color: white; background: rgba(181,60,54,.95); font-size: 16px; font-weight: 800; transition: opacity .2s; }
+    .edit-status.show { opacity: 1; }
+  </style>
+<style>.hub-return{position:fixed;bottom:12px;left:12px;z-index:2000;color:#102b46;background:#fff;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;text-decoration:none;font:14px sans-serif}body:has(.overlay.open)>.hub-return{display:none}</style><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script></head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="ChatGPT 第三部分就業實作與總回顧投影片">
+
+      <!-- === SLIDE 01：第三部分封面／轉場頁 === -->
+      <section class="slide active" aria-label="第三部分就業與工作實作" data-note="時間：1 分鐘。\n講師口令：前面我們已經會問、會追問。現在要把 ChatGPT 用在一件真的和工作有關的事情上。">
+        <div class="cover-layout">
+          <div class="cover-copy">
+            <div class="pill teal reveal" data-edit-key="s1-kicker">第三部分｜40 分鐘實作</div>
+            <h1 class="reveal delay-1" data-edit-key="s1-title">讓 AI 幫我<br>準備工作</h1>
+            <p class="reveal delay-2" data-edit-key="s1-subtitle">說出我會什麼、看懂一份工作，再練習回答面試問題。</p>
+          </div>
+          <div class="cover-visual" aria-hidden="true">
+            <div class="work-wheel">
+              <div class="phone-core"></div>
+              <div class="orbit-label one">說出能力</div>
+              <div class="orbit-label two">看懂工作</div>
+              <div class="orbit-label three">練習面試</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">01</div>
+      </section>
+
+      <!-- === SLIDE 02：三種參與方式／說明頁 === -->
+      <section class="slide" aria-label="選擇自己的參與方式" data-note="時間：3 分鐘。\n三種方式都算完整參與，不要求公開障別。兩人合作時，一人決定內容、一人協助找按鈕；第二項任務可交換。協助者代按時，要把輸入內容念回來確認。">
+        <div class="chapter-tag reveal" data-edit-key="s2-tag">先選一條適合自己的路</div><div class="slide-number">02</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s2-title">怎麼參加，由你選擇</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s2-subtitle">不用和別人一樣快，也不用每個按鈕都自己按。</p>
+        <div class="content-zone three-grid">
+          <article class="choice-card card reveal delay-1"><div class="icon">我</div><h2 data-edit-key="s2-c1">自己操作</h2><p data-edit-key="s2-p1">自己輸入、送出，再看回答。</p></article>
+          <article class="choice-card card reveal delay-2"><div class="icon">伴</div><h2 data-edit-key="s2-c2">兩人合作</h2><p data-edit-key="s2-p2">一人決定內容，一人協助找按鈕。</p></article>
+          <article class="choice-card card reveal delay-3"><div class="icon">助</div><h2 data-edit-key="s2-c3">協助操作</h2><p data-edit-key="s2-p3">你說或指選項，協助者代按並念回確認。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 03：成功標準／說服頁 === -->
+      <section class="slide" aria-label="今天的兩個成功標準" data-note="時間：1 分鐘。\n把標準說低、說清楚。學員只要完成其中一項，也算今天有帶走成果；不要把速度或獨立操作所有功能當成評量。">
+        <div class="chapter-tag reveal" data-edit-key="s3-tag">今天不比速度</div><div class="slide-number">03</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s3-title">完成其中一項，就是成功</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s3-subtitle">成果可以存在手機裡，也可以請同伴幫忙抄在紙上。</p>
+        <div class="content-zone two-grid">
+          <article class="goal-card card reveal delay-1"><div class="goal-mark">1</div><div><h2 data-edit-key="s3-g1">說出我會什麼</h2><p data-edit-key="s3-g1p">完成三句簡單的求職自我介紹。</p></div></article>
+          <article class="goal-card card reveal delay-2"><div class="goal-mark">2</div><div><h2 data-edit-key="s3-g2">看懂一份工作</h2><p data-edit-key="s3-g2p">知道每天做什麼，以及面試可以問什麼。</p></div></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 04：任務一轉場頁 === -->
+      <section class="slide" aria-label="任務一AI幫我說出我會什麼" data-note="任務一總時間：12 分鐘。\n可使用本人資料，也可用下一頁的虛構人物阿凱；不強迫任何人公開真實經歷。">
+        <div class="task-splash">
+          <div class="task-number"><span>1</span></div>
+          <div class="task-copy">
+            <div class="pill coral reveal" data-edit-key="s4-label">求職表達</div>
+            <h1 class="reveal delay-1" data-edit-key="s4-title">AI 幫我說出<br>我會什麼</h1>
+            <p class="reveal delay-2" data-edit-key="s4-subtitle">先說真實經驗，再請 AI 幫忙整理；不讓它替你編故事。</p>
+          </div>
+        </div><div class="slide-number">04</div>
+      </section>
+
+      <!-- === SLIDE 05：三項真實資料／說明頁 === -->
+      <section class="slide" aria-label="先準備三項真實資料" data-note="時間：約 2 分鐘。\n讓學員用口頭、便條紙或圖卡先選三項資料。寫不出完整句沒關係，關鍵字就可以。">
+        <div class="chapter-tag reveal" data-edit-key="s5-tag">輸入以前，先想三件事</div><div class="slide-number">05</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s5-title">只說真的，不用說得很完整</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s5-subtitle">一個詞也可以，ChatGPT 可以再幫你整理。</p>
+        <div class="content-zone three-grid">
+          <article class="fact-card card reveal delay-1"><div class="fact-label" data-edit-key="s5-l1">我做過</div><div class="fact-line" data-edit-key="s5-f1">我做過 <span class="blank">　</span></div><div class="support" data-edit-key="s5-h1">例如：包裝、整理、照顧植物</div></article>
+          <article class="fact-card card reveal delay-2"><div class="fact-label" data-edit-key="s5-l2">我會</div><div class="fact-line" data-edit-key="s5-f2">我會 <span class="blank">　</span></div><div class="support" data-edit-key="s5-h2">例如：準時、清點、操作手機</div></article>
+          <article class="fact-card card reveal delay-3"><div class="fact-label" data-edit-key="s5-l3">別人說我</div><div class="fact-line" data-edit-key="s5-f3">別人說我 <span class="blank">　</span></div><div class="support" data-edit-key="s5-h3">例如：細心、願意學、會合作</div></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 06：虛構人物卡／證明頁 === -->
+      <section class="slide" aria-label="虛構人物阿凱的經驗卡" data-note="時間：約 1 分鐘。\n不想使用自己經驗的人，可以全程使用阿凱這張虛構人物卡。請講師明確說：選虛構角色不代表比較差。">
+        <div class="chapter-tag reveal" data-edit-key="s6-tag">不想說自己？可以用角色卡</div><div class="slide-number">06</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s6-title">練習人物：阿凱</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s6-subtitle">以下都是虛構資料，不代表任何學員。</p>
+        <div class="content-zone persona-layout">
+          <div class="persona-avatar card reveal delay-1"><div class="avatar-circle" aria-hidden="true">🙂</div><h2 data-edit-key="s6-name">阿凱</h2><p data-edit-key="s6-note">正在準備找第一份工作</p></div>
+          <div class="persona-facts card reveal delay-2">
+            <div class="persona-line"><strong data-edit-key="s6-a">做過</strong><span data-edit-key="s6-av">在活動中幫忙把物品放進袋子</span></div>
+            <div class="persona-line"><strong data-edit-key="s6-b">會做</strong><span data-edit-key="s6-bv">照著清單清點數量</span></div>
+            <div class="persona-line"><strong data-edit-key="s6-c">別人說</strong><span data-edit-key="s6-cv">做事仔細，也願意問問題</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 07：任務一提示詞／說明頁 === -->
+      <section class="slide" aria-label="求職自我介紹提示詞" data-note="時間：約 2 分鐘。\n講師逐行念一次，再讓學員輸入。可以把空格換成自己的關鍵字，也可以直接使用阿凱的三點經驗。先輸入，不要急著送出。">
+        <div class="chapter-tag reveal" data-edit-key="s7-tag">全班慢慢輸入</div><div class="slide-number">07</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s7-title">請 ChatGPT 幫忙整理</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s7-subtitle">先輸入，不要送出；完成後舉綠卡。</p>
+        <div class="content-zone prompt-layout">
+          <aside class="prompt-step reveal delay-1"><div class="step-no">01</div><p data-edit-key="s7-step">把自己的三個關鍵字放進去</p></aside>
+          <div class="prompt-sheet card reveal delay-2"><p class="prompt-text" data-edit-key="s7-prompt">我做過＿＿＿＿。我會＿＿＿＿。別人說我＿＿＿＿。<br>請幫我整理成三句簡單的求職自我介紹。<br>不要替我增加沒有說過的經驗。</p><div class="prompt-footer" data-edit-key="s7-footer">找到空格 → 換成自己的詞</div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 08：送出前安全檢查／說明頁 === -->
+      <section class="slide" aria-label="送出前的三項檢查" data-note="時間：約 1 分鐘。\n講師逐項問，全班用手勢回答。確認沒有姓名、電話、地址、證件號、密碼或醫療資料；也要保留『不要增加經驗』這句。">
+        <div class="chapter-tag reveal" data-edit-key="s8-tag">送出以前，先停一下</div><div class="slide-number">08</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s8-title">先看一眼：這些內容安全嗎？</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s8-subtitle">如果不確定，舉黃卡，請同伴或協助者一起看。</p>
+        <div class="content-zone three-grid">
+          <article class="check-card card reveal delay-1"><div class="check-icon">人</div><h2 data-edit-key="s8-h1">沒有完整個資</h2><p data-edit-key="s8-p1">不放姓名、電話、地址或證件號碼。</p></article>
+          <article class="check-card card reveal delay-2"><div class="check-icon">鎖</div><h2 data-edit-key="s8-h2">沒有祕密資料</h2><p data-edit-key="s8-p2">不放密碼、銀行資料或未遮蔽病歷。</p></article>
+          <article class="check-card card reveal delay-3"><div class="check-icon">真</div><h2 data-edit-key="s8-h3">只用真實經驗</h2><p data-edit-key="s8-p3">請 AI 整理，不請它替你編經歷。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 09：回答檢查／互動頁 === -->
+      <section class="slide" aria-label="檢查AI整理出的自我介紹" data-note="時間：約 3 分鐘。\n看到回答後，先不要比較誰寫得漂亮。只檢查三件事：像不像本人、有沒有編造、是否看得懂。任何一項有問題都可以追問。">
+        <div class="chapter-tag reveal" data-edit-key="s9-tag">看到回答，不代表已完成</div><div class="slide-number">09</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s9-title">答案要像你，不是像廣告</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s9-subtitle">AI 整理文字；你負責確認內容。</p>
+        <div class="content-zone three-grid">
+          <article class="check-card card reveal delay-1"><div class="check-icon">像</div><h2 data-edit-key="s9-h1">這像我會說的話嗎？</h2><p data-edit-key="s9-p1">太正式、太誇張，都可以請它修改。</p></article>
+          <article class="check-card card reveal delay-2"><div class="check-icon">查</div><h2 data-edit-key="s9-h2">有沒有多出新經驗？</h2><p data-edit-key="s9-p2">沒有說過的內容，要刪掉。</p></article>
+          <article class="check-card card reveal delay-3"><div class="check-icon">懂</div><h2 data-edit-key="s9-h3">我自己看得懂嗎？</h2><p data-edit-key="s9-p3">看不懂，就請它改成更簡單的話。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 10：三種修改指令／說明頁 === -->
+      <section class="slide" aria-label="三種自我介紹修改方法" data-note="時間：約 3 分鐘。\n請每位學員三選一追問。看到新回答即完成任務一。若進度落後，只保留第一張『請再短一點』。">
+        <div class="chapter-tag reveal" data-edit-key="s10-tag">三選一，再追問一次</div><div class="slide-number">10</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s10-title">不好用，就要求它修改</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s10-subtitle">不用開新對話，直接在下面接著說。</p>
+        <div class="content-zone three-grid">
+          <article class="revision-card card reveal delay-1"><h2 data-edit-key="s10-h1">太長</h2><div class="quote" data-edit-key="s10-q1">請縮短成三句，每句不要超過十五個字。</div><div class="ask" data-edit-key="s10-a1">選這句追問</div></article>
+          <article class="revision-card card reveal delay-2"><h2 data-edit-key="s10-h2">不像我</h2><div class="quote" data-edit-key="s10-q2">請改得更自然，不要使用誇大的形容詞。</div><div class="ask" data-edit-key="s10-a2">選這句追問</div></article>
+          <article class="revision-card card reveal delay-3"><h2 data-edit-key="s10-h3">看不懂</h2><div class="quote" data-edit-key="s10-q3">請用更簡單的話，一步一步告訴我。</div><div class="ask" data-edit-key="s10-a3">選這句追問</div></article>
+        </div>
+        <div class="bottom-ribbon" data-edit-key="s10-ribbon">完成後，把這三句留在手機裡：這就是第一項成果。</div>
+      </section>
+
+      <!-- === SLIDE 11：任務二轉場頁 === -->
+      <section class="slide" aria-label="任務二幫我看懂一份工作" data-note="任務二總時間：12 分鐘。\n使用主辦單位準備的去識別化職缺範例。若操作時間不足，照片上傳改成講師示範，學員只練習輸入問題。">
+        <div class="task-splash">
+          <div class="task-number" style="background:var(--coral)"><span>2</span></div>
+          <div class="task-copy">
+            <div class="pill teal reveal" data-edit-key="s11-label">工作理解</div>
+            <h1 class="reveal delay-1" data-edit-key="s11-title">幫我看懂<br>一份工作</h1>
+            <p class="reveal delay-2" data-edit-key="s11-subtitle">先看工作內容，再決定要不要應徵；不是看到職缺就直接答應。</p>
+          </div>
+        </div><div class="slide-number">11</div>
+      </section>
+
+      <!-- === SLIDE 12：虛構職缺卡／證明頁 === -->
+      <section class="slide" aria-label="包裝作業助理練習職缺" data-note="時間：約 2 分鐘。\n此頁是虛構練習卡，不是真實職缺。活動時可替換成去識別化的真實職缺，但必須遮住聯絡人個資與不必要資訊。">
+        <div class="chapter-tag reveal" data-edit-key="s12-tag">先看一張練習職缺</div><div class="slide-number">12</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s12-title">練習職缺：包裝作業助理</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s12-subtitle">這是一張虛構練習卡，不是正在徵人的職缺。</p>
+        <div class="content-zone job-layout">
+          <article class="job-poster card reveal delay-1"><div class="practice">練習用</div><h2 data-edit-key="s12-job">包裝作業助理</h2><div class="job-list">
+            <div class="job-line"><span>1</span><div data-edit-key="s12-l1">將商品放進盒子</div></div>
+            <div class="job-line"><span>2</span><div data-edit-key="s12-l2">貼上標籤</div></div>
+            <div class="job-line"><span>3</span><div data-edit-key="s12-l3">依清單核對數量</div></div>
+            <div class="job-line"><span>4</span><div data-edit-key="s12-l4">保持工作桌整潔</div></div>
+          </div></article>
+          <div class="job-visual reveal delay-2">
+            <div class="job-tile"><div class="tile-icon">📦</div><strong data-edit-key="s12-t1">裝盒</strong></div>
+            <div class="job-tile"><div class="tile-icon">🏷️</div><strong data-edit-key="s12-t2">貼標籤</strong></div>
+            <div class="job-tile"><div class="tile-icon">🔢</div><strong data-edit-key="s12-t3">清點</strong></div>
+            <div class="job-tile"><div class="tile-icon">🧹</div><strong data-edit-key="s12-t4">整理</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 13：照片輸入三步驟／說明頁 === -->
+      <section class="slide" aria-label="拍照後再告訴AI要做什麼" data-note="時間：約 2 分鐘。\n照片只是資料，還要加一句任務。請只拍主辦單位準備的職缺卡，不拍證件、存摺、病歷或有完整聯絡資料的文件。">
+        <div class="chapter-tag reveal" data-edit-key="s13-tag">方法：照片加一句說明</div><div class="slide-number">13</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s13-title">拍下資料，還要告訴 AI 要看什麼</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s13-subtitle">照片不會自己變成問題；要說清楚希望它幫什麼。</p>
+        <div class="content-zone photo-flow">
+          <article class="flow-card card reveal delay-1"><div class="flow-icon">＋</div><h2 data-edit-key="s13-h1">加入照片</h2><p data-edit-key="s13-p1">只用練習職缺，不用真實證件。</p></article>
+          <div class="flow-arrow reveal delay-2">→</div>
+          <article class="flow-card card reveal delay-2"><div class="flow-icon">看</div><h2 data-edit-key="s13-h2">確認畫面</h2><p data-edit-key="s13-p2">照片正確、文字看得清楚。</p></article>
+          <div class="flow-arrow reveal delay-3">→</div>
+          <article class="flow-card card reveal delay-3"><div class="flow-icon">問</div><h2 data-edit-key="s13-h3">加上問題</h2><p data-edit-key="s13-p3">告訴 AI 要整理哪些內容。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 14：任務二提示詞／說明頁 === -->
+      <section class="slide" aria-label="看懂工作提示詞" data-note="時間：約 2 分鐘。\n可以拍照後輸入，也可以只輸入職缺文字。先讓全班停在送出前，再一起確認沒有敏感資料。">
+        <div class="chapter-tag reveal" data-edit-key="s14-tag">全班使用同一句</div><div class="slide-number">14</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s14-title">請 ChatGPT 把工作說簡單</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s14-subtitle">先輸入，不要送出；完成後舉綠卡。</p>
+        <div class="content-zone prompt-layout">
+          <aside class="prompt-step reveal delay-1" style="background:var(--coral)"><div class="step-no">02</div><p data-edit-key="s14-step">搭配職缺照片或文字</p></aside>
+          <div class="prompt-sheet card reveal delay-2"><p class="prompt-text" data-edit-key="s14-prompt">請用簡單的話告訴我：<br>這份工作每天要做什麼？<br>需要會什麼？<br>我面試時可以問哪三個問題？</p><div class="prompt-footer" data-edit-key="s14-footer">確認資料安全後，再送出</div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 15：回答地圖／說明頁 === -->
+      <section class="slide" aria-label="從回答中找三種資訊" data-note="時間：約 2 分鐘。\n回答出現後，不要求逐字讀完。請每組只找三種資訊：每天做什麼、需要會什麼、面試能問什麼。找不到就舉黃卡。">
+        <div class="chapter-tag reveal" data-edit-key="s15-tag">不用一次讀完所有字</div><div class="slide-number">15</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s15-title">從回答裡，找出三個區塊</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s15-subtitle">先抓重點；不懂的地方，再請它重說。</p>
+        <div class="content-zone three-grid">
+          <article class="answer-card card reveal delay-1"><div class="answer-no">1</div><h2 data-edit-key="s15-h1">每天做什麼？</h2><p data-edit-key="s15-p1">找工作內容與動作。</p></article>
+          <article class="answer-card card reveal delay-2"><div class="answer-no">2</div><h2 data-edit-key="s15-h2">需要會什麼？</h2><p data-edit-key="s15-p2">找需要的能力或工作習慣。</p></article>
+          <article class="answer-card card reveal delay-3"><div class="answer-no">3</div><h2 data-edit-key="s15-h3">我可以問什麼？</h2><p data-edit-key="s15-p3">找面試時可以確認的問題。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 16：工作理解追問／互動頁 === -->
+      <section class="slide" aria-label="工作內容看不懂時的追問" data-note="時間：約 2 分鐘。\n每位學員選一句追問。不要求大家都操作照片；看講師示範、指出選項，也算完成。看到更簡單的回答，即完成任務二。">
+        <div class="chapter-tag reveal" data-edit-key="s16-tag">看不懂，不代表你不會</div><div class="slide-number">16</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s16-title">請它換一種方式再說</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s16-subtitle">三選一，在原來的對話下面接著問。</p>
+        <div class="content-zone three-grid">
+          <article class="revision-card card reveal delay-1"><h2 data-edit-key="s16-h1">用時間順序</h2><div class="quote" data-edit-key="s16-q1">請用「上班後先做什麼、再做什麼」告訴我。</div><div class="ask" data-edit-key="s16-a1">適合想像一天工作</div></article>
+          <article class="revision-card card reveal delay-2"><h2 data-edit-key="s16-h2">只留三點</h2><div class="quote" data-edit-key="s16-q2">請只留下最重要的三件事。</div><div class="ask" data-edit-key="s16-a2">適合文字太多</div></article>
+          <article class="revision-card card reveal delay-3"><h2 data-edit-key="s16-h3">舉一個例子</h2><div class="quote" data-edit-key="s16-q3">請舉一個工作現場的簡單例子。</div><div class="ask" data-edit-key="s16-a3">適合內容太抽象</div></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 17：面試練習／說明頁 === -->
+      <section class="slide" aria-label="任務三面試練習" data-note="任務三時間：7 分鐘，全班示範。\n由自願者回答，或使用虛構人物阿凱。ChatGPT 每次只問一題，講師要讓學員知道可以說『請換一題』或暫停。">
+        <div class="chapter-tag reveal" data-edit-key="s17-tag">任務三｜全班示範</div><div class="slide-number">17</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s17-title">面試練習：一次只問一題</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s17-subtitle">可以用自己的情況，也可以繼續扮演阿凱。</p>
+        <div class="content-zone interview-layout">
+          <div class="interviewer card reveal delay-1"><div class="bot-face" aria-hidden="true"></div><h2 data-edit-key="s17-bot">ChatGPT 當面試官</h2><div class="pill amber" data-edit-key="s17-rule">一次一題</div></div>
+          <div class="interview-question card reveal delay-2"><div class="eyebrow" data-edit-key="s17-eyebrow">示範指令</div><p class="question" data-edit-key="s17-prompt">請陪我練習「包裝作業助理」的面試。<br>一次只問我一題。<br>等我回答後，再給一項簡單建議。</p><div class="rule" data-edit-key="s17-safe">不想回答，可以說：請換一題。</div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 18：回饋公式／說明頁 === -->
+      <section class="slide" aria-label="面試回饋的三個步驟" data-note="時間：約 3 分鐘。\n如果 AI 一次給太多建議，立刻追問『只告訴我一個最重要的修改』。學員不需要照單全收；覺得不適合可以要求重問。">
+        <div class="chapter-tag reveal" data-edit-key="s18-tag">回答後，只改一件事</div><div class="slide-number">18</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s18-title">好的練習：先肯定，再改一點</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s18-subtitle">一次改太多，反而不容易記住。</p>
+        <div class="content-zone feedback-formula">
+          <article class="feedback-card card reveal delay-1"><div class="mark">✓</div><h2 data-edit-key="s18-h1">先說清楚的地方</h2><p data-edit-key="s18-p1">例如：你有說出做過什麼。</p></article>
+          <div class="plus reveal delay-2">＋</div>
+          <article class="feedback-card card reveal delay-2"><div class="mark">1</div><h2 data-edit-key="s18-h2">只給一項建議</h2><p data-edit-key="s18-p2">例如：補上一個具體例子。</p></article>
+          <div class="plus reveal delay-3">＋</div>
+          <article class="feedback-card card reveal delay-3"><div class="mark">↻</div><h2 data-edit-key="s18-h3">再試一次</h2><p data-edit-key="s18-p3">不滿意可以重說、換題或暫停。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 19：紅黃綠安全判斷／互動頁 === -->
+      <section class="slide" aria-label="紅黃綠安全判斷" data-note="時間：約 3 分鐘。\n逐項念例子，請學員舉實體紅黃綠卡。黃卡不是『不能問』，而是重要事情要再找可信來源或專業人員確認。">
+        <div class="chapter-tag reveal" data-edit-key="s19-tag">最後一次安全檢查</div><div class="slide-number">19</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s19-title">這些資料，可以交給 AI 嗎？</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s19-subtitle">舉綠卡、黃卡或紅卡；也可以用手指選一張。</p>
+        <div class="content-zone three-grid">
+          <article class="signal-card green card reveal delay-1"><div class="signal-head"><div class="signal-dot">✓</div><h2 data-edit-key="s19-g">綠卡｜可以說</h2></div><p data-edit-key="s19-gp">一般興趣、一般技能、經過改寫的工作經驗。</p></article>
+          <article class="signal-card yellow card reveal delay-2"><div class="signal-head"><div class="signal-dot">?</div><h2 data-edit-key="s19-y">黃卡｜再確認</h2></div><p data-edit-key="s19-yp">勞動、醫療、法律、金錢與福利資格問題。</p></article>
+          <article class="signal-card red card reveal delay-3"><div class="signal-head"><div class="signal-dot">×</div><h2 data-edit-key="s19-r">紅卡｜不要輸入</h2></div><p data-edit-key="s19-rp">身分證號、密碼、銀行資料、完整住址、未遮蔽病歷。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 20：成果確認／互動收束頁 === -->
+      <section class="slide" aria-label="選一項成果帶回家" data-note="時間：約 2 分鐘。\n不要求公開朗讀。請學員指一張卡，表示自己完成或想保留的成果；可以截圖、收藏對話或抄到紙上。">
+        <div class="chapter-tag reveal" data-edit-key="s20-tag">實作完成</div><div class="slide-number">20</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s20-title">選一項成果，帶回家</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s20-subtitle">不用分享內容；只要指出你完成了哪一種。</p>
+        <div class="content-zone three-grid">
+          <article class="result-card card reveal delay-1"><div class="result-icon">我</div><h2 data-edit-key="s20-h1">三句自我介紹</h2><p data-edit-key="s20-p1">下次準備履歷或面試時，可以再修改。</p></article>
+          <article class="result-card card reveal delay-2"><div class="result-icon">職</div><h2 data-edit-key="s20-h2">一份工作說明</h2><p data-edit-key="s20-p2">知道工作內容，以及面試可以問什麼。</p></article>
+          <article class="result-card card reveal delay-3"><div class="result-icon">問</div><h2 data-edit-key="s20-h3">一題面試練習</h2><p data-edit-key="s20-p3">知道如何請 AI 一次只問一題。</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 21：最後十分鐘轉場頁 === -->
+      <section class="slide" aria-label="最後十分鐘帶走三件事" data-note="最後回顧總時間：10 分鐘。\n講師口令：按鈕和功能會改版，但下面三件事不容易過時。">
+        <div class="task-splash">
+          <div class="task-number" style="background:var(--amber);color:var(--ink)"><span>3</span></div>
+          <div class="task-copy">
+            <div class="pill coral reveal" data-edit-key="s21-label">最後 10 分鐘</div>
+            <h1 class="reveal delay-1" data-edit-key="s21-title">今天只要帶走<br>三件事</h1>
+            <p class="reveal delay-2" data-edit-key="s21-subtitle">說清楚需要、保護資料、最後由自己決定。</p>
+          </div>
+        </div><div class="slide-number">21</div>
+      </section>
+
+      <!-- === SLIDE 22：三句提問口訣／回顧頁 === -->
+      <section class="slide" aria-label="三句提問口訣" data-note="時間：約 3 分鐘。\n全班一起念一次。強調不必背長提示詞；只要說出情況、需要和希望的回答方式。">
+        <div class="chapter-tag reveal" data-edit-key="s22-tag">第一件事｜把需要說清楚</div><div class="slide-number">22</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s22-title">三句提問口訣</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s22-subtitle">不用完美，也不用特殊指令。</p>
+        <div class="content-zone mantra-stack">
+          <div class="mantra-line reveal delay-1"><div class="mantra-no">1</div><p data-edit-key="s22-m1">我現在遇到什麼情況？</p></div>
+          <div class="mantra-line reveal delay-2"><div class="mantra-no">2</div><p data-edit-key="s22-m2">我希望 AI 幫我什麼？</p></div>
+          <div class="mantra-line reveal delay-3"><div class="mantra-no">3</div><p data-edit-key="s22-m3">請用我看得懂的方式回答。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 23：三句安全口訣／回顧頁 === -->
+      <section class="slide" aria-label="三句安全口訣" data-note="時間：約 3 分鐘。\n全班一起念一次。黃卡問題可使用 AI 幫忙整理，但不能只依 AI 的答案做重要決定。">
+        <div class="chapter-tag reveal" data-edit-key="s23-tag">第二件事｜保護自己</div><div class="slide-number">23</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s23-title">三句安全口訣</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s23-subtitle">遇到重要事情，多找一個可信的人或來源確認。</p>
+        <div class="content-zone mantra-stack safety-mantra">
+          <div class="mantra-line reveal delay-1"><div class="mantra-no">×</div><p data-edit-key="s23-m1">個人祕密，不輸入。</p></div>
+          <div class="mantra-line reveal delay-2"><div class="mantra-no">?</div><p data-edit-key="s23-m2">重要事情，要查證。</p></div>
+          <div class="mantra-line reveal delay-3"><div class="mantra-no">✓</div><p data-edit-key="s23-m3">AI 提建議，由我做決定。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 24：最終收束頁 === -->
+      <section class="slide" aria-label="AI可以幫忙人仍是隊長" data-note="時間：約 4 分鐘。\n請學員用說、指圖卡或寫便條紙回答：回家後最想先請 ChatGPT 幫忙做哪一件事？不要強迫公開。最後提醒保存成果並登出公用裝置。">
+        <div class="chapter-tag reveal" data-edit-key="s24-tag">第三件事｜保留最後決定</div><div class="slide-number">24</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s24-title">AI 可以幫忙，人仍是隊長</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s24-subtitle">工具會改變，但方向、資料與重要決定仍由你負責。</p>
+        <div class="content-zone captain-layout">
+          <div class="captain-badge reveal delay-1"><div class="badge-shape" aria-hidden="true">★</div></div>
+          <div class="captain-copy card reveal delay-2"><div class="eyebrow" data-edit-key="s24-eyebrow">離開以前，想一想</div><h2 data-edit-key="s24-question">回家以後，<br>你最想先請 ChatGPT<br>幫忙做哪一件事？</h2><p data-edit-key="s24-method">可以口頭回答、指圖卡，或寫在便條紙上。</p><div class="take-home" data-edit-key="s24-close">今天的成果是你的；最後決定也是你的。</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- === PLAYER CONTROLS === -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button class="control-button" id="prevButton" aria-label="上一頁">←</button>
+    <div class="progress-dots" id="progressDots" aria-label="頁面導覽"></div>
+    <div class="page-readout" id="pageReadout">1 / 24</div>
+    <button class="control-button" id="nextButton" aria-label="下一頁">→</button>
+    <button class="control-button" id="notesButton" aria-label="講師備註">N</button>
+    <button class="control-button" id="fullscreenButton" aria-label="全螢幕">⛶</button>
+  </nav>
+
+  <aside class="notes-panel" id="notesPanel" aria-label="講師備註"><strong>講師備註</strong><p id="notesText"></p></aside>
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式（E）">✎</button>
+  <div class="edit-status" id="editStatus">編輯模式：可直接修改文字，Ctrl+S 下載文字備份</div>
+
+  <!-- === SOURCE AND VERSION MANIFEST === -->
+  <script type="application/json" id="sourceManifest">
+  {
+    "version": "V1",
+    "created_on": "2026-09-05",
+    "audience": "約10位多元身心障礙學員，以手機為主，現場1位協助者",
+    "duration": "第三部分40分鐘，加總回顧10分鐘",
+    "sources": [
+      "ChatGPT演講新版_內容與影片腳本_V1.md",
+      "ChatGPT演講_第二部分_手機帶做投影片藍圖_V1.md"
+    ],
+    "design": "延續已核可的三頁視覺樣稿與前兩部分完整簡報"
+  }
+  </script>
+
+  <script>
+    /* === SLIDE PRESENTATION CONTROLLER === */
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('.slide'));
+        this.currentSlide = 0;
+        this.stage = document.getElementById('deckStage');
+        this.pageReadout = document.getElementById('pageReadout');
+        this.progressDots = document.getElementById('progressDots');
+        this.notesPanel = document.getElementById('notesPanel');
+        this.notesText = document.getElementById('notesText');
+        this.lastWheelTime = 0;
+        this.touchStartX = null;
+        this.setupDots();
+        this.setupStageScale();
+        this.setupNavigation();
+        this.showSlide(0);
+      }
+
+      setupDots() {
+        this.slides.forEach((slide, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'progress-dot';
+          dot.setAttribute('aria-label', '跳到第 ' + (index + 1) + ' 頁');
+          dot.addEventListener('click', () => this.showSlide(index));
+          this.progressDots.appendChild(dot);
+        });
+      }
+
+      setupStageScale() {
+        const scaleStage = () => {
+          const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          const x = (window.innerWidth - 1920 * factor) / 2;
+          const y = (window.innerHeight - 1080 * factor) / 2;
+          this.stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + factor + ')';
+        };
+        scaleStage();
+        window.addEventListener('resize', scaleStage);
+      }
+
+      setupNavigation() {
+        document.getElementById('prevButton').addEventListener('click', () => this.previous());
+        document.getElementById('nextButton').addEventListener('click', () => this.next());
+        document.getElementById('notesButton').addEventListener('click', () => this.toggleNotes());
+        document.getElementById('fullscreenButton').addEventListener('click', () => this.toggleFullscreen());
+
+        document.addEventListener('keydown', event => {
+          if (event.target && event.target.getAttribute('contenteditable') === 'true') return;
+          if (['ArrowRight','ArrowDown',' ','PageDown'].includes(event.key)) { event.preventDefault(); this.next(); }
+          if (['ArrowLeft','ArrowUp','PageUp'].includes(event.key)) { event.preventDefault(); this.previous(); }
+          if (event.key === 'Home') { event.preventDefault(); this.showSlide(0); }
+          if (event.key === 'End') { event.preventDefault(); this.showSlide(this.slides.length - 1); }
+          if (event.key === 'n' || event.key === 'N') { event.preventDefault(); this.toggleNotes(); }
+          if (event.key === 'f' || event.key === 'F') { event.preventDefault(); this.toggleFullscreen(); }
+        });
+
+        window.addEventListener('wheel', event => {
+          const now = Date.now();
+          if (now - this.lastWheelTime < 650 || Math.abs(event.deltaY) < 22) return;
+          this.lastWheelTime = now;
+          event.deltaY > 0 ? this.next() : this.previous();
+        }, { passive: true });
+
+        window.addEventListener('touchstart', event => { this.touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+        window.addEventListener('touchend', event => {
+          if (this.touchStartX === null) return;
+          const delta = event.changedTouches[0].clientX - this.touchStartX;
+          if (Math.abs(delta) > 55) delta < 0 ? this.next() : this.previous();
+          this.touchStartX = null;
+        }, { passive: true });
+      }
+
+      showSlide(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === this.currentSlide);
+          slide.classList.toggle('visible', i === this.currentSlide);
+        });
+        Array.from(this.progressDots.children).forEach((dot, i) => dot.classList.toggle('active', i === this.currentSlide));
+        this.pageReadout.textContent = (this.currentSlide + 1) + ' / ' + this.slides.length;
+        this.notesText.textContent = this.slides[this.currentSlide].dataset.note || '本頁沒有額外備註。';
+      }
+
+      next() { this.showSlide(this.currentSlide + 1); }
+      previous() { this.showSlide(this.currentSlide - 1); }
+      toggleNotes() {
+        this.notesPanel.classList.toggle('show');
+        document.getElementById('notesButton').classList.toggle('active', this.notesPanel.classList.contains('show'));
+      }
+      toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    /* === INLINE EDITOR WITH LOCAL STORAGE === */
+    class InlineEditor {
+      constructor() {
+        this.storageKey = 'chatgpt-employment-practice-v1-edits';
+        this.isActive = false;
+        this.editables = Array.from(document.querySelectorAll('[data-edit-key]'));
+        this.toggle = document.getElementById('editToggle');
+        this.hotzone = document.querySelector('.edit-hotzone');
+        this.status = document.getElementById('editStatus');
+        this.hideTimeout = null;
+        this.restore();
+        this.setup();
+      }
+
+      setup() {
+        this.toggle.addEventListener('click', () => this.toggleMode());
+        this.hotzone.addEventListener('click', () => this.toggleMode());
+        this.hotzone.addEventListener('mouseenter', () => { clearTimeout(this.hideTimeout); this.toggle.classList.add('show'); });
+        this.hotzone.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.toggle.classList.remove('show'); }, 400); });
+        this.toggle.addEventListener('mouseenter', () => clearTimeout(this.hideTimeout));
+        this.toggle.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.toggle.classList.remove('show'); }, 400); });
+        document.addEventListener('keydown', event => {
+          if ((event.key === 'e' || event.key === 'E') && !(event.target && event.target.getAttribute('contenteditable') === 'true')) { event.preventDefault(); this.toggleMode(); }
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); this.downloadBackup(); }
+        });
+        this.editables.forEach(element => element.addEventListener('input', () => this.save()));
+      }
+
+      toggleMode() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('editing', this.isActive);
+        this.toggle.classList.toggle('active', this.isActive);
+        this.toggle.classList.toggle('show', this.isActive);
+        this.status.classList.toggle('show', this.isActive);
+        this.editables.forEach(element => { element.contentEditable = this.isActive ? 'true' : 'false'; });
+      }
+
+      save() {
+        const edits = {};
+        this.editables.forEach(element => { edits[element.dataset.editKey] = element.innerHTML; });
+        localStorage.setItem(this.storageKey, JSON.stringify(edits));
+      }
+
+      restore() {
+        try {
+          const edits = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+          this.editables.forEach(element => { if (Object.prototype.hasOwnProperty.call(edits, element.dataset.editKey)) element.innerHTML = edits[element.dataset.editKey]; });
+        } catch (error) { console.warn('無法讀取先前的文字修訂。', error); }
+      }
+
+      downloadBackup() {
+        this.save();
+        const payload = localStorage.getItem(this.storageKey) || '{}';
+        const blob = new Blob([payload], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'ChatGPT第三部分_文字修訂備份_V1.json';
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 500);
+      }
+    }
+
+    const presentation = new SlidePresentation();
+    const editor = new InlineEditor();
+  </script>
+<a class="hub-return" href="../../talks.html" target="_top">← 返回演講簡報</a></body>
+</html>
