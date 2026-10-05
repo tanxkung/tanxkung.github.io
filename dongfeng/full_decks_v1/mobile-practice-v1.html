@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT 第二部分｜手機帶做完整投影片 V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* === THEME === */
+    :root {
+      --stage-bg: #152728;
+      --slide-bg: #f6edda;
+      --cream: #fffaf0;
+      --paper: #fffdf7;
+      --ink: #173b3d;
+      --ink-soft: #496566;
+      --teal: #0f696c;
+      --teal-light: #dcebea;
+      --amber: #f2a51a;
+      --amber-light: #ffefc8;
+      --coral: #e76447;
+      --coral-light: #f9ddd2;
+      --green: #6e9937;
+      --green-light: #e6efd8;
+      --yellow: #d99700;
+      --red: #b64232;
+      --line: rgba(23, 59, 61, 0.16);
+      --shadow: 0 30px 70px rgba(32, 57, 54, 0.16);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --font: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    }
+
+    /* === RESET === */
+    * { box-sizing: border-box; }
+    button { font: inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* === SHARED SLIDE ATMOSPHERE === */
+    body { font-family: var(--font); color: var(--ink); }
+    .slide {
+      transition: opacity 0.34s ease;
+      background:
+        radial-gradient(circle at 7% 10%, rgba(242, 165, 26, 0.16), transparent 28%),
+        radial-gradient(circle at 94% 16%, rgba(15, 105, 108, 0.12), transparent 30%),
+        linear-gradient(135deg, #fff9ed 0%, #f5ead4 100%);
+    }
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.45;
+      background-image:
+        linear-gradient(rgba(23, 59, 61, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 59, 61, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+    .slide-number {
+      position: absolute;
+      top: 72px;
+      right: 88px;
+      z-index: 5;
+      min-width: 112px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--line);
+      border-radius: 30px;
+      color: var(--ink-soft);
+      background: rgba(255,255,255,0.58);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .chapter-tag {
+      position: absolute;
+      top: 78px;
+      left: 90px;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--teal);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .chapter-tag::before {
+      content: '';
+      width: 52px;
+      height: 12px;
+      border-radius: 99px;
+      background: var(--coral);
+    }
+    .main-title {
+      position: absolute;
+      z-index: 5;
+      top: 132px;
+      left: 88px;
+      right: 170px;
+      margin: 0;
+      color: var(--ink);
+      font-size: 76px;
+      font-weight: 900;
+      line-height: 1.18;
+      letter-spacing: 0.015em;
+    }
+    .main-subtitle {
+      position: absolute;
+      z-index: 5;
+      top: 235px;
+      left: 92px;
+      right: 100px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 34px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    .stage-area {
+      position: absolute;
+      z-index: 4;
+      top: 328px;
+      left: 90px;
+      right: 90px;
+      bottom: 158px;
+    }
+    .surface {
+      border: 3px solid rgba(23, 59, 61, 0.12);
+      border-radius: 38px;
+      background: rgba(255, 253, 247, 0.92);
+      box-shadow: var(--shadow);
+    }
+    .caption-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 24px;
+      border-radius: 99px;
+      color: var(--ink);
+      background: var(--amber-light);
+      font-size: 27px;
+      font-weight: 800;
+    }
+    .caption-pill.coral { color: #8d331f; background: var(--coral-light); }
+    .caption-pill.teal { color: var(--teal); background: var(--teal-light); }
+
+    /* === MOTION === */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+    }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+    .delay-4 { transition-delay: 0.32s; }
+
+    /* === ROLE CARDS: APPROVED SAMPLE SYSTEM === */
+    .role-grid {
+      position: absolute;
+      z-index: 4;
+      top: 326px;
+      left: 90px;
+      right: 90px;
+      bottom: 160px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 44px;
+    }
+    .role-card {
+      position: relative;
+      overflow: hidden;
+      padding: 44px 46px 42px;
+      border: 3px solid rgba(23, 59, 61, 0.12);
+      border-radius: 38px;
+      background: rgba(255, 253, 247, 0.91);
+      box-shadow: var(--shadow);
+    }
+    .role-card::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: var(--card-light);
+    }
+    .role-topline { display: flex; align-items: center; gap: 28px; }
+    .role-icon {
+      width: 128px;
+      height: 128px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 34px;
+      color: white;
+      background: var(--card-color);
+      box-shadow: 0 18px 36px color-mix(in srgb, var(--card-color) 28%, transparent);
+    }
+    .role-icon svg { width: 76px; height: 76px; stroke: currentColor; fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+    .role-name { margin: 0; color: var(--card-color); font-size: 64px; font-weight: 900; letter-spacing: -0.02em; }
+    .role-description { position: relative; z-index: 2; margin: 40px 0 0; min-height: 132px; color: var(--ink-soft); font-size: 34px; font-weight: 600; line-height: 1.58; }
+    .role-keyword { position: absolute; z-index: 2; left: 46px; bottom: 38px; color: var(--ink); font-size: 60px; font-weight: 900; letter-spacing: 0.02em; }
+    .role-chat { --card-color: var(--coral); --card-light: var(--coral-light); }
+    .role-work { --card-color: var(--teal); --card-light: var(--teal-light); }
+    .role-codex { --card-color: #c27d00; --card-light: var(--amber-light); }
+
+    /* === GENERIC EXPLAINER LAYOUTS === */
+    .hero-split { height: 100%; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 52px; align-items: stretch; }
+    .hero-copy { padding: 50px 58px; display: flex; flex-direction: column; justify-content: center; }
+    .hero-word { margin: 0; color: var(--accent, var(--teal)); font-size: 88px; font-weight: 900; line-height: 1.05; }
+    .hero-copy p { margin: 34px 0 0; color: var(--ink-soft); font-size: 40px; font-weight: 700; line-height: 1.55; }
+    .hero-visual { position: relative; overflow: hidden; display: grid; place-items: center; padding: 38px; }
+    .hero-visual svg { width: 310px; height: 310px; stroke: var(--accent, var(--teal)); fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .speech-scene { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+    .person { position: absolute; left: 94px; bottom: 70px; width: 190px; height: 250px; }
+    .person .head { position: absolute; top: 0; left: 55px; width: 86px; height: 86px; border-radius: 50%; background: #d99168; }
+    .person .body { position: absolute; left: 23px; bottom: 0; width: 150px; height: 164px; border-radius: 70px 70px 24px 24px; background: var(--teal); }
+    .bubble { position: absolute; top: 58px; right: 54px; width: 420px; min-height: 190px; padding: 34px 40px; border-radius: 38px 38px 38px 12px; color: var(--ink); background: var(--paper); box-shadow: var(--shadow); font-size: 32px; font-weight: 800; line-height: 1.45; }
+
+    .process-row { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; align-items: center; }
+    .process-card { position: relative; height: 350px; padding: 38px 28px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .process-card:not(:last-child)::after { content: '→'; position: absolute; right: -34px; color: var(--coral); font-size: 54px; font-weight: 900; }
+    .process-icon { width: 120px; height: 120px; display: grid; place-items: center; border-radius: 32px; color: var(--teal); background: var(--teal-light); font-size: 60px; font-weight: 900; }
+    .process-card h2 { margin: 26px 0 0; font-size: 37px; font-weight: 900; }
+    .process-card p { margin: 14px 0 0; color: var(--ink-soft); font-size: 27px; font-weight: 700; line-height: 1.42; }
+
+    .goal-grid, .choice-grid, .input-grid, .answer-grid { height: 100%; display: grid; gap: 38px; align-items: stretch; }
+    .goal-grid { grid-template-columns: repeat(2, 1fr); }
+    .choice-grid, .input-grid, .answer-grid { grid-template-columns: repeat(3, 1fr); }
+    .goal-card, .choice-card, .input-card, .answer-card { position: relative; padding: 48px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .goal-check { width: 142px; height: 142px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--teal); font-size: 76px; font-weight: 900; }
+    .goal-card h2 { margin: 34px 0 0; font-size: 56px; font-weight: 900; }
+    .goal-card p, .choice-card p, .input-card p, .answer-card p { margin: 20px 0 0; color: var(--ink-soft); font-size: 31px; font-weight: 650; line-height: 1.5; }
+    .choice-symbol, .input-symbol { width: 142px; height: 142px; display: grid; place-items: center; border-radius: 36px; color: white; background: var(--card-color, var(--teal)); font-size: 64px; font-weight: 900; }
+    .choice-card h2, .input-card h2, .answer-card h2 { margin: 28px 0 0; font-size: 43px; font-weight: 900; line-height: 1.3; }
+
+    /* === PHONE MOCKUPS === */
+    .phone-layout { height: 100%; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 66px; align-items: center; }
+    .phone-frame { position: relative; width: 330px; height: 610px; margin: auto; padding: 24px 18px; border: 12px solid var(--ink); border-radius: 54px; background: var(--ink); box-shadow: var(--shadow); }
+    .phone-frame::before { content: ''; position: absolute; z-index: 4; top: 10px; left: 50%; width: 112px; height: 24px; transform: translateX(-50%); border-radius: 18px; background: var(--ink); }
+    .phone-screen { position: relative; height: 100%; overflow: hidden; border-radius: 34px; background: #fffdf8; }
+    .phone-bar { height: 72px; display: flex; justify-content: center; align-items: center; border-bottom: 2px solid var(--line); color: var(--ink); font-size: 24px; font-weight: 900; }
+    .phone-logo { width: 92px; height: 92px; margin: 88px auto 0; display: grid; place-items: center; border-radius: 28px; color: white; background: var(--teal); font-size: 45px; font-weight: 900; }
+    .phone-message { margin: 62px 25px 0; padding: 22px; border-radius: 24px; color: var(--ink-soft); background: var(--teal-light); font-size: 22px; font-weight: 700; line-height: 1.45; }
+    .phone-input { position: absolute; left: 18px; right: 18px; bottom: 22px; min-height: 78px; display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 14px 22px; border: 4px solid var(--coral); border-radius: 28px; color: var(--ink-soft); background: white; font-size: 20px; font-weight: 800; }
+    .send-dot { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--teal); font-size: 26px; }
+    .instruction-stack { display: flex; flex-direction: column; gap: 28px; }
+    .instruction-card { padding: 30px 38px; display: flex; align-items: center; gap: 28px; }
+    .instruction-no { width: 76px; height: 76px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 24px; color: white; background: var(--coral); font-size: 36px; font-weight: 900; }
+    .instruction-card strong { display: block; font-size: 39px; line-height: 1.3; }
+    .instruction-card span { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 27px; font-weight: 650; }
+    .replace-badge { position: absolute; right: 28px; top: 28px; padding: 10px 16px; border: 2px dashed var(--coral); border-radius: 16px; color: #8d331f; background: var(--coral-light); font-size: 18px; font-weight: 800; }
+
+    /* === PROMPT SHEETS: APPROVED SAMPLE SYSTEM === */
+    .step-rail { position: absolute; z-index: 4; top: 290px; left: 92px; width: 310px; bottom: 160px; display: flex; flex-direction: column; justify-content: space-between; padding: 42px 36px; border-radius: 34px; color: white; background: var(--teal); box-shadow: var(--shadow); }
+    .step-big { font-size: 126px; font-weight: 900; line-height: 1; color: var(--amber); }
+    .step-rail p { margin: 0; font-size: 32px; font-weight: 700; line-height: 1.55; }
+    .step-rail .small { color: rgba(255,255,255,0.80); font-size: 28px; font-weight: 600; }
+    .prompt-sheet { position: absolute; z-index: 4; top: 290px; left: 450px; right: 92px; bottom: 160px; display: flex; flex-direction: column; justify-content: center; padding: 68px 92px 82px; border: 4px solid rgba(15, 105, 108, 0.17); border-radius: 42px; background: rgba(255,253,247,0.95); box-shadow: var(--shadow); }
+    .quote-mark { position: absolute; top: 30px; left: 52px; color: var(--coral); font-size: 112px; font-weight: 900; line-height: 1; }
+    .prompt-text { margin: 0; color: var(--ink); font-size: 64px; font-weight: 800; line-height: 1.55; letter-spacing: 0.018em; }
+    .prompt-text.compact { font-size: 51px; line-height: 1.52; }
+    .hold-pill { position: absolute; left: 92px; bottom: 42px; display: inline-flex; align-items: center; gap: 18px; padding: 16px 28px; border-radius: 99px; color: #8d331f; background: var(--coral-light); font-size: 28px; font-weight: 800; }
+    .hold-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--coral); font-size: 22px; }
+    .keyboard-ghost { position: absolute; right: 66px; bottom: 44px; display: grid; grid-template-columns: repeat(7, 20px); gap: 7px; opacity: 0.23; }
+    .keyboard-ghost span { width: 20px; height: 14px; border-radius: 4px; background: var(--teal); }
+
+    /* === SAFETY, WAITING, AND REVISION === */
+    .safety-line { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 42px; }
+    .safety-step { flex: 1; height: 360px; padding: 42px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .safety-step .giant { font-size: 108px; font-weight: 900; color: var(--coral); }
+    .safety-step h2 { margin: 18px 0 0; font-size: 40px; font-weight: 900; }
+    .safety-step p { margin: 16px 0 0; color: var(--ink-soft); font-size: 27px; font-weight: 650; line-height: 1.45; }
+    .safety-arrow { color: var(--teal); font-size: 70px; font-weight: 900; }
+    .wait-card { height: 100%; display: grid; grid-template-columns: 0.95fr 1.05fr; overflow: hidden; }
+    .wait-hand { display: grid; place-items: center; background: var(--teal-light); }
+    .wait-hand svg { width: 300px; height: 300px; stroke: var(--teal); fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+    .wait-copy { padding: 64px; display: flex; flex-direction: column; justify-content: center; }
+    .wait-copy strong { color: var(--coral); font-size: 78px; line-height: 1.2; }
+    .wait-copy p { margin: 30px 0 0; color: var(--ink-soft); font-size: 38px; font-weight: 700; line-height: 1.55; }
+    .revision-tags { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; height: 100%; align-items: center; }
+    .revision-tag { min-height: 330px; padding: 46px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+    .revision-tag .mark { font-size: 84px; color: var(--coral); font-weight: 900; }
+    .revision-tag h2 { margin: 18px 0 0; font-size: 49px; font-weight: 900; }
+    .revision-tag p { margin: 18px 0 0; color: var(--ink-soft); font-size: 29px; font-weight: 650; line-height: 1.45; }
+
+    /* === DICTATION FLOW: APPROVED SAMPLE SYSTEM === */
+    .dictation-flow { position: absolute; z-index: 4; top: 330px; left: 88px; right: 88px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; }
+    .flow-card { position: relative; min-height: 486px; padding: 34px 34px 40px; border-radius: 36px; border: 3px solid rgba(23, 59, 61, 0.12); background: rgba(255, 253, 247, 0.93); box-shadow: var(--shadow); }
+    .flow-card:not(:last-child)::after { content: '→'; position: absolute; z-index: 8; top: 198px; right: -39px; width: 44px; height: 70px; display: grid; place-items: center; color: var(--coral); font-size: 58px; font-weight: 900; }
+    .flow-number { color: var(--coral); font-size: 27px; font-weight: 900; letter-spacing: 0.1em; }
+    .flow-icon { width: 158px; height: 158px; margin: 28px auto 32px; display: grid; place-items: center; border-radius: 50%; color: var(--teal); background: var(--teal-light); }
+    .flow-icon svg { width: 90px; height: 90px; stroke: currentColor; fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+    .flow-label { margin: 0; text-align: center; color: var(--ink); font-size: 38px; font-weight: 900; line-height: 1.35; }
+    .flow-note { margin: 15px 0 0; text-align: center; color: var(--ink-soft); font-size: 28px; font-weight: 600; line-height: 1.45; }
+    .safety-ribbon { position: absolute; z-index: 5; left: 88px; right: 88px; bottom: 150px; min-height: 104px; display: flex; align-items: center; justify-content: center; gap: 24px; padding: 18px 38px; border-radius: 30px; color: white; background: var(--ink); box-shadow: 0 22px 48px rgba(23, 59, 61, 0.24); font-size: 34px; font-weight: 800; }
+    .safety-ribbon strong { color: var(--amber); }
+
+    /* === SPECIAL CONTENT LAYOUTS === */
+    .traffic-grid { height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 42px; }
+    .traffic-card { padding: 46px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .traffic-light { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; color: white; background: var(--traffic); border: 14px solid rgba(255,255,255,.7); box-shadow: 0 0 0 4px var(--traffic), var(--shadow); font-size: 62px; font-weight: 900; }
+    .traffic-card h2 { margin: 34px 0 0; font-size: 50px; font-weight: 900; }
+    .traffic-card p { margin: 18px 0 0; color: var(--ink-soft); font-size: 31px; font-weight: 700; line-height: 1.45; }
+    .source-flow { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; align-items: center; }
+    .source-step { position: relative; min-height: 320px; padding: 38px 28px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .source-step:not(:last-child)::after { content: '→'; position: absolute; right: -36px; color: var(--coral); font-size: 58px; font-weight: 900; }
+    .source-step .big { color: var(--teal); font-size: 70px; font-weight: 900; }
+    .source-step h2 { margin: 20px 0 0; font-size: 37px; font-weight: 900; }
+    .source-step p { margin: 12px 0 0; color: var(--ink-soft); font-size: 25px; font-weight: 650; line-height: 1.45; }
+    .privacy-grid { height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+    .privacy-card { overflow: hidden; display: flex; flex-direction: column; }
+    .privacy-head { height: 132px; display: flex; align-items: center; justify-content: center; gap: 20px; color: white; background: var(--privacy); font-size: 44px; font-weight: 900; }
+    .privacy-head span { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; border: 4px solid white; font-size: 28px; }
+    .privacy-list { flex: 1; padding: 36px 42px; display: flex; flex-direction: column; justify-content: center; gap: 22px; color: var(--ink); font-size: 30px; font-weight: 750; line-height: 1.35; }
+    .privacy-list div::before { content: '•'; margin-right: 14px; color: var(--privacy); }
+    .pricing-stack { height: 100%; display: grid; grid-template-rows: repeat(3, 1fr); gap: 24px; }
+    .pricing-row { padding: 26px 42px; display: grid; grid-template-columns: 0.75fr 1.25fr; align-items: center; gap: 40px; }
+    .pricing-q { color: var(--teal); font-size: 39px; font-weight: 900; }
+    .pricing-a { color: var(--ink); font-size: 34px; font-weight: 750; line-height: 1.45; }
+    .demo-layout { height: 100%; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 44px; }
+    .demo-prompt { padding: 42px 50px; display: flex; flex-direction: column; justify-content: center; }
+    .demo-prompt .label { color: var(--coral); font-size: 26px; font-weight: 900; letter-spacing: .08em; }
+    .demo-prompt blockquote { margin: 24px 0 0; padding: 0; color: var(--ink); font-size: 32px; font-weight: 750; line-height: 1.52; }
+    .demo-result { padding: 38px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; background: var(--teal); border-radius: 38px; box-shadow: var(--shadow); }
+    .demo-result .result-icon { width: 118px; height: 118px; display: grid; place-items: center; border-radius: 32px; color: var(--teal); background: var(--amber); font-size: 58px; font-weight: 900; }
+    .demo-result h2 { margin: 28px 0 0; font-size: 44px; font-weight: 900; }
+    .demo-result p { margin: 16px 0 0; color: rgba(255,255,255,.82); font-size: 28px; font-weight: 650; line-height: 1.45; }
+    .quiz-grid { height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+    .quiz-card { position: relative; padding: 44px; display: flex; flex-direction: column; justify-content: space-between; }
+    .quiz-no { color: var(--coral); font-size: 30px; font-weight: 900; }
+    .quiz-card p { margin: 18px 0; color: var(--ink); font-size: 37px; font-weight: 850; line-height: 1.48; }
+    .quiz-answer { align-self: flex-start; padding: 14px 24px; border-radius: 99px; color: white; background: var(--answer); font-size: 35px; font-weight: 900; }
+
+    /* Keep every authored layout inside the stage-area top/bottom bounds.
+       Layout helpers use height:100% in isolation; this final rule prevents
+       that height from overriding an absolutely positioned stage area. */
+    .stage-area { height: auto; }
+
+    /* === PLAYER CHROME === */
+    .deck-controls { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; color: white; background: rgba(12, 27, 28, 0.92); box-shadow: 0 18px 48px rgba(0,0,0,0.28); backdrop-filter: blur(12px); }
+    .control-button { min-width: 48px; height: 44px; padding: 0 14px; border: 0; border-radius: 12px; color: white; background: rgba(255,255,255,0.1); cursor: pointer; font-size: 20px; font-weight: 800; }
+    .control-button:hover { background: rgba(255,255,255,0.2); }
+    .page-readout { min-width: 84px; text-align: center; font-size: 18px; font-weight: 800; }
+    .progress-dots { display: flex; gap: 6px; padding: 0 6px; }
+    .progress-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,0.28); cursor: pointer; }
+    .progress-dot.current { background: var(--coral); transform: scale(1.45); }
+    @media (max-width: 720px) { .progress-dots { display: none; } .deck-controls { bottom: 10px; } }
+
+    /* === INLINE EDITING === */
+    .edit-hotzone { position: fixed; top: 0; left: 0; width: 82px; height: 82px; z-index: 10000; cursor: pointer; }
+    .edit-toggle { position: fixed; top: 18px; left: 18px; z-index: 10001; width: 48px; height: 48px; border: 0; border-radius: 15px; color: white; background: rgba(12,27,28,0.9); opacity: 0; pointer-events: none; cursor: pointer; transition: opacity 0.25s ease; }
+    .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+    body.editing [contenteditable="true"] { outline: 4px dashed var(--coral); outline-offset: 8px; border-radius: 8px; }
+    .edit-status { position: fixed; top: 18px; left: 78px; z-index: 10002; display: none; padding: 12px 18px; border-radius: 12px; color: white; background: rgba(12,27,28,0.9); font-size: 15px; font-weight: 700; }
+    body.editing .edit-status { display: block; }
+
+    /* === SPEAKER NOTES === */
+    .notes-panel { position: fixed; z-index: 12000; right: 18px; bottom: 88px; width: min(560px, calc(100vw - 36px)); max-height: 48vh; overflow: auto; display: none; padding: 22px 24px; border: 1px solid rgba(255,255,255,.18); border-radius: 20px; color: white; background: rgba(12,27,28,.96); box-shadow: 0 22px 60px rgba(0,0,0,.35); font-size: 18px; line-height: 1.55; }
+    .notes-panel.show { display: block; }
+    .notes-panel strong { display: block; margin-bottom: 8px; color: var(--amber); font-size: 20px; }
+  </style>
+<style>.hub-return{position:fixed;bottom:12px;left:12px;z-index:2000;color:#102b46;background:#fff;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;text-decoration:none;font:14px sans-serif}body:has(.overlay.open)>.hub-return{display:none}</style><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script></head>
+<body>
+  <!-- === FIXED PRESENTATION STAGE === -->
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="ChatGPT 第二部分手機帶做完整投影片">
+
+      <!-- === SLIDE 01: TRANSITION FROM VIDEO === -->
+      <section class="slide active visible" aria-label="從會回答到會做事" data-note="講師口令：剛才是故事，現在換我們自己做。不要重講 AI 歷史。">
+        <div class="chapter-tag reveal" data-edit-key="s01-tag">第二部分｜認識現在的 ChatGPT</div><div class="slide-number">01</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s01-title">從「會回答」到「會做事」</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s01-sub">剛才是小智的故事，現在換我們拿起手機試一次。</p>
+        <div class="stage-area hero-split">
+          <div class="hero-copy surface reveal delay-1" style="--accent:var(--coral)">
+            <p class="hero-word" data-edit-key="s01-word">手機在手上，<br>我們就能開始。</p>
+            <div style="margin-top:34px"><span class="caption-pill coral" data-edit-key="s01-pill">慢慢來，一次做一個動作</span></div>
+          </div>
+          <div class="hero-visual surface reveal delay-2" style="--accent:var(--teal)">
+            <div class="phone-frame" style="transform:scale(.82)"><div class="phone-screen"><div class="phone-bar">ChatGPT</div><div class="phone-logo">AI</div><div class="phone-message">你想先問什麼？</div><div class="phone-input">輸入文字的位置 <span class="send-dot">↑</span></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 02: CHAT / WORK / CODEX (APPROVED SAMPLE) === -->
+      <section class="slide" aria-label="同一個 ChatGPT，三種工作深度" data-note="只建立全貌，不要求學員操作。官方定位依 Use ChatGPT；不要談模型名稱、token、API、CLI。">
+        <div class="chapter-tag reveal" data-edit-key="s02-tag">認識現在的 ChatGPT</div><div class="slide-number">02</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s02-title">同一個 ChatGPT，三種工作深度</h1>
+        <p class="main-subtitle reveal delay-2" data-edit-key="s02-subtitle">不是誰比較厲害，而是你現在想完成什麼。</p>
+        <div class="role-grid">
+          <article class="role-card role-chat reveal delay-1"><div class="role-topline"><div class="role-icon"><svg viewBox="0 0 100 100"><path d="M18 22h64v44H47L29 81V66H18z"/><path d="M33 38h34M33 51h23"/></svg></div><h2 class="role-name" data-edit-key="s02-chat-name">Chat</h2></div><p class="role-description" data-edit-key="s02-chat-desc">問問題、聽解釋、比較選項，還可以接著追問。</p><div class="role-keyword" data-edit-key="s02-chat-key">一起想</div></article>
+          <article class="role-card role-work reveal delay-2"><div class="role-topline"><div class="role-icon"><svg viewBox="0 0 100 100"><path d="M14 30h31l8 10h33v42H14z"/><path d="M34 61l10 10 23-25"/></svg></div><h2 class="role-name" data-edit-key="s02-work-name">Work</h2></div><p class="role-description" data-edit-key="s02-work-desc">讀資料、整理步驟，做出可以檢查的完整成果。</p><div class="role-keyword" data-edit-key="s02-work-key">完成工作</div></article>
+          <article class="role-card role-codex reveal delay-3"><div class="role-topline"><div class="role-icon"><svg viewBox="0 0 100 100"><rect x="13" y="18" width="74" height="64" rx="8"/><path d="M13 35h74M28 54l10 9-10 9M49 73h22"/></svg></div><h2 class="role-name" data-edit-key="s02-codex-name">Codex</h2></div><p class="role-description" data-edit-key="s02-codex-desc">把一句想法，逐步做成網頁、程式或數位工具。</p><div class="role-keyword" data-edit-key="s02-codex-key">蓋出工具</div></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 03: CHAT === -->
+      <section class="slide" aria-label="Chat陪你一起想" data-note="講師口令：你說一句，它回一句；看不懂，可以再問。">
+        <div class="chapter-tag reveal">三種工作深度</div><div class="slide-number">03</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s03-title">Chat：陪你一起想</h1><p class="main-subtitle reveal delay-2" data-edit-key="s03-sub">問問題、聽解釋、比較選項、修改文字，都可以從這裡開始。</p>
+        <div class="stage-area hero-split" style="--accent:var(--coral)">
+          <div class="hero-copy surface reveal delay-1"><p class="hero-word" data-edit-key="s03-word">你說一句，<br>它回一句。</p><p data-edit-key="s03-copy">第一個回答看不懂？<br>可以接著問。</p></div>
+          <div class="hero-visual surface reveal delay-2"><div class="speech-scene"><div class="person"><div class="head"></div><div class="body"></div></div><div class="bubble" data-edit-key="s03-bubble">面試時，<br>我可以怎麼介紹自己？</div></div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 04: WORK === -->
+      <section class="slide" aria-label="Work接下一件工作" data-note="Work 會完成有明確成果的任務，但重要選擇仍由人檢查與決定。官方來源：learn.chatgpt.com/docs/get-started-with-work。">
+        <div class="chapter-tag reveal">三種工作深度</div><div class="slide-number">04</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s04-title">Work：接下一件工作</h1><p class="main-subtitle reveal delay-2" data-edit-key="s04-sub">不只回一句，而是做出一個可以檢查的成果。</p>
+        <div class="stage-area process-row">
+          <article class="process-card surface reveal delay-1"><div class="process-icon">目</div><h2 data-edit-key="s04-a">先說目標</h2><p>例如：一頁面試準備單</p></article>
+          <article class="process-card surface reveal delay-2"><div class="process-icon">讀</div><h2 data-edit-key="s04-b">讀取資料</h2><p>職缺與你的經驗</p></article>
+          <article class="process-card surface reveal delay-3"><div class="process-icon">整</div><h2 data-edit-key="s04-c">整理內容</h2><p>依照你的要求安排</p></article>
+          <article class="process-card surface reveal delay-4"><div class="process-icon">✓</div><h2 data-edit-key="s04-d">完成成果</h2><p>最後仍由你檢查</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 05: CODEX === -->
+      <section class="slide" aria-label="Codex蓋數位工具" data-note="今天不學程式碼，只看它怎麼把一句想法做成工具。">
+        <div class="chapter-tag reveal">三種工作深度</div><div class="slide-number">05</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s05-title">Codex：把想法蓋成數位工具</h1><p class="main-subtitle reveal delay-2" data-edit-key="s05-sub">先說清楚需求，再看它建立、測試與修正。</p>
+        <div class="stage-area hero-split" style="--accent:#c27d00">
+          <div class="hero-copy surface reveal delay-1"><p class="hero-word" data-edit-key="s05-word">一句想法</p><p data-edit-key="s05-copy">「做一張可以勾選工作能力的手機小卡。」</p></div>
+          <div class="hero-visual surface reveal delay-2"><svg viewBox="0 0 360 360"><rect x="70" y="35" width="220" height="290" rx="28"/><path d="M104 95h152M104 145h22m24 0h106M104 195h22m24 0h106M104 245h22m24 0h106"/><path d="M107 143l7 8 14-18M107 243l7 8 14-18"/></svg><span class="caption-pill" data-edit-key="s05-pill">今天只看成果，不看程式碼</span></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 06: TWO GOALS === -->
+      <section class="slide" aria-label="今天只完成兩件事" data-note="成功標準刻意降低。講師口令：不用跟別人一樣快；完成一個步驟就是成功。">
+        <div class="chapter-tag reveal">今天的成功標準</div><div class="slide-number">06</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s06-title">今天每個人只要完成兩件事</h1><p class="main-subtitle reveal delay-2" data-edit-key="s06-sub">不比速度，也不用一次學會所有功能。</p>
+        <div class="stage-area goal-grid">
+          <article class="goal-card surface reveal delay-1"><div class="goal-check">1</div><h2 data-edit-key="s06-a">問一個問題</h2><p>先完成一次對話</p></article>
+          <article class="goal-card surface reveal delay-2"><div class="goal-check" style="background:var(--coral)">2</div><h2 data-edit-key="s06-b">再追問一次</h2><p>讓回答更適合自己</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 07: PARTICIPATION PATHS === -->
+      <section class="slide" aria-label="先選操作方式" data-note="不要求公開障別，也不要求說明為何需要協助。三種方式都算完整參與。">
+        <div class="chapter-tag reveal">開始以前</div><div class="slide-number">07</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s07-title">先選你舒服的操作方式</h1><p class="main-subtitle reveal delay-2" data-edit-key="s07-sub">答案由你決定；按鍵可以有人協助。</p>
+        <div class="stage-area choice-grid">
+          <article class="choice-card surface reveal delay-1" style="--card-color:var(--teal)"><div class="choice-symbol">我</div><h2 data-edit-key="s07-a">自己操作</h2><p>自己打字、按鍵與送出</p></article>
+          <article class="choice-card surface reveal delay-2" style="--card-color:var(--coral)"><div class="choice-symbol">2</div><h2 data-edit-key="s07-b">兩人合作</h2><p>一人決定，一人協助找按鈕</p></article>
+          <article class="choice-card surface reveal delay-3" style="--card-color:#c27d00"><div class="choice-symbol">手</div><h2 data-edit-key="s07-c">請人代按</h2><p>協助者念回內容，再由本人確認</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 08: FIND OFFICIAL APP === -->
+      <section class="slide" aria-label="找到官方ChatGPT App" data-note="活動前 48 小時：以現場示範手機重拍 App Store 與 Google Play 官方頁面。只處理找不到或疑似非官方 App 的學員。">
+        <div class="chapter-tag reveal">手機帶做｜第一步</div><div class="slide-number">08</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s08-title">先找到官方 ChatGPT App</h1><p class="main-subtitle reveal delay-2" data-edit-key="s08-sub">找到以後先不要按；請舉起綠卡。</p>
+        <div class="stage-area phone-layout">
+          <div class="surface hero-visual reveal delay-1" style="height:100%"><div class="replace-badge">活動前 48 小時換實機截圖</div><div style="display:flex;gap:34px;align-items:center"><div class="phone-frame" style="transform:scale(.72);margin:-75px -32px"><div class="phone-screen"><div class="phone-bar">iPhone</div><div class="phone-logo">AI</div><div class="phone-message" style="text-align:center">官方 ChatGPT</div></div></div><div class="phone-frame" style="transform:scale(.72);margin:-75px -32px"><div class="phone-screen"><div class="phone-bar">Android</div><div class="phone-logo">AI</div><div class="phone-message" style="text-align:center">官方 ChatGPT</div></div></div></div></div>
+          <div class="instruction-stack reveal delay-2"><div class="instruction-card surface"><div class="instruction-no">1</div><div><strong data-edit-key="s08-a">先確認名稱</strong><span>ChatGPT</span></div></div><div class="instruction-card surface"><div class="instruction-no">2</div><div><strong data-edit-key="s08-b">先停在這裡</strong><span>不安裝來路不明的工具</span></div></div><div class="instruction-card surface"><div class="instruction-no">✓</div><div><strong data-edit-key="s08-c">找到就舉綠卡</strong><span>需要協助就舉黃卡</span></div></div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 09: OPEN APP === -->
+      <section class="slide" aria-label="打開App後停下" data-note="活動前 48 小時：換成最新首頁實機截圖。沒有 App 可用瀏覽器；未登入者可先與鄰座共用。">
+        <div class="chapter-tag reveal">手機帶做｜第二步</div><div class="slide-number">09</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s09-title">打開 App，然後停下來</h1><p class="main-subtitle reveal delay-2" data-edit-key="s09-sub">大家先停在首頁，不搶快。</p>
+        <div class="stage-area phone-layout">
+          <div class="surface hero-visual reveal delay-1" style="height:100%"><div class="replace-badge">活動前 48 小時換實機截圖</div><div class="phone-frame" style="transform:scale(.78)"><div class="phone-screen"><div class="phone-bar">ChatGPT</div><div class="phone-logo">AI</div><div class="phone-message" style="text-align:center">首頁</div><div class="phone-input">先不要輸入 <span class="send-dot">■</span></div></div></div></div>
+          <div class="hero-copy surface reveal delay-2"><p class="hero-word" style="color:var(--coral)" data-edit-key="s09-word">打開後，<br>先停。</p><p data-edit-key="s09-copy">等大家都看見首頁，<br>我們再一起做下一步。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 10: FIND INPUT === -->
+      <section class="slide" aria-label="找到輸入文字的位置" data-note="不同手機的按鈕外觀可能不同。活動前 48 小時換 iOS／Android 輸入區截圖，不長期固定箭頭指向易變按鈕。">
+        <div class="chapter-tag reveal">手機帶做｜第三步</div><div class="slide-number">10</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s10-title">找到「輸入文字的位置」</h1><p class="main-subtitle reveal delay-2" data-edit-key="s10-sub">用手指給我看，先不要按。</p>
+        <div class="stage-area phone-layout">
+          <div class="surface hero-visual reveal delay-1" style="height:100%"><div class="replace-badge">活動前 48 小時換實機截圖</div><div class="phone-frame" style="transform:scale(.78)"><div class="phone-screen"><div class="phone-bar">ChatGPT</div><div class="phone-message">今天想問什麼？</div><div class="phone-input" style="box-shadow:0 0 0 12px var(--coral-light)">輸入文字的位置 <span class="send-dot">↑</span></div></div></div></div>
+          <div class="hero-copy surface reveal delay-2"><p class="hero-word" data-edit-key="s10-word">先用手指，<br>指給我看。</p><p data-edit-key="s10-copy">不用找完全一樣的按鈕，<br>找能夠輸入文字的地方。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 11: TRAFFIC LIGHTS === -->
+      <section class="slide" aria-label="課堂交通號誌" data-note="超過三張黃卡時，全班暫停，講師重新示範同一步。">
+        <div class="chapter-tag reveal">我們一起控制速度</div><div class="slide-number">11</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s11-title">課堂交通號誌</h1><p class="main-subtitle reveal delay-2" data-edit-key="s11-sub">不用大聲喊，舉卡片就能告訴我們你的狀態。</p>
+        <div class="stage-area traffic-grid">
+          <article class="traffic-card surface reveal delay-1" style="--traffic:#5d902f"><div class="traffic-light">✓</div><h2 data-edit-key="s11-a">綠卡</h2><p>我完成了，可以繼續</p></article>
+          <article class="traffic-card surface reveal delay-2" style="--traffic:#d99700"><div class="traffic-light">?</div><h2 data-edit-key="s11-b">黃卡</h2><p>我需要一點協助</p></article>
+          <article class="traffic-card surface reveal delay-3" style="--traffic:#b64232"><div class="traffic-light">■</div><h2 data-edit-key="s11-c">紅卡</h2><p>我想停一下或休息</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 12: FIRST PROMPT (APPROVED SAMPLE) === -->
+      <section class="slide" aria-label="第一次提問" data-note="講師口令：先輸入，不要送出。可以打字、手機聽寫或請同伴代輸入。">
+        <div class="chapter-tag reveal" data-edit-key="s12-tag">手機帶做</div><div class="slide-number">12</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s12-title">第一次提問：全班輸入同一句</h1><p class="main-subtitle reveal delay-2" data-edit-key="s12-subtitle">先建立一次成功經驗，第一句不用完美。</p>
+        <aside class="step-rail reveal delay-1"><div class="step-big">01</div><p data-edit-key="s12-rail-main">找到手機上的文字輸入位置</p><p class="small" data-edit-key="s12-rail-small">可以自己打字、用手機聽寫，或請同伴代輸入。</p></aside>
+        <div class="prompt-sheet reveal delay-2"><div class="quote-mark">「</div><p class="prompt-text" data-edit-key="s12-prompt">我第一次使用 ChatGPT。<br>請用三句簡單的話告訴我，<br>你可以怎麼幫助我。</p><div class="hold-pill"><span class="hold-icon">■</span><span data-edit-key="s12-hold">先輸入，不要送出</span></div><div class="keyboard-ghost"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+      </section>
+
+      <!-- === SLIDE 13: REVIEW BEFORE SEND === -->
+      <section class="slide" aria-label="送出以前先看一眼" data-note="講師口令：確認沒有個人祕密，再一起送出。">
+        <div class="chapter-tag reveal">手機帶做｜送出以前</div><div class="slide-number">13</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s13-title">送出以前，先看一眼</h1><p class="main-subtitle reveal delay-2" data-edit-key="s13-sub">AI 的第一道安全，是自己先看過要送出的內容。</p>
+        <div class="stage-area safety-line">
+          <article class="safety-step surface reveal delay-1"><div class="giant">眼</div><h2 data-edit-key="s13-a">看文字</h2><p>這真的是我想問的嗎？</p></article><div class="safety-arrow">→</div>
+          <article class="safety-step surface reveal delay-2"><div class="giant">?</div><h2 data-edit-key="s13-b">找祕密</h2><p>姓名、電話、密碼或不想公開的資料？</p></article><div class="safety-arrow">→</div>
+          <article class="safety-step surface reveal delay-3"><div class="giant">↑</div><h2 data-edit-key="s13-c">再送出</h2><p>確認安全後，才一起按</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 14: WAIT === -->
+      <section class="slide" aria-label="等它回答" data-note="講師口令：看到正在回答，就把手停下來。網路慢時不要連按或重複送出。">
+        <div class="chapter-tag reveal">手機帶做｜送出以後</div><div class="slide-number">14</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s14-title">等它回答，不需要重複按</h1><p class="main-subtitle reveal delay-2" data-edit-key="s14-sub">網路有時候比較慢，先看畫面上的狀態。</p>
+        <div class="stage-area wait-card surface reveal delay-1"><div class="wait-hand"><svg viewBox="0 0 360 360"><path d="M178 75v122M178 112c0-20 45-20 45 2v82M223 135c0-20 44-20 44 2v75M267 158c0-20 43-20 43 2v80c0 72-45 105-112 105-55 0-90-31-118-86l-24-49c-12-25 23-43 39-22l36 45V90c0-22 47-22 47-15z"/><circle cx="66" cy="78" r="18"/><path d="M66 35v18M24 78h18M90 52l13-13"/></svg></div><div class="wait-copy"><strong data-edit-key="s14-word">看見正在回答，<br>手就停下來。</strong><p data-edit-key="s14-copy">不要連按。<br>不要重複送出。<br>先等它完成。</p></div></div>
+      </section>
+
+      <!-- === SLIDE 15: REVISE === -->
+      <section class="slide" aria-label="回答可以再改" data-note="提問：它哪一句太難？哪一句太長？強調會要求修改，才是真正的使用能力。">
+        <div class="chapter-tag reveal">學會使用，不是接受第一稿</div><div class="slide-number">15</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s15-title">回答不是考卷，可以再改</h1><p class="main-subtitle reveal delay-2" data-edit-key="s15-sub">第一個回答不必完美，你可以告訴它怎麼調整。</p>
+        <div class="stage-area revision-tags">
+          <article class="revision-tag surface reveal delay-1"><div class="mark">長</div><h2 data-edit-key="s15-a">太長</h2><p>請再短一點</p></article>
+          <article class="revision-tag surface reveal delay-2"><div class="mark">?</div><h2 data-edit-key="s15-b">看不懂</h2><p>請用更簡單的話說</p></article>
+          <article class="revision-tag surface reveal delay-3"><div class="mark">例</div><h2 data-edit-key="s15-c">想要例子</h2><p>請舉一個生活中的例子</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 16: FIRST FOLLOW-UP === -->
+      <section class="slide" aria-label="第一次追問" data-note="講師口令：不要開新對話，就在下面接著問。追問會延續前面的脈絡。">
+        <div class="chapter-tag reveal">手機帶做｜追問</div><div class="slide-number">16</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s16-title">第一次追問：請再短一點</h1><p class="main-subtitle reveal delay-2" data-edit-key="s16-sub">留在同一段對話，直接接著問。</p>
+        <aside class="step-rail reveal delay-1"><div class="step-big">02</div><p data-edit-key="s16-rail">不要開新對話</p><p class="small">在剛才回答的下面接著輸入</p></aside>
+        <div class="prompt-sheet reveal delay-2"><div class="quote-mark">「</div><p class="prompt-text" data-edit-key="s16-prompt">請再短一點，<br>每句不要超過十五個字。</p><div class="hold-pill"><span class="hold-icon">✓</span><span>輸入後，先看一眼再送出</span></div></div>
+      </section>
+
+      <!-- === SLIDE 17: FOLLOW-UP CHOICE === -->
+      <section class="slide" aria-label="第二次追問三選一" data-note="學員自行選一句，不需要向全班解釋。完成標準：看見第二次回答。">
+        <div class="chapter-tag reveal">手機帶做｜自己選一句</div><div class="slide-number">17</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s17-title">第二次追問：三選一</h1><p class="main-subtitle reveal delay-2" data-edit-key="s17-sub">挑一張最適合你的卡片，接著問。</p>
+        <div class="stage-area answer-grid">
+          <article class="answer-card surface reveal delay-1"><div class="choice-symbol" style="--card-color:var(--coral)">例</div><h2 data-edit-key="s17-a">請舉一個<br>生活中的例子。</h2></article>
+          <article class="answer-card surface reveal delay-2"><div class="choice-symbol" style="--card-color:var(--teal)">簡</div><h2 data-edit-key="s17-b">請用更簡單的話說。</h2></article>
+          <article class="answer-card surface reveal delay-3"><div class="choice-symbol" style="--card-color:#c27d00">步</div><h2 data-edit-key="s17-c">我看不懂，請一步一步告訴我。</h2></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 18: THREE INPUT METHODS === -->
+      <section class="slide" aria-label="手機三種輸入方法" data-note="不是只有快速打字才叫會用。即時語音不作全員必要操作。">
+        <div class="chapter-tag reveal">不只一種方法</div><div class="slide-number">18</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s18-title">一支手機，三種輸入方法</h1><p class="main-subtitle reveal delay-2" data-edit-key="s18-sub">選一種對你最方便的方式，就可以開始。</p>
+        <div class="stage-area input-grid">
+          <article class="input-card surface reveal delay-1" style="--card-color:var(--teal)"><div class="input-symbol">字</div><h2 data-edit-key="s18-a">打字</h2><p>先輸入短句或關鍵字</p></article>
+          <article class="input-card surface reveal delay-2" style="--card-color:var(--coral)"><div class="input-symbol">聲</div><h2 data-edit-key="s18-b">說成文字</h2><p>用手機鍵盤聽寫</p></article>
+          <article class="input-card surface reveal delay-3" style="--card-color:#c27d00"><div class="input-symbol">圖</div><h2 data-edit-key="s18-c">拍照再問</h2><p>加一句話說明想看哪裡</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 19: TYPING === -->
+      <section class="slide" aria-label="方法一打字" data-note="同伴代輸入時，要把內容念回來，讓本人確認。">
+        <div class="chapter-tag reveal">輸入方法一</div><div class="slide-number">19</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s19-title">打字：先寫關鍵字，也可以</h1><p class="main-subtitle reveal delay-2" data-edit-key="s19-sub">不用一開始就寫成完整句子。</p>
+        <div class="stage-area hero-split">
+          <div class="hero-copy surface reveal delay-1"><p class="hero-word" style="font-size:70px" data-edit-key="s19-keys">面試<br>緊張<br>自我介紹</p><p>先把想到的詞打出來。</p></div>
+          <div class="hero-copy surface reveal delay-2"><span class="caption-pill coral">接著加一句</span><p class="hero-word" style="margin-top:28px;color:var(--teal);font-size:60px" data-edit-key="s19-prompt">請幫我整理成<br>一句問題。</p><p data-edit-key="s19-note">內容要由本人確認。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 20: DICTATION (APPROVED SAMPLE) === -->
+      <section class="slide" aria-label="手機鍵盤聽寫四步驟" data-note="找的是手機鍵盤上的麥克風，不是直接進入即時語音對話。活動前 48 小時檢查 iOS 與 Android 鍵盤位置。">
+        <div class="chapter-tag reveal" data-edit-key="s20-tag">不方便打字，也能使用</div><div class="slide-number">20</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s20-title">手機鍵盤聽寫：說完先看，再送出</h1><p class="main-subtitle reveal delay-2" data-edit-key="s20-subtitle">把聲音變成文字，自己仍保有最後確認的機會。</p>
+        <div class="dictation-flow">
+          <article class="flow-card reveal delay-1"><div class="flow-number">STEP 1</div><div class="flow-icon"><svg viewBox="0 0 100 100"><rect x="14" y="18" width="72" height="60" rx="10"/><path d="M24 36h8M39 36h8M54 36h8M69 36h8M27 50h8M42 50h8M57 50h8M72 50h5M28 64h38"/><circle cx="76" cy="72" r="14" fill="#f2a51a" stroke="none"/><path d="M76 64v11M71 70a5 5 0 0 0 10 0M76 75v5" stroke="white"/></svg></div><h2 class="flow-label" data-edit-key="s20-step1">按鍵盤<br>麥克風</h2><p class="flow-note">找的是手機鍵盤上的麥克風</p></article>
+          <article class="flow-card reveal delay-2"><div class="flow-number">STEP 2</div><div class="flow-icon"><svg viewBox="0 0 100 100"><rect x="36" y="15" width="28" height="48" rx="14"/><path d="M25 49a25 25 0 0 0 50 0M50 74v13M36 87h28"/><path d="M77 30c7 5 7 15 0 20M85 23c12 10 12 25 0 35"/></svg></div><h2 class="flow-label" data-edit-key="s20-step2">說一句<br>短句</h2><p class="flow-note">說慢一點，一次只說一件事</p></article>
+          <article class="flow-card reveal delay-3"><div class="flow-number">STEP 3</div><div class="flow-icon"><svg viewBox="0 0 100 100"><path d="M10 50s15-25 40-25 40 25 40 25-15 25-40 25S10 50 10 50z"/><circle cx="50" cy="50" r="12"/><path d="M30 87h40M35 15h30"/></svg></div><h2 class="flow-label" data-edit-key="s20-step3">停下來<br>看文字</h2><p class="flow-note">有錯字可以先修改，不急著送出</p></article>
+          <article class="flow-card reveal delay-4"><div class="flow-number">STEP 4</div><div class="flow-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36"/><path d="M30 51l14 14 28-32"/></svg></div><h2 class="flow-label" data-edit-key="s20-step4">確認後<br>再送出</h2><p class="flow-note">內容是你的，最後決定也由你做</p></article>
+        </div>
+        <div class="safety-ribbon reveal delay-4" data-edit-key="s20-ribbon"><strong>記得：</strong>手機鍵盤聽寫是「先變成文字」，不是直接開始語音對話。</div>
+      </section>
+
+      <!-- === SLIDE 21: PHOTO INPUT === -->
+      <section class="slide" aria-label="照片加一句說明" data-note="使用主辦單位準備的職缺範例。活動前 48 小時換實機的圖片加入位置；不用真實證件、病歷、存摺或含完整聯絡資料的文件。">
+        <div class="chapter-tag reveal">輸入方法三</div><div class="slide-number">21</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s21-title">照片加一句說明，AI 才知道要幫什麼</h1><p class="main-subtitle reveal delay-2" data-edit-key="s21-sub">照片是資料；問題才是方向。</p>
+        <div class="stage-area demo-layout">
+          <div class="demo-prompt surface reveal delay-1"><div class="replace-badge">活動前 48 小時換實機截圖</div><span class="label">職缺範例＋一句話</span><blockquote data-edit-key="s21-prompt">請用三句簡單的話，<br>告訴我這份工作<br>每天要做什麼。</blockquote></div>
+          <div class="demo-result reveal delay-2"><div class="result-icon">圖</div><h2 data-edit-key="s21-result">拍照以後<br>還要說明任務</h2><p data-edit-key="s21-safe">不要使用證件、病歷、存摺或完整聯絡資料練習。</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 22: SOURCES === -->
+      <section class="slide" aria-label="最新資料要找來源" data-note="示範句：請搜尋彰化最近的公開就業活動，列出日期與官方來源。有來源也不代表一定正確，要打開官方頁面核對。">
+        <div class="chapter-tag reveal">重要資料要查證</div><div class="slide-number">22</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s22-title">最新資料，要請它找來源</h1><p class="main-subtitle reveal delay-2" data-edit-key="s22-sub">日期、價格、法規或職缺，都可能改變。</p>
+        <div class="stage-area source-flow">
+          <article class="source-step surface reveal delay-1"><div class="big">問</div><h2 data-edit-key="s22-a">問最新資料</h2><p>把地點與時間說清楚</p></article>
+          <article class="source-step surface reveal delay-2"><div class="big">源</div><h2 data-edit-key="s22-b">要求來源</h2><p>不要只看一句答案</p></article>
+          <article class="source-step surface reveal delay-3"><div class="big">開</div><h2 data-edit-key="s22-c">打開官方頁面</h2><p>確認內容與日期</p></article>
+          <article class="source-step surface reveal delay-4"><div class="big">定</div><h2 data-edit-key="s22-d">再做決定</h2><p>重要事情找人一起確認</p></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 23: PRIVACY TRAFFIC LIGHT === -->
+      <section class="slide" aria-label="什麼可以說什麼先不要說" data-note="逐例請學員舉綠、黃或紅卡。不需要把完整人生交給 AI，只提供完成任務所需的最少資料。">
+        <div class="chapter-tag reveal">個資安全</div><div class="slide-number">23</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s23-title">什麼可以說？什麼先不要說？</h1><p class="main-subtitle reveal delay-2" data-edit-key="s23-sub">只提供完成任務需要的最少資料。</p>
+        <div class="stage-area privacy-grid">
+          <article class="privacy-card surface reveal delay-1" style="--privacy:#5d902f"><div class="privacy-head"><span>✓</span>可以說</div><div class="privacy-list"><div>興趣</div><div>一般技能</div><div>改寫過的工作經驗</div></div></article>
+          <article class="privacy-card surface reveal delay-2" style="--privacy:#d99700"><div class="privacy-head"><span>?</span>一起確認</div><div class="privacy-list"><div>醫療問題</div><div>法律與金錢</div><div>福利資格</div></div></article>
+          <article class="privacy-card surface reveal delay-3" style="--privacy:#b64232"><div class="privacy-head"><span>×</span>不要輸入</div><div class="privacy-list"><div>身分證號與密碼</div><div>銀行資料與完整住址</div><div>未遮蔽的病歷</div></div></article>
+        </div>
+      </section>
+
+      <!-- === SLIDE 24: FREE VS PAID === -->
+      <section class="slide" aria-label="免費版與付費版判斷" data-note="2026-09-05 官方現況：ChatGPT Work 與 Codex 納入 Free、Go、Plus、Pro、Business、Edu、Enterprise，並共用使用量。個人方案參考：Free US$0/月、Go US$8/月、Plus US$20/月、Pro US$100/月起。活動前 48 小時重查；不要求學員記憶價格，也不在現場代購。來源：https://learn.chatgpt.com/docs/pricing">
+        <div class="chapter-tag reveal">方案怎麼選</div><div class="slide-number">24</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s24-title">免費版夠不夠？先看用途，不先付費</h1><p class="main-subtitle reveal delay-2" data-edit-key="s24-sub">功能、用量與可用狀態可能因帳號、平台及地區不同。</p>
+        <div class="stage-area pricing-stack">
+          <div class="pricing-row surface reveal delay-1"><div class="pricing-q" data-edit-key="s24-q1">免費版能不能開始？</div><div class="pricing-a" data-edit-key="s24-a1">可以。先練習提問、追問與基本任務。</div></div>
+          <div class="pricing-row surface reveal delay-2"><div class="pricing-q" data-edit-key="s24-q2">付費通常增加什麼？</div><div class="pricing-a" data-edit-key="s24-a2">較多使用量，並可能增加模型、速度或進階功能。</div></div>
+          <div class="pricing-row surface reveal delay-3"><div class="pricing-q" data-edit-key="s24-q3">現在要不要付費？</div><div class="pricing-a" data-edit-key="s24-a3">先用免費版；真的常用、常碰到限制，再評估。</div></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 25: WORK DEMO === -->
+      <section class="slide" aria-label="Work製作面試準備單" data-note="示範前準備：去識別化職缺＋三點虛構人物經驗。活動前 48 小時確認示範帳號可見 Work。讓學員用讀、整理、製作、檢查四張卡指出剛才做過哪些步驟。來源：https://learn.chatgpt.com/docs/get-started-with-work">
+        <div class="chapter-tag reveal">講師示範｜Work</div><div class="slide-number">25</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s25-title">Work：做出一頁面試準備單</h1><p class="main-subtitle reveal delay-2" data-edit-key="s25-sub">清楚說明成果、資料與限制，讓它完成一件工作。</p>
+        <div class="stage-area demo-layout">
+          <div class="demo-prompt surface reveal delay-1"><div class="replace-badge">活動前 48 小時確認介面</div><span class="label">示範指令</span><blockquote data-edit-key="s25-prompt">請讀這份職缺和三點工作經驗，做成一頁面試準備單。<br>包含：工作內容、我的優勢、三題可能的面試問題。<br>使用簡單中文，不要增加沒有提供的經驗。</blockquote></div>
+          <div class="demo-result reveal delay-2"><div class="result-icon">單</div><h2 data-edit-key="s25-result">一頁<br>面試準備單</h2><p>讀資料 → 整理 → 製作 → 人來檢查</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 26: CODEX DEMO === -->
+      <section class="slide" aria-label="Codex製作能力小卡" data-note="活動前 48 小時確認示範帳號可見 Codex，並預先完成可用成果。展示需求、工作過程、可勾選網頁與人實際試按；不要展示程式碼、Git、權限細節或失敗日誌。">
+        <div class="chapter-tag reveal">講師示範｜Codex</div><div class="slide-number">26</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s26-title">Codex：把一句話做成小工具</h1><p class="main-subtitle reveal delay-2" data-edit-key="s26-sub">不會寫程式，也可以先說清楚想要什麼。</p>
+        <div class="stage-area demo-layout">
+          <div class="demo-prompt surface reveal delay-1"><div class="replace-badge">活動前 48 小時確認成果</div><span class="label">示範指令</span><blockquote data-edit-key="s26-prompt">請做一張手機可以使用的能力小卡。<br>讓我勾選「整理、包裝、清潔、拍照、操作電腦」。<br>字要大，按鈕要清楚，不要收集姓名。</blockquote></div>
+          <div class="demo-result reveal delay-2" style="background:#a66a00"><div class="result-icon">✓</div><h2 data-edit-key="s26-result">可以勾選的<br>能力小卡</h2><p>一句需求 → 建立工具 → 人實際試按</p></div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 27: QUIZ AND WRAP === -->
+      <section class="slide" aria-label="選擇合適的幫手" data-note="學員舉三張角色卡作答，不需口頭回答。收束：工具會變，但你要先說清楚，是想問問題、完成工作，還是做出工具。">
+        <div class="chapter-tag reveal">最後一起選</div><div class="slide-number">27</div>
+        <h1 class="main-title reveal delay-1" data-edit-key="s27-title">你現在會選哪一位幫手？</h1><p class="main-subtitle reveal delay-2" data-edit-key="s27-sub">看情境，舉起 Chat、Work 或 Codex 角色卡。</p>
+        <div class="stage-area quiz-grid">
+          <article class="quiz-card surface reveal delay-1"><div class="quiz-no">情境 1</div><p data-edit-key="s27-q1">我想練習回答面試問題。</p><div class="quiz-answer" style="--answer:var(--coral)">Chat</div></article>
+          <article class="quiz-card surface reveal delay-2"><div class="quiz-no">情境 2</div><p data-edit-key="s27-q2">我想把職缺和經驗做成一頁準備單。</p><div class="quiz-answer" style="--answer:var(--teal)">Work</div></article>
+          <article class="quiz-card surface reveal delay-3"><div class="quiz-no">情境 3</div><p data-edit-key="s27-q3">我想做一張可以勾選能力的小網頁。</p><div class="quiz-answer" style="--answer:#b67700">Codex</div></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- === PLAYER CHROME === -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button class="control-button" id="prevButton" aria-label="上一頁">←</button>
+    <div class="progress-dots" id="progressDots" aria-label="頁面導覽"></div>
+    <span class="page-readout" id="pageReadout">1 / 27</span>
+    <button class="control-button" id="nextButton" aria-label="下一頁">→</button>
+    <button class="control-button" id="notesButton" aria-label="講師備註">N</button>
+    <button class="control-button" id="fullscreenButton" aria-label="全螢幕">⛶</button>
+  </nav>
+
+  <!-- === INLINE EDITING CHROME === -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式（E）">✎</button>
+  <div class="edit-status">編輯模式：可直接修改文字，按 E 結束；Ctrl/Cmd＋S 儲存</div>
+  <aside class="notes-panel" id="notesPanel"><strong>講師備註</strong><span id="notesText"></span></aside>
+
+  <!-- === OFFICIAL SOURCE MANIFEST / PRESENTER DATA === -->
+  <script type="application/json" id="sourceManifest">
+  {
+    "checked_on": "2026-09-05",
+    "official_sources": [
+      "https://learn.chatgpt.com/docs/use-chatgpt",
+      "https://learn.chatgpt.com/docs/get-started-with-work",
+      "https://learn.chatgpt.com/docs/pricing"
+    ],
+    "pricing_note": "2026-09-05 官方頁面列個人方案：Free US$0/月、Go US$8/月、Plus US$20/月、Pro US$100/月起；活動前48小時重查。",
+    "replacement_points": [8, 9, 10, 20, 21, 24, 25, 26]
+  }
+  </script>
+
+  <script>
+    /* === SLIDE PRESENTATION CONTROLLER === */
+    class SlidePresentation {
+      constructor() {
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.currentSlide = 0;
+        this.stage = document.getElementById('deckStage');
+        this.pageReadout = document.getElementById('pageReadout');
+        this.notesPanel = document.getElementById('notesPanel');
+        this.notesText = document.getElementById('notesText');
+        this.setupStageScale();
+        this.setupDots();
+        this.setupControls();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupWheelNav();
+        this.showSlide(0);
+      }
+
+      setupStageScale() {
+        const scale = () => {
+          const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          const x = (window.innerWidth - 1920 * factor) / 2;
+          const y = (window.innerHeight - 1080 * factor) / 2;
+          this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+        };
+        scale();
+        window.addEventListener('resize', scale);
+      }
+
+      setupDots() {
+        const holder = document.getElementById('progressDots');
+        this.slides.forEach((slide, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'progress-dot';
+          dot.setAttribute('aria-label', `跳到第 ${index + 1} 頁`);
+          dot.addEventListener('click', () => this.showSlide(index));
+          holder.appendChild(dot);
+        });
+        this.dots = [...holder.children];
+      }
+
+      setupControls() {
+        document.getElementById('prevButton').addEventListener('click', () => this.previous());
+        document.getElementById('nextButton').addEventListener('click', () => this.next());
+        document.getElementById('notesButton').addEventListener('click', () => this.toggleNotes());
+        document.getElementById('fullscreenButton').addEventListener('click', () => {
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+          else document.exitFullscreen?.();
+        });
+      }
+
+      setupKeyboardNav() {
+        document.addEventListener('keydown', event => {
+          if (event.target.getAttribute('contenteditable') === 'true') return;
+          if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.code === 'Space') { event.preventDefault(); this.next(); }
+          if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); this.previous(); }
+          if (event.key === 'Home') { event.preventDefault(); this.showSlide(0); }
+          if (event.key === 'End') { event.preventDefault(); this.showSlide(this.slides.length - 1); }
+          if (event.key === 'n' || event.key === 'N') { event.preventDefault(); this.toggleNotes(); }
+        });
+      }
+
+      setupTouchNav() {
+        let startX = 0;
+        let startY = 0;
+        this.stage.addEventListener('touchstart', event => { startX = event.changedTouches[0].clientX; startY = event.changedTouches[0].clientY; }, { passive: true });
+        this.stage.addEventListener('touchend', event => {
+          const dx = event.changedTouches[0].clientX - startX;
+          const dy = event.changedTouches[0].clientY - startY;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) dx < 0 ? this.next() : this.previous();
+        }, { passive: true });
+      }
+
+      setupWheelNav() {
+        let locked = false;
+        window.addEventListener('wheel', event => {
+          if (locked || Math.abs(event.deltaY) < 30) return;
+          locked = true;
+          event.deltaY > 0 ? this.next() : this.previous();
+          setTimeout(() => { locked = false; }, 650);
+        }, { passive: true });
+      }
+
+      toggleNotes() { this.notesPanel.classList.toggle('show'); }
+      next() { this.showSlide(Math.min(this.slides.length - 1, this.currentSlide + 1)); }
+      previous() { this.showSlide(Math.max(0, this.currentSlide - 1)); }
+
+      showSlide(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === this.currentSlide);
+          slide.classList.toggle('visible', i === this.currentSlide);
+        });
+        this.dots.forEach((dot, i) => dot.classList.toggle('current', i === this.currentSlide));
+        this.pageReadout.textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+        this.notesText.textContent = this.slides[this.currentSlide].dataset.note || '本頁沒有額外備註。';
+      }
+    }
+
+    /* === INLINE TEXT EDITOR === */
+    class InlineEditor {
+      constructor() {
+        this.key = 'chatgpt-mobile-full-deck-v1';
+        this.isActive = false;
+        this.toggle = document.getElementById('editToggle');
+        this.hotzone = document.querySelector('.edit-hotzone');
+        this.editables = [...document.querySelectorAll('[data-edit-key]')];
+        this.hideTimeout = null;
+        this.restore();
+        this.setup();
+      }
+
+      setup() {
+        const toggle = () => this.toggleMode();
+        this.toggle.addEventListener('click', toggle);
+        this.hotzone.addEventListener('click', toggle);
+        this.hotzone.addEventListener('mouseenter', () => { clearTimeout(this.hideTimeout); this.toggle.classList.add('show'); });
+        this.hotzone.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.toggle.classList.remove('show'); }, 400); });
+        this.toggle.addEventListener('mouseenter', () => clearTimeout(this.hideTimeout));
+        this.toggle.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.toggle.classList.remove('show'); }, 400); });
+        document.addEventListener('keydown', event => {
+          if ((event.key === 'e' || event.key === 'E') && event.target.getAttribute('contenteditable') !== 'true') toggle();
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); this.save(); }
+        });
+        this.editables.forEach(element => element.addEventListener('input', () => this.save()));
+      }
+
+      toggleMode() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('editing', this.isActive);
+        this.toggle.classList.toggle('active', this.isActive);
+        this.toggle.classList.toggle('show', this.isActive);
+        this.editables.forEach(element => { element.contentEditable = this.isActive ? 'true' : 'false'; });
+      }
+
+      save() {
+        const payload = {};
+        this.editables.forEach(element => { payload[element.dataset.editKey] = element.innerHTML; });
+        localStorage.setItem(this.key, JSON.stringify(payload));
+      }
+
+      restore() {
+        try {
+          const payload = JSON.parse(localStorage.getItem(this.key) || '{}');
+          this.editables.forEach(element => { if (payload[element.dataset.editKey]) element.innerHTML = payload[element.dataset.editKey]; });
+        } catch (_) { /* Keep authored content if saved data is invalid. */ }
+      }
+    }
+
+    /* === BOOT === */
+    new SlidePresentation();
+    new InlineEditor();
+  </script>
+<a class="hub-return" href="../../talks.html" target="_top">← 返回演講簡報</a></body>
+</html>

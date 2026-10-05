@@ -1,0 +1,848 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<!-- Candidate adaptation: original native HTML 16 slides + authoritative PPT V2 18-slide content. This is not a recovered original 18-slide HTML. --><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="組織專業工作流程 AI 化、MCP 服務架構、治理機制、導入方法與分階段預算規劃">
+  <title>組織專業工作流程的 AI 化｜MCP 通案型內部討論稿</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,800&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;600;700;800&amp;family=Noto+Serif+TC:wght@600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --stage-bg:#202833;
+      --slide-bg:#202833;
+      --paper:#f6f0e5;
+      --paper-2:#eee6d7;
+      --ink:#17202b;
+      --muted:#62707a;
+      --hair:#cfc5b4;
+      --red:#d95b43;
+      --blue:#4d7ea8;
+      --mustard:#dfa93b;
+      --green:#2f6b5b;
+      --mint:#a9d8c5;
+      --lavender:#c7b8ea;
+      --pink:#e8a9b9;
+      --sky:#9acfe3;
+      --ease:cubic-bezier(.16,1,.3,1);
+      --display:"Noto Serif TC","Bodoni Moda",serif;
+      --body:"Noto Sans TC","DM Sans",sans-serif;
+      --mono:"DM Sans",sans-serif;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+        .deck-controls {
+            display: none !important;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    body{font-family:var(--body);color:var(--ink)}
+    a{color:inherit}
+    button{font-family:var(--body)}
+
+    /* Each slide is a tactile paper sheet inside a dark desk surface. */
+    .paper{
+      position:absolute;inset:38px 54px 38px 42px;border-radius:7px;background:var(--paper);
+      box-shadow:0 28px 80px #0008;overflow:hidden;
+    }
+    .paper::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent 0 39px,#17202b08 40px);
+    }
+    .binding{position:absolute;left:0;top:0;bottom:0;width:22px;background:var(--ink)}
+    .hole{position:absolute;left:43px;width:18px;height:18px;border:3px solid #b9af9f;border-radius:50%;background:#e5ddcf;box-shadow:inset 0 1px 4px #0003}
+    .hole.h1{top:160px}.hole.h2{top:520px}.hole.h3{top:880px}
+    .topline{position:absolute;left:108px;right:146px;top:105px;height:2px;background:var(--ink)}
+    .eyebrow{position:absolute;left:110px;top:60px;font-size:22px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+    .index{position:absolute;right:150px;top:58px;font:700 20px/1.1 var(--mono);color:var(--ink)}
+    .content{position:absolute;left:110px;right:150px;top:146px;bottom:90px}
+    .slide-title{font-family:var(--display);font-size:63px;line-height:1.18;font-weight:800;letter-spacing:0;color:var(--ink);margin-bottom:22px}
+    .slide-title.dense-title{font-size:55px;line-height:1.15;margin-bottom:16px}
+    .slide-lead{font-size:27px;line-height:1.55;color:#4f5b64;max-width:1360px}
+    .section-marker{display:flex;align-items:center;gap:15px;margin-bottom:20px;font-size:20px;letter-spacing:.12em;color:var(--red);font-weight:800}
+    .section-marker::before{content:"";width:32px;height:7px;background:currentColor}
+    .footer{position:absolute;left:110px;right:148px;bottom:54px;border-top:1px solid #8c867c;padding-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:16px;color:#6c726f;z-index:3}
+    .footer strong{color:var(--ink)}
+    .footer a{text-decoration:none;border-bottom:1px dotted currentColor}
+
+    /* Persistent notebook section tabs. */
+    .tabs{position:absolute;right:0;top:145px;z-index:5;display:grid;gap:11px}
+    .tab{width:116px;height:138px;border-radius:7px 0 0 7px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:18px;letter-spacing:.15em;font-weight:800;color:#26313b;opacity:.48;transform:translateX(22px);transition:.28s var(--ease)}
+    .tab.t1{background:var(--pink)}.tab.t2{background:var(--sky)}.tab.t3{background:var(--mint)}.tab.t4{background:var(--mustard)}
+    .active-problem .t1,.active-design .t2,.active-govern .t3,.active-pilot .t4{opacity:1;transform:translateX(0);box-shadow:-7px 7px 14px #0002}
+
+    /* Editorial reveal system. */
+    .reveal,.reveal-left,.reveal-scale{opacity:0;transition:opacity .55s var(--ease),transform .55s var(--ease)}
+    .reveal{transform:translateY(24px)}.reveal-left{transform:translateX(-30px)}.reveal-scale{transform:scale(.965)}
+    .slide.visible .reveal,.slide.visible .reveal-left,.slide.visible .reveal-scale{opacity:1;transform:none}
+    .slide.visible .d1{transition-delay:.08s}.slide.visible .d2{transition-delay:.16s}.slide.visible .d3{transition-delay:.24s}.slide.visible .d4{transition-delay:.32s}.slide.visible .d5{transition-delay:.4s}
+
+    /* Title slide. */
+    .title-content{position:absolute;left:110px;top:190px;width:1420px}
+    .title-kicker{font-size:29px;color:var(--red);font-weight:800;margin-bottom:30px;display:flex;align-items:center;gap:16px}
+    .title-kicker::before{content:"";width:34px;height:8px;background:var(--red)}
+    .title-slide h1{font-family:var(--display);font-size:112px;line-height:1.15;font-weight:800;letter-spacing:0;max-width:1450px}
+    .title-sub{margin-top:42px;font-size:32px;line-height:1.62;color:#525e68;width:1220px}
+    .title-bottom{position:absolute;left:110px;right:146px;bottom:80px;display:flex;align-items:flex-end;justify-content:space-between;border-top:2px solid var(--ink);padding-top:21px;color:#4f5964;font-size:21px}
+    .title-bottom strong{color:var(--ink)}
+    .stamp{position:absolute;right:208px;bottom:150px;width:124px;height:124px;border:3px solid var(--red);border-radius:50%;color:var(--red);display:grid;place-items:center;transform:rotate(-7deg);font:800 17px/1.35 var(--mono);text-align:center;opacity:.85}
+
+    /* Reusable reading layouts. */
+    .callout{border-left:9px solid var(--red);padding:18px 25px;background:#fff9;border-radius:0 10px 10px 0;font-size:27px;line-height:1.5;font-weight:700}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .card{background:#fbf8f1;border:1px solid var(--hair);border-radius:12px;padding:26px;box-shadow:0 10px 24px #2a22120a}
+    .card h3{font-family:var(--display);font-size:31px;line-height:1.25;margin-bottom:13px}
+    .card p{font-size:22px;line-height:1.55;color:#52606a}
+    .card-number{font:800 18px/1 var(--mono);color:var(--red);margin-bottom:18px;letter-spacing:.08em}
+    .tag{display:inline-block;border:1px solid currentColor;border-radius:999px;padding:6px 12px;font-size:16px;font-weight:700;letter-spacing:.05em}
+    .list{list-style:none;display:grid;gap:14px}
+    .list li{position:relative;padding-left:25px;font-size:22px;line-height:1.5;color:#43515a}
+    .list li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--red)}
+    .mini-note{font-size:17px;line-height:1.45;color:#69736f}
+
+    /* Slide 2: operational problems. */
+    .problem-grid{margin-top:32px}
+    .problem-grid .card{min-height:220px;border-top:7px solid var(--red)}
+    .problem-grid .card:nth-child(2){border-top-color:var(--blue)}
+    .problem-grid .card:nth-child(3){border-top-color:var(--mustard)}
+    .problem-grid .card:nth-child(4){border-top-color:var(--green)}
+    .judgment{margin-top:25px;display:grid;grid-template-columns:290px 1fr;align-items:stretch;border:2px solid var(--ink);border-radius:12px;overflow:hidden}
+    .judgment-label{background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:24px;font-weight:800;letter-spacing:.12em}
+    .judgment-text{padding:19px 26px;font-family:var(--display);font-size:29px;line-height:1.4;background:#fff8}
+
+    /* Slides 3–4: generic opportunity screen and application map. */
+    .fit-grid{margin-top:24px;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+    .fit-card{min-height:245px;border:1px solid var(--hair);border-top:7px solid var(--green);border-radius:12px;background:#fbf8f1;padding:22px 20px;position:relative;overflow:hidden}
+    .fit-card:nth-child(2){border-top-color:var(--blue)}.fit-card:nth-child(3){border-top-color:var(--mustard)}.fit-card:nth-child(4){border-top-color:var(--red)}.fit-card:nth-child(5){border-top-color:var(--lavender)}
+    .fit-card b{display:block;font-family:var(--display);font-size:25px;line-height:1.25;margin:12px 0}.fit-card p{font-size:18px;line-height:1.5;color:#55626b}.fit-check{font:800 15px/1 var(--mono);color:var(--green);letter-spacing:.08em}
+    .fit-result{margin-top:22px;display:grid;grid-template-columns:260px 1fr 330px;align-items:center;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff8}
+    .fit-result strong{height:100%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-size:22px;letter-spacing:.08em}.fit-result span{padding:17px 22px;font-size:21px;line-height:1.4}.fit-result em{padding:17px 22px;font-style:normal;font-weight:800;color:var(--red);border-left:1px solid var(--hair)}
+    .application-grid{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .application{min-height:205px;border:1px solid var(--hair);border-radius:12px;background:#fbf8f1;padding:21px 23px;display:grid;grid-template-columns:54px 1fr;column-gap:16px;align-content:start}
+    .application .app-icon{grid-row:1/3;width:54px;height:54px;border-radius:11px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}.application:nth-child(2n) .app-icon{background:var(--green)}.application:nth-child(3n) .app-icon{background:var(--red)}
+    .application h3{font-family:var(--display);font-size:25px;line-height:1.25;margin-bottom:9px}.application p{font-size:18px;line-height:1.46;color:#56636b}
+
+    /* Slide 3: MCP concept. */
+    .not-equal{display:grid;grid-template-columns:390px 90px 1fr;align-items:center;margin-top:28px;gap:22px}
+    .box-stack{height:370px;background:#fbf8f1;border:2px solid var(--ink);border-radius:14px;padding:25px;display:grid;gap:14px}
+    .stack-row{display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--hair);font-size:22px;font-weight:700}
+    .stack-row:last-child{border:none}.stack-icon{width:44px;height:44px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-weight:800}.stack-row:nth-child(2) .stack-icon{background:var(--mustard);color:var(--ink)}.stack-row:nth-child(3) .stack-icon{background:var(--green)}
+    .neq{font:800 70px/1 var(--display);text-align:center;color:var(--red)}
+    .mcp-panel{height:370px;background:var(--ink);color:var(--paper);border-radius:14px;padding:28px 32px;position:relative;overflow:hidden}
+    .mcp-panel::after{content:"MCP";position:absolute;right:-10px;bottom:-45px;font:800 150px/1 "Bodoni Moda",serif;color:#ffffff10}
+    .mcp-panel h3{font-size:31px;margin-bottom:22px}.mcp-panel p{font-size:23px;line-height:1.55;color:#dfe7e5;max-width:840px}.primitive-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:23px}.primitive{border:1px solid #ffffff42;border-radius:9px;padding:15px 17px}.primitive b{display:block;color:#fff;font-size:20px;margin-bottom:5px}.primitive span{font-size:16px;color:#bdc9c6}
+
+    /* Slide 4: two architecture choices. */
+    .architecture-options{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .arch-option{height:586px;border:2px solid var(--ink);border-radius:15px;background:#fbf8f1;padding:24px 26px;position:relative;overflow:hidden}
+    .arch-option.preferred{background:#0d2b25;color:#f5efe3;border-color:#0d2b25;box-shadow:0 16px 36px #0d2b2533}
+    .option-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;border-bottom:1px solid #9d9588;padding-bottom:15px}
+    .preferred .option-head{border-color:#8fc2af55}
+    .option-name{font-family:var(--display);font-size:31px;line-height:1.24}.option-name small{display:block;font:700 16px/1.2 var(--body);letter-spacing:.08em;color:var(--red);margin-bottom:7px}
+    .preferred .option-name small{color:#ff9a7d}
+    .option-badge{border:1px solid currentColor;border-radius:999px;padding:7px 12px;font-size:15px;font-weight:800;white-space:nowrap}.preferred .option-badge{background:var(--mustard);color:#18231f;border-color:var(--mustard)}
+    .mini-flow{display:grid;grid-template-columns:1fr 31px 1fr 31px 1fr;align-items:center;gap:6px;margin:18px 0}
+    .flow-chip{min-height:76px;border:1px solid #c8bfaf;border-radius:9px;background:#fff;padding:11px 10px;display:grid;place-items:center;text-align:center;font-size:17px;line-height:1.35;font-weight:800}
+    .preferred .flow-chip{background:#123a32;border-color:#8fc2af55;color:#eef7f3}.flow-arrow{text-align:center;font-size:25px;color:var(--red);font-weight:900}.preferred .flow-arrow{color:#ff9a7d}
+    .option-body{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:4px}
+    .option-col h4{font-size:18px;margin-bottom:10px;color:var(--red)}.preferred .option-col h4{color:#ff9a7d}
+    .option-col ul{list-style:none;display:grid;gap:8px}.option-col li{font-size:17px;line-height:1.45;padding-left:17px;position:relative;color:#4f5c64}.preferred .option-col li{color:#c8ddd6}.option-col li::before{content:"";position:absolute;left:0;top:.63em;width:7px;height:7px;background:var(--red)}
+    .option-cost{position:absolute;left:26px;right:26px;bottom:22px;border-top:1px solid #aea696;padding-top:13px;display:flex;justify-content:space-between;gap:18px;font-size:16px;line-height:1.4;color:#59656c}.preferred .option-cost{border-color:#8fc2af55;color:#b9d8cd}.option-cost b{color:var(--ink)}.preferred .option-cost b{color:#fff}
+
+    /* Slide 5: preferred central-AI architecture / flow. */
+    .architecture{margin-top:22px;background:#0d2b25;border-radius:18px;height:535px;padding:29px 40px;color:#f4eedf;position:relative;overflow:hidden}
+    .architecture::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,#2f695844,transparent 35%),linear-gradient(135deg,transparent 49.7%,#9ac9b60e 50%,transparent 50.3%);background-size:auto,58px 58px}
+    .arch-flow{position:relative;z-index:2;display:grid;grid-template-columns:170px 42px 190px 42px 220px 42px 350px 42px 170px;justify-content:space-between;align-items:center;height:100%}
+    .arch-node{min-height:205px;border:1px solid #8fc2af66;background:#123a32e8;border-radius:15px;padding:23px;box-shadow:0 18px 40px #001d1688}
+    .arch-node .n{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--red);color:#102923;font-weight:900;margin-bottom:17px}
+    .arch-node h3{font-size:26px;line-height:1.25;margin-bottom:12px}.arch-node p{font-size:18px;line-height:1.5;color:#b9d8cd}
+    .arch-node.gateway{border-color:#ff7a45}.arch-node.ai-center{border-color:#9acfe3}.arch-node.human{border-color:#dfa93b}
+    .arrow{height:4px;background:linear-gradient(90deg,#ff7a45,#7fb6a2);position:relative;margin:0 7px}
+    .arrow::after{content:"";position:absolute;right:-1px;top:-7px;width:15px;height:15px;border-top:4px solid #7fb6a2;border-right:4px solid #7fb6a2;transform:rotate(45deg)}
+    .mcp-core{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .mcp-core h3{grid-column:1/-1;font-size:27px;color:#fff;margin-bottom:3px}.module{border:1px solid #8fc2af5e;border-radius:9px;padding:14px 13px;background:#0b3028}.module b{font-size:18px}.module small{display:block;color:#a9d8c5;font-size:14px;margin-top:5px}
+    .arch-caption{position:absolute;left:40px;bottom:25px;right:40px;z-index:2;display:flex;justify-content:space-between;color:#9ec5b7;font-size:16px}.arch-caption strong{color:#f4eedf}
+
+    /* Slide 5: workflow timeline. */
+    .workflow{margin-top:31px;display:grid;grid-template-columns:repeat(7,1fr);gap:12px;position:relative}
+    .workflow::before{content:"";position:absolute;left:80px;right:80px;top:47px;height:4px;background:#b9b0a1}
+    .step{position:relative;text-align:center;z-index:2}
+    .step-num{width:92px;height:92px;border-radius:50%;margin:0 auto 19px;background:var(--paper);border:4px solid var(--blue);display:grid;place-items:center;font:800 27px/1 var(--mono);box-shadow:0 0 0 8px var(--paper)}
+    .step:nth-child(2) .step-num,.step:nth-child(3) .step-num,.step:nth-child(4) .step-num,.step:nth-child(5) .step-num{border-color:var(--green)}
+    .step:nth-child(6) .step-num{border-color:var(--mustard)}.step:nth-child(7) .step-num{border-color:var(--red)}
+    .step h3{font-size:21px;line-height:1.3;margin-bottom:9px}.step p{font-size:17px;line-height:1.45;color:#5a666d}
+    .step .owner{display:inline-block;margin-top:12px;padding:5px 9px;border-radius:5px;background:#e1dbce;font-size:14px;font-weight:700;color:#48535b}
+    .step .owner.human{background:#f1d6c3;color:#8d402b}.step .owner.mix{background:#d4e8df;color:#245448}
+    .workflow-note{margin-top:30px;display:flex;gap:16px;align-items:center;border:1px solid #c6bda9;background:#fff8;border-radius:10px;padding:18px 22px;font-size:22px;line-height:1.45}.workflow-note strong{color:var(--red)}
+
+    /* Slide 6: responsibility boundary. */
+    .boundary{margin-top:27px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .lane{border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#fbf8f1}
+    .lane-head{padding:20px 25px;background:var(--blue);color:#fff;display:flex;justify-content:space-between;align-items:center}.lane.human .lane-head{background:var(--ink)}
+    .lane-head h3{font-family:var(--display);font-size:31px}.lane-head span{font-size:16px;opacity:.85}
+    .lane-body{padding:24px 28px}.lane-body li{font-size:21px;line-height:1.45;margin-bottom:14px}
+    .no-auto{margin-top:24px;border:3px solid var(--red);border-radius:12px;padding:18px 23px;display:flex;align-items:center;gap:22px;background:#fff9}.no-icon{width:58px;height:58px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:31px;font-weight:900}.no-auto p{font-size:22px;line-height:1.45}.no-auto strong{color:var(--red)}
+
+    /* Slide 7: governance gates. */
+    .gates{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .gate{min-height:305px;border:1px solid var(--hair);border-radius:12px;padding:24px 23px;background:#fbf8f1;position:relative;overflow:hidden}
+    .gate::after{content:attr(data-num);position:absolute;right:7px;bottom:-23px;font:800 98px/1 "Bodoni Moda",serif;color:#1c28310d}
+    .gate-icon{width:49px;height:49px;border-radius:10px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:21px;font-weight:800;margin-bottom:18px}
+    .gate h3{font-family:var(--display);font-size:27px;line-height:1.25;margin-bottom:13px}.gate p{font-size:19px;line-height:1.5;color:#536169}
+    .classification{margin-top:22px;display:grid;grid-template-columns:190px repeat(3,1fr);border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:#fff8}
+    .classification div{padding:15px 18px;border-right:1px solid var(--hair);font-size:18px;line-height:1.35}.classification div:last-child{border:0}.classification .label{background:var(--ink);color:#fff;font-weight:800}.classification b{display:block;margin-bottom:3px}
+
+    /* Slide 8: pilot roadmap. */
+    .roadmap{margin-top:34px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--ink);border-radius:13px;overflow:hidden}
+    .phase{min-height:295px;padding:24px;border-right:1px solid var(--ink);background:#fbf8f1;position:relative}.phase:last-child{border:0}.phase:nth-child(2){background:#eef5f2}.phase:nth-child(3){background:#f4efe2}.phase:nth-child(4){background:#f3e9e5}
+    .weeks{font:800 18px/1 var(--mono);color:var(--red);letter-spacing:.06em;margin-bottom:16px}.phase h3{font-family:var(--display);font-size:27px;line-height:1.3;margin-bottom:14px}.phase p{font-size:18px;line-height:1.5;color:#52606a}.phase .output{position:absolute;left:24px;right:24px;bottom:22px;border-top:1px solid #aea696;padding-top:11px;font-size:15px;font-weight:700;color:#34434b}
+    .pilot-bottom{margin-top:22px;display:grid;grid-template-columns:1.05fr 1.95fr;gap:20px}.scope-box,.metric-box{border-radius:11px;padding:18px 21px}.scope-box{background:var(--ink);color:#fff}.metric-box{border:1px solid var(--hair);background:#fff8}.scope-box h3,.metric-box h3{font-size:20px;margin-bottom:10px}.scope-box p,.metric-box p{font-size:17px;line-height:1.45}.metric-pills{display:flex;gap:9px;flex-wrap:wrap}.metric-pills span{border:1px solid #6d766f;border-radius:999px;padding:6px 11px;font-size:15px;font-weight:700}
+
+    /* Slide 10: separate one-time build costs from recurring operations. */
+    .cost-phases{margin-top:22px;display:grid;grid-template-columns:1fr 82px 1fr;align-items:stretch;gap:18px}
+    .cost-phase{height:470px;border:2px solid var(--ink);border-radius:15px;background:#fbf8f1;padding:23px 28px;position:relative;overflow:hidden}.cost-phase.run{background:#0d2b25;color:#f4eedf;border-color:#0d2b25}
+    .phase-label{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #aaa193;padding-bottom:14px;margin-bottom:17px}.run .phase-label{border-color:#8fc2af55}.phase-label span{font:800 17px/1 var(--mono);color:var(--red)}.run .phase-label span{color:#ff9a7d}.phase-label b{font-family:var(--display);font-size:31px}
+    .phase-cost-list{list-style:none;display:grid;gap:10px}.phase-cost-list li{position:relative;padding-left:24px;font-size:19px;line-height:1.4;color:#4d5a62}.run .phase-cost-list li{color:#c8ddd6}.phase-cost-list li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--red)}
+    .phase-ai{position:absolute;left:28px;right:28px;bottom:18px;border-top:1px solid #aaa193;padding-top:11px;font-size:16px;line-height:1.4;color:#59656c}.run .phase-ai{border-color:#8fc2af55;color:#b9d8cd}.phase-ai strong{display:block;color:var(--ink);margin-bottom:3px}.run .phase-ai strong{color:#fff}
+    .phase-bridge{display:grid;place-items:center;font-size:43px;color:var(--red);font-weight:900}.phase-bridge small{font:800 14px/1.5 var(--body);writing-mode:vertical-rl;letter-spacing:.12em;color:#5e696d}
+    .first-year-formula{margin-top:14px;background:var(--ink);color:#fff;border-radius:10px;padding:14px 23px;display:flex;justify-content:space-between;align-items:center;font-size:19px}.first-year-formula strong{font-family:var(--display);font-size:25px}.first-year-formula span{color:#cad6d1}
+
+    /* Slide 11: professional services split into shared and architecture-specific work. */
+    .service-common{margin-top:18px;border:2px solid var(--ink);border-radius:14px;background:#fbf8f1;padding:20px 24px}.service-common header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.service-common h3{font-family:var(--display);font-size:30px}.service-common header span{font-size:16px;font-weight:800;color:var(--red)}
+    .common-modules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.common-module{border-left:6px solid var(--blue);background:#fff;padding:14px 17px;min-height:103px}.common-module:nth-child(2){border-color:var(--green)}.common-module:nth-child(3){border-color:var(--mustard)}.common-module b{font-size:20px;display:block;margin-bottom:6px}.common-module p{font-size:16px;line-height:1.4;color:#5b666b}
+    .service-fork{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:20px}.service-branch{height:303px;border-radius:14px;border:2px solid var(--ink);background:#fbf8f1;padding:21px 24px;position:relative}.service-branch.preferred{background:#0d2b25;color:#fff;border-color:#0d2b25}.branch-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #b1a897;padding-bottom:12px;margin-bottom:13px}.preferred .branch-head{border-color:#8fc2af55}.branch-head h3{font-family:var(--display);font-size:27px}.branch-head span{font-size:15px;font-weight:800;color:var(--red)}.preferred .branch-head span{color:#ff9a7d}.branch-items{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}.branch-items div{font-size:17px;line-height:1.4;padding-left:17px;position:relative;color:#526069}.preferred .branch-items div{color:#c8ddd6}.branch-items div::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--red)}
+    .branch-note{position:absolute;left:24px;right:24px;bottom:18px;border-top:1px solid #b1a897;padding-top:10px;font-size:15px;color:#626d70}.preferred .branch-note{border-color:#8fc2af55;color:#b9d8cd}
+
+    /* Slide 12: annual operating model and token scenarios. */
+    .run-compare{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.run-card{height:463px;border:2px solid var(--ink);border-radius:14px;background:#fbf8f1;padding:22px 25px;position:relative}.run-card.preferred{border-color:var(--green);box-shadow:inset 0 8px 0 var(--green)}
+    .run-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:16px}.run-head h3{font-family:var(--display);font-size:29px}.run-head span{font-size:15px;font-weight:800;background:#e8e0d2;border-radius:999px;padding:7px 11px}.preferred .run-head span{background:var(--green);color:#fff}
+    .cost-formula{font:800 22px/1.45 var(--mono);color:var(--red);background:#fff;border-radius:9px;padding:14px 16px;margin-bottom:15px}.preferred .cost-formula{color:var(--green)}
+    .run-list{list-style:none;display:grid;gap:10px}.run-list li{font-size:18px;line-height:1.4;display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #d1c7b7;padding-bottom:8px}.run-list li b{white-space:nowrap}.run-total{position:absolute;left:25px;right:25px;bottom:20px;display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:#fff;border-radius:9px;padding:13px 16px}.preferred .run-total{background:var(--green)}.run-total strong{font-size:25px}
+    .token-scenarios{margin-top:18px;display:grid;grid-template-columns:205px repeat(3,1fr);border:1px solid var(--hair);border-radius:10px;overflow:hidden}.token-scenarios div{padding:13px 17px;border-right:1px solid var(--hair);background:#fff8;font-size:16px;line-height:1.35}.token-scenarios div:last-child{border:0}.token-scenarios .scenario-label{background:var(--ink);color:#fff;font-weight:800;display:grid;place-items:center}.token-scenarios b{font-size:18px;display:block;margin-bottom:3px}.token-scenarios strong{color:var(--red)}
+
+    /* Slide 13: Plan C first-year budget comparison. */
+    .budget-compare{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .budget-card{height:576px;border:2px solid var(--ink);border-radius:15px;background:#fbf8f1;padding:19px 23px;position:relative;overflow:hidden}
+    .budget-card.preferred{border-color:var(--green);box-shadow:inset 0 8px 0 var(--green)}
+    .budget-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:8px}.budget-head h3{font-family:var(--display);font-size:29px;line-height:1.2}.budget-head span{font-size:15px;font-weight:800;border-radius:999px;padding:7px 11px;background:#e8e0d2}.budget-card.preferred .budget-head span{background:var(--green);color:#fff}
+    .budget-table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.18}.budget-table th,.budget-table td{padding:4px 5px;border-bottom:1px solid #d6cdbc;text-align:left}.budget-table th{font-size:13px;color:#68736f}.budget-table th:last-child,.budget-table td:last-child{text-align:right;font-weight:800;white-space:nowrap}.budget-table tr.subtotal td{border-top:2px solid var(--ink);font-weight:800}.budget-table .muted-row td{color:#6a746f}.budget-table .stage-row td{background:#e9e2d5;color:var(--ink);font-weight:800;padding-top:6px;padding-bottom:6px}.budget-card.preferred .stage-row td{background:#d8e8e1}
+    .budget-total{position:absolute;left:23px;right:23px;bottom:17px;border-radius:10px;background:var(--ink);color:#fff;padding:11px 15px;display:flex;justify-content:space-between;align-items:center}.budget-card.preferred .budget-total{background:var(--green)}.budget-total span{font-size:15px}.budget-total strong{font:800 27px/1 var(--mono)}
+    .budget-assumption{margin-top:13px;font-size:15px;line-height:1.4;color:#68736f;display:flex;justify-content:space-between;gap:20px}.budget-assumption strong{color:var(--ink)}
+
+    /* Slide 14: close and internal decision. */
+    .closing-statement{font-family:var(--display);font-size:60px;line-height:1.32;width:1390px;margin-top:15px}
+    .closing-statement em{font-style:normal;color:var(--red)}
+    .decision-row{margin-top:38px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.decision{border-top:7px solid var(--blue);background:#fbf8f1;border-radius:9px;padding:22px 22px 20px;min-height:180px}.decision:nth-child(2){border-color:var(--green)}.decision:nth-child(3){border-color:var(--mustard)}.decision:nth-child(4){border-color:var(--red)}.decision b{display:block;font-size:22px;margin-bottom:12px}.decision span{font-size:18px;line-height:1.5;color:#53616a}
+    .next-step{margin-top:27px;background:var(--ink);color:#fff;border-radius:12px;padding:23px 27px;display:flex;justify-content:space-between;align-items:center}.next-step strong{font-family:var(--display);font-size:29px}.next-step span{font-size:19px;color:#d3ddd9}
+
+    /* Presentation chrome, outside authored slides. */
+    .deck-controls{display:flex;gap:10px;align-items:center;background:#111923d9;color:#fff;border:1px solid #ffffff22;border-radius:999px;padding:8px 12px;backdrop-filter:blur(12px);box-shadow:0 10px 30px #0005;transition:opacity .25s}
+    .deck-controls button{width:38px;height:38px;border:0;border-radius:50%;background:#ffffff14;color:#fff;font-size:18px;cursor:pointer}.deck-controls button:hover{background:#ffffff28}.page-count{min-width:70px;text-align:center;font:600 14px/1 var(--mono)}
+    .progress{position:fixed;left:0;bottom:0;height:4px;background:var(--red);z-index:1200;transition:width .35s var(--ease)}
+    .help{position:fixed;right:20px;bottom:23px;color:#ffffff80;font-size:12px;z-index:1000}
+
+    /* Inline editing: hover top-left or press E. */
+    .edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer}
+    .edit-toggle,.save-toggle{position:fixed;top:18px;width:44px;height:44px;border:0;border-radius:50%;background:#111923e8;color:#fff;box-shadow:0 8px 24px #0005;opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:10001;cursor:pointer}
+    .edit-toggle{left:18px}.save-toggle{left:70px}
+    .edit-toggle.show,.edit-toggle.active,.save-toggle.show{opacity:1;pointer-events:auto}
+    .editing .editable{outline:2px dashed #d95b43aa;outline-offset:5px;cursor:text}
+    .editing .editable:focus{outline:3px solid var(--red);background:#fff4}
+
+    @media print{.edit-hotzone,.edit-toggle,.save-toggle,.help,.progress{display:none!important}.paper{box-shadow:none}}
+
+/* V2 content adaptation; native 16-page structure retained. */
+.data-prep{display:flex;gap:24px;align-items:center;background:var(--mint);padding:16px 22px;border-radius:14px;margin:12px 0;font-size:22px;line-height:1.4}.data-prep strong{white-space:nowrap}.new-note{font-size:22px;line-height:1.5;margin-top:18px;color:var(--ink)}
+.hearteng-layout{display:grid;grid-template-columns:1.9fr 1fr;gap:28px}.hearteng-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.hearteng-photos img{width:100%;height:230px;object-fit:contain;border-radius:14px}.hearteng-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.hearteng-facts h3{font-size:27px}.hearteng-facts p{font-size:22px;line-height:1.45;margin-top:8px}.hearteng-service{padding:28px;background:var(--paper-2);border-radius:18px}.hearteng-service h3{font-size:32px;margin-bottom:20px}.hearteng-service p{font-size:27px;line-height:1.6;margin-bottom:24px}
+.slide[aria-label="正式系統架構"] .architecture{padding-top:22px}.slide[aria-label="開發期與上線後費用"] .phase-card{padding-top:22px;padding-bottom:22px}.slide[aria-label="專業服務費拆分"] .service-common{padding:20px}.slide[aria-label="專業服務費拆分"] .service-fork{margin-top:18px}.slide[aria-label="專業服務費拆分"] .branch-items{font-size:22px}.budget-exclusion{position:absolute;left:125px;right:90px;bottom:86px;font-size:19px;line-height:1.35;color:var(--red)}
+.return-site{position:fixed;left:18px;bottom:18px;z-index:200;color:#fff;font:15px var(--body);text-decoration:none;background:#202833dd;padding:9px 14px;border-radius:8px}
+
+.slide[aria-label="正式系統架構"] .architecture{height:455px;margin-top:16px;padding-bottom:52px}
+.slide[aria-label="方案C分階段預算比較"] .budget-card{height:540px}
+</style>
+<script src="access-gate-config.js"></script><script src="access-gate.js"></script></head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="組織專業工作流程 AI 化與 MCP 通案型簡報">
+
+      <section class="slide title-slide active" data-section="title" aria-label="封面">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i>
+          <div class="topline"></div>
+          <div class="eyebrow">組織 AI 能力建設｜通案型內部討論稿</div><div class="index">01 / FRAMEWORK</div>
+          <div class="title-content">
+            <div class="title-kicker reveal d1 editable">從個人經驗，走向組織共同能力</div>
+            <h1 class="reveal d2 editable">組織專業工作流程的<br>AI 化</h1>
+            <p class="title-sub reveal d3 editable">從數位典藏與資料整備出發，以 MCP 串接規章、案例、範本、資料與作業工具，建立可治理、可追溯、可持續維護的 AI 工作系統。</p>
+          </div>
+          <div class="stamp reveal-scale d4">HUMAN<br>REVIEW</div>
+          <div class="title-bottom"><strong class="editable">AI 協作，但專業判斷與責任仍由人承擔</strong><span>2026.09</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-problem" data-section="problem" aria-label="問題與核心判斷">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">01｜為什麼值得做</div><div class="index">02 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">現況問題</div>
+            <h2 class="slide-title reveal d1 editable">工作高度重複，但專業品質仍跟著個人能力波動</h2>
+            <div class="grid-4 problem-grid">
+              <article class="card reveal d2"><div class="card-number">01</div><h3 class="editable">資料分散</h3><p class="editable">規章、案例、表單、會議紀錄與範本散落於不同系統及個人資料夾。</p></article>
+              <article class="card reveal d2"><div class="card-number">02</div><h3 class="editable">重複查找</h3><p class="editable">同仁反覆搜尋依據、複製舊案、比對格式，時間用在搬運資訊。</p></article>
+              <article class="card reveal d3"><div class="card-number">03</div><h3 class="editable">能力不一</h3><p class="editable">新進與資深人員在事實整理、依據連結、理由敘述上出現落差。</p></article>
+              <article class="card reveal d3"><div class="card-number">04</div><h3 class="editable">品質難控</h3><p class="editable">缺件、引用過期、理由不完整與格式差異，增加退修及決策風險。</p></article>
+            </div>
+            <div class="judgment reveal d4"><div class="judgment-label">核心判斷</div><div class="judgment-text editable">目標不是「每人買一個 AI 帳號」，而是讓所有人透過受控 Agent，使用同一套可治理的專業底座。</div></div>
+          </div>
+          <div class="footer"><span><strong>討論焦點：</strong>將個人經驗轉化為組織可維護的共同能力</span><span>先處理工作流程，再決定採用哪一種 AI</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-problem" data-section="problem" aria-label="適合AI化的工作特徵">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">02｜先選對工作，不從工具出發</div><div class="index">03 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">機會篩選</div>
+            <h2 class="slide-title dense-title reveal d1 editable">同時具備「重複、資料、規則、產出、審查」的工作，最適合優先試辦</h2>
+            <div class="fit-grid">
+              <article class="fit-card reveal d2"><span class="fit-check">CHECK 01</span><b class="editable">高度重複</b><p class="editable">案件或任務量穩定，同一組步驟反覆發生，人工時間可被量測。</p></article>
+              <article class="fit-card reveal d2"><span class="fit-check">CHECK 02</span><b class="editable">資料可取得</b><p class="editable">已有文件、系統資料、歷史案例或範本，且來源與權限可以釐清。</p></article>
+              <article class="fit-card reveal d3"><span class="fit-check">CHECK 03</span><b class="editable">規則可描述</b><p class="editable">判斷依據、檢核點與例外情況可由資深人員說明並逐步驗證。</p></article>
+              <article class="fit-card reveal d3"><span class="fit-check">CHECK 04</span><b class="editable">產出可檢查</b><p class="editable">成果有固定欄位、結構、格式或品質標準，可比較導入前後差異。</p></article>
+              <article class="fit-card reveal d4"><span class="fit-check">CHECK 05</span><b class="editable">人員可覆核</b><p class="editable">AI 先提供草稿與依據，最後仍有明確的專業審查與責任歸屬。</p></article>
+            </div>
+            <div class="fit-result reveal d5"><strong>優先順序</strong><span class="editable">先做高頻、規則清楚、風險可控的讀取與草擬任務</span><em class="editable">暫不從自動核定或自動對外發送開始</em></div>
+          </div>
+          <div class="footer"><span><strong>不是所有工作都適合：</strong>低頻、資料不足、判斷完全未成形者，先做流程整理</span><span>選題品質會直接影響試辦成敗</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-problem" data-section="problem" aria-label="通案應用場景">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">03｜可延伸的通案場景</div><div class="index">04 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">應用地圖</div>
+            <h2 class="slide-title reveal d1 editable">同一套方法，可以套用到不同部門的專業工作</h2>
+            <div class="application-grid">
+              <article class="application reveal d2"><span class="app-icon">文</span><h3 class="editable">公文與審查</h3><p class="editable">資料彙整、依據查找、草稿形成、格式與引用檢核。</p></article>
+              <article class="application reveal d2"><span class="app-icon">評</span><h3 class="editable">補助與評選</h3><p class="editable">資格檢核、評分依據、差異比較、審查意見初稿。</p></article>
+              <article class="application reveal d3"><span class="app-icon">稽</span><h3 class="editable">稽核與評鑑</h3><p class="editable">證據對照、缺件提醒、指標判讀、改善追蹤。</p></article>
+              <article class="application reveal d3"><span class="app-icon">約</span><h3 class="editable">契約與採購</h3><p class="editable">條款比對、風險提示、規格一致性與履約文件檢查。</p></article>
+              <article class="application reveal d4"><span class="app-icon">服</span><h3 class="editable">諮詢與案件服務</h3><p class="editable">問題分類、知識檢索、回覆草稿、轉介與案件紀錄。</p></article>
+              <article class="application reveal d4"><span class="app-icon">知</span><h3 class="editable">知識與訓練</h3><p class="editable">新人引導、標準作業查詢、案例學習與經驗傳承。</p></article>
+            </div>
+            <div class="callout reveal d5" style="margin-top:20px"><span class="editable">可替換的是業務資料與規則；不變的是「數位典藏與資料治理 → 工作流 → MCP → Agent → 人員覆核」的方法。</span></div>
+          </div>
+          <div class="footer"><span><strong>母版用途：</strong>先談共同方法，再依機關需求抽換 2～4 頁個案模組</span><span>一套底座可逐步支援多個業務流程</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="AI 工作流不是從 Agent 開始，而是從資料能不能被使用開始">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">04｜AI 工作流的資料起點</div><div class="index">05 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">先把資料變成可用的組織資產</div><h2 class="slide-title dense-title reveal d1 editable">AI 工作流不是從 Agent 開始，而是從資料能不能被使用開始</h2><div><div class="application-grid"><article class="application reveal d2"><span class="app-icon">01</span><h3 class="editable">原始載體</h3><p class="editable">紙本、影像、錄音、舊檔案</p></article><article class="application reveal d2"><span class="app-icon">02</span><h3 class="editable">數位化</h3><p class="editable">掃描、OCR、轉錄與切分</p></article><article class="application reveal d2"><span class="app-icon">03</span><h3 class="editable">結構整理</h3><p class="editable">命名、欄位、metadata 與關聯</p></article><article class="application reveal d2"><span class="app-icon">04</span><h3 class="editable">品質治理</h3><p class="editable">正確性、去識別、權利與版本</p></article><article class="application reveal d2"><span class="app-icon">05</span><h3 class="editable">可用知識庫</h3><p class="editable">文件庫、索引、搜尋與權限</p></article><article class="application reveal d2"><span class="app-icon">06</span><h3 class="editable">MCP＋Agent</h3><p class="editable">受控檢索、工具調用與工作流</p></article></div><div class="callout reveal d3" style="margin-top:20px"><strong>數位典藏的價值轉譯</strong><span>把『看得到的檔案』整理成『AI 找得到、讀得懂、引得到、用得安全的資料』。</span></div><p class="new-note">掃描只是第一步；命名、metadata、品質驗證、權限與版本，才決定資料能否進入 MCP 與 AI 工作流。</p></div></div>
+          <div class="footer"><span>原始資料若沒有可辨識、可搜尋、可授權的結構，Agent 就無法可靠使用</span><span>數位典藏不是掃描終點，而是 AI 資料準備的起點</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="心騰把數位典藏做成可分工、可驗收的資料準備服務">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">05｜心騰數位流通庇護工場的實務基礎</div><div class="index">06 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">既有能力 × 社會使命</div><h2 class="slide-title dense-title reveal d1 editable">心騰把數位典藏做成可分工、可驗收的資料準備服務</h2><div><div class="hearteng-layout"><div><div class="hearteng-photos"><img src="assets/general-native/image4.png" alt="心騰既有簡報照片"><img src="assets/general-native/image7.jpeg" alt="心騰既有簡報照片"><img src="assets/general-native/image8.jpeg" alt="心騰既有簡報照片"></div><div class="hearteng-facts"><article><h3>109 年起</h3><p>承接大型非營利組織長期機密文件數位化</p></article><article><h3>可分工 SOP</h3><p>分類 → 掃描 → 命名 → 建資料夾 → 上傳／儲存 → 後續處理</p></article><article><h3>可驗收品質</h3><p>掃描正確、影像品質、檔名與資料夾、優化與複核</p></article><article><h3>就業設計</h3><p>把細緻、重複且可拆解的工作，轉化為身心障礙者可參與的職務</p></article></div></div><div class="hearteng-service"><h3>延伸成 AI 基礎服務</h3><p>數位化＋metadata＋品質驗證＋權限標記＋可追溯交付</p><p>→ 接上文件庫、索引、MCP 與 Agent</p></div></div><p class="new-note">安全提醒｜既有開放式作業環境未必適合高敏感資料；須依機密等級增設門禁、隔離區、帳號權限、操作紀錄與媒體控管。</p></div></div>
+          <div class="footer"><span>案例定位：既有數位典藏能力，可向上延伸為 AI 資料準備服務</span><span>服務量體、敏感度與安全工作區仍需逐案估算</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="MCP定位">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">06｜MCP 在整體設計中扮演什麼角色</div><div class="index">07 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">概念校準</div>
+            <h2 class="slide-title reveal d1 editable">MCP 不只是資料庫；它是 Agent 使用專業資料與工具的標準介面</h2>
+            <div class="not-equal">
+              <div class="box-stack reveal-left d2">
+                <div class="stack-row"><span class="stack-icon">文</span><span class="editable">文件庫：規章、報告、案例與範本</span></div>
+                <div class="stack-row"><span class="stack-icon">數</span><span class="editable">資料庫：欄位、版本、狀態與權限</span></div>
+                <div class="stack-row"><span class="stack-icon">索</span><span class="editable">索引：業務類型、主題、關鍵事實與關係</span></div>
+              </div>
+              <div class="neq reveal-scale d2">≠</div>
+              <div class="mcp-panel reveal d3">
+                <h3 class="editable">MCP 服務＝可被安全調用的「專業能力」</h3>
+                <p class="editable">它把資料、提示與工具包成清楚的服務，讓不同的 MCP 相容 Agent 在權限範圍內找到正確內容、執行指定作業，並留下可追溯結果。</p>
+                <div class="primitive-row">
+                  <div class="primitive"><b>Resources</b><span class="editable">提供可引用的規章、資料、案例與範本</span></div>
+                  <div class="primitive"><b>Prompts</b><span class="editable">提供顧問設計的標準作業指令</span></div>
+                  <div class="primitive"><b>Tools</b><span class="editable">執行檢索、比對、計算與格式檢查</span></div>
+                </div>
+              </div>
+            </div>
+            <p class="mini-note reveal d4" style="margin-top:18px">因此，資料整理仍是基礎；MCP 的差異在於把這些內容變成「有權限、有規格、有輸出格式」的共用服務。</p>
+          </div>
+          <div class="footer"><span><strong>來源：</strong><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/index" target="_blank" rel="noopener">Model Context Protocol｜Server Features Overview</a></span><span>Resources・Prompts・Tools</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="兩種可行服務架構比較">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">07｜AI 在哪裡運作、費用由誰負擔</div><div class="index">08 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">兩種可行架構</div>
+            <h2 class="slide-title reveal d1 editable">共用同一套 MCP 專業底座，但 AI 推理的位置不同</h2>
+            <div class="architecture-options">
+              <article class="arch-option reveal-left d2">
+                <header class="option-head"><h3 class="option-name editable"><small>方案 A</small>純 MCP 資料服務</h3><span class="option-badge">可行方案</span></header>
+                <div class="mini-flow"><div class="flow-chip editable">個人端<br>AI Agent</div><div class="flow-arrow">→</div><div class="flow-chip editable">安全閘道</div><div class="flow-arrow">→</div><div class="flow-chip editable">MCP 資料與工具</div></div>
+                <div class="option-body">
+                  <div class="option-col"><h4>優點</h4><ul><li class="editable">可讓不同 MCP 相容 Agent 使用</li><li class="editable">中央系統較單純，建置成本較低</li><li class="editable">先把知識底座做好，未來容易擴充</li></ul></div>
+                  <div class="option-col"><h4>注意事項</h4><ul><li class="editable">模型、提示與輸出品質可能因工具而異</li><li class="editable">各 Agent 的訂閱或 API 費由使用端產生</li><li class="editable">須建立相容清單及個人端資料規範</li></ul></div>
+                </div>
+                <div class="option-cost"><span><b>中央端 AI 費：</b>原則 0 元</span><span><b>適合：</b>先建共用底座、多工具並存</span></div>
+              </article>
+              <article class="arch-option preferred reveal d3">
+                <header class="option-head"><h3 class="option-name editable"><small>方案 B</small>MCP＋中央 AI 服務</h3><span class="option-badge">偏好方案</span></header>
+                <div class="mini-flow"><div class="flow-chip editable">瀏覽器／<br>核准介面</div><div class="flow-arrow">→</div><div class="flow-chip editable">中央 AI<br>協作引擎</div><div class="flow-arrow">→</div><div class="flow-chip editable">MCP 資料與工具</div></div>
+                <div class="option-body">
+                  <div class="option-col"><h4>優點</h4><ul><li class="editable">模型、提示、工作流與輸出格式一致</li><li class="editable">用量、費用、紀錄與風險集中管理</li><li class="editable">使用者通常不需另買 Agent 帳號</li></ul></div>
+                  <div class="option-col"><h4>注意事項</h4><ul><li class="editable">需建置中央協作引擎與模型治理</li><li class="editable">中央 API 用量由組織統一負擔</li><li class="editable">服務可用性與資安責任更集中</li></ul></div>
+                </div>
+                <div class="option-cost"><span><b>中央端 AI 費：</b>按量計費、設額度</span><span><b>適合：</b>正式試辦、追求一致品質</span></div>
+              </article>
+            </div>
+          </div>
+          <div class="footer"><span>共同基礎：數位典藏、資料治理、權限、版本、引用與稽核紀錄</span><span><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/index" target="_blank" rel="noopener">MCP Server Features</a>・<a href="https://developers.openai.com/api/reference/cli/resources/responses/methods/create" target="_blank" rel="noopener">遠端 MCP 串接示例</a></span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="正式系統架構">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">08｜偏好方案 B 的正式系統架構</div><div class="index">09 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">中央服務、受控連線</div>
+            <h2 class="slide-title reveal d1 editable">人員用瀏覽器進入；中央 AI 執行工作流，MCP 提供專業依據</h2>
+            <div class="data-prep reveal d2"><strong>0｜資料整備與數位典藏層</strong><span>掃描／OCR／轉錄　命名與 metadata　品質驗證　去識別與權限標記　文件庫與索引</span></div><div class="architecture reveal-scale d2">
+              <div class="arch-flow">
+                <article class="arch-node"><span class="n">1</span><h3 class="editable">使用者介面</h3><p class="editable">業務人員以瀏覽器或核准的輕量介面登入，不必每人購買完整 Agent。</p></article>
+                <div class="arrow"></div>
+                <article class="arch-node gateway"><span class="n">2</span><h3 class="editable">安全閘道</h3><p class="editable">身分驗證、角色權限、流量限制、輸入輸出檢查。</p></article>
+                <div class="arrow"></div>
+                <article class="arch-node ai-center"><span class="n">3</span><h3 class="editable">中央 AI 協作引擎</h3><p class="editable">管理標準提示、工作流、模型調用、用量額度與敏感資料遮罩。</p></article>
+                <div class="arrow"></div>
+                <article class="arch-node mcp-core"><h3>4｜MCP 專業服務層</h3><div class="module"><b>規章服務</b><small>來源、版本、效期</small></div><div class="module"><b>案例服務</b><small>相似案、差異、結果</small></div><div class="module"><b>文件服務</b><small>範本、欄位、品質檢核</small></div><div class="module"><b>作業工具</b><small>擷取、試算、比對</small></div></article>
+                <div class="arrow"></div>
+                <article class="arch-node human"><span class="n">5</span><h3 class="editable">人員審查核定</h3><p class="editable">確認事實、依據與判斷理由，承擔專業與管理責任。</p></article>
+              </div>
+              <div class="arch-caption"><span><strong>Server 端執行：</strong>閘道、中央 AI、MCP、索引、資料庫、日誌與監控</span><span>第一階段只讀｜不自動核定或對外送出</span></div>
+            </div>
+          </div>
+          <div class="footer"><span>數位典藏、中央 AI 協作引擎與 MCP 專業服務是可獨立管理的模組</span><span>可部署於組織內網或受管理的政府／私有雲環境</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-design" data-section="design" aria-label="理想工作流">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">09｜通案型理想工作流</div><div class="index">10 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">從任務輸入到專業產出</div>
+            <h2 class="slide-title reveal d1 editable">AI 把重複工作串起來，人員在關鍵節點作判斷</h2>
+            <div class="workflow">
+              <div class="step reveal d2"><div class="step-num">01</div><h3 class="editable">任務建立</h3><p class="editable">確認目的、載體、資料範圍與輸出要求</p><span class="owner human">人員</span></div>
+              <div class="step reveal d2"><div class="step-num">02</div><h3 class="editable">內容擷取</h3><p class="editable">掃描、OCR、轉錄並整理事實與證據</p><span class="owner mix">人機協作</span></div>
+              <div class="step reveal d3"><div class="step-num">03</div><h3 class="editable">完整性檢核</h3><p class="editable">檔名、metadata、版本與缺漏檢查</p><span class="owner mix">人機協作</span></div>
+              <div class="step reveal d3"><div class="step-num">04</div><h3 class="editable">依據與案例</h3><p class="editable">查找有效規章、知識與相似案例</p><span class="owner mix">人機協作</span></div>
+              <div class="step reveal d4"><div class="step-num">05</div><h3 class="editable">形成草稿</h3><p class="editable">依核准結構產生可查證初稿</p><span class="owner mix">人機協作</span></div>
+              <div class="step reveal d4"><div class="step-num">06</div><h3 class="editable">品質檢核</h3><p class="editable">影像、文字、引用、欄位與一致性</p><span class="owner mix">人機協作</span></div>
+              <div class="step reveal d5"><div class="step-num">07</div><h3 class="editable">審查核定</h3><p class="editable">專業判斷、簽核、送出與留存</p><span class="owner human">人員</span></div>
+            </div>
+            <div class="workflow-note reveal d5"><strong>每一步都要能回到來源。</strong><span class="editable">從掃描影像、檔名與 metadata，到 Agent 引用版本、相似案例與待確認事項，都必須留下可查驗的交付鏈。</span></div>
+          </div>
+          <div class="footer"><span>作業原則：先把原始載體整理成可用資料，再檢索依據與案例，最後形成專業產出</span><span>草稿 ≠ 核定</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-govern" data-section="govern" aria-label="AI與人員責任邊界">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">10｜責任不能外包給 AI</div><div class="index">11 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">人機分工</div>
+            <h2 class="slide-title reveal d1 editable">AI 可以協助形成判斷材料，但不得取代專業責任</h2>
+            <div class="boundary">
+              <article class="lane reveal-left d2">
+                <header class="lane-head"><h3>AI / Agent 可以做</h3><span>輔助與提醒</span></header>
+                <div class="lane-body"><ul class="list"><li class="editable">擷取文件內容，整理事實、欄位與時間線</li><li class="editable">檢索規章、知識、範本與相似案例</li><li class="editable">提出缺件、矛盾、引用失效與格式風險</li><li class="editable">依核准模板產生草稿、摘要及檢核表</li></ul></div>
+              </article>
+              <article class="lane human reveal d3">
+                <header class="lane-head"><h3>人員必須保留</h3><span>裁量與責任</span></header>
+                <div class="lane-body"><ul class="list"><li class="editable">確認資料真實性、完整性與可採性</li><li class="editable">決定依據適用、專業判斷與裁量因素</li><li class="editable">處理例外、爭點、利害衝突與高風險情境</li><li class="editable">完成簽核、對外送出與責任承擔</li></ul></div>
+              </article>
+            </div>
+            <div class="no-auto reveal d4"><div class="no-icon">!</div><p class="editable"><strong>第一階段禁止自動執行：</strong>不得由 Agent 自動作成高風險決定、直接寫回正式系統，或未經覆核即對外送出。</p></div>
+          </div>
+          <div class="footer"><span><strong>治理原則：</strong>專業人員應對生成式 AI 產出進行客觀且專業的最終判斷</span><span>公部門可參考｜<a href="https://www.ey.gov.tw/Page/448DE008087A1971/40c1a925-121d-4b6b-8f40-7e9e1a5401f2" target="_blank" rel="noopener">行政院生成式AI參考指引</a></span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-govern" data-section="govern" aria-label="資料與治理底線">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">11｜資料、權限與可追溯性</div><div class="index">12 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">四道治理閘門</div>
+            <h2 class="slide-title reveal d1 editable">典藏品質與權利資訊，必須和 AI 使用權限一起治理</h2>
+            <div class="gates">
+              <article class="gate reveal d2" data-num="1"><div class="gate-icon">源</div><h3 class="editable">來源、metadata 與權利</h3><p class="editable">保留原始載體、檔名、產製資訊、使用權利與數位化品質紀錄。</p></article>
+              <article class="gate reveal d2" data-num="2"><div class="gate-icon">權</div><h3 class="editable">身分、分級與最小權限</h3><p class="editable">公開、內部、敏感資料分級；以角色與任務範圍授權。</p></article>
+              <article class="gate reveal d3" data-num="3"><div class="gate-icon">版</div><h3 class="editable">版本、效期與引用</h3><p class="editable">規章、案例、範本與數位檔均標示版本、效期、主管人與更新紀錄。</p></article>
+              <article class="gate reveal d3" data-num="4"><div class="gate-icon">誌</div><h3 class="editable">日誌與品質監測</h3><p class="editable">保留掃描複核、查詢、工具調用、引用與人工修改；定期抽查偏差。</p></article>
+            </div>
+            <div class="classification reveal d4"><div class="label">建議分級</div><div><b>公開資料</b>公開規章、報告與統計</div><div><b>內部資料</b>去識別案例、核准範本與作業知識</div><div><b>敏感資料</b>原始個資、機密或未公開內容；原則上不送外部模型</div></div>
+          </div>
+          <div class="footer"><span><strong>依據：</strong><a href="https://www.ey.gov.tw/Page/448DE008087A1971/40c1a925-121d-4b6b-8f40-7e9e1a5401f2" target="_blank" rel="noopener">行政院生成式AI參考指引</a>・<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=I0050021" target="_blank" rel="noopener">個人資料保護法</a></span><span>正式導入前由法制、資安、典藏與業務單位共同確認</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="十二週試辦方案">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">12｜從小範圍、讀取型試辦開始</div><div class="index">13 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">12 週驗證</div>
+            <h2 class="slide-title reveal d1 editable">先證明能提高品質，再決定是否擴大與串接正式系統</h2>
+            <div class="roadmap reveal-scale d2">
+              <article class="phase"><div class="weeks">WEEK 01–02</div><h3 class="editable">資料盤點與基準</h3><p class="editable">確認原始載體、數量、敏感度、權利、數位化現況、退修原因與基準時間。</p><div class="output">產出｜資料清冊、量體、風險與抽樣基準</div></article>
+              <article class="phase"><div class="weeks">WEEK 03–06</div><h3 class="editable">典藏整備與 MCP</h3><p class="editable">抽樣掃描／OCR／命名／metadata／品質複核；建立只讀 Resources、Prompts 與 Tools。</p><div class="output">產出｜可追溯典藏樣本與 MCP 原型</div></article>
+              <article class="phase"><div class="weeks">WEEK 07–10</div><h3 class="editable">平行試作</h3><p class="editable">以去識別歷史任務進行人工作業與 AI 協作對照，不影響正式業務運作。</p><div class="output">產出｜草稿、檢核表、錯誤紀錄</div></article>
+              <article class="phase"><div class="weeks">WEEK 11–12</div><h3 class="editable">評估與決策</h3><p class="editable">比較效率、典藏品質、引用正確與跨人員一致性，決定修正、擴大或停止。</p><div class="output">產出｜試辦評估與第二階段建議</div></article>
+            </div>
+            <div class="pilot-bottom reveal d3"><div class="scope-box"><h3>試辦邊界</h3><p class="editable">去識別歷史資料｜只讀服務｜不寫回正式系統｜不自動對外送出</p></div><div class="metric-box"><h3>驗證指標</h3><div class="metric-pills">掃描／OCR 正確率　metadata 完整率　引用正確率　退修次數　作業時間　使用者接受度</div></div></div>
+          </div>
+          <div class="footer"><span><strong>停損原則：</strong>若來源無法追溯、敏感資料無法隔離或正確率不足，即不進入正式業務</span><span>先讀取、後寫入；先輔助、後自動化</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="開發期與上線後費用">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">13｜費用必須按生命週期區分</div><div class="index">14 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">一次性建置 × 經常性營運</div>
+            <h2 class="slide-title dense-title reveal d1 editable">第一年預算不能只列一個總數，否則看不出未來每年要負擔什麼</h2>
+            <div class="data-prep reveal d2"><strong>PRE｜資料準備與數位典藏</strong><span>依頁數、檔案數、影音分鐘、metadata 深度與機密等級另行估算，可先抽樣再放大。</span></div><div class="cost-phases">
+              <article class="cost-phase reveal-left d2">
+                <header class="phase-label"><span>PHASE 01</span><b class="editable">開發建置期</b></header>
+                <ul class="phase-cost-list"><li class="editable">業務流程、任務類型與專業判斷邏輯盤點</li><li class="editable">資料清理、版本治理、案例索引與範本管理</li><li class="editable">MCP Resources、Prompts及Tools開發</li><li class="editable">架構特有的Agent部署或中央AI系統建置</li><li class="editable">整合測試、資安檢測、驗收與教育訓練</li></ul>
+                <div class="phase-ai"><strong>開發期間也會有 AI 費</strong><span class="editable">A：5位使用者的測試帳號；B：開發與壓力測試所使用的 Token。</span></div>
+              </article>
+              <div class="phase-bridge reveal d3"><span>→</span><small>完成驗收後上線</small></div>
+              <article class="cost-phase run reveal d3">
+                <header class="phase-label"><span>PHASE 02</span><b class="editable">上線後營運期</b></header>
+                <ul class="phase-cost-list"><li class="editable">Agent帳號訂閱或中央模型API用量</li><li class="editable">MCP、網站、Agent Runtime及模型閘道維護</li><li class="editable">新增資料的典藏、metadata 與索引更新</li><li class="editable">備份、監控、弱點修補與操作紀錄保存</li><li class="editable">使用者支援、問題排除及品質抽查</li></ul>
+                <div class="phase-ai"><strong>費用計價方式不同</strong><span class="editable">A主要隨帳號數成長；B主要隨任務量、文件長度及Token用量成長。</span></div>
+              </article>
+            </div>
+            <div class="first-year-formula reveal d4"><strong>第一年總經費</strong><span>資料準備費＋開發建置費＋第一年營運費</span><strong>第二年起｜營運費＋新增典藏量體</strong></div>
+          </div>
+          <div class="footer"><span>分列資料準備、一次性建置費與年度經常費，並明定涵蓋期間</span><span>硬體可先假設沿用組織既有 Server 環境</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="專業服務費拆分">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">14｜專業服務費如何形成</div><div class="index">15 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">模組化報價</div>
+            <h2 class="slide-title reveal d1 editable">先按資料量體估典藏費，再計共同底座與架構特有工作</h2>
+            <div class="data-prep reveal d2"><strong>模組 0｜資料整備與數位典藏</strong><span>頁／件／影音分鐘 × OCR／metadata／品質等級 × 機密與交付要求｜量體未定・另估</span></div><section class="service-common reveal-scale d2">
+              <header><h3 class="editable">模組 1｜兩案共同的專業工作流底座</h3><span>討論值｜各 80 萬元</span></header>
+              <div class="common-modules"><article class="common-module"><b class="editable">流程與資料治理</b><p class="editable">流程、專業邏輯、版本與範本治理</p></article><article class="common-module"><b class="editable">MCP專業服務</b><p class="editable">Resources、Prompts、Tools、索引與權限</p></article><article class="common-module"><b class="editable">品質與導入</b><p class="editable">測試、驗收、文件與教育訓練</p></article></div>
+            </section>
+            <div class="service-fork">
+              <article class="service-branch reveal-left d3"><header class="branch-head"><h3 class="editable">模組 2A｜使用端 Agent 部署</h3><span>討論值｜7 萬元</span></header><div class="branch-items"><div class="editable">5台電腦安裝及設定</div><div class="editable">MCP連線與權限對應</div><div class="editable">相容性及版本測試</div><div class="editable">端點資料留存規範</div><div class="editable">操作教學與故障排除</div><div class="editable">核准Agent清單</div></div><p class="branch-note editable">使用現成 Agent，不另開發任務操作網站；仍須計入部署與整合工作。</p></article>
+              <article class="service-branch preferred reveal d4"><header class="branch-head"><h3 class="editable">模組 2B｜中央 AI 應用系統</h3><span>討論值｜33 萬元</span></header><div class="branch-items"><div class="editable">業務工作網站與UX</div><div class="editable">文件上傳與狀態保存</div><div class="editable">中央Agent Runtime</div><div class="editable">模型API與工作流整合</div><div class="editable">額度、日誌及管理後台</div><div class="editable">多人使用、排程與復原</div></div><p class="branch-note editable">不只是做網站；還包含後端服務、AI協作引擎及模型治理。</p></article>
+            </div>
+          </div>
+          <div class="footer"><span>專業服務＝資料整備模組＋共同工作流底座＋A 端點部署／B 中央 AI 應用系統</span><span>這樣才能說明兩案價差從何而來</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="上線後年度營運費">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">15｜上線後：5 位使用者與 Token 用量</div><div class="index">16 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">兩種不同的成本成長方式</div>
+            <h2 class="slide-title dense-title reveal d1 editable">A主要按使用者帳號付費；B主要按實際AI用量付費</h2>
+            <div class="run-compare">
+              <article class="run-card reveal-left d2"><header class="run-head"><h3 class="editable">方案 A｜5位使用者</h3><span>帳號數驅動</span></header><div class="cost-formula editable">5人 × 1,500元／人月 × 12月 ＝ 9萬元</div><ul class="run-list"><li><span class="editable">Agent年度帳號訂閱</span><b>9 萬</b></li><li><span class="editable">MCP服務、監控與版本維護</span><b>8 萬</b></li><li><span class="editable">資料更新與使用者支援</span><b>5 萬</b></li><li><span class="editable">若訂閱不含API用量，另編額度</span><b>0～3 萬</b></li></ul><div class="run-total"><span>年度營運費</span><strong>約 22～25 萬</strong></div></article>
+              <article class="run-card preferred reveal d3"><header class="run-head"><h3 class="editable">方案 B｜中央AI服務</h3><span>用量驅動</span></header><div class="cost-formula editable">任務數 × 操作次數 × Token數 × 模型單價</div><ul class="run-list"><li><span class="editable">中央模型API用量池（中情境）</span><b>10 萬</b></li><li><span class="editable">網站、Runtime、MCP與監控維護</span><b>9 萬</b></li><li><span class="editable">資料更新與使用者支援</span><b>5 萬</b></li><li><span class="editable">使用者端不另購完整Agent帳號</span><b>0 萬</b></li></ul><div class="run-total"><span>年度營運費</span><strong>約 24 萬</strong></div></article>
+            </div>
+            <div class="token-scenarios reveal d4"><div class="scenario-label">B｜Token年度上限</div><div><b>低用量</b>少量任務、短文件<br><strong>4萬｜營運共18萬</strong></div><div><b>中用量</b>正式試辦、一般文件量<br><strong>10萬｜營運共24萬</strong></div><div><b>高用量</b>任務增加、長文件、多次生成<br><strong>20萬｜營運共34萬</strong></div></div>
+          </div>
+          <div class="footer"><span><strong>討論假設：</strong>A暫以每人每月1,500元估列；B以中用量10萬元列入方案C</span><span>均非特定廠商報價，採購前依工具、模型及任務量校正</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="方案C分階段預算比較">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">16｜通案示意：方案 C 第一年度 150～200 萬元</div><div class="index">17 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">分階段、分架構預算</div>
+            <h2 class="slide-title reveal d1 editable">同一示意規模：A 約 161.8 萬元；B 約 198.0 萬元</h2>
+            <div class="budget-compare">
+              <article class="budget-card reveal-left d2">
+                <header class="budget-head"><h3 class="editable">方案 A｜純 MCP</h3><span>5位使用者</span></header>
+                <table class="budget-table" aria-label="方案A分階段預算"><thead><tr><th>階段／科目</th><th>內容</th><th>萬元</th></tr></thead><tbody>
+                  <tr class="stage-row"><td colspan="2">開發建置期｜一次性</td><td>112.0</td></tr>
+                  <tr><td>共同專業底座</td><td>流程、資料治理與MCP</td><td>80.0</td></tr><tr><td>A特有建置</td><td>5端點部署、連線與測試</td><td>7.0</td></tr><tr><td>開發期AI費</td><td>5人測試帳號</td><td>2.0</td></tr><tr><td>資安費</td><td>架構審查、弱掃與API檢核</td><td>15.0</td></tr><tr><td>業務費</td><td>訪談、會議、教材與差旅</td><td>8.0</td></tr>
+                  <tr class="stage-row"><td colspan="2">上線後第一年｜經常性</td><td>22.0</td></tr>
+                  <tr><td>Agent帳號</td><td>5人 × 1,500元 × 12月</td><td>9.0</td></tr><tr><td>系統維護</td><td>MCP、監控與版本維護</td><td>8.0</td></tr><tr><td>內容與支援</td><td>資料更新、品質抽查與客服</td><td>5.0</td></tr>
+                  <tr class="subtotal"><td>直接成本</td><td>建置112＋營運22</td><td>134.0</td></tr><tr class="muted-row"><td>管理費</td><td>直接成本 × 10%</td><td>13.4</td></tr><tr class="muted-row"><td>雜費</td><td>直接成本 × 5%</td><td>6.7</td></tr><tr class="muted-row"><td>營業稅</td><td>稅前金額 × 5%</td><td>7.7</td></tr>
+                </tbody></table>
+                <div class="budget-total"><span>第一年估算總額</span><strong>161.8 萬</strong></div>
+              </article>
+              <article class="budget-card preferred reveal d3">
+                <header class="budget-head"><h3 class="editable">方案 B｜MCP＋中央AI</h3><span>偏好｜中用量</span></header>
+                <table class="budget-table" aria-label="方案B分階段預算"><thead><tr><th>階段／科目</th><th>內容</th><th>萬元</th></tr></thead><tbody>
+                  <tr class="stage-row"><td colspan="2">開發建置期｜一次性</td><td>140.0</td></tr>
+                  <tr><td>共同專業底座</td><td>流程、資料治理與MCP</td><td>80.0</td></tr><tr><td>B特有建置</td><td>網站、Runtime與模型治理</td><td>33.0</td></tr><tr><td>開發期AI費</td><td>模型串接與測試Token</td><td>3.0</td></tr><tr><td>資安費</td><td>模型閘道、遮罩、弱掃與日誌</td><td>16.0</td></tr><tr><td>業務費</td><td>訪談、會議、教材與差旅</td><td>8.0</td></tr>
+                  <tr class="stage-row"><td colspan="2">上線後第一年｜經常性</td><td>24.0</td></tr>
+                  <tr><td>中央AI用量</td><td>中情境Token年度上限</td><td>10.0</td></tr><tr><td>系統維護</td><td>網站、Runtime、MCP及監控</td><td>9.0</td></tr><tr><td>內容與支援</td><td>資料更新、品質抽查與客服</td><td>5.0</td></tr>
+                  <tr class="subtotal"><td>直接成本</td><td>建置140＋營運24</td><td>164.0</td></tr><tr class="muted-row"><td>管理費</td><td>直接成本 × 10%</td><td>16.4</td></tr><tr class="muted-row"><td>雜費</td><td>直接成本 × 5%</td><td>8.2</td></tr><tr class="muted-row"><td>營業稅</td><td>稅前金額 × 5%</td><td>9.4</td></tr>
+                </tbody></table>
+                <div class="budget-total"><span>第一年估算總額</span><strong>198.0 萬</strong></div>
+              </article>
+            </div>
+            <div class="budget-assumption reveal d4"><span><strong>示意假設：</strong>已有Server、網路、備份與基本監控；5位使用者；硬體暫列0元。</span><span>此表是估算方法範例，非通案固定報價；仍須依流程複雜度、資料量與期間校正。</span></div>
+          </div>
+          <div class="budget-exclusion">※ 上述兩案總額尚未納入數位典藏量體費；待確認頁數、檔案數、影音分鐘、metadata 深度及機密等級後另行估算。</div><div class="footer"><span><strong>計算口徑：</strong>管理費10%｜雜費5%｜營業稅5%；合計以未四捨五入數計算</span><span>B採Token中用量情境</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+
+      <section class="slide active-pilot" data-section="pilot" aria-label="結論與內部決策">
+        <div class="paper">
+          <div class="binding"></div><i class="hole h1"></i><i class="hole h2"></i><i class="hole h3"></i><div class="topline"></div>
+          <div class="eyebrow">17｜內部討論的結論</div><div class="index">18 / 18</div>
+          <div class="content">
+            <div class="section-marker reveal d1">建議方向</div>
+            <h2 class="closing-statement reveal d1 editable">這不是買一套聊天機器人；而是建立一套<em>組織可以治理、專業人員可以信任</em>的工作系統。</h2>
+            <div class="decision-row">
+              <article class="decision reveal d2"><b class="editable">選擇試辦架構</b><span class="editable">採 A 的多 Agent 彈性，或以偏好方案 B 統一中央 AI？</span></article>
+              <article class="decision reveal d2"><b class="editable">確認資料與典藏量體</b><span class="editable">哪些資料可用？紙本／檔案／影音有多少？需何種 metadata 與權限？</span></article>
+              <article class="decision reveal d3"><b class="editable">確認預算上限</b><span class="editable">A 約 162 萬或 B 約 198 萬，另加數位典藏量體費？</span></article>
+              <article class="decision reveal d3"><b class="editable">同意評估標準</b><span class="editable">用典藏品質、引用正確、效率與風險指標判斷是否擴大？</span></article>
+            </div>
+            <div class="next-step reveal d4"><strong class="editable">建議下一步：啟動一個含典藏抽樣、可驗證、可停止的 12 週讀取型試辦</strong><span>不是全面上線，也不是先採購大量帳號</span></div>
+          </div>
+          <div class="footer"><span>內部決策題：是否以方案 B 優先、方案 A 替代，進入需求、資料與典藏量體盤點？</span><span>END｜2026.09</span></div>
+          <nav class="tabs" aria-label="簡報章節"><span class="tab t1">問題</span><span class="tab t2">設計</span><span class="tab t3">治理</span><span class="tab t4">試辦</span></nav>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" aria-label="上一頁">←</button><span class="page-count" id="pageCount">1 / 18</span><button id="nextBtn" aria-label="下一頁">→</button>
+  </nav>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="help">方向鍵／空白鍵換頁・按 E 編輯</div>
+  <div class="edit-hotzone" title="編輯模式"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式（E）" aria-label="切換編輯模式">✎</button>
+  <button class="save-toggle" id="saveToggle" title="另存目前HTML" aria-label="另存簡報">⇩</button>
+
+  <script>
+    class SlidePresentation {
+      constructor(){
+        this.slides=[...document.querySelectorAll('.slide')];
+        this.stage=document.getElementById('deckStage');
+        this.current=0;this.touchStartX=0;this.wheelLocked=false;
+        this.restoreEdits();this.setupScale();this.setupNav();this.show(this.indexFromHash());
+      }
+      setupScale(){
+        const scale=()=>{const f=Math.min(innerWidth/1920,innerHeight/1080);const x=(innerWidth-1920*f)/2;const y=(innerHeight-1080*f)/2;this.stage.style.transform=`translate(${x}px,${y}px) scale(${f})`};
+        scale();addEventListener('resize',scale);
+      }
+      setupNav(){
+        document.getElementById('prevBtn').addEventListener('click',()=>this.prev());
+        document.getElementById('nextBtn').addEventListener('click',()=>this.next());
+        addEventListener('keydown',e=>{if(e.target?.getAttribute('contenteditable')==='true')return;if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();this.next()}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();this.prev()}if(e.key==='Home')this.show(0);if(e.key==='End')this.show(this.slides.length-1)});
+        addEventListener('wheel',e=>{if(this.wheelLocked||Math.abs(e.deltaY)<18)return;this.wheelLocked=true;e.deltaY>0?this.next():this.prev();setTimeout(()=>this.wheelLocked=false,650)},{passive:true});
+        addEventListener('touchstart',e=>this.touchStartX=e.changedTouches[0].screenX,{passive:true});
+        addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-this.touchStartX;if(Math.abs(d)>55)d<0?this.next():this.prev()},{passive:true});
+        addEventListener('hashchange',()=>this.show(this.indexFromHash(),false));
+      }
+      indexFromHash(){const n=parseInt(location.hash.replace('#',''),10);return Number.isFinite(n)?Math.max(0,Math.min(n-1,this.slides.length-1)):0}
+      show(i,push=true){
+        this.current=Math.max(0,Math.min(i,this.slides.length-1));
+        this.slides.forEach((s,n)=>{s.classList.toggle('active',n===this.current);s.classList.toggle('visible',n===this.current)});
+        document.getElementById('pageCount').textContent=`${this.current+1} / ${this.slides.length}`;
+        document.getElementById('progress').style.width=`${((this.current+1)/this.slides.length)*100}%`;
+        if(push&&location.hash!==`#${this.current+1}`)history.replaceState(null,'',`#${this.current+1}`);
+      }
+      next(){this.show(this.current+1)} prev(){this.show(this.current-1)}
+      restoreEdits(){
+        document.querySelectorAll('.editable').forEach((el,i)=>{el.dataset.editId=String(i);const saved=localStorage.getItem(`mcp-ai-general-brief-${i}`);if(saved!==null)el.innerHTML=saved;el.addEventListener('input',()=>localStorage.setItem(`mcp-ai-general-brief-${i}`,el.innerHTML))});
+      }
+    }
+
+    class InlineEditor {
+      constructor(){
+        this.isActive=false;this.toggle=document.getElementById('editToggle');this.save=document.getElementById('saveToggle');this.hotzone=document.querySelector('.edit-hotzone');this.hideTimeout=null;
+        this.toggle.addEventListener('click',()=>this.toggleEditMode());this.hotzone.addEventListener('click',()=>this.toggleEditMode());
+        this.hotzone.addEventListener('mouseenter',()=>this.showButtons());this.hotzone.addEventListener('mouseleave',()=>this.delayHide());
+        [this.toggle,this.save].forEach(b=>{b.addEventListener('mouseenter',()=>clearTimeout(this.hideTimeout));b.addEventListener('mouseleave',()=>this.delayHide())});
+        this.save.addEventListener('click',()=>this.download());
+        document.addEventListener('keydown',e=>{if((e.key==='e'||e.key==='E')&&!e.target.getAttribute('contenteditable'))this.toggleEditMode()});
+      }
+      showButtons(){clearTimeout(this.hideTimeout);this.toggle.classList.add('show');this.save.classList.add('show')}
+      delayHide(){this.hideTimeout=setTimeout(()=>{if(!this.isActive){this.toggle.classList.remove('show');this.save.classList.remove('show')}},400)}
+      toggleEditMode(){this.isActive=!this.isActive;document.body.classList.toggle('editing',this.isActive);this.toggle.classList.toggle('active',this.isActive);document.querySelectorAll('.editable').forEach(el=>el.setAttribute('contenteditable',String(this.isActive)));this.showButtons()}
+      download(){
+        const clone=document.documentElement.cloneNode(true);clone.querySelectorAll('[contenteditable]').forEach(el=>el.setAttribute('contenteditable','false'));
+        const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='mcp_ai_workflow_general_brief_edited.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      }
+    }
+
+    const deck=new SlidePresentation();
+    const editor=new InlineEditor();
+  </script>
+<a class="return-site" href="business.html">返回業務構想簡報</a></body>
+</html>

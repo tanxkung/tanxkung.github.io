@@ -1,436 +1,28 @@
 <!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="utf-8">
-  <meta name="robots" content="noindex, nofollow, noarchive">
   <script src="access-gate-config.js?v=14b"></script>
   <script src="access-gate.js?v=14b"></script>
+
+  <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="龔鴻裕助理教授的課程教材入口，提供職涯探索、行銷企劃、管理資訊系統、企業資源規劃與專題研究教材。">
+  <meta name="description" content="龔鴻裕的課程教材、演講簡報與業務構想簡報分類入口。">
   <link rel="icon" href="data:,">
-  <title>龔鴻裕｜教學與教材</title>
-  <style>
-    :root {
-      --navy: #102b46;
-      --navy-2: #173d60;
-      --gold: #f0b429;
-      --paper: #f5f7f8;
-      --white: #ffffff;
-      --ink: #17212b;
-      --muted: #5b6875;
-      --line: #dce3e8;
-      --radius: 22px;
-      --shadow: 0 22px 60px rgba(16, 43, 70, .12);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      line-height: 1.7;
-    }
-
-    a { color: inherit; }
-
-    .skip-link {
-      position: absolute;
-      left: -9999px;
-      top: 12px;
-      z-index: 20;
-      padding: 10px 14px;
-      background: var(--white);
-      color: var(--navy);
-      border-radius: 8px;
-    }
-
-    .skip-link:focus { left: 12px; }
-
-    .site-header {
-      color: var(--white);
-      background: var(--navy);
-    }
-
-    .nav {
-      width: min(1120px, calc(100% - 40px));
-      margin: 0 auto;
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 22px;
-      font-size: .95rem;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,.82);
-      text-decoration: none;
-    }
-
-    .nav-links a:hover,
-    .nav-links a:focus { color: var(--white); }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      color: var(--white);
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -110px;
-      bottom: -180px;
-      width: 440px;
-      height: 440px;
-      border: 72px solid rgba(240, 180, 41, .13);
-      border-radius: 50%;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      width: min(1120px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 42px 0 50px;
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 50px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      margin: 0 0 16px;
-      color: var(--gold);
-      font-size: .82rem;
-      font-weight: 800;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(3rem, 8vw, 6.4rem);
-      line-height: .98;
-      letter-spacing: -.05em;
-    }
-
-    .role {
-      margin: 24px 0 0;
-      color: rgba(255,255,255,.86);
-      font-size: clamp(1.05rem, 2vw, 1.35rem);
-    }
-
-    .hero-note {
-      margin: 14px 0 0;
-      padding: 14px 0 3px 18px;
-      border-left: 3px solid var(--gold);
-      color: rgba(255,255,255,.82);
-      font-size: 1rem;
-    }
-
-    .hero-aside {
-      width: 100%;
-      max-width: 380px;
-      min-width: 0;
-      justify-self: end;
-    }
-
-    .hero-portrait {
-      margin: 0;
-      overflow: hidden;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 22px;
-      box-shadow: 0 24px 54px rgba(0,0,0,.24);
-    }
-
-    .hero-portrait img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .hero-portrait figcaption {
-      padding: 9px 14px 11px;
-      color: rgba(255,255,255,.68);
-      font-size: .76rem;
-    }
-
-    .hero-portrait a {
-      color: inherit;
-      text-underline-offset: 3px;
-    }
-
-    main {
-      width: min(1120px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 72px 0 88px;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 24px;
-      margin-bottom: 26px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      color: var(--navy);
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      line-height: 1.2;
-      letter-spacing: -.03em;
-    }
-
-    .section-head p {
-      max-width: 540px;
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .course-groups {
-      display: grid;
-      gap: 16px;
-    }
-
-    .course-group {
-      padding-top: 4px;
-      border-radius: 16px;
-    }
-
-    .course-group-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto 32px;
-      align-items: center;
-      gap: 14px;
-      margin: 0 4px 14px;
-      padding: 10px 8px 12px;
-      border-bottom: 2px solid var(--line);
-      border-radius: 10px 10px 0 0;
-      cursor: pointer;
-      list-style: none;
-      transition: background .2s ease;
-    }
-
-    .course-group-head::-webkit-details-marker { display: none; }
-
-    .course-group-head::after {
-      content: "+";
-      display: grid;
-      width: 30px;
-      height: 30px;
-      place-items: center;
-      color: var(--white);
-      background: var(--navy);
-      border-radius: 50%;
-      font-size: 1.25rem;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .course-group[open] > .course-group-head::after { content: "−"; }
-
-    .course-group-head:hover { background: rgba(16, 43, 70, .06); }
-
-    .course-group-head:focus-visible {
-      outline: 3px solid var(--gold);
-      outline-offset: 3px;
-    }
-
-    .course-group:not([open]) > .course-group-head {
-      margin-bottom: 0;
-      border-radius: 10px;
-    }
-
-    .course-group-head h3 {
-      margin: 0;
-      color: var(--navy);
-      font-size: clamp(1.15rem, 3vw, 1.45rem);
-      line-height: 1.35;
-    }
-
-    .course-count {
-      flex: none;
-      color: var(--muted);
-      font-size: .88rem;
-      font-weight: 700;
-    }
-
-    .materials-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .material-card {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 34px;
-      align-items: center;
-      padding: 38px;
-      color: var(--white);
-      background: var(--navy);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .material-card h4 {
-      margin: 6px 0 12px;
-      font-size: clamp(1.55rem, 4vw, 2.3rem);
-      line-height: 1.25;
-    }
-
-    .material-card p {
-      margin: 0;
-      color: rgba(255,255,255,.76);
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .meta span {
-      padding: 5px 10px;
-      color: var(--gold);
-      border: 1px solid rgba(240,180,41,.45);
-      border-radius: 999px;
-      font-size: .8rem;
-      font-weight: 700;
-    }
-
-    .primary-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 154px;
-      min-height: 52px;
-      padding: 12px 20px;
-      color: var(--navy);
-      background: var(--gold);
-      border-radius: 14px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .primary-link:hover,
-    .primary-link:focus { background: #ffd166; }
-
-    .profile-section { margin-top: 74px; }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .info-card {
-      padding: 28px;
-      background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-    }
-
-    .info-card h3 {
-      margin: 0 0 12px;
-      color: var(--navy);
-      font-size: 1rem;
-    }
-
-    .info-card p,
-    .info-card ul { margin: 0; }
-
-    .info-card ul {
-      padding-left: 1.25em;
-    }
-
-    .course-section { margin-top: 64px; }
-
-    .course-list {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 24px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .course-list li {
-      padding: 16px 18px;
-      background: transparent;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      font-weight: 650;
-    }
-
-    .source-link {
-      display: inline-block;
-      margin-top: 24px;
-      color: var(--navy-2);
-      font-weight: 700;
-      text-underline-offset: 4px;
-    }
-
-    footer {
-      padding: 28px 20px;
-      color: rgba(255,255,255,.72);
-      background: var(--navy);
-      text-align: center;
-      font-size: .9rem;
-    }
-
-    @media (max-width: 760px) {
-      .nav { min-height: 66px; }
-      .nav-links { display: none; }
-      .hero-inner {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        padding: 36px 0 44px;
-      }
-      .hero-aside {
-        max-width: 420px;
-        justify-self: start;
-      }
-      .hero-note { max-width: 34rem; }
-      main { padding: 54px 0 68px; }
-      .section-head { display: block; }
-      .section-head p { margin-top: 12px; }
-      .course-groups { gap: 12px; }
-      .course-group-head { align-items: center; }
-      .material-card { grid-template-columns: 1fr; padding: 28px; }
-      .primary-link { width: 100%; }
-      .profile-grid,
-      .course-list { grid-template-columns: 1fr; }
-    }
-  </style>
+  <title>龔鴻裕｜教材與簡報</title>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <a class="skip-link" href="#materials">跳至教材</a>
+  <a class="skip-link" href="#categories">跳至分類入口</a>
 
   <header class="site-header">
     <nav class="nav" aria-label="主要導覽">
-      <a class="brand" href="./">龔鴻裕｜教學與教材</a>
+      <a class="brand" href="./">龔鴻裕｜教材與簡報</a>
       <div class="nav-links">
         <a href="#materials">教材</a>
+        <a href="#talks">演講簡報</a>
+        <a href="#business">業務構想簡報</a>
         <a href="#profile">教師簡介</a>
         <a href="#courses">本學期課程</a>
       </div>
@@ -455,6 +47,20 @@
   </section>
 
   <main>
+    <nav class="category-nav" id="categories" aria-labelledby="categories-title">
+      <h2 id="categories-title">教材與簡報</h2>
+      <div class="category-links">
+        <a class="info-card category-link" href="#materials">
+          <strong>學校教材</strong><span>依課程查找現有 20 份教材。</span>
+        </a>
+        <a class="info-card category-link" href="talks.html">
+          <strong>演講簡報</strong><span>已選定的演講簡報與配套資料。</span>
+        </a>
+        <a class="info-card category-link" href="business.html">
+          <strong>業務構想簡報</strong><span>已選定的業務構想與服務介紹資料。</span>
+        </a>
+      </div>
+    </nav>
     <section id="materials" aria-labelledby="materials-title">
       <div class="section-head">
         <h2 id="materials-title">課程教材</h2>
@@ -478,7 +84,7 @@
                 <h4>什麼是職涯與如何選擇</h4>
                 <p>從高薪與適合、熱愛與職業出發，透過實際經驗與證據，練習做出可以修正的職涯選擇。</p>
               </div>
-              <a class="primary-link" href="career-exploration-part1-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/career-exploration-part1-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -491,7 +97,7 @@
                 <h4>認識自己與工作適配</h4>
                 <p>透過 PDP 與 MBTI 認識自己的行為傾向與人格偏好，將測驗結果轉換成可以驗證的工作條件。</p>
               </div>
-              <a class="primary-link" href="career-exploration-part2-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/career-exploration-part2-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -504,7 +110,7 @@
                 <h4>收入、生產力與成長循環</h4>
                 <p>從勞動力、知識、技術、經驗與資本出發，理解生產力如何形成、轉成收入，並透過儲蓄與投資持續累積。</p>
               </div>
-              <a class="primary-link" href="career-exploration-part3-v3.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/career-exploration-part3-v3.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -517,7 +123,7 @@
                 <h4>財商（一）：從收入到資產思維</h4>
                 <p>以《富爸爸，窮爸爸》摘要影片分四次課程進行，從收入、現金流與資產思維，走到投資風險、能力累積與可執行的財務行動。</p>
               </div>
-              <a class="primary-link" href="career-exploration-part4-financial-literacy-v3.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/career-exploration-part4-financial-literacy-v3.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -530,7 +136,7 @@
                 <h4>財商（二）：管理現金流</h4>
                 <p>從現金流、消費衝動與「真資產」出發，練習看見錢的流向、保留生活享受，並把有限資源放到真正重要的地方。</p>
               </div>
-              <a class="primary-link" href="career-exploration-part4-financial-literacy-2-cash-flow-v1.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/career-exploration-part4-financial-literacy-2-cash-flow-v1.html">開啟教材　→</a>
             </article>
           </div>
         </details>
@@ -551,7 +157,7 @@
                 <h4>生活中無所不在的行銷</h4>
                 <p>從生活選擇、顧客價值與交換出發，釐清行銷、廣告、促銷與推銷，並以全家友善食光拆解完整行銷方案。</p>
               </div>
-              <a class="primary-link" href="marketing-part1-everyday-marketing-v1.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/marketing-part1-everyday-marketing-v1.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -564,7 +170,7 @@
                 <h4>行銷的全觀：STP 與行銷組合</h4>
                 <p>以王品多品牌案例串起市場區隔、目標市場、定位與 4P，理解策略選擇如何落實為顧客看得見的價值。</p>
               </div>
-              <a class="primary-link" href="marketing-part2-stp-marketing-mix-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/marketing-part2-stp-marketing-mix-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -577,7 +183,7 @@
                 <h4>科技與 AI 如何重塑行銷</h4>
                 <p>以 Netflix、台灣麥當勞、Google「AI 台味夜市」與 Pedigree 案例，理解數位化、個人化、生成式 AI 如何改變 STP、行銷組合與顧客接觸。</p>
               </div>
-              <a class="primary-link" href="marketing-part3-technology-ai-v4.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/marketing-part3-technology-ai-v4.html">開啟教材　→</a>
             </article>
           </div>
         </details>
@@ -598,7 +204,7 @@
                 <h4>從運算、連結到組織能力的形成</h4>
                 <p>依序掌握電腦、網路與資訊系統的演進脈絡。</p>
               </div>
-              <a class="primary-link" href="mis-background-evolution-v4.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/mis-background-evolution-v4.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -611,7 +217,7 @@
                 <h4>行動通訊、手機與 AI 演進</h4>
                 <p>從行動網路與智慧型手機的發展，銜接人工智慧由規則、學習到生成與協作的演進。</p>
               </div>
-              <a class="primary-link" href="mis-mobile-ai-evolution-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/mis-mobile-ai-evolution-v2.html">開啟教材　→</a>
             </article>
             <article class="material-card">
               <div>
@@ -623,7 +229,7 @@
                 <h4>資訊系統如何改變企業的運作與管理？</h4>
                 <p>從全家跨店服務與記銘工業訂單流程，理解資料、協作、系統導入與管理判斷。</p>
               </div>
-              <a class="primary-link" href="mis-is-business-management-v1.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/mis-is-business-management-v1.html">開啟教材　→</a>
             </article>
           </div>
         </details>
@@ -644,7 +250,7 @@
                 <h4>ERP 概念、歷史、現況與未來</h4>
                 <p>認識 ERP 的概念與演進，透過跨部門連動及 AI 採購流程示範，理解現況與未來。</p>
               </div>
-              <a class="primary-link" href="erp-concepts-history-present-future-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/erp-concepts-history-present-future-v2.html">開啟教材　→</a>
             </article>
             <article class="material-card">
               <div>
@@ -656,7 +262,7 @@
                 <h4>ERP 模組、資料與跨部門流程</h4>
                 <p>從核心模組與主檔資料出發，理解訂單、採購、生產與財務如何串成端到端流程。</p>
               </div>
-              <a class="primary-link" href="erp-modules-data-cross-functional-processes-v1.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/erp-modules-data-cross-functional-processes-v1.html">開啟教材　→</a>
             </article>
             <article class="material-card">
               <div>
@@ -668,7 +274,7 @@
                 <h4>採購、庫存與付款流程</h4>
                 <p>從缺料情境出發，透過三部操作影片，追蹤詢價採購、部分到貨、帳單核對與付款。</p>
               </div>
-              <a class="primary-link" href="erp-procurement-inventory-payment-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/erp-procurement-inventory-payment-v2.html">開啟教材　→</a>
             </article>
           </div>
         </details>
@@ -689,7 +295,7 @@
                 <h4>畢業專題影片教材</h4>
                 <p>以歷屆專題影片作為案例，協助同學觀察題目、成果呈現與專題規劃。</p>
               </div>
-              <a class="primary-link" href="capstone-project-video-materials-v3.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-project-video-materials-v3.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -702,7 +308,7 @@
                 <h4>問對問題：六個案例的問題發掘練習</h4>
                 <p>從《翻轉幸福》、Dyson、3M Post-it、Canva、Gogoro 與可調式眼鏡，練習發掘與理解問題，再思考解答如何形成。六個案例採單層方式進行。</p>
               </div>
-              <a class="primary-link" href="capstone-session2-question-discovery-single-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-session2-question-discovery-single-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -711,7 +317,7 @@
                 <h4>做判斷之前，多想一步：我們怎麼看資料、做判斷？</h4>
                 <p>確認偏誤、倖存者偏差、框架效應、錨定效應。含全套導言。</p>
               </div>
-              <a class="primary-link" href="capstone-session3-unit01-thinking-effects-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-session3-unit01-thinking-effects-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -720,7 +326,7 @@
                 <h4>做判斷之前，多想一步：為什麼有些決定很難改？</h4>
                 <p>從眾效應、鄧寧克魯格效應、沉沒成本效應、稟賦效應。</p>
               </div>
-              <a class="primary-link" href="capstone-session3-unit02-thinking-effects-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-session3-unit02-thinking-effects-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -729,7 +335,7 @@
                 <h4>做判斷之前，多想一步：感受與印象，如何影響我們？</h4>
                 <p>損失趨避、月暈效應、旁觀者效應、巴納姆效應。</p>
               </div>
-              <a class="primary-link" href="capstone-session3-unit03-thinking-effects-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-session3-unit03-thinking-effects-v2.html">開啟教材　→</a>
             </article>
 
             <article class="material-card">
@@ -738,12 +344,26 @@
                 <h4>做判斷之前，多想一步：怎麼看待表現、經驗與成果？</h4>
                 <p>聚光燈效應、單純曝光效應、峰終效應、蔡格尼效應。含全套結論。</p>
               </div>
-              <a class="primary-link" href="capstone-session3-unit04-thinking-effects-v2.html">開啟教材　→</a>
+              <a class="primary-link" href="https://tanxkung.github.io/capstone-session3-unit04-thinking-effects-v2.html">開啟教材　→</a>
             </article>
           </div>
         </details>
       </div>
     </section>
+
+    <section class="talks-section" id="talks" aria-labelledby="talks-title">
+      <div class="section-head">
+        <h2 id="talks-title">演講簡報</h2>
+        <p>已選定的演講簡報與配套資料。</p>
+      </div>
+      <article class="material-card"><div><div class="meta"><span>26 頁・PPT 來源網頁版</span></div><h3>職涯探索人生下半場：找回你的職涯方向</h3><p>2026 年 8 月 8 日講座；附 PDP 量表與使用說明。</p><p><a href="assets/PDP%E9%87%8F%E8%A1%A82.docx" download>PDP 量表</a> · <a href="assets/PDP%E9%87%8F%E8%A1%A8%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E.docx" download>PDP 量表使用說明</a></p></div><a class="primary-link" href="life.html">開啟簡報 →</a></article><article class="material-card"><div><div class="meta"><span>15 頁・PPT 來源網頁版</span></div><h3>把每一天過得更好</h3><p>好習慣・喜歡生活・遇到困難不孤單</p></div><a class="primary-link" href="workshop.html">開啟簡報 →</a></article><article class="material-card"><div><div class="meta"><span>原生 HTML・15＋27＋24 頁</span></div><h3>ChatGPT 就業體驗</h3><p>AI 演進、手機帶做、讓 AI 幫我準備工作；活動控制中心。</p></div><a class="primary-link" href="dongfeng/full_decks_v1/ChatGPT%E6%BC%94%E8%AC%9B_%E6%B4%BB%E5%8B%95%E6%8E%A7%E5%88%B6%E4%B8%AD%E5%BF%83_V2.html">開啟簡報 →</a></article></section>
+
+    <section class="business-section" id="business" aria-labelledby="business-title">
+      <div class="section-head">
+        <h2 id="business-title">業務構想簡報</h2>
+        <p>用於業務構想與服務介紹的簡報。</p>
+      </div>
+      <article class="material-card"><div><div class="meta"><span>原生 HTML・14 頁・V3</span></div><h3>移工查察與裁罰業務的 AI 工作流</h3><p>分階段預算討論稿</p></div><a class="primary-link" href="ai-case.html">開啟簡報 →</a></article><article class="material-card"><div><div class="meta"><span>18 頁・HTML 結構改版候選</span></div><h3>組織專業工作流程的 AI 化</h3><p>沿用原生 16 頁 HTML，依 PPT V2 補入數位典藏與資料整備內容。</p></div><a class="primary-link" href="ai-general.html">開啟簡報 →</a></article></section>
 
     <section class="profile-section" id="profile" aria-labelledby="profile-title">
       <div class="section-head">
@@ -793,6 +413,6 @@
     </section>
   </main>
 
-  <footer>龔鴻裕｜教學與教材 · 最後更新 2026-10-04</footer>
+  <footer>龔鴻裕｜教材與簡報 · 最後更新 2026-10-05</footer>
 </body>
 </html>

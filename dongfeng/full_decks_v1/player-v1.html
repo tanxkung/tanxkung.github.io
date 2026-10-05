@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT 就業體驗｜正式播放入口 V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --stage-bg:#102f31; --slide-bg:#f6edda; --paper:#fffdf7; --ink:#173b3d;
+      --soft:#496566; --teal:#0f696c; --teal-deep:#0a5154; --teal-light:#dcebea;
+      --amber:#f2a51a; --amber-light:#ffefc8; --coral:#e76447; --coral-light:#f9ddd2;
+      --green:#5d902f; --line:rgba(23,59,61,.16); --shadow:0 30px 75px rgba(12,41,42,.22);
+      --font:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+    }
+    *{box-sizing:border-box} html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg)}
+    body{font-family:var(--font);color:var(--ink)} button,a{font:inherit}
+    .deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg)}
+    .deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg)}
+    .home{position:absolute;inset:0;padding:70px 82px 58px;background:
+      radial-gradient(circle at 8% 8%,rgba(242,165,26,.19),transparent 28%),
+      radial-gradient(circle at 95% 15%,rgba(15,105,108,.16),transparent 30%),
+      linear-gradient(135deg,#fff9ed,#f3e6cd)}
+    .home::before{content:"";position:absolute;inset:0;opacity:.42;background-image:linear-gradient(rgba(23,59,61,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(23,59,61,.04) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 86%);pointer-events:none}
+    header{position:relative;z-index:1;display:flex;justify-content:space-between;gap:32px;align-items:flex-start}
+    .eyebrow{display:inline-flex;gap:12px;align-items:center;color:var(--teal);font-size:27px;font-weight:900;letter-spacing:.04em}
+    .eyebrow::before{content:"";width:42px;height:8px;border-radius:8px;background:var(--amber)}
+    h1{font-size:72px;line-height:1.13;margin:18px 0 10px;letter-spacing:-.035em}
+    .subtitle{margin:0;color:var(--soft);font-size:28px;font-weight:650}
+    .total{min-width:270px;padding:22px 30px;border:2px solid var(--line);border-radius:28px;background:rgba(255,255,255,.65);text-align:center;box-shadow:0 15px 35px rgba(23,59,61,.08)}
+    .total strong{display:block;color:var(--teal-deep);font-size:54px;line-height:1}.total span{display:block;margin-top:9px;font-size:23px;font-weight:800;color:var(--soft)}
+    .timeline{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.35fr .62fr 1fr;gap:22px;margin-top:44px}
+    .module{min-height:474px;border:2px solid var(--line);border-radius:34px;background:rgba(255,253,247,.91);padding:30px 28px 28px;box-shadow:0 22px 50px rgba(23,59,61,.11);display:flex;flex-direction:column;position:relative;overflow:hidden}
+    .module::after{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--accent)}
+    .module .no{width:62px;height:62px;display:grid;place-items:center;border-radius:19px;background:var(--accent);color:white;font-size:29px;font-weight:900}
+    .module .time{position:absolute;right:27px;top:34px;color:var(--soft);font-size:22px;font-weight:800}
+    .module h2{font-size:34px;line-height:1.25;margin:22px 0 12px}.module p{font-size:22px;line-height:1.55;color:var(--soft);margin:0}.module .meta{margin-top:12px;color:var(--ink);font-weight:800;font-size:20px}
+    .module button{margin-top:auto;border:0;border-radius:19px;padding:17px 16px;background:var(--accent);color:white;font-weight:900;font-size:23px;cursor:pointer;box-shadow:0 11px 25px color-mix(in srgb,var(--accent) 28%,transparent);transition:transform .18s ease,filter .18s ease}
+    .module button:hover,.module button:focus-visible{transform:translateY(-3px);filter:brightness(.94);outline:5px solid rgba(242,165,26,.32);outline-offset:3px}
+    .module.break{background:linear-gradient(160deg,#fff7df,#ffefc8)}
+    .timer{font-variant-numeric:tabular-nums;font-size:62px;font-weight:900;line-height:1;color:#8a5a00;margin:30px 0 22px;text-align:center}
+    .timer-controls{display:grid;gap:10px;margin-top:auto}.timer-controls button{margin:0;background:#b87800}.timer-controls .reset{background:transparent;color:#805900;border:2px solid rgba(128,89,0,.35);box-shadow:none}
+    .footer{position:relative;z-index:1;margin-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--soft);font-weight:700}
+    .start{border:0;border-radius:22px;padding:18px 32px;color:#fff;background:var(--teal-deep);font-weight:900;font-size:25px;cursor:pointer;box-shadow:0 16px 35px rgba(10,81,84,.23)}
+    .start:focus-visible{outline:5px solid rgba(242,165,26,.45);outline-offset:4px}
+    .overlay{position:fixed;inset:0;z-index:50;background:#0c2425;display:none;flex-direction:column}.overlay.open{display:flex}
+    .overlay-bar{height:66px;display:flex;align-items:center;gap:14px;padding:9px 18px;background:#102f31;color:white;border-bottom:1px solid rgba(255,255,255,.13)}
+    .overlay-bar strong{margin-right:auto;font-size:20px}.overlay-bar button,.overlay-bar a{border:1px solid rgba(255,255,255,.32);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;text-decoration:none;padding:9px 16px;font-weight:800;cursor:pointer}
+    .overlay iframe{width:100%;height:calc(100% - 66px);border:0;background:#102f31}
+    .shortcut{padding:6px 10px;border-radius:9px;background:rgba(23,59,61,.08);font-weight:900;color:var(--ink)}
+    @media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+  </style>
+<style>.hub-return{position:fixed;bottom:12px;left:12px;z-index:2000;color:#102b46;background:#fff;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;text-decoration:none;font:14px sans-serif}body:has(.overlay.open)>.hub-return{display:none}</style><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script></head>
+<body>
+  <div class="deck-viewport"><main class="deck-stage" id="stage">
+    <section class="home" aria-label="演講正式播放入口">
+      <header>
+        <div><div class="eyebrow">共創協會｜就業東風永續計畫</div><h1>ChatGPT 就業體驗</h1><p class="subtitle">從 AI 演進，到手機操作，再把能力整理成求職成果</p></div>
+        <div class="total"><strong>150</strong><span>分鐘｜完整流程</span></div>
+      </header>
+      <div class="timeline">
+        <article class="module" style="--accent:var(--teal)"><div class="no">1</div><div class="time">00:00–00:25</div><h2>AI 演進＋影片</h2><p>先用生活語言認識 AI，再看卡通影片；影片後立刻回顧重點。</p><div class="meta">15 張｜約 25 分鐘</div><button type="button" data-open="ai-evolution-v1.html" data-title="第一部分｜AI 演進＋影片">播放第一部分</button></article>
+        <article class="module" style="--accent:var(--coral)"><div class="no">2</div><div class="time">00:25–01:30</div><h2>ChatGPT 手機帶做</h2><p>認識 Chat、Work、Codex；全班一步一步完成提問、追問與安全判斷。</p><div class="meta">27 張｜約 65 分鐘</div><button type="button" data-open="mobile-practice-v1.html" data-title="第二部分｜ChatGPT 手機帶做">播放第二部分</button></article>
+        <article class="module break" style="--accent:var(--amber)"><div class="no">休</div><div class="time">01:30–01:40</div><h2>休息一下</h2><p>喝水、上洗手間，也可以請協助者處理手機問題。</p><div class="timer" id="timer">10:00</div><div class="timer-controls"><button type="button" id="timerToggle">開始倒數</button><button type="button" class="reset" id="timerReset">重設 10 分鐘</button></div></article>
+        <article class="module" style="--accent:var(--green)"><div class="no">3</div><div class="time">01:40–02:30</div><h2>就業實作＋總回顧</h2><p>整理求職自我介紹、看懂一份工作，最後帶走提問與安全口訣。</p><div class="meta">24 張｜約 50 分鐘</div><button type="button" data-open="employment-practice-v1.html" data-title="第三部分｜就業實作＋總回顧">播放第三部分</button></article>
+      </div>
+      <div class="footer"><div><span class="shortcut">1</span> 第一部分　<span class="shortcut">2</span> 第二部分　<span class="shortcut">R</span> 休息　<span class="shortcut">3</span> 第三部分　<span class="shortcut">Esc</span> 回目錄</div><button class="start" id="start">開始第一部分 →</button></div>
+    </section>
+  </main></div>
+  <section class="overlay" id="overlay" aria-label="投影片播放區">
+    <div class="overlay-bar"><button type="button" id="back">← 返回總目錄</button><strong id="overlayTitle">投影片</strong><a id="newWindow" href="#" target="_blank" rel="noopener">在新視窗開啟 ↗</a></div>
+    <iframe id="viewer" title="投影片播放視窗" allow="autoplay; fullscreen"></iframe>
+  </section>
+  <script>
+    const stage=document.getElementById('stage');
+    function scaleStage(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`}
+    scaleStage();addEventListener('resize',scaleStage);
+    const overlay=document.getElementById('overlay'),viewer=document.getElementById('viewer'),title=document.getElementById('overlayTitle'),newWindow=document.getElementById('newWindow');
+    function openDeck(src,label){viewer.src=src;title.textContent=label;newWindow.href=src;overlay.classList.add('open')}
+    function closeDeck(){overlay.classList.remove('open');viewer.src='about:blank'}
+    document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openDeck(b.dataset.open,b.dataset.title)));
+    document.getElementById('start').addEventListener('click',()=>document.querySelector('[data-open]').click());
+    document.getElementById('back').addEventListener('click',closeDeck);
+    let remaining=600,handle=null;
+    const timer=document.getElementById('timer'),timerToggle=document.getElementById('timerToggle');
+    function paintTimer(){const m=Math.floor(remaining/60),s=remaining%60;timer.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+    function pause(){clearInterval(handle);handle=null;timerToggle.textContent=remaining===600?'開始倒數':'繼續倒數'}
+    function toggleTimer(){if(handle){pause();return}timerToggle.textContent='暫停';handle=setInterval(()=>{remaining=Math.max(0,remaining-1);paintTimer();if(!remaining){pause();timerToggle.textContent='休息結束';timer.style.color='#b64232'}},1000)}
+    timerToggle.addEventListener('click',toggleTimer);
+    document.getElementById('timerReset').addEventListener('click',()=>{pause();remaining=600;timer.style.color='';paintTimer();timerToggle.textContent='開始倒數'});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDeck();return}if(overlay.classList.contains('open'))return;const key=e.key.toLowerCase();if(key==='1')document.querySelectorAll('[data-open]')[0].click();if(key==='2')document.querySelectorAll('[data-open]')[1].click();if(key==='3')document.querySelectorAll('[data-open]')[2].click();if(key==='r')toggleTimer()});
+  </script>
+<a class="hub-return" href="../../talks.html" target="_top">← 返回演講簡報</a></body>
+</html>

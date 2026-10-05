@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小智上班記｜AI演進卡通旁白同步動態樣片 V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* === THEME === */
+    :root {
+      --stage-bg: #111514;
+      --slide-bg: #f7eedb;
+      --ink: #173b3d;
+      --cream: #fffaf0;
+      --teal: #0f5e62;
+      --amber: #f2a51a;
+      --coral: #e76447;
+      --green: #6e9937;
+      --panel: rgba(255, 250, 240, 0.92);
+      --caption: rgba(12, 27, 28, 0.82);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --font: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    }
+
+    /* === RESET === */
+    * { box-sizing: border-box; }
+    button, input, select { font: inherit; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* === SCENE IMAGES === */
+    .slide { transition: opacity 1s linear; }
+    .scene-image {
+      position: absolute;
+      inset: -24px;
+      width: 1968px;
+      height: 1128px;
+      max-width: none;
+      max-height: none;
+      object-fit: cover;
+      will-change: transform;
+      transform-origin: center center;
+    }
+
+    /* === CINEMATIC OVERLAYS === */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(19, 37, 37, 0.08), transparent 20%, transparent 76%, rgba(19, 37, 37, 0.16)),
+        radial-gradient(ellipse at center, transparent 52%, rgba(28, 36, 34, 0.10));
+    }
+    .title-card {
+      position: absolute;
+      z-index: 20;
+      top: 48px;
+      left: 52px;
+      min-width: 640px;
+      max-width: 1240px;
+      padding: 21px 34px 25px;
+      border-radius: 26px;
+      color: var(--ink);
+      background: var(--panel);
+      border: 2px solid rgba(15, 94, 98, 0.18);
+      box-shadow: 0 18px 48px rgba(21, 55, 56, 0.15);
+      font: 800 46px/1.25 var(--font);
+      letter-spacing: 0.02em;
+    }
+    .caption-wrap {
+      position: absolute;
+      z-index: 22;
+      left: 140px;
+      right: 140px;
+      bottom: 210px;
+      min-height: 106px;
+      display: grid;
+      place-items: center;
+      padding: 20px 42px 24px;
+      border-radius: 28px;
+      color: white;
+      background: var(--caption);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.20);
+      font: 600 43px/1.45 var(--font);
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+    .caption-wrap:empty { opacity: 0; }
+
+    /* === OPENING AND END CARDS === */
+    .start-card,
+    .end-card {
+      position: absolute;
+      z-index: 40;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(15, 44, 45, 0.56);
+      backdrop-filter: blur(8px);
+      transition: opacity 0.6s var(--ease), visibility 0.6s;
+    }
+    .start-card.hidden,
+    .end-card.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .start-panel,
+    .end-panel {
+      width: 1030px;
+      padding: 58px 70px 64px;
+      border-radius: 42px;
+      background: rgba(255, 250, 240, 0.96);
+      color: var(--ink);
+      text-align: center;
+      box-shadow: 0 34px 90px rgba(0, 0, 0, 0.28);
+      border: 3px solid rgba(242, 165, 26, 0.55);
+    }
+    .eyebrow {
+      margin-bottom: 14px;
+      color: var(--coral);
+      font: 800 26px/1 var(--font);
+      letter-spacing: 0.14em;
+    }
+    .start-panel h1,
+    .end-panel h2 {
+      margin: 0 0 20px;
+      font: 800 66px/1.2 var(--font);
+    }
+    .start-panel p,
+    .end-panel p {
+      margin: 0 0 34px;
+      font: 600 30px/1.6 var(--font);
+    }
+    .primary-action {
+      border: 0;
+      border-radius: 999px;
+      padding: 19px 42px 22px;
+      color: white;
+      background: var(--teal);
+      box-shadow: 0 12px 28px rgba(15, 94, 98, 0.28);
+      cursor: pointer;
+      font: 800 31px/1 var(--font);
+    }
+    .primary-action:hover { background: #0b4c50; transform: translateY(-2px); }
+
+    /* === SCENE PROGRESS === */
+    .scene-dots {
+      position: absolute;
+      z-index: 25;
+      top: 65px;
+      right: 62px;
+      display: flex;
+      gap: 13px;
+      padding: 16px 20px;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.84);
+      border: 2px solid rgba(15, 94, 98, 0.14);
+    }
+    .scene-dot {
+      width: 20px;
+      height: 20px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(15, 94, 98, 0.25);
+      cursor: pointer;
+      transition: transform 0.3s var(--ease), background 0.3s;
+    }
+    .scene-dot.current { background: var(--coral); transform: scale(1.35); }
+    .scene-dot.past { background: var(--teal); }
+
+    /* === PLAYER CONTROLS === */
+    .deck-controls {
+      width: min(1120px, calc(100vw - 32px));
+      display: grid;
+      grid-template-columns: auto auto minmax(180px, 1fr) auto auto auto;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      background: rgba(8, 17, 18, 0.88);
+      color: white;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      font: 600 15px/1 var(--font);
+      backdrop-filter: blur(12px);
+    }
+    .control-button,
+    .speed-select {
+      min-height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      padding: 0 14px;
+    }
+    .control-button:hover,
+    .speed-select:hover { background: rgba(255, 255, 255, 0.16); }
+    .time-readout { min-width: 104px; text-align: center; font-variant-numeric: tabular-nums; }
+    .timeline { width: 100%; accent-color: var(--coral); cursor: pointer; }
+
+    /* === EDITING CONTROLS === */
+    .edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+    .edit-toggle {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 10001;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      color: white;
+      background: rgba(8, 17, 18, 0.9);
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    .edit-toggle.show,
+    .edit-toggle.active { opacity: 1; pointer-events: auto; }
+    .export-button { display: none; }
+    body.editing .export-button { display: inline-block; }
+    body.editing .title-card,
+    body.editing .caption-wrap { outline: 4px dashed var(--amber); cursor: text; }
+    .edit-status {
+      position: fixed;
+      top: 18px;
+      left: 74px;
+      z-index: 10002;
+      display: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      background: rgba(8, 17, 18, 0.9);
+      font: 600 14px/1 var(--font);
+    }
+    body.editing .edit-status { display: block; }
+  </style>
+<style>.hub-return{position:fixed;bottom:12px;left:12px;z-index:2000;color:#102b46;background:#fff;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;text-decoration:none;font:14px sans-serif}body:has(.overlay.open)>.hub-return{display:none}</style><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script></head>
+<body>
+  <!-- === FIXED PRESENTATION STAGE === -->
+  <div class="deck-viewport" id="deckViewport">
+    <main class="deck-stage" id="deckStage" aria-label="AI演進卡通旁白同步動態樣片">
+      <section class="slide active visible" data-index="0"><img class="scene-image" src="../storyboard_v1/01_只會照規則做.png" alt="阿東向只會翻規則書的小智求助"></section>
+      <section class="slide" data-index="1"><img class="scene-image" src="../storyboard_v1/02_機器能不能思考.png" alt="研究者開始思考機器能否思考"></section>
+      <section class="slide" data-index="2"><img class="scene-image" src="../storyboard_v1/03_規則限制與AI寒冬.png" alt="小智受困於大量規則與AI寒冬"></section>
+      <section class="slide" data-index="3"><img class="scene-image" src="../storyboard_v1/04_從大量例子學習.png" alt="小智從圖片聲音及棋局範例學習"></section>
+      <section class="slide" data-index="4"><img class="scene-image" src="../storyboard_v1/05_生成文字圖片聲音.png" alt="小智生成文字圖片與聲音"></section>
+      <section class="slide" data-index="5"><img class="scene-image" src="../storyboard_v1/06_Agent分解任務.png" alt="小智把面試準備分成多個步驟"></section>
+      <section class="slide" data-index="6"><img class="scene-image" src="../storyboard_v1/07_多個AI合作與實體工具.png" alt="多個小智分工合作並連接機器手臂"></section>
+      <section class="slide" data-index="7"><img class="scene-image" src="../storyboard_v1/08_AI協助人做決定.png" alt="阿東檢查成果並親自確認是否送出"></section>
+
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="title-card editable" id="sceneTitle" aria-live="polite">早期AI：照規則做</div>
+      <div class="caption-wrap editable" id="caption" aria-live="polite">阿東明天要去面試。他問小智：「你可以幫我想一段自我介紹嗎？」</div>
+      <nav class="scene-dots" id="sceneDots" aria-label="八幕故事導覽"></nav>
+
+      <div class="start-card" id="startCard">
+        <div class="start-panel">
+          <div class="eyebrow">台灣中文旁白同步樣片 V3</div>
+          <h1>小智上班記</h1>
+          <p>AI怎麼從聽命令，變成會做事？<br>一般語速約3分14秒，可隨時暫停、重聽或調整速度。</p>
+          <button class="primary-action" id="startButton">▶ 開始播放旁白</button>
+        </div>
+      </div>
+
+      <div class="end-card hidden" id="endCard">
+        <div class="end-panel">
+          <div class="eyebrow">故事播放完畢</div>
+          <h2>AI可以幫忙<br>人仍是隊長</h2>
+          <p>請一起判斷旁白是否夠慢、字幕是否容易閱讀。</p>
+          <button class="primary-action" id="replayButton">↻ 再看一次</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <audio id="narration" preload="auto" src="AI演進卡通_旁白_Meijia_r130_V3.m4a"></audio>
+
+  <!-- === PLAYER CHROME === -->
+  <div class="deck-controls" role="group" aria-label="播放控制">
+    <button class="control-button" id="playButton" aria-label="播放或暫停">▶ 播放</button>
+    <button class="control-button" id="restartButton" aria-label="重新開始">↻</button>
+    <input class="timeline" id="timeline" type="range" min="0" max="194" step="0.1" value="0" aria-label="影片時間軸">
+    <span class="time-readout" id="timeReadout">00:00 / 03:14</span>
+    <select class="speed-select" id="speedSelect" aria-label="播放速度">
+      <option value="0.9">較慢 0.9×</option>
+      <option value="1" selected>一般速度</option>
+      <option value="1.25">1.25×</option>
+      <option value="1.5">1.5×</option>
+      <option value="2">2×</option>
+    </select>
+    <button class="control-button" id="fullscreenButton" aria-label="全螢幕">⛶</button>
+    <button class="control-button export-button" id="exportButton">匯出字幕設定</button>
+  </div>
+
+  <!-- === INLINE EDITING CHROME === -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式（E）">✎</button>
+  <div class="edit-status">編輯模式：可修改目前標題與字幕，按E結束</div>
+
+  <script>
+    /* === CONTENT AND TIMING DATA === */
+    const SOURCE_TIMELINE_DURATION = 270;
+    const VOICE_DURATION = 193.964082;
+    const COMFORT_BASE_RATE = 1;
+    const TOTAL_DURATION = VOICE_DURATION / COMFORT_BASE_RATE;
+    const TIMING_SCALE = TOTAL_DURATION / SOURCE_TIMELINE_DURATION;
+
+    const scenes = [
+      { start: 0, end: 25, title: '早期AI：照規則做', zoomA: 1.00, zoomB: 1.04, panX: 18, panY: 0 },
+      { start: 25, end: 55, title: '1950–1956：機器能不能思考？', zoomA: 1.04, zoomB: 1.00, panX: -16, panY: 4 },
+      { start: 55, end: 90, title: '規則的限制與AI寒冬', zoomA: 1.00, zoomB: 1.04, panX: 16, panY: 3 },
+      { start: 90, end: 125, title: '機器學習：從例子學', zoomA: 1.04, zoomB: 1.00, panX: -18, panY: 0 },
+      { start: 125, end: 165, title: '生成式AI：創造內容', zoomA: 1.00, zoomB: 1.04, panX: 14, panY: 2 },
+      { start: 165, end: 220, title: 'AI Agent：朝目標做事', zoomA: 1.04, zoomB: 1.00, panX: -14, panY: 2 },
+      { start: 220, end: 245, title: '正在發展：多個AI合作', zoomA: 1.00, zoomB: 1.04, panX: 18, panY: 0 },
+      { start: 245, end: 270, title: 'AI可以幫忙，人仍是隊長', zoomA: 1.04, zoomB: 1.00, panX: -10, panY: 0 }
+    ];
+
+    const cues = [
+      { start: 0, end: 10, text: '阿東明天要去面試。他問小智：「你可以幫我想一段自我介紹嗎？」' },
+      { start: 10, end: 18, text: '小智翻開厚厚的規則書，找了半天，最後搖搖頭。' },
+      { start: 18, end: 25, text: '最早的AI，只能做人類事先寫好規則的事情。' },
+      { start: 25, end: 37, text: '人類很早就想過：機器有一天能不能思考？' },
+      { start: 37, end: 45, text: '1950年，圖靈把這個問題認真地提出來。' },
+      { start: 45, end: 55, text: '1956年，這個研究方向有了名字：「人工智慧」。' },
+      { start: 55, end: 67, text: '早期AI像一位非常聽話的助手。規則越清楚，它做得越好。' },
+      { start: 67, end: 78, text: '可是遇到規則裡沒有的新狀況，它就很容易卡住。' },
+      { start: 78, end: 90, text: '人們曾經失望，這些低潮被稱為「AI寒冬」。' },
+      { start: 90, end: 103, text: '後來，電腦速度更快，資料也越來越多。' },
+      { start: 103, end: 115, text: '人們給AI大量例子，讓它自己找出規律。' },
+      { start: 115, end: 125, text: 'AI開始辨認圖片、聽懂語音、預測結果，也會下棋。' },
+      { start: 125, end: 138, text: '再後來，AI不只會判斷，也開始能產生新的內容。' },
+      { start: 138, end: 151, text: '它可以寫文字、畫圖片、整理資料，甚至與我們一問一答。' },
+      { start: 151, end: 165, text: '這就是許多人透過ChatGPT接觸到的「生成式AI」。' },
+      { start: 165, end: 177, text: '現在AI又往前走一步。阿東說：「請幫我準備明天的面試。」' },
+      { start: 177, end: 190, text: 'AI先了解目標，再把事情分成幾個步驟。' },
+      { start: 190, end: 205, text: '讀職缺、整理經驗、寫自我介紹、提出面試問題。' },
+      { start: 205, end: 220, text: '這種為了目標規劃、使用工具並採取行動的AI，叫做「AI agent」。' },
+      { start: 220, end: 232, text: '未來，我們還會看到多個AI分工合作。' },
+      { start: 232, end: 245, text: 'AI也會操作電腦、連接機器人，走進更多真實工作。' },
+      { start: 245, end: 255, text: '但是，AI做得越多，人越需要決定方向、保護資料並檢查結果。' },
+      { start: 255, end: 264, text: '小智問：「準備好了，要現在送出嗎？」' },
+      { start: 264, end: 270, text: 'AI可以成為很有能力的助手；人生方向與重要決定，仍由自己負責。' }
+    ];
+
+    scenes.forEach(scene => {
+      scene.start *= TIMING_SCALE;
+      scene.end *= TIMING_SCALE;
+    });
+    cues.forEach(cue => {
+      cue.start *= TIMING_SCALE;
+      cue.end *= TIMING_SCALE;
+    });
+
+    /* === FIXED-STAGE PLAYER CONTROLLER === */
+    class SlidePresentation {
+      constructor() {
+        this.total = TOTAL_DURATION;
+        this.currentTime = 0;
+        this.rate = 1;
+        this.playing = false;
+        this.lastTick = 0;
+        this.currentScene = 0;
+        this.currentCue = 0;
+        this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.stage = document.getElementById('deckStage');
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.images = this.slides.map(slide => slide.querySelector('.scene-image'));
+        this.title = document.getElementById('sceneTitle');
+        this.caption = document.getElementById('caption');
+        this.timeline = document.getElementById('timeline');
+        this.playButton = document.getElementById('playButton');
+        this.timeReadout = document.getElementById('timeReadout');
+        this.startCard = document.getElementById('startCard');
+        this.endCard = document.getElementById('endCard');
+        this.audio = document.getElementById('narration');
+        this.audioReady = false;
+        this.audioObjectUrl = '';
+        this.timeline.max = String(this.total);
+        this.audio.playbackRate = COMFORT_BASE_RATE;
+        this.restoreEdits();
+        this.setupStageScale();
+        this.setupDots();
+        this.setupControls();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupWheelNav();
+        this.prepareAudio();
+        this.render(true);
+        requestAnimationFrame(t => this.tick(t));
+      }
+
+      async prepareAudio() {
+        const startButton = document.getElementById('startButton');
+        const originalSource = this.audio.getAttribute('src');
+        startButton.disabled = true;
+        startButton.textContent = '載入旁白中…';
+
+        const waitForMetadata = () => new Promise((resolve, reject) => {
+          if (this.audio.readyState >= 1) return resolve();
+          this.audio.addEventListener('loadedmetadata', resolve, { once: true });
+          this.audio.addEventListener('error', () => reject(this.audio.error), { once: true });
+        });
+
+        try {
+          if (location.protocol !== 'file:') {
+            const response = await fetch(originalSource);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            this.audioObjectUrl = URL.createObjectURL(await response.blob());
+            this.audio.src = this.audioObjectUrl;
+            this.audio.load();
+          }
+          await waitForMetadata();
+          this.audio.currentTime = this.currentTime * COMFORT_BASE_RATE;
+          this.audioReady = true;
+          startButton.disabled = false;
+          startButton.textContent = '▶ 開始播放旁白';
+        } catch (error) {
+          console.error('旁白載入失敗：', error);
+          startButton.textContent = '旁白載入失敗';
+        }
+      }
+
+      setupStageScale() {
+        const scale = () => {
+          const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          const x = (window.innerWidth - 1920 * factor) / 2;
+          const y = (window.innerHeight - 1080 * factor) / 2;
+          this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+        };
+        scale();
+        window.addEventListener('resize', scale);
+      }
+
+      setupDots() {
+        const holder = document.getElementById('sceneDots');
+        scenes.forEach((scene, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'scene-dot';
+          dot.setAttribute('aria-label', `跳到第${index + 1}幕：${scene.title}`);
+          dot.addEventListener('click', () => this.seek(scene.start));
+          holder.appendChild(dot);
+        });
+        this.dots = [...holder.children];
+      }
+
+      setupControls() {
+        document.getElementById('startButton').addEventListener('click', () => this.play());
+        document.getElementById('replayButton').addEventListener('click', () => { this.seek(0); this.play(); });
+        this.playButton.addEventListener('click', () => this.togglePlay());
+        document.getElementById('restartButton').addEventListener('click', () => this.seek(0));
+        this.timeline.addEventListener('input', event => this.seek(Number(event.target.value), false));
+        document.getElementById('speedSelect').addEventListener('change', event => {
+          this.rate = Number(event.target.value);
+          this.audio.playbackRate = COMFORT_BASE_RATE * this.rate;
+        });
+        document.getElementById('fullscreenButton').addEventListener('click', () => {
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+          else document.exitFullscreen?.();
+        });
+      }
+
+      setupKeyboardNav() {
+        document.addEventListener('keydown', event => {
+          if (event.target.matches('[contenteditable="true"], input, select')) return;
+          if (event.code === 'Space') { event.preventDefault(); this.togglePlay(); }
+          if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); this.nextScene(); }
+          if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); this.previousScene(); }
+          if (event.key === 'Home') { event.preventDefault(); this.seek(0); }
+          if (event.key === 'End') { event.preventDefault(); this.seek(this.total); }
+        });
+      }
+
+      setupTouchNav() {
+        let startX = 0;
+        let startY = 0;
+        this.stage.addEventListener('touchstart', event => {
+          startX = event.changedTouches[0].clientX;
+          startY = event.changedTouches[0].clientY;
+        }, { passive: true });
+        this.stage.addEventListener('touchend', event => {
+          const dx = event.changedTouches[0].clientX - startX;
+          const dy = event.changedTouches[0].clientY - startY;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+            dx < 0 ? this.nextScene() : this.previousScene();
+          }
+        }, { passive: true });
+      }
+
+      setupWheelNav() {
+        let locked = false;
+        window.addEventListener('wheel', event => {
+          if (locked || Math.abs(event.deltaY) < 25) return;
+          locked = true;
+          event.deltaY > 0 ? this.nextScene() : this.previousScene();
+          setTimeout(() => { locked = false; }, 650);
+        }, { passive: true });
+      }
+
+      tick(now) {
+        if (this.playing) {
+          this.currentTime = Math.min(this.total, this.audio.currentTime / COMFORT_BASE_RATE);
+          this.lastTick = now;
+          if (this.currentTime >= this.total || this.audio.ended) {
+            this.playing = false;
+            this.endCard.classList.remove('hidden');
+            this.playButton.textContent = '▶ 播放';
+          }
+          this.render();
+        } else {
+          this.lastTick = now;
+        }
+        requestAnimationFrame(t => this.tick(t));
+      }
+
+      play() {
+        if (!this.audioReady) return;
+        if (this.currentTime >= this.total) {
+          this.currentTime = 0;
+          this.audio.currentTime = 0;
+        }
+        this.audio.currentTime = this.currentTime * COMFORT_BASE_RATE;
+        this.audio.playbackRate = COMFORT_BASE_RATE * this.rate;
+        const playback = this.audio.play();
+        if (playback?.catch) {
+          playback.catch(error => {
+            console.error('旁白無法播放：', error);
+            this.pause();
+          });
+        }
+        this.playing = true;
+        this.startCard.classList.add('hidden');
+        this.endCard.classList.add('hidden');
+        this.playButton.textContent = 'Ⅱ 暫停';
+      }
+
+      pause() {
+        this.audio.pause();
+        this.playing = false;
+        this.playButton.textContent = '▶ 播放';
+      }
+
+      togglePlay() { this.playing ? this.pause() : this.play(); }
+
+      seek(time, hideCards = true) {
+        this.currentTime = Math.max(0, Math.min(this.total, time));
+        this.audio.currentTime = this.currentTime * COMFORT_BASE_RATE;
+        if (hideCards) {
+          this.startCard.classList.add('hidden');
+          this.endCard.classList.add('hidden');
+        }
+        if (this.currentTime >= this.total) this.pause();
+        this.render(true);
+      }
+
+      nextScene() {
+        const next = Math.min(scenes.length - 1, this.currentScene + 1);
+        this.seek(scenes[next].start);
+      }
+
+      previousScene() {
+        const previous = this.currentTime - scenes[this.currentScene].start > 3
+          ? this.currentScene
+          : Math.max(0, this.currentScene - 1);
+        this.seek(scenes[previous].start);
+      }
+
+      render(force = false) {
+        const time = Math.min(this.currentTime, this.total - 0.001);
+        const index = scenes.findIndex(scene => time >= scene.start && time < scene.end);
+        const activeIndex = index < 0 ? scenes.length - 1 : index;
+        const scene = scenes[activeIndex];
+        const progress = Math.max(0, Math.min(1, (time - scene.start) / (scene.end - scene.start)));
+        const fadeProgress = activeIndex < scenes.length - 1 && time >= scene.end - 1
+          ? time - (scene.end - 1)
+          : 0;
+
+        this.slides.forEach((slide, i) => {
+          const isCurrent = i === activeIndex;
+          const isNext = fadeProgress > 0 && i === activeIndex + 1;
+          slide.classList.toggle('active', isCurrent);
+          slide.classList.toggle('visible', isCurrent || isNext);
+          slide.style.opacity = isCurrent ? String(1 - fadeProgress) : isNext ? String(fadeProgress) : '0';
+          slide.style.zIndex = isNext ? '2' : isCurrent ? '1' : '0';
+        });
+
+        this.images.forEach((image, i) => {
+          const data = scenes[i];
+          const localProgress = i === activeIndex ? progress : 0;
+          const zoom = this.reduceMotion ? 1 : data.zoomA + (data.zoomB - data.zoomA) * localProgress;
+          const x = this.reduceMotion ? 0 : data.panX * (localProgress - 0.5);
+          const y = this.reduceMotion ? 0 : data.panY * (localProgress - 0.5);
+          image.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
+        });
+
+        this.currentScene = activeIndex;
+        this.currentCue = Math.max(0, cues.findIndex(cue => time >= cue.start && time < cue.end));
+        this.title.textContent = scene.title;
+        this.caption.textContent = cues[this.currentCue]?.text || '';
+        this.timeline.value = String(this.currentTime);
+        this.timeReadout.textContent = `${this.formatTime(this.currentTime)} / ${this.formatTime(this.total)}`;
+        this.dots.forEach((dot, i) => {
+          dot.classList.toggle('current', i === activeIndex);
+          dot.classList.toggle('past', i < activeIndex);
+        });
+      }
+
+      formatTime(seconds) {
+        const safe = Math.max(0, Math.min(this.total, Math.floor(seconds)));
+        const minutes = Math.floor(safe / 60);
+        const remain = safe % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remain).padStart(2, '0')}`;
+      }
+
+      restoreEdits() {
+        try {
+          const stored = JSON.parse(localStorage.getItem('ai-animatic-v3-edits') || '{}');
+          stored.sceneTitles?.forEach((title, i) => { if (scenes[i] && title) scenes[i].title = title; });
+          stored.cueTexts?.forEach((text, i) => { if (cues[i] && text) cues[i].text = text; });
+        } catch (_) { /* Keep original content if saved data is invalid. */ }
+      }
+
+      saveEdits() {
+        localStorage.setItem('ai-animatic-v3-edits', JSON.stringify({
+          sceneTitles: scenes.map(scene => scene.title),
+          cueTexts: cues.map(cue => cue.text)
+        }));
+      }
+    }
+
+    /* === INLINE TEXT EDITOR === */
+    class InlineEditor {
+      constructor(player) {
+        this.player = player;
+        this.isActive = false;
+        this.toggle = document.getElementById('editToggle');
+        this.hotzone = document.querySelector('.edit-hotzone');
+        this.hideTimeout = null;
+        this.setup();
+      }
+
+      setup() {
+        this.toggle.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('mouseenter', () => {
+          clearTimeout(this.hideTimeout);
+          this.toggle.classList.add('show');
+        });
+        this.hotzone.addEventListener('mouseleave', () => {
+          this.hideTimeout = setTimeout(() => {
+            if (!this.isActive) this.toggle.classList.remove('show');
+          }, 400);
+        });
+        this.toggle.addEventListener('mouseenter', () => clearTimeout(this.hideTimeout));
+        this.toggle.addEventListener('mouseleave', () => {
+          this.hideTimeout = setTimeout(() => {
+            if (!this.isActive) this.toggle.classList.remove('show');
+          }, 400);
+        });
+        document.addEventListener('keydown', event => {
+          if ((event.key === 'e' || event.key === 'E') && !event.target.getAttribute('contenteditable')) {
+            this.toggleEditMode();
+          }
+        });
+
+        this.player.title.addEventListener('input', () => {
+          scenes[this.player.currentScene].title = this.player.title.textContent.trim();
+          this.player.saveEdits();
+        });
+        this.player.caption.addEventListener('input', () => {
+          cues[this.player.currentCue].text = this.player.caption.textContent.trim();
+          this.player.saveEdits();
+        });
+
+        document.getElementById('exportButton').addEventListener('click', () => {
+          const payload = JSON.stringify({ scenes, cues }, null, 2);
+          const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }));
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'AI演進卡通_字幕時間碼_瀏覽器修訂_V3.json';
+          link.click();
+          URL.revokeObjectURL(url);
+        });
+      }
+
+      toggleEditMode() {
+        this.isActive = !this.isActive;
+        this.player.pause();
+        document.body.classList.toggle('editing', this.isActive);
+        this.toggle.classList.toggle('active', this.isActive);
+        this.toggle.classList.toggle('show', this.isActive);
+        [this.player.title, this.player.caption].forEach(element => {
+          element.contentEditable = this.isActive ? 'true' : 'false';
+        });
+      }
+    }
+
+    /* === BOOT === */
+    const player = new SlidePresentation();
+    new InlineEditor(player);
+  </script>
+<a class="hub-return" href="../../talks.html" target="_top">← 返回演講簡報</a></body>
+</html>
