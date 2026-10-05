@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT 演講｜現場圖卡與學員講義 V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#173b3d;--soft:#496566;--teal:#0f696c;--teal-light:#dcebea;--coral:#e76447;--coral-light:#f9ddd2;--amber:#d68a00;--amber-light:#fff0c9;--green:#4f842d;--green-light:#e5f0d7;--red:#b64232;--red-light:#f9dedd;--paper:#fffdf7;--line:rgba(23,59,61,.25);--font:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif}
+    *{box-sizing:border-box} body{margin:0;background:#dfe6e5;color:var(--ink);font-family:var(--font)}
+    .screen-tools{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:#102f31;color:#fff;box-shadow:0 5px 20px rgba(0,0,0,.18)}
+    .screen-tools strong{font-size:18px}.screen-tools button{border:0;border-radius:11px;background:#f2a51a;color:#173b3d;padding:10px 18px;font:800 17px var(--font);cursor:pointer}
+    .pages{padding:22px 0}.print-page{position:relative;width:210mm;height:297mm;margin:0 auto 22px;background:var(--paper);padding:14mm;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.14);page-break-after:always;break-after:page}
+    .print-page:last-child{page-break-after:auto;break-after:auto}.page-kicker{color:var(--teal);font-size:12pt;font-weight:900;letter-spacing:.04em}.page-title{font-size:27pt;line-height:1.18;margin:2mm 0 3mm}.page-sub{font-size:14pt;line-height:1.55;color:var(--soft);margin:0 0 6mm}.page-no{position:absolute;right:14mm;bottom:9mm;font-size:10pt;color:var(--soft);font-weight:800}
+    .cut-note{position:absolute;top:9mm;right:14mm;color:var(--soft);font-size:10pt;font-weight:700}.cut-card{border:1.5mm dashed rgba(23,59,61,.42);border-radius:5mm;background:#fff;padding:8mm;position:relative}.cut-card::after{content:'✂';position:absolute;top:-4mm;left:8mm;background:var(--paper);padding:0 2mm;color:var(--soft)}
+    .three-cards{display:grid;grid-template-rows:repeat(3,1fr);gap:6mm;height:226mm}.role-card{display:grid;grid-template-columns:27mm 1fr 41mm;gap:7mm;align-items:center;border-left:6mm solid var(--accent)}
+    .role-icon,.mode-icon{width:25mm;height:25mm;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:white;font-size:23pt;font-weight:900}.role-card h2{font-size:25pt;margin:0 0 2mm}.role-card p{font-size:15.5pt;line-height:1.45;margin:0}.keyword{border-radius:30mm;background:color-mix(in srgb,var(--accent) 15%,white);padding:4mm;text-align:center;font-size:14pt;font-weight:900;color:var(--accent)}
+    .signal-card{display:grid;grid-template-columns:35mm 1fr;align-items:center;border:2.4mm solid var(--accent);background:var(--bg)}.signal-symbol{width:31mm;height:31mm;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:white;font-size:31pt;font-weight:900}.signal-card h2{font-size:29pt;margin:0 0 3mm}.signal-card p{font-size:18pt;line-height:1.42;margin:0;font-weight:700}
+    .mode-card{display:grid;grid-template-columns:31mm 1fr;align-items:center;gap:8mm;border-left:5mm solid var(--accent)}.mode-card h2{font-size:25pt;margin:0 0 2mm}.mode-card p{font-size:16pt;line-height:1.5;margin:0}
+    .pocket-stack{display:grid;grid-template-rows:1fr 1fr;gap:9mm;height:236mm}.pocket{border:2mm solid var(--teal);border-radius:7mm;padding:10mm;background:linear-gradient(145deg,#fff,#eef6f3);position:relative}.pocket.safety{border-color:var(--coral);background:linear-gradient(145deg,#fff,#fff1ec)}.pocket h2{font-size:28pt;margin:0 0 7mm}.mantra{display:grid;grid-template-columns:14mm 1fr;align-items:center;gap:4mm;margin:5mm 0;font-size:18pt;font-weight:800;line-height:1.35}.mantra b{width:12mm;height:12mm;border-radius:50%;display:grid;place-items:center;background:var(--teal);color:white}.safety .mantra b{background:var(--coral)}.pocket-foot{position:absolute;left:10mm;right:10mm;bottom:8mm;color:var(--soft);font-size:11pt;border-top:.5mm solid var(--line);padding-top:3mm}
+    .worksheet{border:1mm solid var(--line);border-radius:5mm;padding:8mm;background:#fff}.field{margin:5mm 0}.field label{display:block;font-size:17pt;font-weight:900;margin-bottom:2mm}.write-lines{height:24mm;background:repeating-linear-gradient(to bottom,transparent 0,transparent 10mm,rgba(23,59,61,.28) 10.3mm,transparent 10.6mm)}.prompt-box{margin-top:7mm;border:1.4mm solid var(--teal);border-radius:5mm;background:var(--teal-light);padding:6mm}.prompt-box h2{font-size:17pt;margin:0 0 3mm}.prompt-box p{font-size:14.5pt;line-height:1.55;margin:0;font-weight:700}.check-row{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin-top:5mm}.check{border:.7mm solid var(--line);border-radius:3mm;padding:4mm;font-size:12pt;font-weight:800;line-height:1.4}.check::before{content:'□';font-size:17pt;margin-right:2mm}
+    .persona-job{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:228mm}.panel{border:1mm solid var(--line);border-radius:6mm;padding:8mm;background:#fff}.panel h2{font-size:24pt;margin:0 0 5mm}.avatar{width:35mm;height:35mm;border-radius:50%;display:grid;place-items:center;background:var(--coral-light);font-size:25pt;margin-bottom:5mm}.fact{margin:4mm 0;padding:4mm;border-radius:3mm;background:#f5f0e5;font-size:14pt;line-height:1.5}.fact strong{display:block;color:var(--teal);font-size:12pt}.practice{display:inline-block;background:var(--amber);color:white;border-radius:20mm;padding:2mm 5mm;font-weight:900;margin-bottom:4mm}.job-line{display:grid;grid-template-columns:10mm 1fr;gap:3mm;align-items:center;margin:5mm 0;font-size:15pt;line-height:1.35}.job-line span{width:9mm;height:9mm;border-radius:50%;display:grid;place-items:center;background:var(--teal);color:#fff;font-size:11pt;font-weight:900}
+    .answer-zone{margin:4mm 0}.answer-zone h2{font-size:17pt;margin:0 0 2mm;color:var(--teal)}.answer-lines{height:29mm;background:repeating-linear-gradient(to bottom,transparent 0,transparent 9mm,rgba(23,59,61,.28) 9.3mm,transparent 9.6mm)}
+    .run-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:7mm}.schedule{display:grid;gap:4mm}.schedule-row{display:grid;grid-template-columns:30mm 1fr;gap:5mm;border-left:4mm solid var(--accent);background:#fff;border-radius:3mm;padding:4mm}.schedule-row time{font-size:13pt;font-weight:900}.schedule-row strong{display:block;font-size:14pt}.schedule-row span{font-size:11pt;color:var(--soft)}.quick-box{border:1mm solid var(--line);border-radius:4mm;background:#fff;padding:6mm;margin-bottom:5mm}.quick-box h2{font-size:17pt;margin:0 0 3mm}.quick-box li{font-size:12.5pt;line-height:1.55;margin:2mm 0}.emergency{margin-top:6mm;border:1.5mm solid var(--red);border-radius:4mm;padding:5mm;background:var(--red-light);font-size:12pt;font-weight:800;line-height:1.5}
+    .print-page:nth-of-type(8) .worksheet{padding:6mm}.print-page:nth-of-type(8) .answer-zone{margin:2.5mm 0}.print-page:nth-of-type(8) .answer-lines{height:20mm}.print-page:nth-of-type(8) .answer-zone:nth-of-type(3) .answer-lines{height:28mm!important}.print-page:nth-of-type(8) .prompt-box{margin-top:4mm;padding:5mm}
+    .print-page:nth-of-type(9) .page-title{margin-bottom:2mm}.print-page:nth-of-type(9) .quick-box{padding:5mm;margin-bottom:4mm}.print-page:nth-of-type(9) .quick-box li{margin:1.5mm 0}.print-page:nth-of-type(9) .emergency{margin-top:4mm}
+    @page{size:A4 portrait;margin:0}@media print{body{background:#fff}.screen-tools{display:none}.pages{padding:0}.print-page{margin:0;box-shadow:none}}
+  </style>
+<style>.hub-return{position:fixed;bottom:12px;left:12px;z-index:2000;color:#102b46;background:#fff;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;text-decoration:none;font:14px sans-serif}body:has(.overlay.open)>.hub-return{display:none}</style><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script></head>
+<body>
+  <div class="screen-tools"><strong>現場圖卡與學員講義｜共 9 頁</strong><button type="button" onclick="window.print()">列印／另存 PDF</button></div>
+  <main class="pages">
+    <section class="print-page"><div class="cut-note">沿虛線裁切｜每組一套</div><div class="page-kicker">角色圖卡</div><h1 class="page-title">現在要請哪一位幫忙？</h1><p class="page-sub">看情況選角色；不是誰比較厲害。</p><div class="three-cards">
+      <article class="cut-card role-card" style="--accent:var(--coral)"><div class="role-icon">聊</div><div><h2>Chat</h2><p>問問題、聽解釋、比較選項，還可以接著追問。</p></div><div class="keyword">一起想</div></article>
+      <article class="cut-card role-card" style="--accent:var(--teal)"><div class="role-icon">做</div><div><h2>Work</h2><p>讀資料、整理步驟，做出可以檢查的完整成果。</p></div><div class="keyword">完成工作</div></article>
+      <article class="cut-card role-card" style="--accent:var(--amber)"><div class="role-icon">建</div><div><h2>Codex</h2><p>把一句想法，逐步做成網頁、程式或數位工具。</p></div><div class="keyword">蓋出工具</div></article>
+    </div><div class="page-no">1 / 9</div></section>
+
+    <section class="print-page"><div class="cut-note">沿虛線裁切｜每人一套</div><div class="page-kicker">課堂交通號誌</div><h1 class="page-title">不用大聲喊，舉卡片就可以</h1><p class="page-sub">顏色之外也有符號與文字，請選現在的狀態。</p><div class="three-cards">
+      <article class="cut-card signal-card" style="--accent:var(--green);--bg:var(--green-light)"><div class="signal-symbol">✓</div><div><h2>綠卡｜完成了</h2><p>我完成了，可以繼續。</p></div></article>
+      <article class="cut-card signal-card" style="--accent:var(--amber);--bg:var(--amber-light)"><div class="signal-symbol">?</div><div><h2>黃卡｜需要協助</h2><p>我需要一點協助，請慢一點。</p></div></article>
+      <article class="cut-card signal-card" style="--accent:var(--red);--bg:var(--red-light)"><div class="signal-symbol">■</div><div><h2>紅卡｜先停一下</h2><p>我想停一下，或需要休息。</p></div></article>
+    </div><div class="page-no">2 / 9</div></section>
+
+    <section class="print-page"><div class="cut-note">沿虛線裁切｜入口選擇卡</div><div class="page-kicker">參與方式</div><h1 class="page-title">怎麼參加，由你選擇</h1><p class="page-sub">三種方式都算完整參與，不必說明原因。</p><div class="three-cards">
+      <article class="cut-card mode-card" style="--accent:var(--teal)"><div class="mode-icon">我</div><div><h2>自己操作</h2><p>自己輸入、送出，再看回答。</p></div></article>
+      <article class="cut-card mode-card" style="--accent:var(--coral)"><div class="mode-icon">伴</div><div><h2>兩人合作</h2><p>一人決定內容，一人協助找按鈕。</p></div></article>
+      <article class="cut-card mode-card" style="--accent:var(--amber)"><div class="mode-icon">助</div><div><h2>協助操作</h2><p>你說或指選項，協助者代按並念回確認。</p></div></article>
+    </div><div class="page-no">3 / 9</div></section>
+
+    <section class="print-page"><div class="cut-note">沿虛線裁切｜可帶回家</div><div class="page-kicker">提問口訣</div><h1 class="page-title">不用背很長的提示詞</h1><div class="pocket-stack">
+      <article class="cut-card pocket"><h2>三句提問口訣</h2><div class="mantra"><b>1</b><span>我現在遇到什麼情況？</span></div><div class="mantra"><b>2</b><span>我希望 AI 幫我什麼？</span></div><div class="mantra"><b>3</b><span>請用我看得懂的方式回答。</span></div><div class="pocket-foot">第一句不用完美。看不懂，就再請它說簡單一點。</div></article>
+      <article class="cut-card pocket"><h2>三句提問口訣</h2><div class="mantra"><b>1</b><span>我現在遇到什麼情況？</span></div><div class="mantra"><b>2</b><span>我希望 AI 幫我什麼？</span></div><div class="mantra"><b>3</b><span>請用我看得懂的方式回答。</span></div><div class="pocket-foot">第一句不用完美。看不懂，就再請它說簡單一點。</div></article>
+    </div><div class="page-no">4 / 9</div></section>
+
+    <section class="print-page"><div class="cut-note">沿虛線裁切｜可帶回家</div><div class="page-kicker">安全口訣</div><h1 class="page-title">保護自己，重要事情要再確認</h1><div class="pocket-stack">
+      <article class="cut-card pocket safety"><h2>三句安全口訣</h2><div class="mantra"><b>×</b><span>個人祕密，不輸入。</span></div><div class="mantra"><b>?</b><span>重要事情，要查證。</span></div><div class="mantra"><b>✓</b><span>AI 提建議，由我做決定。</span></div><div class="pocket-foot">勞動、醫療、法律、金錢與福利資格，要找可信來源或專業人員確認。</div></article>
+      <article class="cut-card pocket safety"><h2>三句安全口訣</h2><div class="mantra"><b>×</b><span>個人祕密，不輸入。</span></div><div class="mantra"><b>?</b><span>重要事情，要查證。</span></div><div class="mantra"><b>✓</b><span>AI 提建議，由我做決定。</span></div><div class="pocket-foot">勞動、醫療、法律、金錢與福利資格，要找可信來源或專業人員確認。</div></article>
+    </div><div class="page-no">5 / 9</div></section>
+
+    <section class="print-page"><div class="page-kicker">任務一｜求職表達</div><h1 class="page-title">先寫三個真實關鍵字</h1><p class="page-sub">寫一個詞也可以；不想寫自己的資料，可以使用下一頁的「阿凱」。</p><div class="worksheet">
+      <div class="field"><label>我做過：</label><div class="write-lines"></div></div><div class="field"><label>我會：</label><div class="write-lines"></div></div><div class="field"><label>別人說我：</label><div class="write-lines"></div></div>
+      <div class="prompt-box"><h2>全班提示詞</h2><p>我做過＿＿＿＿。我會＿＿＿＿。別人說我＿＿＿＿。<br>請幫我整理成三句簡單的求職自我介紹。<br>不要替我增加沒有說過的經驗。</p></div>
+      <div class="check-row"><div class="check">像我會說的話</div><div class="check">沒有多出新經驗</div><div class="check">我自己看得懂</div></div>
+    </div><div class="page-no">6 / 9</div></section>
+
+    <section class="print-page"><div class="page-kicker">虛構練習材料</div><h1 class="page-title">不想說自己，也可以完整練習</h1><p class="page-sub">以下都是虛構資料，不代表任何學員，也不是真實徵才資訊。</p><div class="persona-job">
+      <article class="panel"><div class="avatar">🙂</div><h2>練習人物：阿凱</h2><p style="font-size:14pt;color:var(--soft)">正在準備找第一份工作</p><div class="fact"><strong>做過</strong>在活動中幫忙把物品放進袋子</div><div class="fact"><strong>會做</strong>照著清單清點數量</div><div class="fact"><strong>別人說</strong>做事仔細，也願意問問題</div></article>
+      <article class="panel"><span class="practice">練習用</span><h2>包裝作業助理</h2><div class="job-line"><span>1</span><div>將商品放進盒子</div></div><div class="job-line"><span>2</span><div>貼上標籤</div></div><div class="job-line"><span>3</span><div>依清單核對數量</div></div><div class="job-line"><span>4</span><div>保持工作桌整潔</div></div><div class="prompt-box" style="margin-top:10mm"><h2>可以這樣使用</h2><p>把阿凱的三點經驗放進任務一；把職缺文字或照片放進任務二。</p></div></article>
+    </div><div class="page-no">7 / 9</div></section>
+
+    <section class="print-page"><div class="page-kicker">任務二｜工作理解</div><h1 class="page-title">請 ChatGPT 把工作說簡單</h1><div class="prompt-box" style="margin:0 0 5mm"><h2>全班提示詞</h2><p>請用簡單的話告訴我：這份工作每天要做什麼？需要會什麼？我面試時可以問哪三個問題？</p></div><div class="worksheet">
+      <div class="answer-zone"><h2>1. 每天要做什麼？</h2><div class="answer-lines"></div></div><div class="answer-zone"><h2>2. 需要會什麼？</h2><div class="answer-lines"></div></div><div class="answer-zone"><h2>3. 面試時可以問哪三個問題？</h2><div class="answer-lines" style="height:39mm"></div></div>
+      <div class="check-row"><div class="check">沒有敏感資料</div><div class="check">我看得懂</div><div class="check">重要內容再查證</div></div>
+      <div class="prompt-box"><h2>看不懂時，再追問</h2><p>請用更簡單的話，一步一步告訴我。</p></div>
+    </div><div class="page-no">8 / 9</div></section>
+
+    <section class="print-page"><div class="page-kicker">講師／協助者快速流程</div><h1 class="page-title">150 分鐘現場執行單</h1><div class="run-grid"><div class="schedule">
+      <div class="schedule-row" style="--accent:var(--teal)"><time>00:00</time><div><strong>第一部分＋影片｜25 分</strong><span>介紹 AI、說明共創過程、播放影片、立即回顧。</span></div></div>
+      <div class="schedule-row" style="--accent:var(--coral)"><time>00:25</time><div><strong>第二部分｜65 分</strong><span>Chat／Work／Codex；手機帶做；提問、追問、安全。</span></div></div>
+      <div class="schedule-row" style="--accent:var(--amber)"><time>01:30</time><div><strong>休息｜10 分</strong><span>處理飲水、洗手間與個別手機問題。</span></div></div>
+      <div class="schedule-row" style="--accent:var(--green)"><time>01:40</time><div><strong>第三部分＋總回顧｜50 分</strong><span>求職表達、工作理解、面試示範、帶走成果。</span></div></div>
+      <div class="emergency">時間不足：保留「第一次提問＋追問一次」、「任務一或任務二擇一」、「三句安全口訣」。不以加快口令追趕進度。</div>
+    </div><div>
+      <div class="quick-box"><h2>交通號誌規則</h2><ul><li>綠：完成，可以繼續。</li><li>黃：需要協助；超過 3 張，全班停下重示範。</li><li>紅：立刻暫停，確認是否需要休息。</li></ul></div>
+      <div class="quick-box"><h2>協助者優先順序</h2><ol><li>先問本人想怎麼做。</li><li>找按鈕或代按。</li><li>念回輸入內容，讓本人確認。</li><li>不代替本人決定答案。</li></ol></div>
+      <div class="quick-box"><h2>安全底線</h2><ul><li>不現場強迫註冊或付費。</li><li>不輸入個資、密碼、銀行資料或病歷。</li><li>不用公開真實經歷；可用阿凱。</li><li>重要勞動、醫療、法律與金錢問題另行查證。</li></ul></div>
+    </div></div><div class="page-no">9 / 9</div></section>
+  </main>
+<a class="hub-return" href="../../talks.html" target="_top">← 返回演講簡報</a></body>
+</html>
