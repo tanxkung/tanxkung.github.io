@@ -1,0 +1,317 @@
+<!doctype html>
+<!-- AIR / 2026-10-09 / full local HTML V1.
+Source outline and approved representative pages remain preserved.
+Numbers and beverage-shop scenario are teaching hypotheses.
+No website publication, PDF, classroom or USB-device validation. -->
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive"><script src="access-gate-config.js?v=14b"></script><script src="access-gate.js?v=14b"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>管理資訊系統｜從資料到決策 V1</title><meta name="description" content="從飲料店案例理解資料、管理資訊、報表、AI與決策責任"><link rel="icon" href="data:,"><style>
+/* === THEME: preserve the approved paper-and-cobalt teaching system === */
+:root{--paper:#f0ebde;--ink:#1f2be0;--dark:#08111f;--light:#f4f0e8;--cyan:#35d9cf;--stage-bg:#080d17;--slide-bg:var(--paper);--font-display:'Noto Serif TC','Songti TC',serif;--font-body:'Noto Sans TC','PingFang TC',sans-serif}
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* === TYPOGRAPHY AND FRAME === */
+*{box-sizing:border-box}button,a,select{font:inherit}a{color:inherit}
+.slide{color:var(--ink);background:var(--paper);font-family:var(--font-body);padding:86px;transition:opacity .22s}
+.slide:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(31,43,224,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(31,43,224,.06) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.slide:after{content:"";position:absolute;left:54px;right:54px;top:30px;border-top:2px solid currentColor}
+.slide>*{position:relative}
+header{height:144px;border-bottom:2px solid currentColor;display:flex;justify-content:space-between;align-items:flex-start;gap:30px}
+h1,h2{font:500 68px/1.22 var(--font-display);letter-spacing:-.025em;margin:0;max-width:1450px}
+.label{font-size:22px;letter-spacing:.08em;white-space:nowrap;padding-top:20px}
+footer{position:absolute!important;left:86px;right:86px;bottom:86px;display:flex;justify-content:space-between;border-top:1px solid currentColor;padding-top:20px;font-size:22px}
+p{margin:0;font-size:34px;line-height:1.6}h3{font:500 44px/1.25 var(--font-display);margin:0 0 24px}
+.subtitle{margin-top:24px;font-size:30px}
+.content{height:620px;padding-top:42px}
+.note{font-size:25px;line-height:1.5;opacity:.85}
+.dark{background:var(--dark);color:var(--light)}.dark:before{background-image:linear-gradient(rgba(111,151,181,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(111,151,181,.12) 1px,transparent 1px);background-size:64px 64px}
+.dark .accent{color:var(--cyan)}
+.reveal{transition:transform .35s,opacity .35s}.active .reveal{animation:enter .35s both}
+@keyframes enter{from{opacity:.3;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* === RECEIPT: transaction fields vs management questions === */
+.receipt-layout{display:grid;grid-template-columns:680px 1fr;gap:90px}
+.receipt{background:#faf7ef;border:2px solid currentColor;padding:32px 42px;box-shadow:14px 14px 0 rgba(31,43,224,.12)}
+.receipt .receipt-head{font-size:26px;letter-spacing:.08em;text-align:center;border-bottom:2px dashed currentColor;padding-bottom:20px;margin-bottom:16px}
+.receipt dl{display:grid;grid-template-columns:1fr 1.4fr;gap:18px;margin:20px 0;font-size:30px;line-height:1.4}
+.receipt dt{opacity:.65}.receipt dd{margin:0;text-align:right}.receipt .total{border-top:2px dashed currentColor;padding-top:18px;font-size:38px;display:flex;justify-content:space-between}
+.questions{padding-top:18px}.questions h3{font-size:54px;margin-bottom:32px}.questions p{margin:22px 0;padding-bottom:20px;border-bottom:1px solid rgba(31,43,224,.25)}
+.questions .note{margin-top:30px;border:0;font-size:27px}
+/* === ROLE MATRIX: one record, three uses === */
+table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:31px;text-align:left}
+th{font-size:24px;font-weight:500;letter-spacing:.06em;padding:18px 28px;border-bottom:3px solid currentColor}
+td{padding:28px;border-bottom:1px solid rgba(31,43,224,.3);vertical-align:top;line-height:1.45}
+.role{font:500 46px var(--font-display)}.row-note{font-size:26px;opacity:.7;display:block;margin-top:10px}
+.callout{margin-top:28px;font-size:32px;border-left:8px solid currentColor;padding:12px 28px}
+/* === REVENUE COMPARISON: proportional bars with explicit zero baseline === */
+.revenue{display:grid;grid-template-columns:920px 1fr;gap:70px}
+.chart{height:520px;position:relative;padding:0 90px 48px;display:flex;align-items:flex-end;justify-content:space-around}
+.chart:after{content:"";position:absolute;left:0;right:0;bottom:48px;border-top:3px solid currentColor}
+.bar-group{width:220px;position:relative;text-align:center}
+.bar{background:var(--ink);height:320px;position:relative}.bar.high{height:384px;background:transparent;border:5px solid var(--ink);background-image:repeating-linear-gradient(-45deg,transparent,transparent 12px,rgba(31,43,224,.14) 12px,rgba(31,43,224,.14) 15px)}
+.bar-value{position:absolute;left:0;right:0;top:-64px;font-size:44px;font-weight:600}
+.bar-name{position:absolute;bottom:-43px;left:0;right:0;font-size:29px}.zero{position:absolute;left:0;bottom:31px;font-size:24px;background:var(--paper);z-index:1}
+.big{font-size:138px;letter-spacing:-.055em;line-height:1.05;margin:26px 0}.discussion{padding-top:28px}.discussion h3{font-size:42px}.discussion p{font-size:36px}.discussion .note{font-size:26px;margin-top:36px}
+.chart-note{margin-top:24px;font-size:23px}
+/* === AI CHECK: confirmed facts, missing information, unsupported conclusion === */
+.check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;height:500px}
+.check{border-top:7px solid currentColor;padding-top:26px}.check .number{font-size:24px;opacity:.6;margin-bottom:42px}
+.check h3{font-size:52px}.check p{font-size:32px;line-height:1.7}.check em{font-style:normal;color:var(--cyan)}
+.dark .callout{border-color:var(--cyan);font-size:31px;margin-top:18px}
+/* === DECISION LOOP: four steps and a visible feedback path === */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;margin-top:10px;position:relative}
+.step{border-top:7px solid currentColor;padding:28px 20px 32px 0;position:relative}
+.step:not(:last-child):after{content:"→";position:absolute;right:-24px;top:74px;font-size:48px}
+.step .number{font-size:28px;margin-bottom:34px}.step h3{font-size:46px}.step p{font-size:30px}
+.feedback{margin:36px 0 28px;border:2px solid currentColor;border-top:0;padding:20px 32px;text-align:center;font-size:29px}
+.action-question{font:500 48px/1.4 var(--font-display);margin-top:26px}
+/* === STATIC FALLBACK AND ACCESSIBLE CHROME === */
+html:not(.enhanced) .slide:first-child,.slide:target{visibility:visible;opacity:1;pointer-events:auto;z-index:2}
+html:not(.enhanced) .slide:target{z-index:3}
+.deck-controls{bottom:10px;background:#faf7ef;color:#172237;display:flex;gap:8px;align-items:center;border:1px solid #c9c3b5;padding:7px 10px;border-radius:8px;font:14px var(--font-body);max-width:96vw;white-space:nowrap}
+.deck-controls a,.deck-controls button,.deck-controls select{border:1px solid #c9c3b5;background:transparent;border-radius:4px;padding:7px;text-decoration:none;color:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #35a69b;outline-offset:3px}
+#status{min-width:32px;text-align:center}
+.edit-hotzone{position:fixed;left:0;top:0;width:65px;height:65px;z-index:1001}
+.edit-toggle{position:fixed;top:12px;left:12px;opacity:0;pointer-events:none;z-index:1002;padding:10px;color:#172237;background:#faf7ef;border:1px solid #c9c3b5}
+.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}
+[contenteditable=true]{outline:2px dashed var(--cyan)}
+@media print{.edit-hotzone,.edit-toggle{display:none}}
+@media(max-width:600px){.deck-controls>a:not([aria-label]){display:none}.deck-controls{gap:5px}.deck-controls select{max-width:120px}}
+
+/* === FULL DECK LAYOUTS === */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;min-height:430px}
+.card{border-top:7px solid currentColor;padding:28px 18px 20px 0}
+.card .number{font-size:24px;opacity:.65;margin-bottom:48px}.card h3{font-size:48px}.card p{font-size:32px;line-height:1.75}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:80px}.compact td{padding:24px 28px}.compact th{padding:18px 28px}
+.compact+p{margin-top:28px}.compact~.note{margin-top:22px;font-size:26px}
+.statement{padding-top:45px;max-width:1650px}.hero{font:500 96px/1.3 var(--font-display);letter-spacing:-.025em}
+.explain{margin-top:44px;padding-top:24px;border-top:2px solid currentColor;font-size:34px;line-height:1.65}
+.system-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;min-height:450px}.system-grid h3{font-size:36px}.system-grid p{font-size:30px}.acronym{font:500 76px/1 var(--font-display);margin-bottom:40px}
+.video-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:90px}.video-title{font:500 54px/1.35 var(--font-display);margin-bottom:28px}
+.video-links{display:flex;gap:24px;margin:28px 0}.video-links a{border:2px solid currentColor;padding:20px 26px;font-size:28px;text-decoration:none}
+.video-guide{border-top:7px solid currentColor;padding-top:30px}.time{font:500 64px/1.3 var(--font-display);margin-bottom:24px}.video-guide h3{font-size:48px}
+.prompt{border-left:10px solid currentColor;padding:28px 38px;background:rgba(31,43,224,.05)}.prompt p{font-size:32px;margin:20px 0}.prompt .prompt-label{font-size:24px;opacity:.7}
+.tags{display:flex;gap:26px;margin:28px 0}.tags span{border:1px solid currentColor;padding:10px 30px;font-size:28px}
+.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin:24px 0 32px}.choices>div{border-top:6px solid currentColor;padding:24px 0}.choices strong{font-size:64px}.choices h3{font-size:38px;margin-top:20px}
+.summary-line{display:flex;align-items:center;gap:32px;font-size:42px;color:var(--cyan);margin-bottom:34px}.closing{font-size:66px}.source-links{display:flex;gap:28px;margin:30px 0;font-size:26px}
+.slide-nav{display:flex;gap:18px}.slide-nav a{text-decoration:none;border:1px solid currentColor;padding:3px 10px;font-size:22px}
+#jump{max-width:330px}.deck-controls select{font-size:14px}
+#s23 .action-question{font-size:44px;margin-top:16px}#s23 .content>.note{font-size:24px;margin-top:16px!important}
+@media(max-width:600px){#jump{max-width:150px}}
+</style><style>
+.site-home-link{position:fixed;top:16px;left:92px;z-index:9900;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 14px;color:#fff;background:rgba(9,24,38,.84);border:1px solid rgba(255,255,255,.38);border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.22);font:700 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;text-decoration:none;opacity:.78;transition:opacity .2s ease,background .2s ease}
+.site-home-link:hover,.site-home-link:focus-visible{opacity:1;background:rgba(9,24,38,.96);outline:3px solid rgba(255,255,255,.7);outline-offset:2px}
+@media(max-width:520px){.site-home-link{top:10px;left:88px;min-height:40px;padding:8px 11px;font-size:13px}}
+@media print{.site-home-link{display:none!important}}
+</style></head><body>
+<a class="site-home-link" href="./" aria-label="返回龔鴻裕教學與教材首頁">← 教材首頁</a>
+<div class="deck-viewport"><main class="deck-stage" id="deckStage"><section class="slide dark active visible" id="s1" aria-labelledby="t1"><header><h2 id="t1" data-edit>從資料到決策</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="statement"><p class="hero" data-edit>資訊系統如何幫助<br>管理者做判斷？</p><p class="explain" data-edit>前一份談「工作如何連起來」。<br>這一份談「工作留下的資料，如何用來做決定」。</p></div></div><footer><span>管理資訊系統｜從紀錄、比較到行動</span><span>01 / 24</span><nav class="slide-nav" aria-label="第 1 頁備援導覽"><a href="#s1">←</a><a href="#s2">→</a></nav></footer></section>
+<section class="slide" id="s2" aria-labelledby="t2"><header><h2 id="t2" data-edit>每天都有紀錄，為什麼還不知道生意好不好？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="split"><div><table class="compact"><thead><tr><th>時間</th><th>訂單</th><th>實收</th></tr></thead><tbody><tr><td>13:20</td><td>A021</td><td>50 元</td></tr><tr><td>13:23</td><td>A022</td><td>100 元</td></tr><tr><td>13:25</td><td>A023</td><td>45 元</td></tr></tbody></table><p class="note">三筆交易示意，不是整日營收。</p></div><div class="questions"><h3 data-edit>紀錄增加，問題仍在。</h3><p data-edit>最近午後好像變忙了。</p><p data-edit>促銷到底有沒有用？</p><p data-edit>是不是該多排一個人？</p></div></div></div><footer><span>教學情境與示意，非真實店家資料</span><span>02 / 24</span><nav class="slide-nav" aria-label="第 2 頁備援導覽"><a href="#s1">←</a><a href="#s3">→</a></nav></footer></section>
+<section class="slide" id="s3" aria-labelledby="t3"><header><h2 id="t3" data-edit>這間店要做哪一個決定？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>排班</h3><p data-edit>哪些時段忙？<br>等待時間多長？</p></article><article class="card"><div class="number">02</div><h3 data-edit>促銷</h3><p data-edit>多賣了多少？<br>成本也增加了嗎？</p></article><article class="card"><div class="number">03</div><h3 data-edit>備料</h3><p data-edit>哪些品項會賣？<br>剩料與缺貨各有多少？</p></article></div><p class="callout" data-edit>先說清楚問題，再決定要找哪些資料。</p></div><footer><span>教學情境與示意，非真實店家資料</span><span>03 / 24</span><nav class="slide-nav" aria-label="第 3 頁備援導覽"><a href="#s2">←</a><a href="#s4">→</a></nav></footer></section>
+<section class="slide" id="s4" aria-labelledby="t4">
+<header><h1 id="t4" data-edit>一筆交易留下什麼？</h1><span class="label">從資料到決策</span></header>
+<div class="content receipt-layout reveal">
+<div class="receipt"><div class="receipt-head">校園旁的飲料店｜交易紀錄</div><dl><dt>訂單編號</dt><dd>A021</dd><dt>交易時間</dt><dd>週二 13:20</dd><dt>品項／數量</dt><dd>珍珠奶茶／1 杯</dd><dt>原價／折扣</dt><dd>60 元／10 元</dd><dt>銷售通路</dt><dd>門市外帶</dd><dt>交易狀態</dt><dd>已完成</dd></dl><div class="total"><span>實收金額</span><strong>50 元</strong></div></div>
+<div class="questions"><h3 data-edit>紀錄有了，答案還沒出現。</h3><p data-edit>哪個時段需要多一個人？</p><p data-edit>折扣有沒有帶來更多交易？</p><p data-edit>多賣一杯，究竟留下多少錢？</p><p class="note" data-edit>一筆資料可以確認交易；要回答經營問題，還需要彙整、比較與其他資訊。</p></div>
+</div><footer><span>交易內容為教學假設，非真實店家資料</span><span>04 / 24</span><nav class="slide-nav" aria-label="第 4 頁備援導覽"><a href="#s3">←</a><a href="#s5">→</a></nav></footer></section>
+<section class="slide" id="s5" aria-labelledby="t5"><header><h2 id="t5" data-edit>資料、資訊、決策，不是同一件事</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>資料</h3><p data-edit>一筆訂單的時間、<br>品項、數量與金額。</p></article><article class="card"><div class="number">02</div><h3 data-edit>資訊</h3><p data-edit>把交易依時段彙整，<br>看出午後交易較集中。</p></article><article class="card"><div class="number">03</div><h3 data-edit>決策</h3><p data-edit>結合等待時間與排班，<br>評估是否增派人力。</p></article></div><p class="callout" data-edit>彙整可以讓現象浮現；採取哪個行動，仍需要判斷。</p></div><footer><span>教學情境與示意，非真實店家資料</span><span>05 / 24</span><nav class="slide-nav" aria-label="第 5 頁備援導覽"><a href="#s4">←</a><a href="#s6">→</a></nav></footer></section>
+<section class="slide" id="s6" aria-labelledby="t6"><header><h2 id="t6" data-edit>同一間店，三種資訊需求</h2><span class="label">從資料到決策</span></header>
+<p class="subtitle" data-edit>不是每個人都需要看全部資料，而是要能回答自己負責的問題。</p>
+<div class="content reveal"><table><colgroup><col style="width:18%"><col style="width:32%"><col style="width:34%"><col style="width:16%"></colgroup><thead><tr><th>角色</th><th>要回答的問題</th><th>需要的資訊</th><th>時間範圍</th></tr></thead><tbody>
+<tr><td class="role">店員</td><td>這筆訂單做對了嗎？</td><td>品項、數量、口味與付款狀態</td><td>現在</td></tr>
+<tr><td class="role">店長</td><td>午後要安排多少人？</td><td>分時交易量、等待時間與排班</td><td>今日／本週</td></tr>
+<tr><td class="role">老闆</td><td>這項促銷要不要繼續？</td><td>營收、成本、通路與比較基準</td><td>活動期間</td></tr></tbody></table>
+<p class="callout" data-edit>職位不同，關心的問題不同；但資訊需求並不是完全分開的。</p></div>
+<footer><span>角色與情境為教學假設</span><span>06 / 24</span><nav class="slide-nav" aria-label="第 6 頁備援導覽"><a href="#s5">←</a><a href="#s7">→</a></nav></footer></section>
+<section class="slide" id="s7" aria-labelledby="t7"><header><h2 id="t7" data-edit>系統如何從交易走向分析？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="system-grid"><article class="card"><div class="acronym">TPS</div><h3 data-edit>交易處理系統</h3><p data-edit>記錄點餐、付款與訂單狀態。</p></article><article class="card"><div class="acronym">MIS</div><h3 data-edit>管理資訊系統</h3><p data-edit>彙整營收、時段與商品報表。</p></article><article class="card"><div class="acronym">DSS</div><h3 data-edit>決策支援系統</h3><p data-edit>協助比較不同排班或促銷方案。</p></article><article class="card"><div class="acronym">BI</div><h3 data-edit>商業智慧</h3><p data-edit>用圖表與查詢探索資料，支援分析。</p></article></div><p class="callout" data-edit>這是功能上的區分，不是職位的固定配對；同一套產品可能整合多種功能。</p></div><footer><span>概念整理｜功能可能重疊，並非單向升級階梯</span><span>07 / 24</span><nav class="slide-nav" aria-label="第 7 頁備援導覽"><a href="#s6">←</a><a href="#s8">→</a></nav></footer></section>
+<section class="slide" id="s8" aria-labelledby="t8"><header><h2 id="t8" data-edit>看影片前：別看按鈕，要看資訊怎麼形成</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>資料來源</h3><p data-edit>圖表使用了哪些資料？<br>資料有哪些欄位？</p></article><article class="card"><div class="number">02</div><h3 data-edit>問題與呈現</h3><p data-edit>總額、趨勢、明細，<br>各能回答什麼問題？</p></article><article class="card"><div class="number">03</div><h3 data-edit>篩選範圍</h3><p data-edit>選了某位顧客後，<br>哪些數字跟著改變？</p></article></div><p class="callout" data-edit>不用記操作步驟。看完後，試著把畫面換成飲料店的問題。</p></div><footer><span>影片一導讀｜不要求學生安裝軟體</span><span>08 / 24</span><nav class="slide-nav" aria-label="第 8 頁備援導覽"><a href="#s7">←</a><a href="#s9">→</a></nav></footer></section>
+<section class="slide" id="s9" aria-labelledby="t9"><header><h2 id="t9" data-edit>影片一：從資料到互動報表</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="video-layout"><div><p class="video-title">Power BI Tutorial<br>for Beginners</p><p>Kevin Stratvert｜完整片長 12:10</p><div class="video-links"><a href="https://www.youtube.com/watch?v=VaOhNqNtGGE&t=482s" target="_blank" rel="noopener noreferrer">▶ 從 08:02 開始</a><a href="https://www.youtube.com/watch?v=VaOhNqNtGGE" target="_blank" rel="noopener noreferrer">觀看完整影片</a></div><p class="note">英文影片，可選繁體中文自動翻譯字幕。<br>影片含贊助內容，課堂節選不包含贊助介紹。</p></div><div class="video-guide"><p class="time">08:02 → 10:52</p><h3 data-edit>2 分 50 秒</h3><p data-edit>折線圖 → 營收卡片<br>→ 顧客明細與互動</p><p class="callout" data-edit>請在 10:52 手動停止。<br>連結不會自動結束播放。</p></div></div></div><footer><span>來源：Kevin Stratvert 頻道｜餅乾案例示範，非飲料店實績</span><span>09 / 24</span><nav class="slide-nav" aria-label="第 9 頁備援導覽"><a href="#s8">←</a><a href="#s10">→</a></nav></footer></section>
+<section class="slide" id="s10" aria-labelledby="t10"><header><h2 id="t10" data-edit>圖表能回答的問題不同</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="system-grid"><article class="card"><div class="acronym">總額</div><h3 data-edit>看規模</h3><p data-edit>今天營收是多少？</p></article><article class="card"><div class="acronym">折線</div><h3 data-edit>看變化</h3><p data-edit>午後交易如何變動？</p></article><article class="card"><div class="acronym">表格</div><h3 data-edit>看細節</h3><p data-edit>哪些品項、哪些交易？</p></article><article class="card"><div class="acronym">篩選</div><h3 data-edit>看特定範圍</h3><p data-edit>只看門市外帶，結果如何？</p></article></div><p class="callout" data-edit>沒有一種圖表能回答所有問題；選圖表，也是在選觀察角度。</p></div><footer><span>教學情境與示意，非真實店家資料</span><span>10 / 24</span><nav class="slide-nav" aria-label="第 10 頁備援導覽"><a href="#s9">←</a><a href="#s11">→</a></nav></footer></section>
+<section class="slide" id="s11" aria-labelledby="t11"><header><h2 id="t11" data-edit>營收增加 20%，就值得慶祝嗎？</h2><span class="label">從資料到決策</span></header>
+<div class="content revenue reveal"><div><div class="chart" role="img" aria-label="零基準營收比較：基準日一萬元，促銷日一萬二千元"><span class="zero">0</span><div class="bar-group"><div class="bar"><span class="bar-value">10,000</span></div><span class="bar-name">基準日</span></div><div class="bar-group"><div class="bar high"><span class="bar-value">12,000</span></div><span class="bar-name">促銷日</span></div></div><p class="chart-note">單位：新臺幣元｜折扣與退單調整後營收</p></div>
+<div class="discussion"><div class="big">+20%</div><h3 data-edit>數字上升，是觀察的起點。</h3><p data-edit>先別急著下結論。<br>如果你是店長，<br>還想知道哪三件事？</p><p class="note" data-edit>交易筆數？成本？營業時間？<br>營收不是獲利；兩天的比較也不能直接證明促銷效果。</p></div></div>
+<footer><span>數字為教學假設，非實際經營成效</span><span>11 / 24</span><nav class="slide-nav" aria-label="第 11 頁備援導覽"><a href="#s10">←</a><a href="#s12">→</a></nav></footer></section>
+<section class="slide" id="s12" aria-labelledby="t12"><header><h2 id="t12" data-edit>是客人變多，還是每筆買更多？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><table class="compact"><thead><tr><th>指標</th><th>基準日</th><th>促銷日</th></tr></thead><tbody><tr><td>營收</td><td>10,000 元</td><td>12,000 元</td></tr><tr><td>有效交易筆數</td><td>200 筆</td><td>240 筆</td></tr><tr><td>每筆交易平均金額</td><td>50 元</td><td>50 元</td></tr></tbody></table><p class="callout" data-edit>營收＝有效交易筆數 × 每筆交易平均金額。</p><p class="note" data-edit>本例增加的是交易筆數，每筆平均金額沒變。<br>一個人可能買好幾次，因此不能直接說顧客人數增加 20%。</p></div><footer><span>教學假設｜有效交易排除取消單，金額口徑一致</span><span>12 / 24</span><nav class="slide-nav" aria-label="第 12 頁備援導覽"><a href="#s11">←</a><a href="#s13">→</a></nav></footer></section>
+<section class="slide" id="s13" aria-labelledby="t13"><header><h2 id="t13" data-edit>多賣了，留下來的金額卻可能變少</h2><span class="label">從資料到決策</span></header><div class="content reveal"><table class="compact"><thead><tr><th>指標</th><th>基準日</th><th>促銷日</th></tr></thead><tbody><tr><td>營收</td><td>10,000 元</td><td>12,000 元</td></tr><tr><td>納入比較的變動成本</td><td>4,000 元</td><td>6,500 元</td></tr><tr><td>貢獻餘額</td><td>6,000 元</td><td>5,500 元</td></tr></tbody></table><p class="callout" data-edit>營收增加 2,000 元，貢獻餘額卻減少 500 元。</p><p class="note" data-edit>本例變動成本含原料、包材與相關通路費用。貢獻餘額尚未扣除人事、租金等費用，不是淨利。<br>這也不等於證明促銷無效：還要核對比較基準與成本範圍。</p></div><footer><span>數字為教學假設｜營收不是獲利</span><span>13 / 24</span><nav class="slide-nav" aria-label="第 13 頁備援導覽"><a href="#s12">←</a><a href="#s14">→</a></nav></footer></section>
+<section class="slide" id="s14" aria-labelledby="t14"><header><h2 id="t14" data-edit>比較之前，先問是不是同一個基準</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>時間相同嗎？</h3><p data-edit>同星期、同時段？<br>營業時間有沒有變？</p></article><article class="card"><div class="number">02</div><h3 data-edit>範圍相同嗎？</h3><p data-edit>門市、外送或全部？<br>折扣與退單怎麼算？</p></article><article class="card"><div class="number">03</div><h3 data-edit>情境相同嗎？</h3><p data-edit>天氣、考試、校園活動，<br>是否也影響了生意？</p></article></div><p class="callout" data-edit>看到差異是第一步；找原因之前，先確認比較是否合理。</p></div><footer><span>教學情境與示意，非真實店家資料</span><span>14 / 24</span><nav class="slide-nav" aria-label="第 14 頁備援導覽"><a href="#s13">←</a><a href="#s15">→</a></nav></footer></section>
+<section class="slide" id="s15" aria-labelledby="t15"><header><h2 id="t15" data-edit>發現變化、查找原因、採取行動</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>發現變化</h3><p data-edit>午後交易變多，<br>等待時間也變長。</p></article><article class="card"><div class="number">02</div><h3 data-edit>查找原因</h3><p data-edit>分時段、品項與通路看。<br>是尖峰集中？還是人力不足？</p></article><article class="card"><div class="number">03</div><h3 data-edit>採取行動</h3><p data-edit>先試調整尖峰排班，<br>再觀察交易量與等待時間。</p></article></div><p class="callout" data-edit>看報表不是為了多看幾個數字，而是為了確認問題與下一步。</p></div><footer><span>構思依據：<a href="https://blog.ichefpos.com/230616-ichefreport/" target="_blank" rel="noopener noreferrer">iCHEF〈餐廳營收分析術〉</a>｜本頁情境為教學延伸</span><span>15 / 24</span><nav class="slide-nav" aria-label="第 15 頁備援導覽"><a href="#s14">←</a><a href="#s16">→</a></nav></footer></section>
+<section class="slide" id="s16" aria-labelledby="t16"><header><h2 id="t16" data-edit>圖表做得漂亮，資料錯了也沒用</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="split"><div><table class="compact"><thead><tr><th>原始名稱</th><th>銷量</th></tr></thead><tbody><tr><td>珍奶</td><td>30 杯</td></tr><tr><td>珍珠奶茶</td><td>20 杯</td></tr></tbody></table><p class="callout" data-edit>若確認是同一品項，應合計 50 杯。</p><p class="note" data-edit>先核對品項代碼與規格；名稱相似不一定能合併。</p></div><div class="questions"><h3 data-edit>分析之前，先檢查。</h3><p data-edit>有沒有重複或漏登？</p><p data-edit>取消單是否已排除？</p><p data-edit>資料更新到哪個時間？</p></div></div></div><footer><span>數字為教學假設｜清理規則與原始紀錄應保留</span><span>16 / 24</span><nav class="slide-nav" aria-label="第 16 頁備援導覽"><a href="#s15">←</a><a href="#s17">→</a></nav></footer></section>
+<section class="slide dark" id="s17" aria-labelledby="t17"><header><h2 id="t17" data-edit>報表看到現象，還要回到現場</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="statement"><p class="hero" data-edit>報表說午後變忙了，<br>現場究竟發生什麼事？</p><p class="explain" data-edit>可能是訂單集中，也可能是製作流程變慢。<br>等待時間、排班、設備與活動紀錄，需要另外核對。</p></div></div><footer><span>系統能回答什麼，取決於實際有記錄什麼</span><span>17 / 24</span><nav class="slide-nav" aria-label="第 17 頁備援導覽"><a href="#s16">←</a><a href="#s18">→</a></nav></footer></section>
+<section class="slide" id="s18" aria-labelledby="t18"><header><h2 id="t18" data-edit>看影片前：AI 幫你做的是哪一段？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="cards"><article class="card"><div class="number">01</div><h3 data-edit>建議圖表</h3><p data-edit>哪些資料適合呈現？<br>有哪些觀察方向？</p></article><article class="card"><div class="number">02</div><h3 data-edit>修改與篩選</h3><p data-edit>換圖表、調整範圍後，<br>答案是否跟著改變？</p></article><article class="card"><div class="number">03</div><h3 data-edit>判斷與責任</h3><p data-edit>誰核對資料與解釋？<br>誰決定採取行動？</p></article></div><p class="callout" data-edit>AI 協助產生圖表，不代表已證明變動原因。</p></div><footer><span>影片二導讀｜觀察功能，不背操作按鈕</span><span>18 / 24</span><nav class="slide-nav" aria-label="第 18 頁備援導覽"><a href="#s17">←</a><a href="#s19">→</a></nav></footer></section>
+<section class="slide" id="s19" aria-labelledby="t19"><header><h2 id="t19" data-edit>影片二：AI 協助提出圖表</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="video-layout"><div><p class="video-title">Power BI Tutorial<br>Copilot Solves The #1 Problem</p><p>Kevin Stratvert 頻道<br>主持人 David DeWinter｜完整片長 11:53</p><div class="video-links"><a href="https://www.youtube.com/watch?v=ZfPM3wBiPpE&t=380s" target="_blank" rel="noopener noreferrer">▶ 從 06:20 開始</a><a href="https://www.youtube.com/watch?v=ZfPM3wBiPpE" target="_blank" rel="noopener noreferrer">觀看完整影片</a></div><p class="note">可選繁體中文自動翻譯字幕。<br>本課是功能示範，不承諾學生帳號可免費使用 Copilot。</p></div><div class="video-guide"><p class="time">06:20 → 09:40</p><h3 data-edit>3 分 20 秒</h3><p data-edit>Copilot 建議 → 加入圖表<br>→ 修改圖表 → 篩選</p><p class="callout" data-edit>請在 09:40 手動停止。<br>想一想：這些圖表證明了什麼？</p></div></div></div><footer><span>來源：Kevin Stratvert 頻道｜自動翻譯字幕不等於已校訂文字</span><span>19 / 24</span><nav class="slide-nav" aria-label="第 19 頁備援導覽"><a href="#s18">←</a><a href="#s20">→</a></nav></footer></section>
+<section class="slide dark" id="s20" aria-labelledby="t20"><header><h2 id="t20" data-edit>AI 提出了建議，你還要確認什麼？</h2><span class="label">從資料到決策</span></header>
+<p class="subtitle" data-edit>假設 AI 說：「促銷日營收增加，建議延長活動。」先把這句話拆開。</p>
+<div class="content reveal"><div class="check-grid">
+<div class="check"><div class="number">01</div><h3 data-edit>已知</h3><p data-edit>這兩天的營收不同。<br>10,000 → 12,000 元。<br><br><em>先核對原始資料與算式。</em></p></div>
+<div class="check"><div class="number">02</div><h3 data-edit>待查</h3><p data-edit>成本有沒有增加？<br>營業時間是否相同？<br>是否遇到校園活動？<br><br><em>確認比較範圍與缺漏。</em></p></div>
+<div class="check"><div class="number">03</div><h3 data-edit>不能直接推論</h3><p data-edit>不能只看營收，<br>就認定促銷造成成長，<br>或延長活動一定划算。<br><br><em>把觀察和因果分開。</em></p></div>
+</div><p class="callout" data-edit>AI 可以幫忙整理與提出方向，不能替管理者省掉查證。</p></div>
+<footer><span>AI 回應為教學示意，非實際執行結果</span><span>20 / 24</span><nav class="slide-nav" aria-label="第 20 頁備援導覽"><a href="#s19">←</a><a href="#s21">→</a></nav></footer></section>
+<section class="slide" id="s21" aria-labelledby="t21"><header><h2 id="t21" data-edit>問清楚，比只問「怎麼讓生意更好」有用</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="prompt"><p class="prompt-label">假設已有可使用的去識別化交易資料</p><p data-edit>請比較平日 13:00–16:00 的門市外帶交易，排除取消單，<br>列出營收、有效交易筆數與每筆交易平均金額。</p><p data-edit>請說明比較日期、計算方式與缺漏資料。<br>把觀察結果與可能原因分開；資料不足時，不要自行補數字。</p></div><div class="tags"><span>問題</span><span>範圍</span><span>口徑</span><span>限制</span></div><p class="note" data-edit>這是提問示意，尚未執行 AI 分析。不要把顧客姓名、電話或未獲授權的店家資料直接上傳。</p></div><footer><span>提示語為教學示意｜資料使用須有權限</span><span>21 / 24</span><nav class="slide-nav" aria-label="第 21 頁備援導覽"><a href="#s20">←</a><a href="#s22">→</a></nav></footer></section>
+<section class="slide" id="s22" aria-labelledby="t22"><header><h2 id="t22" data-edit>如果你是店長，你會先做什麼？</h2><span class="label">從資料到決策</span></header><div class="content reveal"><p class="subtitle" data-edit>營收 10,000 → 12,000 元；貢獻餘額 6,000 → 5,500 元。你會怎麼做？</p><div class="choices"><div><strong>A</strong><h3 data-edit>延續促銷</h3></div><div><strong>B</strong><h3 data-edit>調整通路</h3></div><div><strong>C</strong><h3 data-edit>小規模試辦</h3></div><div><strong>D</strong><h3 data-edit>先補資料</h3></div></div><p class="action-question" data-edit>提出兩項支持判斷的證據，<br>以及一項採取行動前還要查的資訊。</p><p class="note" data-edit>可以有不同答案；重點是理由與證據能否相互支持。</p></div><footer><span>課堂討論 3–5 分鐘｜教學假設，不設唯一標準答案</span><span>22 / 24</span><nav class="slide-nav" aria-label="第 22 頁備援導覽"><a href="#s21">←</a><a href="#s23">→</a></nav></footer></section>
+<section class="slide" id="s23" aria-labelledby="t23"><header><h2 id="t23" data-edit>決策不是終點，要看結果再調整</h2><span class="label">從資料到決策</span></header>
+<div class="content reveal"><div class="steps">
+<div class="step"><div class="number">01</div><h3 data-edit>說清楚問題</h3><p data-edit>要改善午後等待，<br>還是提高促銷收益？</p></div>
+<div class="step"><div class="number">02</div><h3 data-edit>小規模試辦</h3><p data-edit>限定時段與範圍，<br>指定負責人。</p></div>
+<div class="step"><div class="number">03</div><h3 data-edit>追蹤結果</h3><p data-edit>看營收、貢獻餘額，<br>也看等待時間。</p></div>
+<div class="step"><div class="number">04</div><h3 data-edit>檢討與調整</h3><p data-edit>核對可比基準，<br>決定續辦、調整或停止。</p></div>
+</div><div class="feedback" data-edit>↶ 把結果帶回原來的問題：改善了什麼？還缺少什麼資訊？</div>
+<p class="action-question" data-edit>如果營收增加，等待時間也變長，<br>你會繼續原來的做法嗎？</p>
+<p class="note" style="margin-top:24px" data-edit>本例貢獻餘額＝營收減納入比較的變動成本，尚未扣除人事、租金等費用，不是淨利。</p></div>
+<footer><span>試辦流程為教學情境，不是現成的經營處方</span><span>23 / 24</span><nav class="slide-nav" aria-label="第 23 頁備援導覽"><a href="#s22">←</a><a href="#s24">→</a></nav></footer></section>
+<section class="slide dark" id="s24" aria-labelledby="t24"><header><h2 id="t24" data-edit>有系統，還是要有人判斷</h2><span class="label">從資料到決策</span></header><div class="content reveal"><div class="summary-line"><span>資料</span><b>→</b><span>資訊</span><b>→</b><span>判斷</span><b>→</b><span>行動</span></div><p class="hero closing" data-edit>營收增加，但貢獻餘額下降。<br>你還要查什麼？</p><p class="explain" data-edit>請用一句話說明要查的資料，以及它會影響哪個決定。</p><div class="source-links"><a href="https://www.youtube.com/watch?v=VaOhNqNtGGE" target="_blank" rel="noopener noreferrer">影片一</a><a href="https://www.youtube.com/watch?v=ZfPM3wBiPpE" target="_blank" rel="noopener noreferrer">影片二</a><a href="https://blog.ichefpos.com/230616-ichefreport/" target="_blank" rel="noopener noreferrer">iCHEF 文字來源</a></div><p class="note">案例數字均為教學假設；外部影片與來源頁需連網。<br>授課前 48 小時請重查影片、字幕與現場設備。</p></div><footer><span>管理資訊系統｜資料不會替人承擔決策責任</span><span>24 / 24</span><nav class="slide-nav" aria-label="第 24 頁備援導覽"><a href="#s23">←</a><a href="#s24">→</a></nav></footer></section></main></div>
+<nav class="deck-controls" aria-label="投影片操作"><a id="prev" href="#s1" aria-label="上一頁">←</a><span id="status" aria-live="polite">1/24</span><a id="next" href="#s2" aria-label="下一頁">→</a><select id="jump" aria-label="選擇投影片"><option value="s1">01｜從資料到決策</option><option value="s2">02｜每天都有紀錄，為什麼還不知道生意好不好？</option><option value="s3">03｜這間店要做哪一個決定？</option><option value="s4">04｜一筆交易留下什麼？</option><option value="s5">05｜資料、資訊、決策，不是同一件事</option><option value="s6">06｜同一間店，三種資訊需求</option><option value="s7">07｜系統如何從交易走向分析？</option><option value="s8">08｜看影片前：別看按鈕，要看資訊怎麼形成</option><option value="s9">09｜影片一：從資料到互動報表</option><option value="s10">10｜圖表能回答的問題不同</option><option value="s11">11｜營收增加 20%，就值得慶祝嗎？</option><option value="s12">12｜是客人變多，還是每筆買更多？</option><option value="s13">13｜多賣了，留下來的金額卻可能變少</option><option value="s14">14｜比較之前，先問是不是同一個基準</option><option value="s15">15｜發現變化、查找原因、採取行動</option><option value="s16">16｜圖表做得漂亮，資料錯了也沒用</option><option value="s17">17｜報表看到現象，還要回到現場</option><option value="s18">18｜看影片前：AI 幫你做的是哪一段？</option><option value="s19">19｜影片二：AI 協助提出圖表</option><option value="s20">20｜AI 提出了建議，你還要確認什麼？</option><option value="s21">21｜問清楚，比只問「怎麼讓生意更好」有用</option><option value="s22">22｜如果你是店長，你會先做什麼？</option><option value="s23">23｜決策不是終點，要看結果再調整</option><option value="s24">24｜有系統，還是要有人判斷</option></select><button id="save" title="下載編輯副本">存副本</button></nav>
+<div class="edit-hotzone" title="按 E 編輯文字"></div><button class="edit-toggle" id="editToggle">編輯文字（E）</button>
+<script>
+/* === CONTROLLER: no modules, fetch, network fonts, or storage-dependent startup === */
+class SlidePresentation{
+constructor(){this.slides=Array.from(document.querySelectorAll('.slide'));this.stage=document.getElementById('deckStage');this.current=0;this.editing=false;this.nodes=Array.from(document.querySelectorAll('[data-edit]'));this.key='mis-decision-full-v1';this.restore();document.documentElement.classList.add('enhanced');this.fit();window.addEventListener('resize',()=>this.fit());window.addEventListener('hashchange',()=>this.fromHash());this.fromHash();
+document.getElementById('jump').addEventListener('change',e=>{location.hash=e.target.value});
+document.addEventListener('keydown',e=>{if(e.target.isContentEditable||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(e.key.toLowerCase()==='e'){this.edit();return}const forward=['ArrowRight','ArrowDown','PageDown',' '];const back=['ArrowLeft','ArrowUp','PageUp'];if(forward.includes(e.key)||back.includes(e.key)){e.preventDefault();this.go(this.current+(forward.includes(e.key)?1:-1))}if(e.key==='Home'){e.preventDefault();this.go(0)}if(e.key==='End'){e.preventDefault();this.go(this.slides.length-1)}});
+let lastWheel=0;this.stage.addEventListener('wheel',e=>{if(this.editing||Math.abs(e.deltaY)<20)return;e.preventDefault();if(Date.now()-lastWheel>450){lastWheel=Date.now();this.go(this.current+(e.deltaY>0?1:-1))}},{passive:false});
+let start=null;this.stage.addEventListener('touchstart',e=>{if(!this.editing)start=e.touches[0].clientX},{passive:true});this.stage.addEventListener('touchend',e=>{if(start===null)return;const dx=e.changedTouches[0].clientX-start;start=null;if(Math.abs(dx)>50)this.go(this.current+(dx<0?1:-1))},{passive:true});
+document.getElementById('editToggle').addEventListener('click',()=>this.edit());this.nodes.forEach(n=>n.addEventListener('input',()=>this.persist()));document.getElementById('save').addEventListener('click',()=>this.export());
+const hot=document.querySelector('.edit-hotzone'),toggle=document.getElementById('editToggle');let timer;[hot,toggle].forEach(n=>{n.addEventListener('mouseenter',()=>{clearTimeout(timer);toggle.classList.add('show')});n.addEventListener('mouseleave',()=>{timer=setTimeout(()=>{if(!this.editing)toggle.classList.remove('show')},400)})});hot.addEventListener('click',()=>this.edit());
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'&&this.editing){e.preventDefault();this.export()}});
+}
+fit(){const w=innerWidth,h=Math.max(1,innerHeight-58),s=Math.min(w/1920,h/1080);this.stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')'}
+fromHash(){const i=this.slides.findIndex(n=>'#'+n.id===location.hash);this.show(i<0?0:i)}
+show(i){this.current=i;this.slides.forEach((n,j)=>{n.classList.toggle('active',i===j);n.classList.toggle('visible',i===j);n.setAttribute('aria-hidden',i===j?'false':'true');n.inert=i!==j});document.getElementById('status').textContent=(i+1)+'/'+this.slides.length;document.getElementById('jump').value=this.slides[i].id;document.getElementById('prev').href='#'+this.slides[Math.max(0,i-1)].id;document.getElementById('next').href='#'+this.slides[Math.min(this.slides.length-1,i+1)].id}
+go(i){location.hash=this.slides[Math.max(0,Math.min(this.slides.length-1,i))].id}
+edit(){this.editing=!this.editing;this.nodes.forEach(n=>n.contentEditable=String(this.editing));const b=document.getElementById('editToggle');b.classList.toggle('active',this.editing);b.textContent=this.editing?'完成編輯（E）':'編輯文字（E）'}
+persist(){try{localStorage.setItem(this.key,JSON.stringify(this.nodes.map(n=>n.innerHTML)))}catch(e){/* Storage can be unavailable on USB/file URLs; navigation still works. */}}
+restore(){try{const values=JSON.parse(localStorage.getItem(this.key)||'null');if(Array.isArray(values)&&values.length===this.nodes.length)values.forEach((v,i)=>{if(typeof v==='string')this.nodes[i].innerHTML=v})}catch(e){}}
+export(){const root=document.documentElement.cloneNode(true);root.classList.remove('enhanced');root.querySelectorAll('[contenteditable]').forEach(n=>n.removeAttribute('contenteditable'));root.querySelectorAll('.slide').forEach((n,i)=>{n.classList.toggle('active',i===0);n.classList.toggle('visible',i===0);n.removeAttribute('inert');n.removeAttribute('aria-hidden')});root.querySelector('.deck-stage').removeAttribute('style');root.querySelector('.edit-toggle').classList.remove('show','active');root.querySelector('.edit-toggle').textContent='編輯文字（E）';const blob=new Blob(['<!doctype html>\n'+root.outerHTML],{type:'text/html;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='管理資訊系統_從資料到決策_教材_編輯副本.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+}
+new SlidePresentation();
+</script></body></html>

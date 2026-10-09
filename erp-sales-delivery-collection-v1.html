@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <script src="access-gate-config.js?v=14b"></script>
+  <script src="access-gate.js?v=14b"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>企業資源規劃｜第四部分：銷售、出貨與收款流程｜V1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&amp;family=Noto+Sans+TC:wght@400;500;600;700;800&amp;family=Noto+Serif+TC:wght@700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS：管理筆記本
+       =========================================== */
+    :root {
+      --stage-bg:#242b26;
+      --slide-bg:#f6f0df;
+      --paper:#f6f0df;
+      --paper-deep:#ece3cf;
+      --ink:#183a2d;
+      --ink-2:#315546;
+      --muted:#6a746d;
+      --rule:rgba(24,58,45,.14);
+      --red:#e54b32;
+      --yellow:#dfff53;
+      --blue:#aebdeb;
+      --mint:#9fd1b5;
+      --amber:#ffd16b;
+      --rose:#ef9e91;
+      --white:#fffdf7;
+      --shadow:rgba(24,35,29,.26);
+      --font-display:"Noto Serif TC",serif;
+      --font-body:"Noto Sans TC",sans-serif;
+      --font-label:"DM Sans",sans-serif;
+      --ease-out-expo:cubic-bezier(.16,1,.3,1);
+      --duration-normal:.55s;
+    }
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+
+    /* ===========================================
+       RESET AND STAGE FALLBACK
+       =========================================== */
+    * { box-sizing:border-box; }
+    body { font-family:var(--font-body); color:var(--ink); }
+    button, a { font:inherit; }
+    .deck-stage {
+      left:50%; top:50%;
+      transform-origin:50% 50%;
+      -ms-transform-origin:50% 50%;
+      transform:translate(-50%,-50%) scale(.5);
+      -ms-transform:translate(-50%,-50%) scale(.5);
+    }
+    .slide { background:#242b26; transition:opacity .25s ease; }
+    .js-ready .slide:target:not(.active) { visibility:hidden; opacity:0; pointer-events:none; z-index:0; }
+    .slide:target { visibility:visible; opacity:1; pointer-events:auto; z-index:5; }
+    .slide:target .reveal,
+    .slide:target .reveal-left,
+    .slide:target .reveal-scale { opacity:1; transform:none; }
+
+    /* ===========================================
+       NOTEBOOK PAPER SURFACE
+       =========================================== */
+    .paper {
+      position:absolute;
+      left:70px; right:82px; top:46px; bottom:46px;
+      overflow:hidden;
+      color:#183a2d;
+      background-color:#f6f0df;
+      background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 66px,rgba(24,58,45,.12) 67px,transparent 68px);
+      border-radius:9px;
+      box-shadow:0 20px 70px rgba(24,35,29,.28);
+    }
+    .paper::before {
+      content:"";
+      position:absolute; left:154px; top:0; bottom:0; width:2px;
+      background:rgba(229,75,50,.42);
+    }
+    .holes {
+      position:absolute; left:36px; top:104px; bottom:104px;
+      display:flex; flex-direction:column; justify-content:space-between; z-index:4;
+    }
+    .holes i {
+      width:28px; height:28px; border-radius:50%;
+      background:#242b26; box-shadow:inset 0 3px 5px rgba(0,0,0,.8);
+    }
+    .section-tabs {
+      position:absolute; right:0; top:130px; display:grid; gap:18px; z-index:5;
+    }
+    .section-tabs span {
+      width:142px; height:70px; display:grid; place-items:center;
+      border-radius:18px 0 0 18px; color:#183a2d;
+      font:800 22px/1 var(--font-body); letter-spacing:.08em;
+      opacity:.5; transform:translateX(26px);
+    }
+    .section-tabs span:nth-child(1){background:#9fd1b5}
+    .section-tabs span:nth-child(2){background:#aebdeb}
+    .section-tabs span:nth-child(3){background:#ffd16b}
+    .section-tabs span:nth-child(4){background:#ef9e91}
+    .tab-definition .section-tabs span:nth-child(1),
+    .tab-history .section-tabs span:nth-child(2),
+    .tab-now .section-tabs span:nth-child(3),
+    .tab-future .section-tabs span:nth-child(4),
+    .tab-summary .section-tabs span { opacity:1; transform:translateX(0); }
+    .content {
+      position:absolute; left:214px; right:190px; top:98px; bottom:92px; z-index:3;
+    }
+    .topline {
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:55px; padding-bottom:18px; border-bottom:3px solid #183a2d;
+    }
+    .topline h2 {
+      margin:0; max-width:1320px;
+      font:900 58px/1.14 var(--font-display); letter-spacing:-.025em;
+    }
+    .label {
+      flex:0 0 auto; margin-left:30px; padding:10px 16px;
+      color:#183a2d; background:#dfff53;
+      font:700 20px/1 var(--font-label); letter-spacing:.09em;
+      transform:rotate(-1deg);
+    }
+    .page-no {
+      position:absolute; right:178px; bottom:61px; z-index:7;
+      min-height:24px; font:700 19px/1.25 var(--font-label); letter-spacing:.08em; color:#315546;
+    }
+    .source {
+      position:absolute; left:214px; bottom:150px; z-index:7;
+      max-width:1320px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+      font:600 17px/1.3 var(--font-label); color:#6a746d;
+    }
+
+    /* ===========================================
+       TYPOGRAPHY AND REVEALS
+       =========================================== */
+    h1,h2,h3,p { overflow-wrap:break-word; }
+    .reveal,.reveal-left,.reveal-scale {
+      opacity:0;
+      transition:opacity var(--duration-normal) var(--ease-out-expo),
+                 transform var(--duration-normal) var(--ease-out-expo);
+    }
+    .reveal { transform:translateY(28px); }
+    .reveal-left { transform:translateX(-42px); }
+    .reveal-scale { transform:scale(.94); }
+    .slide.visible .reveal,
+    .slide.visible .reveal-left,
+    .slide.visible .reveal-scale { opacity:1; transform:none; }
+    .delay-1 { transition-delay:.10s; }
+    .delay-2 { transition-delay:.20s; }
+    .delay-3 { transition-delay:.30s; }
+    .delay-4 { transition-delay:.40s; }
+    .eyebrow { font:700 22px/1 var(--font-label); letter-spacing:.15em; }
+    .highlight { display:inline; padding:0 .12em; background:linear-gradient(transparent 56%,#dfff53 56%); }
+    .red { color:#e54b32; }
+    .muted { color:#6a746d; }
+
+    /* ===========================================
+       TITLE SLIDE
+       =========================================== */
+    .title-content { position:absolute; left:250px; top:160px; width:1240px; z-index:3; }
+    .title-content .chip {
+      display:inline-block; margin-top:55px; padding:10px 20px;
+      color:#183a2d; background:#dfff53; font-size:24px; font-weight:700;
+      transform:rotate(-2deg);
+    }
+    .title-content h1 {
+      margin:26px 0 24px; font:900 142px/1.06 var(--font-display); letter-spacing:-.045em;
+    }
+    .title-content .lead {
+      max-width:1180px; font-size:40px; line-height:1.5; font-weight:600;
+    }
+    .stamp {
+      position:absolute; right:225px; bottom:105px; z-index:4;
+      width:290px; height:142px; display:grid; place-items:center;
+      border:7px double #e54b32; border-radius:12px;
+      color:#e54b32; background:rgba(246,240,223,.72);
+      font:800 27px/1.3 var(--font-body); text-align:center;
+      transform:rotate(-6deg);
+    }
+    .course-foot {
+      position:absolute; left:250px; bottom:112px; z-index:4;
+      font:700 22px/1.2 var(--font-label); letter-spacing:.09em;
+    }
+
+    /* ===========================================
+       CONCEPT LAYOUTS
+       =========================================== */
+    .definition-grid {
+      display:grid; grid-template-columns:1.12fr .88fr; gap:48px; margin-top:64px;
+      align-items:stretch;
+    }
+    .big-definition {
+      padding:54px 58px; min-height:610px;
+      background:#183a2d; color:#fffdf7; border-radius:28px 8px 28px 8px;
+      box-shadow:12px 12px 0 #9fd1b5;
+    }
+    .big-definition .term { font:700 24px/1 var(--font-label); letter-spacing:.12em; color:#dfff53; }
+    .big-definition p { margin:34px 0 0; font:700 50px/1.5 var(--font-body); }
+    .module-list { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .module {
+      min-height:134px; padding:26px 24px; border:2px solid #183a2d;
+      background:rgba(255,253,247,.86); border-radius:7px;
+    }
+    .module b { display:block; margin-bottom:10px; font-size:29px; }
+    .module span { font-size:21px; line-height:1.45; color:#315546; }
+    .mis-core {
+      display:grid; grid-template-columns:420px 1fr; gap:58px; margin-top:70px; align-items:center;
+    }
+    .erp-circle {
+      width:390px; height:390px; border-radius:50%; display:grid; place-items:center;
+      background:#e54b32; color:#fffdf7; font:900 92px/1 var(--font-label);
+      box-shadow:0 0 0 25px rgba(229,75,50,.18),0 0 0 50px rgba(229,75,50,.08);
+    }
+    .mis-stack { display:grid; gap:17px; }
+    .mis-row {
+      display:grid; grid-template-columns:190px 1fr; align-items:center;
+      min-height:98px; padding:17px 28px; border-left:10px solid #183a2d;
+      background:rgba(255,253,247,.86);
+    }
+    .mis-row b { font-size:28px; }
+    .mis-row span { font-size:25px; line-height:1.45; color:#315546; }
+
+    /* ===========================================
+       VIDEO INTRO AND PLAYER SLIDES
+       =========================================== */
+    .video-intro {
+      display:grid; grid-template-columns:430px 1fr; gap:48px; margin-top:58px;
+    }
+    .video-meta {
+      min-height:590px; padding:40px 36px; background:#183a2d; color:#fffdf7;
+      border-radius:22px 7px 22px 7px; box-shadow:11px 11px 0 #aebdeb;
+    }
+    .video-meta .video-no { font:700 20px/1 var(--font-label); letter-spacing:.14em; color:#dfff53; }
+    .video-meta .duration { margin:32px 0 20px; font:900 88px/1 var(--font-label); }
+    .video-meta .maker { font-size:27px; line-height:1.5; }
+    .video-meta .status { margin-top:34px; display:grid; gap:12px; }
+    .pill {
+      display:inline-flex; align-items:center; width:max-content; max-width:100%;
+      padding:9px 14px; border:1px solid rgba(255,255,255,.48); border-radius:999px;
+      font-size:19px; line-height:1.3;
+    }
+    .watch-task {
+      min-height:590px; padding:34px 44px;
+      border:3px solid #183a2d; background:rgba(255,253,247,.88);
+    }
+    .watch-task h3 { margin:0 0 22px; font:900 38px/1.2 var(--font-display); }
+    .watch-task ol { margin:0; padding-left:44px; }
+    .watch-task li { margin:0 0 22px; padding-left:12px; font-size:29px; line-height:1.5; }
+    .watch-note {
+      margin-top:24px; padding:18px 22px; background:#ffd16b;
+      font-size:21px; line-height:1.45; font-weight:600;
+    }
+    .video-page .paper { background:#183a2d; color:#fffdf7; background-image:none; }
+    .video-page .paper::before { display:none; }
+    .video-page .section-tabs span { color:#183a2d; }
+    .video-page .page-no,.video-page .source { color:#dfe8e2; }
+    .video-title {
+      position:absolute; top:72px; left:225px; right:215px; z-index:3;
+      min-height:56px;
+      display:flex; justify-content:space-between; align-items:baseline; gap:30px;
+    }
+    .video-title h2 { margin:0; color:#fffdf7; font:800 39px/1.25 var(--font-body); }
+    .video-title span { color:#dfff53; font:700 21px/1 var(--font-label); letter-spacing:.1em; }
+    .video-shell {
+      position:absolute; left:338px; top:156px; z-index:3;
+      width:1244px; height:700px; overflow:hidden;
+      background:#0f1914; border:5px solid #fffdf7;
+      box-shadow:16px 16px 0 rgba(174,189,235,.55);
+    }
+    .video-shell iframe { width:100%; height:100%; border:0; }
+    .load-video {
+      width:100%; height:100%; border:0; color:#fffdf7; background:
+      radial-gradient(circle at 50% 42%,rgba(223,255,83,.16),transparent 35%),
+      linear-gradient(135deg,#12251d,#0b1510);
+      cursor:pointer; display:grid; place-content:center; gap:24px; text-align:center;
+      font-size:28px; font-weight:700;
+    }
+    .play-icon {
+      width:118px; height:118px; margin:auto; display:grid; place-items:center;
+      border-radius:50%; background:#e54b32; color:#fff; font-size:46px;
+      box-shadow:0 0 0 18px rgba(229,75,50,.18);
+    }
+    .video-fallback {
+      position:absolute; left:338px; right:338px; bottom:80px; z-index:4;
+      display:flex; justify-content:space-between; align-items:center; gap:26px;
+      font-size:20px; color:#dfe8e2;
+    }
+    .video-fallback a { color:#dfff53; font-weight:700; }
+
+    /* ===========================================
+       SUMMARY VISUALS
+       =========================================== */
+    .timeline {
+      display:grid; grid-template-columns:repeat(5,1fr); gap:20px; margin-top:92px;
+      position:relative;
+    }
+    .timeline::before {
+      content:""; position:absolute; left:30px; right:30px; top:28px; height:5px; background:#183a2d;
+    }
+    .era { position:relative; padding-top:70px; }
+    .era::before {
+      content:""; position:absolute; left:16px; top:11px; width:34px; height:34px;
+      border-radius:50%; background:#f6f0df; border:8px solid #e54b32; z-index:2;
+    }
+    .era b { display:block; margin-bottom:15px; font:800 26px/1 var(--font-label); }
+    .era h3 { margin:0 0 13px; font:900 34px/1.2 var(--font-display); }
+    .era p { margin:0; font-size:23px; line-height:1.5; color:#315546; }
+    .now-grid,.risk-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:72px;
+    }
+    .now-card,.risk-card {
+      min-height:430px; padding:36px 34px; background:rgba(255,253,247,.88);
+      border:3px solid #183a2d; border-radius:8px;
+    }
+    .now-card:nth-child(2) { box-shadow:11px 11px 0 #ffd16b; }
+    .now-card:nth-child(3) { box-shadow:11px 11px 0 #ef9e91; }
+    .now-card .icon,.risk-card .icon { font:900 54px/1 var(--font-label); color:#e54b32; }
+    .now-card h3,.risk-card h3 { margin:30px 0 16px; font:900 36px/1.2 var(--font-display); }
+    .now-card p,.risk-card p { margin:0; font-size:25px; line-height:1.56; color:#315546; }
+    .future-flow { display:grid; grid-template-columns:1fr 110px 1fr 110px 1fr; align-items:center; margin-top:120px; }
+    .future-node { min-height:310px; padding:42px 36px; border-radius:26px 8px 26px 8px; color:#fffdf7; background:#183a2d; }
+    .future-node:nth-of-type(2){background:#e54b32}.future-node:nth-of-type(3){background:#315546}
+    .future-node b { color:#dfff53; font:700 20px/1 var(--font-label); letter-spacing:.12em; }
+    .future-node h3 { margin:28px 0 16px; font:900 38px/1.25 var(--font-display); }
+    .future-node p { margin:0; font-size:23px; line-height:1.5; }
+    .arrow { text-align:center; font-size:58px; font-weight:900; color:#e54b32; }
+    .formula {
+      margin-top:86px; display:grid; grid-template-columns:1fr 74px 1fr 74px 1fr 74px 1fr;
+      align-items:center;
+    }
+    .formula-card { min-height:280px; padding:36px 25px; display:grid; place-items:center; text-align:center; border:3px solid #183a2d; background:#fffdf7; }
+    .formula-card b { display:block; font:900 35px/1.25 var(--font-display); }
+    .formula-card span { display:block; margin-top:20px; font-size:21px; line-height:1.45; color:#315546; }
+    .plus { text-align:center; font-size:48px; font-weight:900; }
+    .closing-question {
+      position:absolute; left:250px; right:240px; top:205px; z-index:3;
+      font:900 74px/1.42 var(--font-display); letter-spacing:-.025em;
+    }
+    .closing-answer {
+      position:absolute; left:250px; bottom:170px; z-index:3;
+      display:inline-block; padding:17px 24px; background:#dfff53;
+      font-size:31px; line-height:1.4; font-weight:800; transform:rotate(-1deg);
+    }
+
+    /* ===========================================
+       PART 2 PROCESS AND DATA VISUALS
+       =========================================== */
+    .question-stage { display:grid; grid-template-columns:1fr 1fr; gap:42px; margin-top:72px; }
+    .question-card { min-height:430px; padding:48px; border:3px solid #183a2d; background:rgba(255,253,247,.9); }
+    .question-card.primary { color:#fffdf7; background:#183a2d; box-shadow:12px 12px 0 #ef9e91; }
+    .question-card .kicker { font:800 21px/1 var(--font-label); letter-spacing:.12em; color:#e54b32; }
+    .question-card.primary .kicker { color:#dfff53; }
+    .question-card h3 { margin:30px 0 20px; font:900 46px/1.25 var(--font-display); }
+    .question-card p { margin:0; font-size:27px; line-height:1.58; color:#315546; }
+    .question-card.primary p { color:#fffdf7; }
+    .data-core { display:grid; grid-template-columns:1fr 390px 1fr; gap:46px; align-items:center; margin-top:76px; }
+    .data-column { display:grid; gap:18px; }
+    .data-item { min-height:118px; padding:25px 28px; border:2px solid #183a2d; background:#fffdf7; }
+    .data-item b { display:block; margin-bottom:9px; font-size:28px; }
+    .data-item span { color:#315546; font-size:21px; line-height:1.4; }
+    .core-disc { width:360px; height:360px; display:grid; place-items:center; text-align:center; border-radius:50%; color:#fffdf7; background:#e54b32; box-shadow:0 0 0 22px rgba(229,75,50,.17),0 0 0 44px rgba(229,75,50,.07); font:900 44px/1.35 var(--font-display); }
+    .process-strip { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-top:98px; align-items:stretch; }
+    .process-step { position:relative; min-height:250px; padding:32px 22px; border:3px solid #183a2d; background:#fffdf7; }
+    .process-step:not(:last-child)::after { content:"→"; position:absolute; right:-28px; top:91px; z-index:3; color:#e54b32; font-size:42px; font-weight:900; }
+    .process-step b { display:block; margin-bottom:22px; color:#e54b32; font:900 32px/1 var(--font-label); }
+    .process-step h3 { margin:0 0 14px; font:900 29px/1.3 var(--font-display); }
+    .process-step p { margin:0; color:#315546; font-size:20px; line-height:1.45; }
+    .decision-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:44px; margin-top:68px; }
+    .scenario { min-height:480px; padding:46px; color:#fffdf7; background:#183a2d; border-radius:28px 8px 28px 8px; box-shadow:12px 12px 0 #ffd16b; }
+    .scenario .number { color:#dfff53; font:900 92px/1 var(--font-label); }
+    .scenario h3 { margin:24px 0 20px; font:900 43px/1.3 var(--font-display); }
+    .scenario p { margin:0; font-size:27px; line-height:1.55; }
+    .decision-list { display:grid; gap:18px; }
+    .decision { min-height:106px; padding:23px 28px; border-left:10px solid #e54b32; background:#fffdf7; font-size:25px; line-height:1.48; }
+    .optional-badge { display:inline-block; margin-top:24px; padding:10px 18px; color:#183a2d; background:#ffd16b; font:800 20px/1 var(--font-label); transform:rotate(-1deg); }
+
+    /* ===========================================
+       CONTROLS, MENU, AND SCRIPTLESS FALLBACK
+       =========================================== */
+    .fallback-controls {
+      position:absolute; left:50%; bottom:18px; z-index:80;
+      display:flex; align-items:center; gap:14px;
+      transform:translateX(-50%); -ms-transform:translateX(-50%);
+      padding:7px 12px; color:#fff; background:#183a2d;
+      border:1px solid rgba(255,255,255,.55);
+      font:600 17px/1 var(--font-body);
+    }
+    .fallback-controls a {
+      width:40px; height:32px; display:flex; align-items:center; justify-content:center;
+      color:#fff; border:1px solid rgba(255,255,255,.55); text-decoration:none;
+    }
+    .fallback-controls span { min-width:80px; text-align:center; }
+    .deck-controls,.progress { display:none; }
+    body.js-ready .deck-controls { display:flex; }
+    body.js-ready .progress { display:block; }
+    body.js-ready .fallback-controls { display:none; }
+    .deck-controls {
+      align-items:center; gap:8px; padding:8px;
+      color:#fffdf7; background:#183a2d; border:1px solid rgba(255,255,255,.45);
+      box-shadow:0 8px 25px rgba(0,0,0,.24);
+    }
+    .deck-controls button {
+      width:42px; height:36px; border:1px solid rgba(255,255,255,.36);
+      background:transparent; color:#fffdf7; cursor:pointer;
+    }
+    .deck-controls button:hover { color:#183a2d; background:#dfff53; }
+    .counter { min-width:92px; text-align:center; font:700 16px/1 var(--font-label); }
+    .progress { position:fixed; left:0; top:0; height:5px; z-index:1100; width:5%; background:#dfff53; transition:width .25s ease; }
+    .chapter-menu {
+      position:fixed; inset:0; z-index:1200; visibility:hidden; opacity:0; pointer-events:none;
+      background:rgba(20,29,24,.78); transition:opacity .25s ease;
+    }
+    .chapter-menu.open { visibility:visible; opacity:1; pointer-events:auto; }
+    .menu-panel {
+      position:absolute; right:0; top:0; bottom:0; width:580px; overflow:auto;
+      padding:34px; color:#183a2d; background:#f6f0df; box-shadow:-18px 0 60px rgba(0,0,0,.28);
+    }
+    .menu-head { display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #183a2d; padding-bottom:18px; }
+    .menu-head h2 { margin:0; font:900 35px/1.2 var(--font-display); }
+    .menu-head button { border:0; background:#e54b32; color:#fff; padding:10px 15px; cursor:pointer; }
+    .menu-links { display:grid; gap:7px; padding-top:22px; }
+    .menu-links button { text-align:left; padding:12px 10px; border:0; border-bottom:1px solid rgba(24,58,45,.2); background:transparent; color:#183a2d; cursor:pointer; font-size:18px; }
+    .menu-links button:hover { background:#183a2d; color:#fffdf7; }
+    .legacy-note { position:fixed; right:10px; top:10px; z-index:20000; padding:7px 10px; color:#fff; background:#183a2d; border:1px solid #fff; font:14px/1.4 var(--font-body); }
+
+    /* ===========================================
+       INLINE EDITING
+       =========================================== */
+    .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+    .edit-toggle { position:fixed; top:16px; left:16px; width:46px; height:46px; z-index:10001; border:1px solid rgba(255,255,255,.4); background:#183a2d; color:#fff; opacity:0; pointer-events:none; transition:opacity .3s ease; cursor:pointer; }
+    .edit-toggle.show,.edit-toggle.active { opacity:1; pointer-events:auto; }
+    .edit-toolbar { position:fixed; top:16px; left:74px; z-index:10001; display:none; gap:8px; }
+    .edit-toolbar.show { display:flex; }
+    .edit-toolbar button { border:1px solid rgba(255,255,255,.4); background:#183a2d; color:#fff; padding:10px 14px; cursor:pointer; }
+    body.editing [data-editable] { outline:2px dashed #e54b32; outline-offset:5px; cursor:text; }
+
+    /* ===========================================
+       PRINT AND SMALL-VIEWPORT FALLBACKS
+       =========================================== */
+    @media (min-width:1600px) and (min-height:900px) {
+      .deck-stage { transform:translate(-50%,-50%) scale(.85); -ms-transform:translate(-50%,-50%) scale(.85); }
+    }
+    @media (max-width:700px) {
+      .deck-stage { transform:translate(-50%,-50%) scale(.25); -ms-transform:translate(-50%,-50%) scale(.25); }
+    }
+    @media print {
+      .fallback-controls,.progress,.chapter-menu,.edit-toggle,.edit-hotzone,.edit-toolbar { display:none !important; }
+    }
+  /* === DOCUMENT COMPARISON === */
+.match-table { width:100%;border-collapse:collapse;margin-top:66px;background:#fffdf7;font-size:30px;line-height:1.5; }
+.match-table th { text-align:left;background:#183a2d;color:#fffdf7;padding:24px 30px; }
+.match-table td { padding:27px 30px;border:2px solid #183a2d; }
+.match-table td:first-child { font-weight:800;width:23%; }
+/* === PART 4 READING AND CASE TABLE === */
+.topline h2 {font-size:52px;max-width:1160px}
+.now-grid {margin-top:54px}
+.now-card p {font-size:28px}
+.source a {color:inherit}
+.process-strip.five {grid-template-columns:repeat(5,1fr)}
+.match-table.compact {margin-top:38px;font-size:27px;line-height:1.35}
+.match-table.compact th {padding:18px 22px}
+.match-table.compact td {padding:18px 22px}
+.match-table.compact td:first-child {width:25%}
+.video-title h2 {max-width:1200px}
+@media (max-width:700px) {.menu-panel{width:min(580px,100vw)}}
+
+/* ===========================================
+   PUBLIC SITE HOME LINK
+   =========================================== */
+.site-home-link{position:fixed;left:16px;bottom:16px;z-index:10002;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border:1px solid rgba(255,255,255,.32);border-radius:999px;color:#fff;background:rgba(9,24,38,.86);box-shadow:0 8px 24px rgba(0,0,0,.24);font:700 14px/1 var(--font-body);letter-spacing:.04em;text-decoration:none;opacity:.78;transition:opacity .2s ease,background .2s ease}
+.site-home-link:hover,.site-home-link:focus-visible{opacity:1;background:rgba(9,24,38,.96);outline:3px solid rgba(255,255,255,.7);outline-offset:2px}
+@media(max-width:520px){.site-home-link{top:10px;bottom:auto;left:88px;min-height:38px;padding:0 13px;font-size:12px}}
+@media print{.site-home-link{display:none!important}}
+</style>
+</head>
+<body>
+  <a class="site-home-link" href="./" aria-label="返回龔鴻裕教學與教材首頁">← 教材首頁</a>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+<!-- 1｜銷售、出貨與收款流程 -->
+<section id="slide-1" class="slide active visible tab-definition" data-title="銷售、出貨與收款流程"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="title-content"><div class="eyebrow reveal">ENTERPRISE RESOURCE PLANNING</div><div class="chip reveal delay-1" data-editable>從一張訂單，看見生意如何往前走</div><h1 class="reveal delay-2" data-editable>銷售、出貨<br>與收款流程</h1><div class="lead reveal delay-3" data-editable>客戶願意買了，接下來呢？<br>跟著新禾家具，走過報價、交貨與請款。</div></div><div class="stamp reveal-scale delay-3">訂單成立<br>之後的事</div><div class="course-foot">115-1　企業資源規劃｜第四部分</div></div><div class="page-no">01 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">←</a><span>1 / 22</span><a href="#slide-2" aria-label="下一張">→</a></nav></section>
+
+<!-- 2｜新禾家具接到一張訂單 -->
+<section id="slide-2" class="slide tab-definition" data-title="新禾家具接到一張訂單"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>新禾家具接到一張訂單</h2><div class="label">ERP · PART 4</div></header><div class="decision-grid"><div class="scenario reveal-left"><div class="number">120 張</div><h3 data-editable>目前只有 80 張可出貨</h3><p data-editable>客戶要 120 張桌子。業務很高興，但倉庫說，眼前只能交 80 張。這筆生意，現在算走到哪裡？</p></div><div class="decision-list reveal"><div class="decision" data-editable>業務：交期答應了，做得到嗎？</div><div class="decision" data-editable>倉庫：先交 80 張，其餘怎麼追蹤？</div><div class="decision" data-editable>會計：這次應該請多少款？</div><div class="decision" data-editable>財務：款項到了，要對哪一筆？</div></div></div></div></div><div class="source">本回新增假設：80 張已完成且可供本訂單出貨；其餘 40 張待完成，不由上一回原料數字直接推算</div><div class="page-no">02 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-1" aria-label="上一張">←</a><span>2 / 22</span><a href="#slide-3" aria-label="下一張">→</a></nav></section>
+
+<!-- 3｜材料買進來之後，還有事情要做 -->
+<section id="slide-3" class="slide tab-definition" data-title="材料買進來之後，還有事情要做"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>材料買進來之後，還有事情要做</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>上一回，向供應商買</h3><p data-editable>我們追蹤材料從採購、收貨到付款，確認買了多少、收到多少。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>這一回，交給客戶</h3><p data-editable>現在換個方向，看看承諾如何變成出貨，出貨之後又怎麼請款。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>一起看，才知道進度</h3><p data-editable>若各部門只看自己的單據，就容易把「我做完了」當成「整筆交易完成了」。</p></article></div></div></div><div class="source">承接第三部分：採購、庫存與付款；本回聚焦訂單到收款，不另展開製造流程</div><div class="page-no">03 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-2" aria-label="上一張">←</a><span>3 / 22</span><a href="#slide-4" aria-label="下一張">→</a></nav></section>
+
+<!-- 4｜先把這筆生意接起來 -->
+<section id="slide-4" class="slide tab-definition" data-title="先把這筆生意接起來"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>先把這筆生意接起來</h2><div class="label">ERP · PART 4</div></header><div class="process-strip five"><article class="process-step reveal delay-1"><b>01</b><h3 data-editable>報價</h3><p data-editable>價格與條件</p></article><article class="process-step reveal delay-2"><b>02</b><h3 data-editable>訂單</h3><p data-editable>客戶確認</p></article><article class="process-step reveal delay-3"><b>03</b><h3 data-editable>出貨</h3><p data-editable>實際交付</p></article><article class="process-step reveal delay-4"><b>04</b><h3 data-editable>請款</h3><p data-editable>金額與到期</p></article><article class="process-step reveal delay-4"><b>05</b><h3 data-editable>收款核對</h3><p data-editable>款項與單據</p></article></div><p class="watch-note reveal" data-editable>我們沿著訂單到收款（Order-to-Cash，O2C）往下看。這是本回的教學順序；實際企業也可能先收訂金，或先請款再交貨。</p></div></div><div class="source">一般流程示意，不將先出貨後請款寫成所有交易的固定順序</div><div class="page-no">04 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-3" aria-label="上一張">←</a><span>4 / 22</span><a href="#slide-5" aria-label="下一張">→</a></nav></section>
+
+<!-- 5｜報價時，我們承諾了什麼？ -->
+<section id="slide-5" class="slide tab-definition" data-title="報價時，我們承諾了什麼？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>報價時，我們承諾了什麼？</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>買什麼、買多少</h3><p data-editable>桌子的規格、數量與單價，先讓雙方談的是同一件事。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>何時、交到哪裡</h3><p data-editable>交期與交貨地址要確認。若只能分批交，最好在承諾前就談清楚。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>何時、如何付款</h3><p data-editable>付款期限、折扣與其他條件會影響後面的請款，不宜等到催款才發現理解不同。</p></article></div><p class="watch-note reveal" data-editable>一張報價單看起來像幾個欄位，但欄位背後，是我們接下來要履行的條件。</p></div></div><div class="source">新禾家具為虛構教學案例；影片使用另一本示範資料，不沿用其品項與數字</div><div class="page-no">05 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-4" aria-label="上一張">←</a><span>5 / 22</span><a href="#slide-6" aria-label="下一張">→</a></nav></section>
+
+<!-- 6｜影片前導｜條件如何進入報價單？ -->
+<section id="slide-6" class="slide tab-definition" data-title="影片前導｜條件如何進入報價單？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>影片前導｜條件如何進入報價單？</h2><div class="label">ERP · PART 4</div></header><div class="video-intro"><div class="video-meta reveal-left"><div class="video-no">VIDEO 1 · ODOO OFFICIAL</div><div class="duration">8:22</div><div class="maker">Odoo 官方操作教學<br>本課片段：1:15–8:06（6 分 51 秒）</div><div class="status"><span class="pill">連網免費觀看</span><span class="pill">英文自動字幕</span><span class="pill">可選繁體中文自動翻譯</span></div></div><div class="watch-task reveal"><h3>先看資料，不急著背按鈕</h3><ol><li data-editable>客戶與品項資料如何帶入？</li><li data-editable>數量、單價及條件放在哪裡？</li><li data-editable>報價如何寄給客戶？寄出之後還要確認什麼？</li></ol><div class="watch-note" data-editable>這段以建立與寄送報價為主。客戶接受及訂單確認的觀念，影片後再一起釐清。</div></div></div></div></div><div class="source">影片核對：2026-10-09｜較早版本流程示範；自動翻譯不是人工中文字幕</div><div class="page-no">06 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-5" aria-label="上一張">←</a><span>6 / 22</span><a href="#slide-7" aria-label="下一張">→</a></nav></section>
+
+<!-- 7｜影片一｜建立與寄送報價 -->
+<section id="slide-7" class="slide video-page tab-definition" data-title="影片一｜建立與寄送報價"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><header class="video-title"><h2 data-editable>影片一｜建立與寄送報價</h2><span>VIDEO 1 · ODOO</span></header><div class="video-shell" data-video-id="rkzypPgAPNA" data-video-title="影片一｜建立與寄送報價" data-start="75" data-end="486"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入教學片段</span></button></div><div class="video-fallback"><span>需連網｜設定 → 字幕 → 自動翻譯 → 中文（繁體）</span><a href="https://www.youtube.com/watch?v=rkzypPgAPNA&amp;t=75s" target="_blank" rel="noopener">在 YouTube 開啟完整影片 ↗</a></div></div><div class="source">影片核對：2026-10-09｜較早版本的流程示範；自動字幕與翻譯可能有誤</div><div class="page-no">07 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-6" aria-label="上一張">←</a><span>7 / 22</span><a href="#slide-8" aria-label="下一張">→</a></nav></section>
+
+<!-- 8｜報價寄出之後，還缺哪個確認？ -->
+<section id="slide-8" class="slide tab-definition" data-title="報價寄出之後，還缺哪個確認？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>報價寄出之後，還缺哪個確認？</h2><div class="label">ERP · PART 4</div></header><div class="question-stage"><article class="question-card primary reveal-left"><div class="kicker">QUOTATION</div><h3 data-editable>我們提出這些條件</h3><p data-editable>價格、數量與交期已寫好，也寄給客戶了。但對方是否接受，還需要有確認依據。</p></article><article class="question-card reveal"><div class="kicker">SALES ORDER</div><h3 data-editable>雙方確認按條件進行</h3><p data-editable>客戶接受後，依企業流程確認銷售訂單。倉庫與後續人員才知道要處理哪一筆需求。</p></article></div><p class="watch-note reveal" data-editable>如果客戶改成 100 張，或改了交期，我們要更新確認後的條件，不能讓不同部門各用一份舊資料。</p></div></div><div class="source">系統中的報價／訂單狀態不取代客戶確認紀錄與企業核准流程</div><div class="page-no">08 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-7" aria-label="上一張">←</a><span>8 / 22</span><a href="#slide-9" aria-label="下一張">→</a></nav></section>
+
+<!-- 9｜訂單成立了，貨就夠了嗎？ -->
+<section id="slide-9" class="slide tab-history" data-title="訂單成立了，貨就夠了嗎？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>訂單成立了，貨就夠了嗎？</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>倉庫記錄的數量</h3><p data-editable>現有庫存告訴我們帳上有多少，但其中可能已有其他用途。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>這筆訂單可用的數量</h3><p data-editable>要再確認保留、品質與可出貨時間，才能向客戶承諾。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>還沒完成的數量</h3><p data-editable>預計未來完成的 40 張，不是今天就能裝車的成品；交期仍要追蹤。</p></article></div><p class="watch-note reveal" data-editable>本回已另設：80 張成品確定可供本訂單使用。這個前提說清楚，才有後面的分批出貨。</p></div></div><div class="source">不同 ERP 的可用量與預測量名稱、計算方式可能不同；本回不展開庫存演算法</div><div class="page-no">09 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-8" aria-label="上一張">←</a><span>9 / 22</span><a href="#slide-10" aria-label="下一張">→</a></nav></section>
+
+<!-- 10｜影片前導｜先出一部分，其餘呢？ -->
+<section id="slide-10" class="slide tab-history" data-title="影片前導｜先出一部分，其餘呢？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>影片前導｜先出一部分，其餘呢？</h2><div class="label">ERP · PART 4</div></header><div class="video-intro"><div class="video-meta reveal-left"><div class="video-no">VIDEO 2 · ODOO OFFICIAL</div><div class="duration">10:08</div><div class="maker">Odoo 官方操作教學<br>本課片段：5:54–9:44（3 分 50 秒）</div><div class="status"><span class="pill">連網免費觀看</span><span class="pill">英文自動字幕</span><span class="pill">可選繁體中文自動翻譯</span></div></div><div class="watch-task reveal"><h3>留意已交與未交如何分開</h3><ol><li data-editable>在哪裡找到客戶的出貨需求？</li><li data-editable>實際交付的數量如何確認？</li><li data-editable>未交的數量如何留下來，讓後續繼續追蹤？</li></ol><div class="watch-note" data-editable>影片示範出貨及待補交單（Backorder）。看懂它保留的是什麼需求，不必照抄示範公司的品項或數字。</div></div></div></div></div><div class="source">本片為 Warehouse Operations 舊版，不是第三部分的 Receive and Store Stock 收貨影片</div><div class="page-no">10 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-9" aria-label="上一張">←</a><span>10 / 22</span><a href="#slide-11" aria-label="下一張">→</a></nav></section>
+
+<!-- 11｜影片二｜出貨與未交數量 -->
+<section id="slide-11" class="slide video-page tab-history" data-title="影片二｜出貨與未交數量"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><header class="video-title"><h2 data-editable>影片二｜出貨與未交數量</h2><span>VIDEO 2 · ODOO</span></header><div class="video-shell" data-video-id="oxW22KBPsVU" data-video-title="影片二｜出貨與未交數量" data-start="354" data-end="584"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入教學片段</span></button></div><div class="video-fallback"><span>需連網｜設定 → 字幕 → 自動翻譯 → 中文（繁體）</span><a href="https://www.youtube.com/watch?v=oxW22KBPsVU&amp;t=354s" target="_blank" rel="noopener">在 YouTube 開啟完整影片 ↗</a></div></div><div class="source">影片核對：2026-10-09｜較早版本的流程示範；自動字幕與翻譯可能有誤</div><div class="page-no">11 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-10" aria-label="上一張">←</a><span>11 / 22</span><a href="#slide-12" aria-label="下一張">→</a></nav></section>
+
+<!-- 12｜交出 80 張，還有 40 張要交 -->
+<section id="slide-12" class="slide tab-history" data-title="交出 80 張，還有 40 張要交"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>交出 80 張，還有 40 張要交</h2><div class="label">ERP · PART 4</div></header><div class="decision-grid"><div class="scenario reveal-left"><div class="number">120 − 80 = 40</div><h3 data-editable>訂單還沒全部交完</h3><p data-editable>SO-001 訂 120 張；出貨紀錄 DO-001 已確認交付 80 張。剩下的 40 張，需要另有可追蹤的交付安排。</p></div><div class="decision-list reveal"><div class="decision" data-editable>倉庫：這次交出的 80 張，留下紀錄。</div><div class="decision" data-editable>業務：向客戶確認其餘 40 張的新交期。</div><div class="decision" data-editable>生產：安排尚未完成的成品需求。</div><div class="decision" data-editable>後續出貨：依原訂單關聯接續，不再重算一筆新需求。</div></div></div></div></div><div class="source">案例假設已實際交付並完成本次出貨確認；系統確認不能代替現場交付事實</div><div class="page-no">12 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-11" aria-label="上一張">←</a><span>12 / 22</span><a href="#slide-13" aria-label="下一張">→</a></nav></section>
+
+<!-- 13｜接著要請多少款？先看約定 -->
+<section id="slide-13" class="slide tab-now" data-title="接著要請多少款？先看約定"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>接著要請多少款？先看約定</h2><div class="label">ERP · PART 4</div></header><div class="question-stage"><article class="question-card primary reveal-left"><div class="kicker">ORDERED QUANTITIES</div><h3 data-editable>依訂購數量</h3><p data-editable>若按訂購數量請款，訂單確認後便可能依規則建立請款單；不能只看這次交出多少。</p></article><article class="question-card reveal"><div class="kicker">DELIVERED QUANTITIES</div><h3 data-editable>依已交數量</h3><p data-editable>本回採這個前提：交付 80 張，每張 NT$2,000，這次請款 NT$160,000。</p></article></div><p class="watch-note reveal" data-editable>120 張是訂購量，80 張是本次交付量。究竟用哪一個請款，要看雙方條件與系統設定；不是靠猜。</p></div></div><div class="source">參考：<a href="https://www.odoo.com/documentation/19.0/applications/finance/accounting/customer_invoices/overview.html" target="_blank" rel="noopener">Odoo：Invoicing processes ↗</a>｜以流程觀念為主，介面依版本與設定不同</div><div class="page-no">13 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-12" aria-label="上一張">←</a><span>13 / 22</span><a href="#slide-14" aria-label="下一張">→</a></nav></section>
+
+<!-- 14｜影片前導｜請款如何成為應收款？ -->
+<section id="slide-14" class="slide tab-now" data-title="影片前導｜請款如何成為應收款？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>影片前導｜請款如何成為應收款？</h2><div class="label">ERP · PART 4</div></header><div class="video-intro"><div class="video-meta reveal-left"><div class="video-no">VIDEO 3 · ODOO OFFICIAL</div><div class="duration">4:14</div><div class="maker">Odoo 官方操作教學<br>本課播放全片；影片標示 ARCHIVED</div><div class="status"><span class="pill">連網免費觀看</span><span class="pill">英文自動字幕</span><span class="pill">可選繁體中文自動翻譯</span></div></div><div class="watch-task reveal"><h3>看這張單據留下什麼</h3><ol><li data-editable>客戶、品項、數量與單價如何填入？</li><li data-editable>草稿如何確認為正式的系統單據？</li><li data-editable>請款金額、到期日及狀態，如何支持後續追蹤？</li></ol><div class="watch-note" data-editable>影片中的 Invoice 是系統請款／會計單據。本回不作為台灣統一發票操作教學，也不把請款當成已收到錢。</div></div></div></div></div><div class="source">舊版封存教學，保留流程參考價值；收款與銀行核對由教材另行說明</div><div class="page-no">14 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-13" aria-label="上一張">←</a><span>14 / 22</span><a href="#slide-15" aria-label="下一張">→</a></nav></section>
+
+<!-- 15｜影片三｜建立客戶請款單 -->
+<section id="slide-15" class="slide video-page tab-now" data-title="影片三｜建立客戶請款單"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><header class="video-title"><h2 data-editable>影片三｜建立客戶請款單</h2><span>VIDEO 3 · ODOO</span></header><div class="video-shell" data-video-id="IGQTJ2-XQXY" data-video-title="影片三｜建立客戶請款單" data-start="0" data-end="254"><button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入教學片段</span></button></div><div class="video-fallback"><span>需連網｜設定 → 字幕 → 自動翻譯 → 中文（繁體）</span><a href="https://www.youtube.com/watch?v=IGQTJ2-XQXY&amp;t=0s" target="_blank" rel="noopener">在 YouTube 開啟完整影片 ↗</a></div></div><div class="source">影片核對：2026-10-09｜較早版本的流程示範；自動字幕與翻譯可能有誤</div><div class="page-no">15 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-14" aria-label="上一張">←</a><span>15 / 22</span><a href="#slide-16" aria-label="下一張">→</a></nav></section>
+
+<!-- 16｜請了款，錢卻未必已收到 -->
+<section id="slide-16" class="slide tab-now" data-title="請了款，錢卻未必已收到"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>請了款，錢卻未必已收到</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>請款有了依據</h3><p data-editable>依本回的交付條件，確認請款 80 張，金額 NT$160,000，並記錄到期日。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>帳上有了應收款</h3><p data-editable>這表示有一筆款項需要收回，不代表銀行已增加同樣的金額。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>收款仍要往下追</h3><p data-editable>客戶匯了多少？是哪一張請款單？有沒有差額？需要把銀行交易與單據接起來。</p></article></div><p class="watch-note reveal" data-editable>先把應收款和已收款分開，我們才知道：這筆生意還有哪一段沒有完成。</p></div></div><div class="source">參考：<a href="https://www.odoo.com/documentation/19.0/applications/finance/accounting/payments/online.html" target="_blank" rel="noopener">Odoo：Payments ↗</a>｜以流程觀念為主，介面依版本與設定不同</div><div class="page-no">16 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-15" aria-label="上一張">←</a><span>16 / 22</span><a href="#slide-17" aria-label="下一張">→</a></nav></section>
+
+<!-- 17｜課堂練習｜這筆生意走到哪裡？ -->
+<section id="slide-17" class="slide tab-future" data-title="課堂練習｜這筆生意走到哪裡？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>課堂練習｜這筆生意走到哪裡？</h2><div class="label">ERP · PART 4</div></header><div class="decision-grid"><div class="scenario reveal-left"><div class="number">NT$100,000</div><h3 data-editable>銀行收到客戶一筆匯款</h3><p data-editable>SO-001 訂 120 張，每張 NT$2,000；DO-001 已交 80 張，INV-001 依已交數量請款。銀行收到 NT$100,000，已確認全數屬於這張請款單。</p></div><div class="decision-list reveal"><div class="decision" data-editable>① 還有多少張未交？</div><div class="decision" data-editable>② 本次請款金額是多少？</div><div class="decision" data-editable>③ 核對這筆收款後，這張單還欠多少？</div><div class="decision" data-editable>④ 未交的桌子與未收的款項，分別由誰追蹤？</div></div></div></div></div><div class="source">分組討論 3 分鐘；不計稅額、運費、折扣、訂金、匯差及其他交易；此匯款已核對且無爭議</div><div class="page-no">17 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-16" aria-label="上一張">←</a><span>17 / 22</span><a href="#slide-18" aria-label="下一張">→</a></nav></section>
+
+<!-- 18｜把同一筆交易放在一起看 -->
+<section id="slide-18" class="slide tab-future" data-title="把同一筆交易放在一起看"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>把同一筆交易放在一起看</h2><div class="label">ERP · PART 4</div></header><table class="match-table compact reveal"><thead><tr><th>資料與狀態</th><th>目前紀錄</th><th>接下來要做的事</th></tr></thead><tbody><tr><td>訂單 SO-001</td><td>120 張 × NT$2,000</td><td>依確認後的條件履行</td></tr><tr><td>出貨 DO-001</td><td>已交 80；未交 40 張</td><td>業務協調交期，倉庫接續出貨</td></tr><tr><td>請款 INV-001</td><td>80 × NT$2,000＝NT$160,000</td><td>會計追蹤這張單的到期與餘額</td></tr><tr><td>已核對收款</td><td>NT$100,000</td><td>保留銀行交易與請款單的關聯</td></tr><tr><td>尚未收回</td><td>NT$60,000</td><td>依到期日及差異原因接續處理</td></tr></tbody></table><p class="watch-note reveal" data-editable>未交 40 張，是交貨進度；未收 NT$60,000，是這張請款單的收款進度。不能把兩個餘額混在一起。</p></div></div><div class="source">教學解答；40 張後續請款尚未建立，不併入目前 INV-001 的 NT$60,000 餘額</div><div class="page-no">18 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-17" aria-label="上一張">←</a><span>18 / 22</span><a href="#slide-19" aria-label="下一張">→</a></nav></section>
+
+<!-- 19｜客戶說「已經匯款了」 -->
+<section id="slide-19" class="slide tab-future" data-title="客戶說「已經匯款了」"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>客戶說「已經匯款了」</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>先找到實際款項</h3><p data-editable>確認銀行交易的金額、日期與付款人。匯款通知是線索，還要查到實際入帳。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>再對到正確單據</h3><p data-editable>確認款項屬於哪張請款單，或是否涵蓋多張單據，不只按相同金額猜測。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>把差額留下來</h3><p data-editable>若金額不同，先查原因。尚未收到、短付或其他差異，不宜直接清成零。</p></article></div><p class="watch-note reveal" data-editable>畫面顯示 Paid，可能受付款與帳戶設定影響。系統狀態、收款登錄與銀行入帳，仍要有可核對的依據。</p></div></div><div class="source">參考：<a href="https://www.odoo.com/documentation/19.0/applications/finance/accounting/payments/online.html" target="_blank" rel="noopener">Odoo：Payments ↗</a>｜以流程觀念為主，介面依版本與設定不同</div><div class="page-no">19 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-18" aria-label="上一張">←</a><span>19 / 22</span><a href="#slide-20" aria-label="下一張">→</a></nav></section>
+
+<!-- 20｜款項遲遲未到，先釐清哪裡卡住 -->
+<section id="slide-20" class="slide tab-future" data-title="款項遲遲未到，先釐清哪裡卡住"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>款項遲遲未到，先釐清哪裡卡住</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>到期日還沒到</h3><p data-editable>先看約定付款期限；請款單建立了，不表示今天就已逾期。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>客戶對交易有疑問</h3><p data-editable>交貨、規格或金額若有爭議，由業務找回確認紀錄，與會計一起釐清。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>已到期，仍未收回</h3><p data-editable>確認聯繫窗口、追蹤時間與處理責任。每次處理留下紀錄，才不會一直從頭問。</p></article></div><p class="watch-note reveal" data-editable>催款之前，先知道自己在催哪一筆、依據是什麼。系統能提醒，但還需要人把問題處理下去。</p></div></div><div class="source">本回聚焦流程與責任；信用政策、呆帳及法律催收程序不在本回範圍</div><div class="page-no">20 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-19" aria-label="上一張">←</a><span>20 / 22</span><a href="#slide-21" aria-label="下一張">→</a></nav></section>
+
+<!-- 21｜系統讓我們看見，事情還要有人處理 -->
+<section id="slide-21" class="slide tab-future" data-title="系統讓我們看見，事情還要有人處理"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>系統讓我們看見，事情還要有人處理</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>紀錄要跟現場一致</h3><p data-editable>若實際只交 80 張，卻輸入 120 張，後面的人可能據此請錯款。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>例外要回到條件</h3><p data-editable>臨時改期、退貨或折讓，需要有依據、權限與紀錄，不是直接把數字改到相符。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>責任要有人接續</h3><p data-editable>未交貨找誰？款項不符找誰？共同資料讓人看得見，也要有分工讓事情走得動。</p></article></div><p class="watch-note reveal" data-editable>ERP 不會替企業把所有爭議自動談妥。它的價值，在於讓我們沿著同一筆交易，找得到問題與接續的人。</p></div></div><div class="source">通用教學判斷；不宣稱特定 ERP 必然自動阻擋所有錯誤</div><div class="page-no">21 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-20" aria-label="上一張">←</a><span>21 / 22</span><a href="#slide-22" aria-label="下一張">→</a></nav></section>
+
+<!-- 22｜這筆生意走到哪裡，下一件事由誰負責？ -->
+<section id="slide-22" class="slide tab-summary" data-title="這筆生意走到哪裡，下一件事由誰負責？"><div class="paper"><div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="section-tabs"><span>報價</span><span>出貨</span><span>請款</span><span>收款</span></div><div class="content"><header class="topline reveal"><h2 data-editable>這筆生意走到哪裡，下一件事由誰負責？</h2><div class="label">ERP · PART 4</div></header><div class="now-grid"><article class="now-card reveal delay-1"><div class="icon">01</div><h3 data-editable>看清楚各段進度</h3><p data-editable>報價寄出、訂單確認、出貨完成、請款與收款，分別有自己的依據。</p></article><article class="now-card reveal delay-2"><div class="icon">02</div><h3 data-editable>接起同一筆資料</h3><p data-editable>120 張訂單、80 張交付、NT$160,000 請款與 NT$100,000 收款，彼此有關聯。</p></article><article class="now-card reveal delay-3"><div class="icon">03</div><h3 data-editable>把剩下的事交接好</h3><p data-editable>40 張尚未交付，NT$60,000 尚未收回。各由誰追蹤，才能讓這筆生意繼續往前走？</p></article></div><p class="watch-note reveal" data-editable>請用自己的話說明：如果業務、倉庫與會計各用一份資料，這筆交易最容易在哪裡出錯？</p></div></div><div class="source">本回總結：共同資料、流程進度與責任交接</div><div class="page-no">22 / 22</div><nav class="fallback-controls" aria-label="相容模式投影片控制"><a href="#slide-21" aria-label="上一張">←</a><span>22 / 22</span><a href="#slide-22" aria-label="下一張">→</a></nav></section>
+
+    </main>
+  </div>
+
+  <!-- ===========================================
+       INTERACTIVE PRESENTATION CONTROLS
+       =========================================== -->
+  <nav class="deck-controls" aria-label="投影片控制">
+    <button id="prevBtn" type="button" aria-label="上一張">←</button>
+    <button id="menuBtn" type="button" aria-label="開啟章節選單">☰</button>
+    <span class="counter" id="counter">01 / 22</span>
+    <button id="nextBtn" type="button" aria-label="下一張">→</button>
+    <button id="fullBtn" type="button" aria-label="全螢幕">⛶</button>
+  </nav>
+  <div class="progress" id="progress"></div>
+
+  <aside class="chapter-menu" id="chapterMenu" aria-label="章節與影片選單">
+    <div class="menu-panel">
+      <div class="menu-head"><h2>章節與影片</h2><button id="closeMenu" type="button">關閉</button></div>
+      <div class="menu-links" id="menuLinks"></div>
+    </div>
+  </aside>
+
+  <!-- ===========================================
+       INLINE EDITING CONTROLS
+       =========================================== -->
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="編輯模式（E）">✎</button>
+  <div class="edit-toolbar" id="editToolbar">
+    <button id="saveFile" type="button">下載目前版本</button>
+    <button id="resetEdits" type="button">清除本機修改</button>
+  </div>
+  <noscript><div class="legacy-note">相容模式：請使用投影片內的左右箭頭翻頁；影片請點選 YouTube 文字連結。</div></noscript>
+
+  <script>
+  /* ===========================================
+     SLIDE CONTROLLER, VIDEO LOADER, AND EDITOR
+     =========================================== */
+  class SlidePresentation {
+    constructor() {
+  (function () {
+    "use strict";
+    function byId(id) { return document.getElementById(id); }
+    function hasClass(el,name) { return new RegExp("(^|\\s)" + name + "(\\s|$)").test(el.className); }
+    function addClass(el,name) { if (!hasClass(el,name)) el.className += " " + name; }
+    function removeClass(el,name) { el.className=el.className.replace(new RegExp("(^|\\s)" + name + "(?=\\s|$)","g")," ").replace(/^\\s+|\\s+$/g,""); }
+    function closestClass(el,name) { while (el && el !== document) { if (hasClass(el,name)) return el; el=el.parentNode; } return null; }
+    function closestAttr(el,attr) { while (el && el !== document) { if (el.getAttribute && el.getAttribute(attr)!==null) return el; el=el.parentNode; } return null; }
+    function pad2(n) { return n < 10 ? "0" + n : String(n); }
+
+    var stage=byId("deckStage");
+    var slides=stage.getElementsByTagName("section");
+    var current=0;
+    var wheelLocked=false;
+    var touchStart=null;
+    var storageKey="erp-fourth-unit-v1";
+
+    function storageGet(){try{return window.localStorage.getItem(storageKey);}catch(ignore){return null;}}
+    function storageSet(value){try{window.localStorage.setItem(storageKey,value);return true;}catch(ignore){return false;}}
+    function storageRemove(){try{window.localStorage.removeItem(storageKey);return true;}catch(ignore){return false;}}
+    var saved=storageGet();
+    if(saved && saved.indexOf("fallback-controls")!==-1){stage.innerHTML=saved;slides=stage.getElementsByTagName("section");}
+
+    function scaleStage(){
+      var factor=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+      var value="translate(-50%,-50%) scale(" + factor + ")";
+      stage.style.transform=value; stage.style.msTransform=value; stage.style.webkitTransform=value;
+    }
+    function resetVideo(slide){
+      var shells=slide.getElementsByClassName("video-shell");
+      if(!shells.length || !shells[0].getElementsByTagName("iframe").length)return;
+      shells[0].innerHTML="<button class=\"load-video\" type=\"button\"><span class=\"play-icon\">&#9654;</span><span>點一下以載入並播放影片</span></button>";
+    }
+    function show(index,updateHash){
+      if(index<0)index=0;if(index>=slides.length)index=slides.length-1;current=index;
+      for(var i=0;i<slides.length;i+=1){
+        if(i===current){addClass(slides[i],"active");addClass(slides[i],"visible");}
+        else{removeClass(slides[i],"active");removeClass(slides[i],"visible");resetVideo(slides[i]);}
+      }
+      byId("counter").innerHTML=pad2(current+1)+" / "+slides.length;
+      byId("progress").style.width=((current+1)/slides.length*100)+"%";
+      if(updateHash!==false){try{window.history.replaceState(null,"","#slide-"+(current+1));}catch(ignore){window.location.hash="slide-"+(current+1);}}
+    }
+    function indexFromHash(){
+      var match=window.location.hash.match(/^#(?:slide-)?(\d+)$/);
+      return match?Math.max(0,Math.min(parseInt(match[1],10)-1,slides.length-1)):0;
+    }
+    function loadVideo(shell){
+      var id=shell.getAttribute("data-video-id");
+      var title=shell.getAttribute("data-video-title")||"課程影片";
+      var start=shell.getAttribute("data-start")||"0"; var end=shell.getAttribute("data-end")||"";
+      shell.innerHTML="<iframe src=\"https://www.youtube-nocookie.com/embed/"+id+"?rel=0&hl=zh-TW&cc_load_policy=1&cc_lang_pref=en&start="+start+"&end="+end+"&autoplay=1\" title=\""+title.replace(/\"/g,"&quot;")+"\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+    }
+    function requestFullscreen(){
+      var root=document.documentElement;
+      var exit=document.exitFullscreen||document.msExitFullscreen||document.webkitExitFullscreen;
+      if(document.fullscreenElement||document.msFullscreenElement||document.webkitFullscreenElement){if(exit)exit.call(document);return;}
+      var enter=root.requestFullscreen||root.msRequestFullscreen||root.webkitRequestFullscreen;if(enter)enter.call(root);
+    }
+    function toggleMenu(force){
+      var menu=byId("chapterMenu");
+      var open=typeof force==="boolean"?force:!hasClass(menu,"open");
+      if(open)addClass(menu,"open");else removeClass(menu,"open");
+    }
+    function buildMenu(){
+      var holder=byId("menuLinks");holder.innerHTML="";
+      for(var i=0;i<slides.length;i+=1){
+        var button=document.createElement("button");button.type="button";button.setAttribute("data-jump",i);
+        button.appendChild(document.createTextNode(pad2(i+1)+"　"+(slides[i].getAttribute("data-title")||"投影片")));
+        holder.appendChild(button);
+      }
+    }
+
+    byId("prevBtn").onclick=function(){show(current-1);};
+    byId("nextBtn").onclick=function(){show(current+1);};
+    byId("menuBtn").onclick=function(){toggleMenu(true);};
+    byId("closeMenu").onclick=function(){toggleMenu(false);};
+    byId("fullBtn").onclick=requestFullscreen;
+    byId("chapterMenu").onclick=function(event){event=event||window.event;if((event.target||event.srcElement).id==="chapterMenu")toggleMenu(false);};
+    document.onclick=function(event){
+      event=event||window.event;var target=event.target||event.srcElement;
+      var load=closestClass(target,"load-video");if(load)loadVideo(closestClass(load,"video-shell"));
+      var jump=closestAttr(target,"data-jump");if(jump){show(parseInt(jump.getAttribute("data-jump"),10));toggleMenu(false);}
+    };
+    document.onkeydown=function(event){
+      event=event||window.event;var target=event.target||event.srcElement;
+      if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA)$/i.test(target.tagName)))return;
+      var key=event.key||event.keyCode;
+      if(key==="ArrowRight"||key==="ArrowDown"||key==="PageDown"||key===39||key===40||key===34||key===32){if(event.preventDefault)event.preventDefault();show(current+1);}
+      else if(key==="ArrowLeft"||key==="ArrowUp"||key==="PageUp"||key===37||key===38||key===33){if(event.preventDefault)event.preventDefault();show(current-1);}
+      else if(key==="Home"||key===36)show(0);
+      else if(key==="End"||key===35)show(slides.length-1);
+      else if(key==="m"||key==="M"||key===77)toggleMenu();
+      else if(key==="Escape"||key===27)toggleMenu(false);
+      else if(key==="e"||key==="E"||key===69)toggleEditing();
+    };
+    window.onresize=scaleStage;
+    window.onhashchange=function(){show(indexFromHash(),false);};
+    if(window.addEventListener){
+      window.addEventListener("wheel",function(event){if(wheelLocked||Math.abs(event.deltaY)<18)return;wheelLocked=true;show(current+(event.deltaY>0?1:-1));window.setTimeout(function(){wheelLocked=false;},550);},false);
+      window.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX;},false);
+      window.addEventListener("touchend",function(event){if(touchStart===null)return;var d=event.changedTouches[0].clientX-touchStart;if(Math.abs(d)>50)show(current+(d<0?1:-1));touchStart=null;},false);
+    }
+
+    /* Inline editor: E key, hotzone, local storage, and HTML download. */
+    var editing=false;var editTimer=null;var hideTimer=null;
+    var hotzone=document.getElementsByClassName("edit-hotzone")[0];var editToggle=byId("editToggle");
+    function toggleEditing(){
+      editing=!editing;var editable=document.querySelectorAll("[data-editable]");
+      for(var i=0;i<editable.length;i+=1)editable[i].contentEditable=editing?"true":"false";
+      if(editing){addClass(document.body,"editing");addClass(editToggle,"active");addClass(byId("editToolbar"),"show");}
+      else{removeClass(document.body,"editing");removeClass(editToggle,"active");removeClass(byId("editToolbar"),"show");}
+    }
+    editToggle.onclick=toggleEditing;
+    hotzone.onclick=toggleEditing;
+    hotzone.onmouseenter=function(){window.clearTimeout(hideTimer);addClass(editToggle,"show");};
+    hotzone.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(editToggle,"show");},400);};
+    editToggle.onmouseenter=function(){window.clearTimeout(hideTimer);};
+    editToggle.onmouseleave=function(){hideTimer=window.setTimeout(function(){if(!editing)removeClass(editToggle,"show");},400);};
+    stage.oninput=function(){window.clearTimeout(editTimer);editTimer=window.setTimeout(function(){storageSet(stage.innerHTML);},350);};
+    byId("resetEdits").onclick=function(){if(window.confirm("要清除目前瀏覽器中儲存的文字修改嗎？")){storageRemove();window.location.reload();}};
+    byId("saveFile").onclick=function(){
+      storageSet(stage.innerHTML);
+      var clone=document.documentElement.cloneNode(true);
+      var clonedBody=clone.querySelector("body");clonedBody.className="";
+      var editNodes=clone.querySelectorAll("[contenteditable]");for(var k=0;k<editNodes.length;k++)editNodes[k].removeAttribute("contenteditable");
+      var clonedSlides=clone.querySelectorAll(".slide");for(var k=0;k<clonedSlides.length;k++){clonedSlides[k].classList.remove("active","visible");if(k===0)clonedSlides[k].classList.add("active","visible");}
+      var liveShells=clone.querySelectorAll(".video-shell");for(var k=0;k<liveShells.length;k++)liveShells[k].innerHTML='<button class="load-video" type="button"><span class="play-icon">▶</span><span>點一下載入教學片段</span></button>';
+      clone.querySelector("#editToggle").className="edit-toggle";clone.querySelector("#editToolbar").className="edit-toolbar";
+      clone.querySelector("#chapterMenu").className="chapter-menu";
+      var html="<!doctype html>\n"+clone.outerHTML;
+      var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+      if(window.navigator.msSaveOrOpenBlob)window.navigator.msSaveOrOpenBlob(blob,"企業資源規劃_第四部分_銷售出貨與收款流程_V1_編輯版.html");
+      else{var urlApi=window.URL||window.webkitURL;var anchor=document.createElement("a");anchor.href=urlApi.createObjectURL(blob);anchor.download="企業資源規劃_第四部分_銷售出貨與收款流程_V1_編輯版.html";document.body.appendChild(anchor);anchor.click();document.body.removeChild(anchor);window.setTimeout(function(){urlApi.revokeObjectURL(anchor.href);},1200);}
+    };
+
+    buildMenu();scaleStage();show(indexFromHash(),false);addClass(document.body,"js-ready");
+  }());
+    }
+  }
+  new SlidePresentation();
+  </script>
+</body>
+</html>
